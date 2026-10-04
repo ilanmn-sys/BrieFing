@@ -1,47 +1,124 @@
 {
-  "me": {"name": "Ilan Manassen", "email": "ilanmn@monday.com", "mondayUserId": 29607541, "tz": "Asia/Jerusalem", "workWeek": "Sun-Thu"},
+  "me": {
+    "name": "Ilan Manassen",
+    "email": "ilanmn@monday.com",
+    "mondayUserId": 29607541,
+    "tz": "Asia/Jerusalem",
+    "workWeek": "Sun-Thu",
+    "slackUserId": "U038UEUQC1Y"
+  },
   "boards": {
     "projects": 18416855289,
     "commsCalendar": 3822310880,
     "news": 446791074,
     "teamRequests": 467729906,
     "webz": 18407283242,
-    "influencersCrm": null,
+    "influencersCrm": 18425284143,
     "officialPrMaterials": null,
     "switchboard": null,
     "routing": null
   },
   "groups": {
     "canonical": {
-      "today": {"id": "group_mm4rgvq6", "cap": 7},
-      "thisWeek": {"id": "group_mm4rm62r"},
-      "waiting": {"id": "group_title"},
-      "pepperTasks": {"id": "group_mm4rym7v"},
-      "completed": {"id": "group_mm65bqbh"}
+      "today": {
+        "id": "group_mm4rgvq6",
+        "cap": 7
+      },
+      "thisWeek": {
+        "id": "group_mm4rm62r"
+      },
+      "waiting": {
+        "id": "group_title"
+      },
+      "pepperTasks": {
+        "id": "group_mm4rym7v"
+      },
+      "completed": {
+        "id": "group_mm65bqbh"
+      }
     },
-    "parking": {"recurring": "group_mm5pb5ye", "noise": "group_mm65xbpj"},
+    "parking": {
+      "recurring": "group_mm5pb5ye",
+      "noise": "group_mm65xbpj"
+    },
     "personal": "group_mm5p991c",
-    "legacy": ["group_mm65750m", "group_mm65tada", "group_mm5p24nn", "group_mm5ptt65", "group_mm5wxtwc"],
+    "legacy": [
+      "group_mm65750m",
+      "group_mm65tada",
+      "group_mm5p24nn",
+      "group_mm5ptt65",
+      "group_mm5wxtwc"
+    ],
     "commsCalendarInternal": "group_mkxmj91f"
   },
   "columns": {
-    "status": "status", "deadline": "date4", "priority": "color_mm5wqmy7", "person": "person",
-    "neverUse": ["color_mm65szsk", "color_mm65n798"]
+    "status": "status",
+    "deadline": "date4",
+    "priority": "color_mm5wqmy7",
+    "person": "person",
+    "neverUse": [
+      "color_mm65szsk",
+      "color_mm65n798"
+    ]
   },
   "pepper": {
     "dmChannel": "D0BCAGJV0AD",
-    "userId": "VERIFY",
-    "candidateIds": ["U0BBLHZH4DC", "U038UEUQC1Y"],
-    "note": "VERIFY which candidate is Pepper vs. Ilan via a harmless test DM. DM targets must be user:<id>, never the channel id (S-005)."
+    "userId": "U0BBLHZH4DC",
+    "note": "Resolved read-only via Slack profiles: U0BBLHZH4DC = pepper (bot), U038UEUQC1Y = Ilan. DM targets must be user:<id>, never the channel id (S-005)."
   },
-  "slackChannels": ["#ilan-pa", "#media-relations", "#communications-team", "#monday_in_the_news", "#global-agencies", "#ask-comms"],
-  "vips": ["Roy Segev", "Eran Zinman", "Or Elmaliah"],
+  "slackChannels": [
+    "#ilan-pa",
+    "#media-relations",
+    "#communications-team",
+    "#monday_in_the_news",
+    "#global-agencies",
+    "#ask-comms"
+  ],
+  "vips": [
+    "Roy Segev",
+    "Eran Zinman",
+    "Or Elmaliah"
+  ],
   "commsOwners": {
-    "Ilan": {"id": 29607541, "regions": ["TLV/IL", "Brazil", "Mexico/LatAm", "global speaking/proactive PR"]},
-    "Alice Simpson": {"id": 99900969, "regions": ["UK", "London", "DACH", "SG", "JP", "APJ", "AU"]},
-    "Noam Safier": {"id": 107057031, "regions": ["US corporate comms"]},
-    "Allison Grey": {"id": 113535276, "regions": ["US product comms"]}
+    "Ilan": {
+      "id": 29607541,
+      "regions": [
+        "TLV/IL",
+        "Brazil",
+        "Mexico/LatAm",
+        "global speaking/proactive PR"
+      ]
+    },
+    "Alice Simpson": {
+      "id": 99900969,
+      "regions": [
+        "UK",
+        "London",
+        "DACH",
+        "SG",
+        "JP",
+        "APJ",
+        "AU"
+      ]
+    },
+    "Noam Safier": {
+      "id": 107057031,
+      "regions": [
+        "US corporate comms"
+      ]
+    },
+    "Allison Grey": {
+      "id": 113535276,
+      "regions": [
+        "US product comms"
+      ]
+    }
   },
   "learningLogUrl": "https://ilanmn.md.page/pepperandclaudprodprocess",
-  "decisions": {"routingApproval": "dashboard-apply-all", "scheduler": "launchd", "runtime": "local-server", "coworkMigration": "one-at-a-time"}
+  "decisions": {
+    "routingApproval": "dashboard-apply-all",
+    "scheduler": "launchd",
+    "runtime": "local-server",
+    "coworkMigration": "one-at-a-time"
+  }
 }
