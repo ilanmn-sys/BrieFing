@@ -11,13 +11,14 @@
     "projects": 18416855289,
     "commsCalendar": 3822310880,
     "news": 446791074,
-    "teamRequests": 467729906,
     "webz": 18407283242,
     "influencersCrm": 18425284143,
     "officialPrMaterials": 834321359,
     "switchboard": 18431118484,
-    "routing": null,
-    "teamRequestsNote": "467729906 is now the archive of pre-Sep-2026 requests; live queue is the Switchboard board 18431118484. Confirm whether the dashboard Requests tab should read Switchboard instead."
+    "routing": 18416855289,
+    "requests": 18431118484,
+    "teamRequestsArchive": 467729906,
+    "routingNote": "Per Ilan: Routing = projects board 18416855289. Confirm intake owner-assignment reads from it."
   },
   "groups": {
     "canonical": {
