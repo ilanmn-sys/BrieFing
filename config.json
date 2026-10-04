@@ -14,9 +14,10 @@
     "teamRequests": 467729906,
     "webz": 18407283242,
     "influencersCrm": 18425284143,
-    "officialPrMaterials": null,
-    "switchboard": null,
-    "routing": null
+    "officialPrMaterials": 834321359,
+    "switchboard": 18431118484,
+    "routing": null,
+    "teamRequestsNote": "467729906 is now the archive of pre-Sep-2026 requests; live queue is the Switchboard board 18431118484. Confirm whether the dashboard Requests tab should read Switchboard instead."
   },
   "groups": {
     "canonical": {
@@ -49,7 +50,17 @@
       "group_mm5ptt65",
       "group_mm5wxtwc"
     ],
-    "commsCalendarInternal": "group_mkxmj91f"
+    "commsCalendarInternal": "group_mkxmj91f",
+    "storyIdeas": "new_group10646",
+    "switchboard": {
+      "inbox": "group_mm77x4r1",
+      "t0": "group_mm77rgfj",
+      "t1": "group_mm77y9aa",
+      "t2": "group_mm778tbs",
+      "t3": "group_mm77ttps",
+      "parked": "group_mm7718vv",
+      "closed": "group_mm77qrtv"
+    }
   },
   "columns": {
     "status": "status",
