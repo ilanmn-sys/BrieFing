@@ -7,6 +7,7 @@ const monday = require('./connectors/monday');
 const google = require('./connectors/google');
 const slack = require('./connectors/slack');
 const drive = require('./connectors/drive');
+const { doneSync, isDryRun } = require('./done');
 
 const CHECKS = {
   monday: monday.health,
@@ -52,11 +53,26 @@ const server = http.createServer(async (req, res) => {
         return send(502, { status, error: e.message, retry: '/api/calendar' });
       }
     }
+    if (url.pathname === '/api/done') {
+      if (req.method !== 'POST') return send(405, { error: 'POST only' });
+      // Local-only server: refuse cross-site requests (CSRF) that could trigger board writes.
+      const origin = req.headers.origin;
+      if (origin && !/^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(origin)) return send(403, { error: 'bad origin' });
+      let raw = ''; for await (const c of req) { raw += c; if (raw.length > 10000) return send(413, { error: 'too large' }); }
+      try {
+        const body = JSON.parse(raw || '{}');
+        const r = await doneSync(body);
+        console.log(`done-sync item=${body.id} dry=${r.dryRun} board=${r.board} pepper=${r.pepper}`);
+        return send(r.board === 'failed' || r.pepper === 'failed' ? 502 : 200, r);
+      } catch (e) {
+        return send(e.code || (e instanceof NotConfigured ? 503 : 500), { error: e.message, notConfigured: e instanceof NotConfigured });
+      }
+    }
     if (url.pathname === '/api/tasks') {
       try {
         const t = await monday.listTasks();
         console.log(`tasks loaded: ${t.items.length} items, ${t.pages} pages${t.truncated ? ' (TRUNCATED)' : ''}`);
-        return send(200, { today: today(), tz: config.me.tz, config: { groups: config.groups, board: config.boards.projects }, ...t });
+        return send(200, { today: today(), tz: config.me.tz, dryRun: isDryRun(), config: { groups: config.groups, board: config.boards.projects }, ...t });
       } catch (e) {
         const status = e instanceof NotConfigured ? 'not_configured' : 'error';
         return send(502, { status, error: e.message, retry: '/api/tasks' });

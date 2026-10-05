@@ -44,4 +44,13 @@ async function listTasks() {
   return { items, pages, truncated };
 }
 
-module.exports = { gql, health, listTasks };
+// Sets the status column to Done. Throws on any API-level error.
+async function setDone(itemId) {
+  const r = await gql(
+    'mutation($b:ID!,$i:ID!,$c:String!,$v:JSON!){ change_column_value(board_id:$b,item_id:$i,column_id:$c,value:$v){ id } }',
+    { b: String(config.boards.projects), i: String(itemId), c: config.columns.status, v: JSON.stringify({ label: 'Done' }) });
+  if (r.errors || !r.data || !r.data.change_column_value) throw new Error(`monday: ${JSON.stringify(r.errors || r).slice(0, 200)}`);
+  return r.data.change_column_value.id;
+}
+
+module.exports = { gql, health, listTasks, setDone };

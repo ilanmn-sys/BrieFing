@@ -19,3 +19,4 @@ Config: `config.json` (the only place IDs live). **Read LEARNING-LOG.md §1 befo
 - Never write into legacy/parking groups or the duplicate columns in `config.json`.
 - Use `--dry-run` before enabling any new agent. Never run a Cowork task and its twin at once.
 - DM targets are `user:<id>`, never a DM-channel id; always check the send result.
+- The server is dry-run by default: board and Slack writes happen only with `DRY_RUN=0`. Run `npm test` after touching `server/done.js`.

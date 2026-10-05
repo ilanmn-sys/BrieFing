@@ -47,9 +47,16 @@ main{flex:1;display:flex;gap:12px;padding:0 16px 16px;min-height:0}
 .stat.danger b{color:var(--danger)}
 .sec{padding:8px 10px 2px;font-size:11px;font-weight:600;color:var(--text2);display:flex;justify-content:space-between}
 .sec.personal{color:var(--slack)}
-.row{display:block;padding:6px 10px;border-bottom:1px solid #f3f3f3;text-decoration:none;color:inherit}
+.row{padding:6px 10px;border-bottom:1px solid #f3f3f3;color:inherit}
 .row:hover{background:var(--accent-soft)}
 .row .nm{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row{display:grid;grid-template-columns:20px 1fr;column-gap:6px;align-items:start}
+.row .cb{margin:2px 0 0;cursor:pointer}
+.row .body{min-width:0}
+.sync{grid-column:2;font-size:10px}
+.sync.pending{color:var(--text3)}.sync.ok{color:var(--ok);background:var(--ok-soft);border-radius:4px;padding:1px 6px;display:inline-block}
+.sync.dry{color:var(--accent)}.sync.bad{color:var(--danger)}
+.badge{background:#fef3c7;color:#92400e;border:1px solid #fde68a;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:600}
 .row .meta{font-size:10px;color:var(--text3);display:flex;gap:8px}
 .row .meta .late{color:var(--danger)}
 .row.sunk{opacity:.55}
@@ -64,6 +71,7 @@ main{flex:1;display:flex;gap:12px;padding:0 16px 16px;min-height:0}
   <h1 id="greet">Ilan's Command Center</h1>
   <span class="date" id="dateline"></span>
   <span class="chip" id="nextup" hidden></span>
+  <span class="badge" id="dry" hidden title="Board and Slack writes are disabled. Start the server with DRY_RUN=0 to enable them.">DRY RUN</span>
   <span class="spacer"></span>
   <button id="refresh" title="Re-pulls data. After a deploy, reload the page too.">Refresh</button>
 </header>
@@ -202,7 +210,7 @@ function render() {
 
 
 // ---------- Tasks tab (R-01..R-03, R-14, R-17, R-18, R-21) ----------
-const tasks = { data: null, error: null, loading: false, touched: new Set() };
+const tasks = { data: null, error: null, loading: false, touched: new Set(), rows: {} };
 const META = /comms calendar sync|daily inbox digest|morning-board|pepper-eod/i;
 const HEALTH = /רופא|בדיק|דם|נוירולוג|רפוא|doctor|medical|health|appointment|🩺/i;
 const PRI = { '🔥 High': 0, '🟡 Medium': 1, '🟢 Low': 2 };
@@ -241,7 +249,25 @@ function taskRow(t, d, kind) {
   const url = `https://monday.monday.com/boards/${d.config.board}/pulses/${t.id}`;
   const late = kind === 'overdue' ? `<span class="late">${daysLate(t.deadline, d.today)}d late</span>` : '';
   const date = t.deadline ? `<span>${esc(t.deadline.slice(5).split('-').reverse().join('.'))}</span>` : '';
-  return `<a class="row ${tasks.touched.has(t.id) ? 'sunk' : ''}" href="${url}" target="_blank" rel="noopener"><span class="nm"><i class="pri ${pc}"></i>${esc(t.name)}</span><span class="meta">${date}${late}<span>${esc(t.status || '')}</span></span></a>`;
+  const st = tasks.rows[t.id] || {};
+  const checked = st.cls === 'ok' || st.cls === 'bad-partial' ? 'checked' : '';
+  return `<div class="row ${tasks.touched.has(t.id) ? 'sunk' : ''}" data-id="${t.id}"><input class="cb" type="checkbox" ${checked} ${st.cls === 'pending' ? 'disabled' : ''} aria-label="Mark done">`
+    + `<div class="body"><a class="nm" href="${url}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none"><i class="pri ${pc}"></i>${esc(t.name)}</a><span class="meta">${date}${late}<span>${esc(t.status || '')}</span></span></div>`
+    + (st.text ? `<div class="sync ${st.cls.replace('bad-partial', 'bad')}">${esc(st.text)}</div>` : '') + '</div>';
+}
+
+// Done-sync (principle 3): one action -> board status + Pepper DM. Never local-only.
+async function doneSync(t, box) {
+  tasks.rows[t.id] = { cls: 'pending', text: 'syncing…' }; renderWork();
+  try {
+    const r = await fetch('/api/done', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: t.id, name: t.name }) });
+    const j = await r.json();
+    if (j.dryRun) { tasks.rows[t.id] = { cls: 'dry', text: 'dry-run: would set Done on the board + DM Pepper' }; }
+    else if (j.board === 'ok' && j.pepper === 'ok') { tasks.rows[t.id] = { cls: 'ok', text: '✓ Done · Pepper notified' }; tasks.touched.add(t.id); }
+    else if (j.board === 'ok') { tasks.rows[t.id] = { cls: 'bad-partial', text: `Done on board, but Pepper was NOT notified: ${j.error || 'unknown error'}` }; tasks.touched.add(t.id); }
+    else { tasks.rows[t.id] = { cls: 'bad', text: `Not done: ${j.error || 'board update failed'}` }; }
+  } catch (e) { tasks.rows[t.id] = { cls: 'bad', text: `Not done: ${e.message}` }; }
+  renderWork();
 }
 
 async function loadTasks() {
@@ -272,6 +298,12 @@ function renderWork() {
   html += sec('👨‍👩 אישי', v.personal, 'personal', v.personalMore ? ` (+${v.personalMore} more)` : '');
   if (!v.total && !v.personal.length) html += '<div class="msg">Nothing open.</div>';
   body.innerHTML = html;
+  $('dry').hidden = !d.dryRun;
+  const all = [...v.today, ...v.overdue, ...v.week, ...v.active, ...v.personal];
+  body.querySelectorAll('.row .cb').forEach((cb) => {
+    const t = all.find((x) => x.id === cb.closest('.row').dataset.id);
+    cb.onchange = () => (cb.checked ? doneSync(t, cb) : (delete tasks.rows[t.id], renderWork()));
+  });
 }
 
 $('tabs').innerHTML = ['Tasks', 'Requests', 'Email', 'Slack', 'Decisions', 'Agents'].map((t) => `<button ${t === 'Tasks' ? 'class="on"' : 'disabled title="Next in the build order"'}>${t}</button>`).join('');
