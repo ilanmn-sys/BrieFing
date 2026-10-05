@@ -8,6 +8,9 @@ const google = require('./connectors/google');
 const slack = require('./connectors/slack');
 const drive = require('./connectors/drive');
 const { doneSync, isDryRun } = require('./done');
+const gmail = require('./connectors/gmail');
+const { triage, classify } = require('./triage');
+const llm = require('./llm');
 
 const CHECKS = {
   monday: monday.health,
@@ -52,6 +55,38 @@ const server = http.createServer(async (req, res) => {
         const status = e instanceof NotConfigured ? 'not_configured' : 'error';
         return send(502, { status, error: e.message, retry: '/api/calendar' });
       }
+    }
+    // ---- Email (drafts only: nothing here can send) ----
+    if (url.pathname === '/api/email') {
+      try {
+        const threads = await gmail.listThreads(30);
+        const tri = await triage(threads);
+        const out = threads.map((t) => ({ ...t, ...classify(t, tri.results.get(t.id)) }));
+        console.log(`email loaded: ${out.length} threads, triage ${tri.ok ? 'ok' : 'FAILED (' + tri.error + ')'}`);
+        return send(200, { threads: out, triageOk: tri.ok, triageError: tri.error || null, dryRun: isDryRun() });
+      } catch (e) { return send(e instanceof NotConfigured ? 503 : 502, { status: e instanceof NotConfigured ? 'not_configured' : 'error', error: e.message }); }
+    }
+    if (url.pathname === '/api/email/thread') {
+      try { return send(200, { messages: await gmail.getThread(url.searchParams.get('id') || '') }); }
+      catch (e) { return send(e instanceof NotConfigured ? 503 : 502, { error: e.message }); }
+    }
+    if (url.pathname === '/api/email/draft' || url.pathname === '/api/email/revise') {
+      if (req.method !== 'POST') return send(405, { error: 'POST only' });
+      const origin = req.headers.origin;
+      if (origin && !/^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(origin)) return send(403, { error: 'bad origin' });
+      let raw = ''; for await (const c of req) { raw += c; if (raw.length > 100000) return send(413, { error: 'too large' }); }
+      try {
+        const b = JSON.parse(raw || '{}');
+        if (url.pathname === '/api/email/revise') {
+          const text = await llm.complete(`Revise this email draft per the instruction. Return ONLY the revised body, same language.\n\nInstruction: ${String(b.prompt || '').slice(0, 1000)}\n\nDraft:\n${String(b.body || '')}`);
+          return send(200, { body: text.trim() });
+        }
+        if (!/^[^\s@,]+@[^\s@,]+$/.test(String(b.to || '').trim()) || !String(b.body || '').trim()) return send(400, { error: 'a valid To address and a body are required' });
+        if (isDryRun()) return send(200, { dryRun: true, would: `gmail: create DRAFT to ${b.to} re "${b.subject}" (not sent)` });
+        const id = await gmail.createDraft(b);
+        console.log(`draft created ${id}`);
+        return send(200, { dryRun: false, draftId: id });
+      } catch (e) { return send(e instanceof NotConfigured ? 503 : 502, { error: e.message }); }
     }
     if (url.pathname === '/api/done') {
       if (req.method !== 'POST') return send(405, { error: 'POST only' });

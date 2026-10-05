@@ -47,4 +47,4 @@ async function listEvents(days, tz, todayStr) {
     }));
 }
 
-module.exports = { gmailHealth, calendarHealth, listEvents };
+module.exports = { gmailHealth, calendarHealth, listEvents, accessToken };

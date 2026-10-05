@@ -63,6 +63,27 @@ main{flex:1;display:flex;gap:12px;padding:0 16px 16px;min-height:0}
 .pri{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;background:#cbd5e1}
 .pri.high{background:var(--danger)}.pri.med{background:#f59e0b}.pri.low{background:#22c55e}
 .banner{margin:8px 10px;padding:6px 8px;border-radius:8px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:11px}
+#modal{position:fixed;inset:0;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;z-index:10}
+#modal[hidden]{display:none}
+.dlg{background:var(--panel);border-radius:12px;width:min(560px,94vw);max-height:90vh;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
+.dlg .warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:8px;padding:6px 8px;font-size:11px}
+.dlg label{font-size:10px;color:var(--text3);display:block}
+.dlg input,.dlg textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:8px;padding:5px 8px}
+.dlg textarea{min-height:160px;resize:vertical}
+.dlg .acts{display:flex;gap:6px;justify-content:flex-end;align-items:center}
+.dlg .primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.dlg .res{font-size:11px}
+.grp{padding:6px 10px 2px;font-size:11px;font-weight:600;color:var(--text2);display:flex;justify-content:space-between}
+.th{padding:6px 10px;border-bottom:1px solid #f3f3f3;cursor:pointer}
+.th:hover{background:var(--accent-soft)}
+.th .sub{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.th .why{font-size:10px;color:var(--text3)}
+.v{display:inline-block;font-size:9px;font-weight:700;border-radius:4px;padding:1px 5px;margin-right:5px;letter-spacing:.3px}
+.v.decision{background:#fee2e2;color:var(--danger)}.v.reply{background:var(--accent-soft);color:var(--accent)}
+.v.waiting{background:#e0f2fe;color:#0369a1}.v.fyi,.v.untriaged{background:#f1f5f9;color:#64748b}
+.thread{padding:6px 10px 10px 18px;background:#fafafa;border-bottom:1px solid var(--line);font-size:12px}
+.msgb{border-left:2px solid var(--line);padding-left:8px;margin:6px 0;white-space:pre-wrap;word-break:break-word;max-height:160px;overflow:auto}
+.msgb small{display:block;color:var(--text3)}
 @media (max-width:760px){main{flex-direction:column}#work{width:auto;height:180px}}
 </style>
 </head>
@@ -87,6 +108,15 @@ main{flex:1;display:flex;gap:12px;padding:0 16px 16px;min-height:0}
     <div class="scroll" id="workbody"></div>
   </aside>
 </main>
+<div id="modal" hidden><div class="dlg" role="dialog" aria-modal="true" aria-label="Compose reply">
+  <div class="warn">This saves to your Gmail <b>Drafts</b>. Nothing is sent from here.</div>
+  <div><label>To</label><input id="c-to"></div>
+  <div><label>Cc</label><input id="c-cc"></div>
+  <div><label>Subject</label><input id="c-sub"></div>
+  <div><label>Body</label><textarea id="c-body" dir="auto"></textarea></div>
+  <div style="display:flex;gap:6px"><input id="c-prompt" placeholder="Revise with a prompt, e.g. shorter, warmer, in Hebrew"><button id="c-rev">Revise</button></div>
+  <div class="acts"><span class="res" id="c-res"></span><button id="c-reset">Reset</button><button id="c-close">Close</button><button class="primary" id="c-save">Save to Drafts</button></div>
+</div></div>
 <script>
 const START_H = 8, END_H = 20, PX_PER_MIN = 1.15;
 const state = { data: null, error: null, day: 0, loading: false };
@@ -210,6 +240,7 @@ function render() {
 
 
 // ---------- Tasks tab (R-01..R-03, R-14, R-17, R-18, R-21) ----------
+const ui = { tab: 'tasks' };
 const tasks = { data: null, error: null, loading: false, touched: new Set(), rows: {} };
 const META = /comms calendar sync|daily inbox digest|morning-board|pepper-eod/i;
 const HEALTH = /רופא|בדיק|דם|נוירולוג|רפוא|doctor|medical|health|appointment|🩺/i;
@@ -282,6 +313,11 @@ async function loadTasks() {
 }
 
 function renderWork() {
+  if (ui.tab === 'email') return renderEmail();
+  $('stats').hidden = true; return renderTasks();
+}
+
+function renderTasks() {
   const body = $('workbody'), stats = $('stats');
   stats.hidden = true;
   if (tasks.error) { body.innerHTML = `<div class="msg err">Tasks unavailable<code>${esc(tasks.error)}</code><button id="retryT">Retry</button></div>`; $('retryT').onclick = loadTasks; return; }
@@ -306,8 +342,111 @@ function renderWork() {
   });
 }
 
-$('tabs').innerHTML = ['Tasks', 'Requests', 'Email', 'Slack', 'Decisions', 'Agents'].map((t) => `<button ${t === 'Tasks' ? 'class="on"' : 'disabled title="Next in the build order"'}>${t}</button>`).join('');
-$('refresh').onclick = () => { load(); loadTasks(); };
+// ---------- Email tab (drafts only; R-19, R-22) ----------
+const email = { data: null, error: null, loading: false, open: new Set(), threads: {}, compose: null };
+const VORDER = { decision: 0, reply: 1, untriaged: 2, fyi: 3, waiting: 4 };
+const VLABEL = { decision: 'DECISION (yours)', reply: 'REPLY', waiting: 'WAITING ON THEM', fyi: 'FYI', untriaged: 'UNTRIAGED' };
+const URG = { high: 0, med: 1, low: 2 };
+
+async function loadEmail() {
+  email.loading = true; if (ui.tab === 'email') renderWork();
+  try {
+    const r = await fetch('/api/email'); const j = await r.json();
+    if (!r.ok) throw new Error(j.error || `HTTP ${r.status}`);
+    email.data = j; email.error = null;
+    console.log(`loaded: ${j.threads.length} email threads${j.triageOk ? '' : ' (UNTRIAGED)'}`);
+  } catch (e) { email.error = e.message; console.error('email load failed', e); }
+  email.loading = false; if (ui.tab === 'email') renderWork();
+}
+
+async function loadThread(id) {
+  email.threads[id] = 'loading'; renderWork();
+  try {
+    const r = await fetch('/api/email/thread?id=' + encodeURIComponent(id)); const j = await r.json();
+    if (!r.ok) throw new Error(j.error || `HTTP ${r.status}`);
+    email.threads[id] = j.messages;
+  } catch (e) { email.threads[id] = { error: e.message }; }
+  renderWork();
+}
+
+function renderEmail() {
+  const body = $('workbody'); $('stats').hidden = true;
+  if (email.error) { body.innerHTML = `<div class="msg err">Email unavailable<code>${esc(email.error)}</code><button id="retryE">Retry</button></div>`; $('retryE').onclick = loadEmail; return; }
+  if (!email.data) { body.innerHTML = '<div class="msg">Loading…</div>'; return; }
+  const d = email.data;
+  let html = '';
+  if (!d.triageOk) html += `<div class="banner">Triage failed, showing threads untriaged: ${esc(d.triageError || 'unknown')}. <button id="retryTri">Retry</button></div>`;
+  // Group by sender; best verdict (then urgency, then recency) decides group order.
+  const groups = new Map();
+  for (const t of d.threads) { const k = t.fromEmail || t.from; (groups.get(k) || groups.set(k, []).get(k)).push(t); }
+  const rank = (t) => [VORDER[t.verdict] ?? 9, URG[t.urgency] ?? 3, -t.date];
+  const cmp = (a, b) => { const x = rank(a), y = rank(b); return x[0] - y[0] || x[1] - y[1] || x[2] - y[2]; };
+  const list = [...groups.values()].map((ts) => ts.sort(cmp)).sort((a, b) => cmp(a[0], b[0]));
+  for (const ts of list) {
+    html += `<div class="grp"><span>${esc(ts[0].from)}</span><span>${ts.length}</span></div>`;
+    for (const t of ts) {
+      const open = email.open.has(t.id), msgs = email.threads[t.id];
+      html += `<div class="th" data-id="${esc(t.id)}"><span class="sub"><span class="v ${t.verdict}">${VLABEL[t.verdict]}</span>${esc(t.subject)}</span>${t.reason ? `<span class="why">${esc(t.reason)}</span>` : ''}</div>`;
+      if (open) {
+        html += '<div class="thread">';
+        if (msgs === 'loading' || !msgs) html += 'Loading thread…';
+        else if (msgs.error) html += `<span style="color:var(--danger)">Thread failed to load: ${esc(msgs.error)}</span> <button data-retry="${esc(t.id)}">Retry</button>`;
+        else html += msgs.map((m) => `<div class="msgb"><small>${esc(m.from)}</small>${esc(m.body)}</div>`).join('');
+        if (t.verdict === 'decision') html += '<div class="why" style="margin-top:6px"><b>This is a decision, not a draft.</b> Nothing to delegate; it is yours to make.</div>';
+        else if (t.verdict === 'waiting') html += '<div class="why" style="margin-top:6px">Your reply was last. The ball is with them.</div>';
+        else html += `<div style="margin-top:6px"><button data-draft="${esc(t.id)}">Draft reply</button></div>`;
+        html += '</div>';
+      }
+    }
+  }
+  if (!d.threads.length) html += '<div class="msg">Inbox is clear.</div>';
+  body.innerHTML = html;
+  const rt = $('retryTri'); if (rt) rt.onclick = loadEmail;
+  body.querySelectorAll('.th').forEach((el) => el.onclick = () => {
+    const id = el.dataset.id;
+    if (email.open.has(id)) email.open.delete(id); else { email.open.add(id); if (!email.threads[id]) loadThread(id); }
+    renderWork();
+  });
+  body.querySelectorAll('[data-retry]').forEach((b) => b.onclick = () => loadThread(b.dataset.retry));
+  body.querySelectorAll('[data-draft]').forEach((b) => b.onclick = () => openCompose(d.threads.find((t) => t.id === b.dataset.draft)));
+}
+
+function openCompose(t) {
+  email.compose = { t, original: t.proposedBody || '' };
+  $('c-to').value = t.replyTo || t.fromEmail; $('c-cc').value = '';
+  $('c-sub').value = /^re:/i.test(t.subject) ? t.subject : 'Re: ' + t.subject;
+  $('c-body').value = email.compose.original; $('c-prompt').value = ''; $('c-res').textContent = '';
+  $('modal').hidden = false;
+}
+$('c-close').onclick = () => { $('modal').hidden = true; };
+$('c-reset').onclick = () => { $('c-body').value = email.compose.original; };
+$('c-rev').onclick = async () => {
+  const b = $('c-rev'); b.textContent = '…';
+  try {
+    const r = await fetch('/api/email/revise', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ body: $('c-body').value, prompt: $('c-prompt').value }) });
+    const j = await r.json(); if (!r.ok) throw new Error(j.error || `HTTP ${r.status}`);
+    $('c-body').value = j.body; b.textContent = '✓';
+  } catch (e) { $('c-res').textContent = 'Revise failed: ' + e.message; $('c-res').style.color = 'var(--danger)'; b.textContent = 'Revise'; return; }
+  setTimeout(() => { b.textContent = 'Revise'; }, 3000);
+};
+$('c-save').onclick = async () => {
+  const res = $('c-res'), t = email.compose.t; res.style.color = 'var(--text3)'; res.textContent = 'saving…';
+  try {
+    const r = await fetch('/api/email/draft', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ threadId: t.id, to: $('c-to').value, cc: $('c-cc').value, subject: $('c-sub').value, body: $('c-body').value, inReplyTo: t.lastMessageId }) });
+    const j = await r.json(); if (!r.ok) throw new Error(j.error || `HTTP ${r.status}`);
+    res.style.color = j.dryRun ? 'var(--accent)' : 'var(--ok)';
+    res.textContent = j.dryRun ? 'dry-run: ' + j.would : '✓ Saved to Drafts (not sent)';
+  } catch (e) { res.style.color = 'var(--danger)'; res.textContent = 'Not saved: ' + e.message; }
+};
+
+const TABS = [['tasks', 'Tasks'], ['requests', 'Requests'], ['email', 'Email'], ['slack', 'Slack'], ['decisions', 'Decisions'], ['agents', 'Agents']];
+const LIVE_TABS = new Set(['tasks', 'email']);
+function renderTabs() {
+  $('tabs').innerHTML = TABS.map(([k, l]) => `<button data-t="${k}" class="${ui.tab === k ? 'on' : ''}" ${LIVE_TABS.has(k) ? '' : 'disabled title="Next in the build order"'}>${l}</button>`).join('');
+  $('tabs').querySelectorAll('button:not([disabled])').forEach((b) => b.onclick = () => { ui.tab = b.dataset.t; renderTabs(); if (ui.tab === 'email' && !email.data && !email.loading) loadEmail(); renderWork(); });
+}
+renderTabs();
+$('refresh').onclick = () => { load(); loadTasks(); if (ui.tab === 'email') loadEmail(); else email.data = null; };
 const h = new Date().getHours();
 $('greet').textContent = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', Ilan';
 load(); loadTasks();
