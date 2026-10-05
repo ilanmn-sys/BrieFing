@@ -84,6 +84,18 @@ main{flex:1;display:flex;gap:12px;padding:0 16px 16px;min-height:0}
 .thread{padding:6px 10px 10px 18px;background:#fafafa;border-bottom:1px solid var(--line);font-size:12px}
 .msgb{border-left:2px solid var(--line);padding-left:8px;margin:6px 0;white-space:pre-wrap;word-break:break-word;max-height:160px;overflow:auto}
 .msgb small{display:block;color:var(--text3)}
+.sl-card{padding:6px 10px;border-bottom:1px solid #f3f3f3}
+.sl-card .who{font-weight:600;font-size:12px;display:flex;justify-content:space-between}
+.sl-card .who.ch{color:var(--slack)}
+.sl-msg{font-size:11px;color:var(--text2);margin:2px 0;white-space:pre-wrap;word-break:break-word}
+.sl-msg b{color:var(--text)}
+.sl-card textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:8px;padding:5px 8px;min-height:60px;margin-top:4px}
+.sl-act{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;align-items:center}
+.sl-act .res{font-size:10px}
+.sl-sum{font-size:11px;background:var(--slack-soft);border-radius:6px;padding:4px 8px;margin-top:3px;white-space:pre-wrap}
+.sl-ask{padding:8px 10px;border-bottom:1px solid var(--line);background:var(--slack-soft)}
+.sl-ask textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:8px;padding:5px 8px;min-height:44px}
+.sl-head{padding:8px 10px 2px;font-size:11px;font-weight:600;color:var(--text2)}
 @media (max-width:760px){main{flex-direction:column}#work{width:auto;height:180px}}
 </style>
 </head>
@@ -314,6 +326,7 @@ async function loadTasks() {
 
 function renderWork() {
   if (ui.tab === 'email') return renderEmail();
+  if (ui.tab === 'slack') return renderSlack();
   $('stats').hidden = true; return renderTasks();
 }
 
@@ -439,14 +452,96 @@ $('c-save').onclick = async () => {
   } catch (e) { res.style.color = 'var(--danger)'; res.textContent = 'Not saved: ' + e.message; }
 };
 
+// ---------- Slack tab (reads; sends only on explicit click) ----------
+const sl = { data: null, error: null, loading: false, drafts: {}, res: {}, sums: {}, ask: { text: '', baseline: undefined, reply: null, msg: '' }, active: null };
+
+async function api(path, body) {
+  const r = await fetch(path, body ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) } : undefined);
+  const j = await r.json(); if (!r.ok) throw new Error(j.error || `HTTP ${r.status}`); return j;
+}
+
+async function loadSlack() {
+  sl.loading = true; if (ui.tab === 'slack') renderWork();
+  try {
+    sl.data = await api('/api/slack'); sl.error = null;
+    console.log(`loaded: ${sl.data.dms.length} DMs, ${sl.data.channels.length} channels`);
+  } catch (e) { sl.error = e.message; console.error('slack load failed', e); }
+  sl.loading = false; if (ui.tab === 'slack') renderWork();
+  // One summary call per channel, patched in as each resolves.
+  if (sl.data) for (const c of sl.data.channels) summarizeChannel(c.id);
+}
+async function summarizeChannel(id) {
+  sl.sums[id] = { state: 'loading' }; if (ui.tab === 'slack') renderWork();
+  try { sl.sums[id] = { state: 'ok', text: (await api('/api/slack/summary?channel=' + encodeURIComponent(id))).summary }; }
+  catch (e) { sl.sums[id] = { state: 'err', text: e.message }; }
+  if (ui.tab === 'slack') renderWork();
+}
+
+function renderSlack() {
+  const body = $('workbody'); $('stats').hidden = true;
+  if (sl.error) { body.innerHTML = `<div class="msg err">Slack unavailable<code>${esc(sl.error)}</code><button id="retryS">Retry</button></div>`; $('retryS').onclick = loadSlack; return; }
+  if (!sl.data) { body.innerHTML = '<div class="msg">Loading…</div>'; return; }
+  const d = sl.data, a = sl.ask;
+  let html = `<div class="sl-ask"><textarea id="ask-t" dir="auto" placeholder="Ask Pepper (she answers in Slack)…">${esc(a.text)}</textarea><div class="sl-act"><button id="ask-send">Ask Pepper</button>${a.baseline !== undefined ? '<button id="ask-check">Check reply</button>' : ''}<span class="res" id="ask-res" style="color:var(--text3)">${esc(a.msg)}</span></div>`
+    + (a.reply ? `<div class="sl-sum" dir="auto">${esc(a.reply)}</div>${sl.active ? '<div class="sl-act"><button id="ask-use">Use this as my reply</button></div>' : ''}` : '') + '</div>';
+  if (d.truncated) html += `<div class="banner">Only ${d.scanned} DM conversations were scanned. Some unread DMs may be missing.</div>`;
+  if (d.notFound.length) html += `<div class="banner">Not found or no access: ${d.notFound.map((n) => '#' + esc(n)).join(', ')}.</div>`;
+  html += `<div class="sl-head">Unread DMs · ${d.dms.length}</div>`;
+  for (const dm of d.dms) {
+    const draft = sl.drafts[dm.channel], r = sl.res[dm.channel];
+    html += `<div class="sl-card" data-ch="${esc(dm.channel)}"><div class="who"><span>${esc(dm.who)}</span><span>${dm.count}</span></div>`
+      + dm.messages.map((m) => `<div class="sl-msg"><b>${esc(m.from)}</b> ${esc(m.text)}</div>`).join('')
+      + (draft !== undefined ? `<textarea dir="auto" data-draft="${esc(dm.channel)}">${esc(draft)}</textarea>` : '')
+      + `<div class="sl-act"><button data-act="draft" data-ch="${esc(dm.channel)}">${draft === undefined ? 'Draft reply' : 'Redraft'}</button>`
+      + (draft !== undefined ? (dm.userId ? `<button data-act="send" data-ch="${esc(dm.channel)}">Send</button>` : '') + `<button data-act="pepper" data-ch="${esc(dm.channel)}">📢 Send draft to Pepper</button>` : '')
+      + (r ? `<span class="res" style="color:${r.bad ? 'var(--danger)' : 'var(--ok)'}">${esc(r.text)}</span>` : '') + '</div></div>';
+  }
+  if (!d.dms.length) html += '<div class="msg" style="padding:10px">No unread DMs.</div>';
+  html += `<div class="sl-head">Channels · ${d.channels.length}</div>`;
+  for (const c of d.channels) {
+    const sm = sl.sums[c.id] || {};
+    html += `<div class="sl-card"><div class="who ch"><span>#${esc(c.name)}</span><span>${c.count}</span></div>`
+      + (sm.state === 'ok' ? `<div class="sl-sum" dir="auto">${esc(sm.text)}</div>` : sm.state === 'err' ? `<div class="sl-msg" style="color:var(--danger)">Summary failed: ${esc(sm.text)} <button data-act="resum" data-ch="${esc(c.id)}">Retry</button></div>` : '<div class="sl-msg">summarising…</div>') + '</div>';
+  }
+  if (!d.channels.length) html += '<div class="msg" style="padding:10px">No unread in key channels.</div>';
+  body.innerHTML = html;
+
+  const T = $('ask-t'); T.oninput = () => { a.text = T.value; };
+  $('ask-send').onclick = async () => {
+    a.msg = 'sending…'; renderWork();
+    try { const j = await api('/api/slack/pepper/ask', { text: a.text }); a.baseline = j.baseline ? j.baseline.text : null; a.reply = null; a.msg = j.dryRun ? 'dry-run: ' + j.would : 'Sent. Press "Check reply" in a moment.'; if (!j.dryRun) a.text = ''; }
+    catch (e) { a.msg = 'Not sent: ' + e.message; }
+    renderWork();
+  };
+  const ck = $('ask-check'); if (ck) ck.onclick = async () => {
+    a.msg = 'checking…'; renderWork();
+    try { const j = await api('/api/slack/pepper'); const t = j.latest ? j.latest.text : null; if (t && t !== a.baseline) { a.reply = t; a.msg = 'New reply from Pepper.'; } else { a.msg = 'No new reply yet.'; } }
+    catch (e) { a.msg = 'Check failed: ' + e.message; }
+    renderWork();
+  };
+  const use = $('ask-use'); if (use) use.onclick = () => { sl.drafts[sl.active] = a.reply; a.msg = 'Copied into the draft.'; renderWork(); };
+  body.querySelectorAll('textarea[data-draft]').forEach((t) => { t.oninput = () => { sl.drafts[t.dataset.draft] = t.value; }; t.onfocus = () => { sl.active = t.dataset.draft; }; });
+  body.querySelectorAll('button[data-act]').forEach((b) => b.onclick = async () => {
+    const ch = b.dataset.ch, dm = d.dms.find((x) => x.channel === ch);
+    if (b.dataset.act === 'resum') return summarizeChannel(ch);
+    sl.active = ch; sl.res[ch] = { text: '…' };
+    try {
+      if (b.dataset.act === 'draft') { sl.drafts[ch] = (await api('/api/slack/draft', { channel: ch })).draft; sl.res[ch] = null; }
+      else if (b.dataset.act === 'send') { const j = await api('/api/slack/send', { userId: dm.userId, text: sl.drafts[ch] }); sl.res[ch] = { text: j.dryRun ? 'dry-run: ' + j.would : '✓ Sent' }; }
+      else if (b.dataset.act === 'pepper') { const j = await api('/api/slack/pepper/ask', { text: `📢 טיוטת תשובה ל-${dm.who}:\n«${sl.drafts[ch]}»` }); sl.res[ch] = { text: j.dryRun ? 'dry-run: ' + j.would : '✓ Sent to Pepper' }; }
+    } catch (e) { sl.res[ch] = { bad: true, text: 'Failed: ' + e.message }; }
+    renderWork();
+  });
+}
+
 const TABS = [['tasks', 'Tasks'], ['requests', 'Requests'], ['email', 'Email'], ['slack', 'Slack'], ['decisions', 'Decisions'], ['agents', 'Agents']];
-const LIVE_TABS = new Set(['tasks', 'email']);
+const LIVE_TABS = new Set(['tasks', 'email', 'slack']);
 function renderTabs() {
   $('tabs').innerHTML = TABS.map(([k, l]) => `<button data-t="${k}" class="${ui.tab === k ? 'on' : ''}" ${LIVE_TABS.has(k) ? '' : 'disabled title="Next in the build order"'}>${l}</button>`).join('');
-  $('tabs').querySelectorAll('button:not([disabled])').forEach((b) => b.onclick = () => { ui.tab = b.dataset.t; renderTabs(); if (ui.tab === 'email' && !email.data && !email.loading) loadEmail(); renderWork(); });
+  $('tabs').querySelectorAll('button:not([disabled])').forEach((b) => b.onclick = () => { ui.tab = b.dataset.t; renderTabs(); if (ui.tab === 'email' && !email.data && !email.loading) loadEmail(); if (ui.tab === 'slack' && !sl.data && !sl.loading) loadSlack(); renderWork(); });
 }
 renderTabs();
-$('refresh').onclick = () => { load(); loadTasks(); if (ui.tab === 'email') loadEmail(); else email.data = null; };
+$('refresh').onclick = () => { load(); loadTasks(); if (ui.tab === 'email') loadEmail(); else email.data = null; if (ui.tab === 'slack') loadSlack(); else sl.data = null; };
 const h = new Date().getHours();
 $('greet').textContent = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', Ilan';
 load(); loadTasks();

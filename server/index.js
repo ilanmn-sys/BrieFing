@@ -11,6 +11,7 @@ const { doneSync, isDryRun } = require('./done');
 const gmail = require('./connectors/gmail');
 const { triage, classify } = require('./triage');
 const llm = require('./llm');
+const slackApi = require('./slackApi');
 
 const CHECKS = {
   monday: monday.health,
@@ -55,6 +56,27 @@ const server = http.createServer(async (req, res) => {
         const status = e instanceof NotConfigured ? 'not_configured' : 'error';
         return send(502, { status, error: e.message, retry: '/api/calendar' });
       }
+    }
+    // ---- Slack (reads; sends only on explicit click and only with DRY_RUN=0) ----
+    if (url.pathname.startsWith('/api/slack')) {
+      const fail = (e) => send(e.code || (e instanceof NotConfigured ? 503 : 502), { status: e instanceof NotConfigured ? 'not_configured' : 'error', error: e.message });
+      try {
+        if (req.method === 'GET') {
+          if (url.pathname === '/api/slack') return send(200, await slackApi.load());
+          if (url.pathname === '/api/slack/summary') return send(200, await slackApi.summarize(url.searchParams.get('channel') || ''));
+          if (url.pathname === '/api/slack/pepper') return send(200, { latest: await slackApi.latestFromPepper() });
+          return send(404, { error: 'not found' });
+        }
+        if (req.method !== 'POST') return send(405, { error: 'GET or POST only' });
+        const origin = req.headers.origin;
+        if (origin && !/^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(origin)) return send(403, { error: 'bad origin' });
+        let raw = ''; for await (const c of req) { raw += c; if (raw.length > 20000) return send(413, { error: 'too large' }); }
+        const b = JSON.parse(raw || '{}');
+        if (url.pathname === '/api/slack/draft') return send(200, await slackApi.draftReply(String(b.channel || '')));
+        if (url.pathname === '/api/slack/send') return send(200, await slackApi.send(String(b.userId || ''), b.text));
+        if (url.pathname === '/api/slack/pepper/ask') return send(200, await slackApi.askPepper(b.text));
+        return send(404, { error: 'not found' });
+      } catch (e) { return fail(e); }
     }
     // ---- Email (drafts only: nothing here can send) ----
     if (url.pathname === '/api/email') {
