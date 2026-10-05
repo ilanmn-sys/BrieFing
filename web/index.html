@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ilan's Command Center</title>
+<style>
+:root{--bg:#f4f4f6;--panel:#fff;--line:#e8e8e8;--accent:#6C47FF;--accent-soft:#f0edff;--accent-line:#d4ccff;
+--ok:#037f4c;--ok-soft:#f0fdf4;--danger:#dc2626;--slack:#4A154B;--slack-soft:#f9f0fa;--text:#334155;--text2:#666;--text3:#999}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--text);font:13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;flex:none}
+header h1{font-size:15px;margin:0}
+header .date{color:var(--text2);font-size:11px}
+.chip{background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);border-radius:999px;padding:3px 10px;font-size:11px;max-width:380px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.spacer{flex:1}
+button{font:inherit;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:4px 10px;cursor:pointer;color:var(--text)}
+button:hover{border-color:var(--accent-line)}
+button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+main{flex:1;display:flex;gap:12px;padding:0 16px 16px;min-height:0}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;min-height:0}
+#timeline{flex:1;min-width:0}
+#work{width:340px;flex:none}
+.panel-head{display:flex;align-items:center;gap:6px;padding:8px 10px;border-bottom:1px solid var(--line);flex:none}
+.scroll{overflow:auto;flex:1;position:relative}
+.grid{position:relative;margin-left:44px;margin-right:8px}
+.hour{position:absolute;left:-44px;width:40px;text-align:right;font-size:10px;color:var(--text3);transform:translateY(-6px)}
+.hline{position:absolute;left:0;right:0;border-top:1px solid #f0f0f0}
+.ev{position:absolute;border-radius:6px;padding:2px 6px;font-size:11px;overflow:hidden;border-left:3px solid;cursor:pointer;text-decoration:none;color:inherit}
+.ev b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev span{font-size:10px;color:var(--text2)}
+.now{position:absolute;left:-4px;right:0;border-top:2px solid var(--danger);z-index:3}
+.now:before{content:"";position:absolute;left:-2px;top:-5px;width:8px;height:8px;border-radius:50%;background:var(--danger)}
+.allday{padding:6px 10px;border-bottom:1px solid var(--line);display:flex;gap:6px;flex-wrap:wrap;flex:none}
+.allday .tag{background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:6px;padding:1px 8px;font-size:11px}
+.msg{padding:24px;text-align:center;color:var(--text2)}
+.msg.err{color:var(--danger)}
+.msg code{display:block;margin:8px auto;color:var(--text3);font-size:11px;word-break:break-all}
+.tabs{display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabs button{font-size:11px;padding:3px 8px}
+.soon{padding:24px;color:var(--text3);text-align:center}
+@media (max-width:760px){main{flex-direction:column}#work{width:auto;height:180px}}
+</style>
+</head>
+<body>
+<header>
+  <h1 id="greet">Ilan's Command Center</h1>
+  <span class="date" id="dateline"></span>
+  <span class="chip" id="nextup" hidden></span>
+  <span class="spacer"></span>
+  <button id="refresh" title="Re-pulls data. After a deploy, reload the page too.">Refresh</button>
+</header>
+<main>
+  <section class="panel" id="timeline">
+    <div class="panel-head" id="daytabs"></div>
+    <div class="allday" id="allday" hidden></div>
+    <div class="scroll" id="scroll"><div id="tlbody"></div></div>
+  </section>
+  <aside class="panel" id="work">
+    <div class="tabs" id="tabs"></div>
+    <div class="soon" id="worksoon">Tasks tab is next in the build order.</div>
+  </aside>
+</main>
+<script>
+const START_H = 8, END_H = 20, PX_PER_MIN = 1.15;
+const state = { data: null, error: null, day: 0, loading: false };
+const $ = (id) => document.getElementById(id);
+
+// Title-keyword colours (border, background).
+const COLOURS = [
+  [/interview|press|media|journalist|podcast/i, ['#6C47FF', '#f0edff']],
+  [/elevate|event|panel|keynote/i, ['#d97706', '#fffbeb']],
+  [/agency|brazil|mexico|latam|scherf/i, ['#037f4c', '#f0fdf4']],
+  [/1:1|1-1|sync|check-?in|stand-?up/i, ['#0284c7', '#f0f9ff']],
+  [/lunch|doctor|dentist|family|personal|רופא|אישי/i, ['#be185d', '#fdf2f8']],
+];
+function colourFor(title) {
+  for (const [re, c] of COLOURS) if (re.test(title)) return c;
+  return ['#64748b', '#f1f5f9'];
+}
+
+function parts(iso, tz) {
+  // Date key (YYYY-MM-DD) and minutes-from-midnight in the configured tz.
+  const d = new Date(iso);
+  const f = new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+  const p = Object.fromEntries(f.formatToParts(d).map((x) => [x.type, x.value]));
+  return { key: `${p.year}-${p.month}-${p.day}`, min: +p.hour * 60 + +p.minute, label: `${p.hour}:${p.minute}` };
+}
+function addDays(key, n) {
+  const d = new Date(key + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+async function load() {
+  state.loading = true; render();
+  try {
+    const r = await fetch('/api/calendar?days=4');
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || `HTTP ${r.status}`);
+    state.data = j; state.error = null;
+    console.log(`loaded: ${j.events.length} calendar events`);
+  } catch (e) {
+    state.error = e.message; console.error('calendar load failed', e);
+  }
+  state.loading = false; render();
+}
+
+function layout(events, tz, dayKey) {
+  // Timed events for one day, packed into side-by-side columns when they overlap.
+  const items = events.filter((e) => !e.allDay).map((e) => {
+    const s = parts(e.start, tz), en = parts(e.end, tz);
+    let startMin = s.key < dayKey ? 0 : s.min;
+    let endMin = en.key > dayKey ? 24 * 60 : en.min;
+    if (s.key > dayKey || en.key < dayKey) return null;
+    if (endMin <= startMin) endMin = startMin + 15;
+    return { e, startMin, endMin, s, en };
+  }).filter(Boolean).sort((a, b) => a.startMin - b.startMin);
+  const cols = [];
+  for (const it of items) {
+    let c = cols.findIndex((last) => last <= it.startMin);
+    if (c === -1) { c = cols.length; cols.push(0); }
+    cols[c] = it.endMin; it.col = c;
+  }
+  // Column count per overlapping cluster (simple: global max within overlap group).
+  for (const it of items) {
+    it.n = Math.max(...items.filter((o) => o.startMin < it.endMin && o.endMin > it.startMin).map((o) => o.col)) + 1;
+  }
+  return items;
+}
+
+function render() {
+  const d = state.data;
+  $('refresh').textContent = state.loading ? '…' : 'Refresh';
+  if (d) {
+    const dt = new Date(d.today + 'T12:00:00Z');
+    $('dateline').textContent = dt.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
+  }
+  // Day tabs
+  const tabs = ['Today', '+1', '+2', '+3'].map((l, i) => `<button class="${i === state.day ? 'on' : ''}" data-d="${i}">${l}</button>`).join('');
+  $('daytabs').innerHTML = tabs;
+  $('daytabs').querySelectorAll('button').forEach((b) => b.onclick = () => { state.day = +b.dataset.d; render(); });
+
+  const body = $('tlbody');
+  $('allday').hidden = true; $('nextup').hidden = true;
+  if (state.error) {
+    body.innerHTML = `<div class="msg err">Calendar unavailable<code>${esc(state.error)}</code><button id="retry">Retry</button></div>`;
+    $('retry').onclick = load; return;
+  }
+  if (!d) { body.innerHTML = '<div class="msg">Loading…</div>'; return; }
+
+  const dayKey = addDays(d.today, state.day);
+  const adEvents = d.events.filter((e) => e.allDay && e.start <= dayKey && e.end > dayKey);
+  if (adEvents.length) { $('allday').hidden = false; $('allday').innerHTML = adEvents.map((e) => `<span class="tag">${esc(e.title)}</span>`).join(''); }
+
+  const items = layout(d.events, d.tz, dayKey);
+  const H = (END_H - START_H) * 60 * PX_PER_MIN;
+  let html = `<div class="grid" style="height:${H + 12}px;margin-top:10px">`;
+  for (let h = START_H; h <= END_H; h++) {
+    const y = (h - START_H) * 60 * PX_PER_MIN;
+    html += `<div class="hline" style="top:${y}px"></div><div class="hour" style="top:${y}px">${String(h).padStart(2, '0')}:00</div>`;
+  }
+  for (const it of items) {
+    const top = (Math.max(it.startMin, START_H * 60) - START_H * 60) * PX_PER_MIN;
+    const bottom = (Math.min(it.endMin, END_H * 60) - START_H * 60) * PX_PER_MIN;
+    if (bottom <= 0 || top >= H) continue;
+    const [bc, bg] = colourFor(it.e.title);
+    const w = 100 / it.n;
+    html += `<a class="ev" href="${esc(it.e.link || '#')}" target="_blank" rel="noopener" style="top:${top}px;height:${Math.max(bottom - top, 18)}px;left:${it.col * w}%;width:calc(${w}% - 3px);background:${bg};border-color:${bc}"><b>${esc(it.e.title)}</b><span>${it.s.label}–${it.en.label}</span></a>`;
+  }
+  const nowP = parts(new Date().toISOString(), d.tz);
+  if (state.day === 0 && nowP.key === d.today && nowP.min >= START_H * 60 && nowP.min <= END_H * 60) {
+    html += `<div class="now" style="top:${(nowP.min - START_H * 60) * PX_PER_MIN}px"></div>`;
+  }
+  html += '</div>';
+  if (!items.length && !adEvents.length) html += '<div class="msg">Nothing scheduled.</div>';
+  body.innerHTML = html;
+
+  // Next-up chip: next event today that hasn't started yet.
+  const todays = layout(d.events, d.tz, d.today);
+  const next = todays.find((it) => it.startMin > nowP.min);
+  if (next && nowP.key === d.today) { $('nextup').hidden = false; $('nextup').textContent = `Next: ${next.s.label} ${next.e.title}`; }
+}
+
+$('tabs').innerHTML = ['Tasks', 'Requests', 'Email', 'Slack', 'Decisions', 'Agents'].map((t) => `<button disabled>${t}</button>`).join('');
+$('refresh').onclick = load;
+const h = new Date().getHours();
+$('greet').textContent = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', Ilan';
+load();
+setInterval(() => { if (state.data) render(); }, 60000); // keep now-line and next-up fresh
+</script>
+</body>
+</html>

@@ -42,6 +42,16 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://localhost');
   try {
     if (url.pathname === '/health') return send(200, await health());
+    if (url.pathname === '/api/calendar') {
+      const days = Math.min(Math.max(parseInt(url.searchParams.get('days') || '4', 10), 1), 14);
+      try {
+        const events = await google.listEvents(days, config.me.tz, today());
+        return send(200, { today: today(), tz: config.me.tz, days, events });
+      } catch (e) {
+        const status = e instanceof NotConfigured ? 'not_configured' : 'error';
+        return send(502, { status, error: e.message, retry: '/api/calendar' });
+      }
+    }
     const m = url.pathname.match(/^\/health\/(\w+)$/);
     if (m) {
       if (!CHECKS[m[1]]) return send(404, { error: 'unknown connector' });
