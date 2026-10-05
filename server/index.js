@@ -52,6 +52,16 @@ const server = http.createServer(async (req, res) => {
         return send(502, { status, error: e.message, retry: '/api/calendar' });
       }
     }
+    if (url.pathname === '/api/tasks') {
+      try {
+        const t = await monday.listTasks();
+        console.log(`tasks loaded: ${t.items.length} items, ${t.pages} pages${t.truncated ? ' (TRUNCATED)' : ''}`);
+        return send(200, { today: today(), tz: config.me.tz, config: { groups: config.groups, board: config.boards.projects }, ...t });
+      } catch (e) {
+        const status = e instanceof NotConfigured ? 'not_configured' : 'error';
+        return send(502, { status, error: e.message, retry: '/api/tasks' });
+      }
+    }
     const m = url.pathname.match(/^\/health\/(\w+)$/);
     if (m) {
       if (!CHECKS[m[1]]) return send(404, { error: 'unknown connector' });

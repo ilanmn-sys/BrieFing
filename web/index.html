@@ -40,6 +40,22 @@ main{flex:1;display:flex;gap:12px;padding:0 16px 16px;min-height:0}
 .tabs{display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .tabs button{font-size:11px;padding:3px 8px}
 .soon{padding:24px;color:var(--text3);text-align:center}
+#workbody{padding:0}
+.stats{display:flex;gap:6px;padding:8px 10px;border-bottom:1px solid var(--line);flex:none}
+.stat{flex:1;background:var(--bg);border-radius:8px;padding:4px 8px;text-align:center}
+.stat b{display:block;font-size:15px}.stat span{font-size:10px;color:var(--text3)}
+.stat.danger b{color:var(--danger)}
+.sec{padding:8px 10px 2px;font-size:11px;font-weight:600;color:var(--text2);display:flex;justify-content:space-between}
+.sec.personal{color:var(--slack)}
+.row{display:block;padding:6px 10px;border-bottom:1px solid #f3f3f3;text-decoration:none;color:inherit}
+.row:hover{background:var(--accent-soft)}
+.row .nm{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .meta{font-size:10px;color:var(--text3);display:flex;gap:8px}
+.row .meta .late{color:var(--danger)}
+.row.sunk{opacity:.55}
+.pri{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;background:#cbd5e1}
+.pri.high{background:var(--danger)}.pri.med{background:#f59e0b}.pri.low{background:#22c55e}
+.banner{margin:8px 10px;padding:6px 8px;border-radius:8px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:11px}
 @media (max-width:760px){main{flex-direction:column}#work{width:auto;height:180px}}
 </style>
 </head>
@@ -59,7 +75,8 @@ main{flex:1;display:flex;gap:12px;padding:0 16px 16px;min-height:0}
   </section>
   <aside class="panel" id="work">
     <div class="tabs" id="tabs"></div>
-    <div class="soon" id="worksoon">Tasks tab is next in the build order.</div>
+    <div class="stats" id="stats" hidden></div>
+    <div class="scroll" id="workbody"></div>
   </aside>
 </main>
 <script>
@@ -183,11 +200,85 @@ function render() {
   if (next && nowP.key === d.today) { $('nextup').hidden = false; $('nextup').textContent = `Next: ${next.s.label} ${next.e.title}`; }
 }
 
-$('tabs').innerHTML = ['Tasks', 'Requests', 'Email', 'Slack', 'Decisions', 'Agents'].map((t) => `<button disabled>${t}</button>`).join('');
-$('refresh').onclick = load;
+
+// ---------- Tasks tab (R-01..R-03, R-14, R-17, R-18, R-21) ----------
+const tasks = { data: null, error: null, loading: false, touched: new Set() };
+const META = /comms calendar sync|daily inbox digest|morning-board|pepper-eod/i;
+const HEALTH = /רופא|בדיק|דם|נוירולוג|רפוא|doctor|medical|health|appointment|🩺/i;
+const PRI = { '🔥 High': 0, '🟡 Medium': 1, '🟢 Low': 2 };
+
+function buildTaskView(d) {
+  const g = d.config.groups, c = g.canonical;
+  const hidden = new Set([c.completed.id, g.parking.recurring, g.parking.noise]);
+  const view = { today: [], overdue: [], week: [], active: [], personal: [], hiddenCount: 0, total: 0 };
+  for (const t of d.items) {
+    if (hidden.has(t.group) || t.status === 'Done' || t.status === 'Not Relevant' || META.test(t.name)) { view.hiddenCount++; continue; }
+    if (t.group === g.personal) { view.personal.push(t); continue; }
+    const inToday = t.group === c.today.id;
+    const blocked = t.group === c.waiting.id || t.status === 'With steakholder'; // R-14: blocked work never counts overdue
+    const due = t.deadline || '';
+    if (inToday || (due && due === d.today && !blocked)) view.today.push(t);          // R-02
+    else if (due && due < d.today && !blocked) view.overdue.push(t);
+    else if (t.group === c.thisWeek.id) view.week.push(t);
+    else view.active.push(t);
+  }
+  const rank = (t) => (t.priority in PRI ? PRI[t.priority] : 3);
+  const sink = (t) => (tasks.touched.has(t.id) ? 1 : 0);                                  // R-03
+  const cmp = (a, b) => sink(a) - sink(b) || rank(a) - rank(b) || (a.deadline || '9999').localeCompare(b.deadline || '9999') || a.name.localeCompare(b.name);
+  for (const k of ['today', 'overdue', 'week', 'active']) view[k].sort(cmp);
+  // R-17 / R-18: personal track, max 3, health first.
+  view.personal.sort((a, b) => (HEALTH.test(b.name) - HEALTH.test(a.name)) || cmp(a, b));
+  view.personalMore = Math.max(0, view.personal.length - 3);
+  view.personal = view.personal.slice(0, 3);
+  view.total = view.today.length + view.overdue.length + view.week.length + view.active.length;
+  return view;
+}
+
+function daysLate(due, today) { return Math.round((Date.parse(today) - Date.parse(due)) / 86400000); }
+
+function taskRow(t, d, kind) {
+  const pc = t.priority.includes('High') ? 'high' : t.priority.includes('Medium') ? 'med' : t.priority.includes('Low') ? 'low' : '';
+  const url = `https://monday.monday.com/boards/${d.config.board}/pulses/${t.id}`;
+  const late = kind === 'overdue' ? `<span class="late">${daysLate(t.deadline, d.today)}d late</span>` : '';
+  const date = t.deadline ? `<span>${esc(t.deadline.slice(5).split('-').reverse().join('.'))}</span>` : '';
+  return `<a class="row ${tasks.touched.has(t.id) ? 'sunk' : ''}" href="${url}" target="_blank" rel="noopener"><span class="nm"><i class="pri ${pc}"></i>${esc(t.name)}</span><span class="meta">${date}${late}<span>${esc(t.status || '')}</span></span></a>`;
+}
+
+async function loadTasks() {
+  tasks.loading = true; renderWork();
+  try {
+    const r = await fetch('/api/tasks'); const j = await r.json();
+    if (!r.ok) throw new Error(j.error || `HTTP ${r.status}`);
+    tasks.data = j; tasks.error = null;
+    console.log(`loaded: ${j.items.length} tasks in ${j.pages} pages${j.truncated ? ' (TRUNCATED)' : ''}`);
+  } catch (e) { tasks.error = e.message; console.error('tasks load failed', e); }
+  tasks.loading = false; renderWork();
+}
+
+function renderWork() {
+  const body = $('workbody'), stats = $('stats');
+  stats.hidden = true;
+  if (tasks.error) { body.innerHTML = `<div class="msg err">Tasks unavailable<code>${esc(tasks.error)}</code><button id="retryT">Retry</button></div>`; $('retryT').onclick = loadTasks; return; }
+  if (!tasks.data) { body.innerHTML = '<div class="msg">Loading…</div>'; return; }
+  const d = tasks.data, v = buildTaskView(d);
+  stats.hidden = false;
+  stats.innerHTML = `<div class="stat"><b>${v.today.length}</b><span>Today</span></div><div class="stat danger"><b>${v.overdue.length}</b><span>Overdue</span></div><div class="stat"><b>${v.total}</b><span>Total</span></div>`;
+  const cap = d.config.groups.canonical.today.cap;
+  const sec = (label, list, kind, extra = '') => list.length ? `<div class="sec ${kind === 'personal' ? 'personal' : ''}"><span>${label} · ${list.length}${extra}</span></div>${list.map((t) => taskRow(t, d, kind)).join('')}` : '';
+  let html = '';
+  if (d.truncated) html += `<div class="banner">Showing a partial board: pagination hit the ${d.pages}-page cap. Counts are incomplete.</div>`;
+  if (v.today.length > cap) html += `<div class="banner">🔥 Today holds ${v.today.length} items (cap ${cap}).</div>`;
+  html += sec('🔥 Today', v.today, 'today') + sec('🔴 Overdue', v.overdue, 'overdue') + sec('📅 This Week', v.week, 'week') + sec('📦 Active', v.active, 'active');
+  html += sec('👨‍👩 אישי', v.personal, 'personal', v.personalMore ? ` (+${v.personalMore} more)` : '');
+  if (!v.total && !v.personal.length) html += '<div class="msg">Nothing open.</div>';
+  body.innerHTML = html;
+}
+
+$('tabs').innerHTML = ['Tasks', 'Requests', 'Email', 'Slack', 'Decisions', 'Agents'].map((t) => `<button ${t === 'Tasks' ? 'class="on"' : 'disabled title="Next in the build order"'}>${t}</button>`).join('');
+$('refresh').onclick = () => { load(); loadTasks(); };
 const h = new Date().getHours();
 $('greet').textContent = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', Ilan';
-load();
+load(); loadTasks();
 setInterval(() => { if (state.data) render(); }, 60000); // keep now-line and next-up fresh
 </script>
 </body>
