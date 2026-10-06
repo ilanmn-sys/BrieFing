@@ -15,6 +15,7 @@ const slackApi = require('./slackApi');
 const requests = require('./requestsApi');
 const decisions = require('./decisionsApi');
 const agents = require('./agents');
+const boardHealth = require('./healthLogic');
 const { spawn } = require('child_process');
 
 const CHECKS = {
@@ -179,7 +180,15 @@ const server = http.createServer(async (req, res) => {
       try {
         const t = await monday.listTasks();
         console.log(`tasks loaded: ${t.items.length} items, ${t.pages} pages${t.truncated ? ' (TRUNCATED)' : ''}`);
-        return send(200, { today: today(), tz: config.me.tz, dryRun: isDryRun(), config: { groups: config.groups, board: config.boards.projects }, ...t });
+        // Board health rides on the same read. A failure here must never hide the task list.
+        let healthRules = null, healthError = null;
+        try {
+          const g = config.groups;
+          const blocked = t.items.filter((i) => boardHealth.isBlocked(i, g) && i.status !== 'Done' && i.group !== g.canonical.completed.id).map((i) => i.id);
+          const holderText = blocked.length ? await monday.updateTexts(blocked) : new Map();
+          healthRules = boardHealth.health(t.items, { groups: g, today: today(), agentNames: agents.registry().flatMap((a) => [a.id.replace(/-/g, ' '), a.name]), holderText });
+        } catch (e) { healthError = e.message; console.error('board health failed', e); }
+        return send(200, { today: today(), tz: config.me.tz, dryRun: isDryRun(), config: { groups: config.groups, board: config.boards.projects }, health: healthRules, healthError, ...t });
       } catch (e) {
         const status = e instanceof NotConfigured ? 'not_configured' : 'error';
         return send(502, { status, error: e.message, retry: '/api/tasks' });

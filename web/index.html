@@ -133,6 +133,19 @@ main{flex:1;display:flex;gap:12px;padding:0 16px 16px;min-height:0}
 .pill{font-size:9px;font-weight:700;border-radius:4px;padding:0 5px}
 .pill.ok{background:var(--ok-soft);color:var(--ok)}.pill.bad{background:#fee2e2;color:var(--danger)}.pill.unk{background:#fef3c7;color:#92400e}.pill.np{background:#f1f5f9;color:#64748b}
 .chip.alert{background:#fee2e2;border-color:#fecaca;color:var(--danger)}
+.hs{padding:8px 10px;border-bottom:1px solid var(--line)}
+.hs .t{font-size:10px;color:var(--text3);margin-bottom:4px}
+.hs .chips{display:flex;gap:4px;flex-wrap:wrap}
+.hc{font-size:10px;padding:2px 7px;border-radius:999px;border:1px solid var(--line);background:var(--panel);cursor:pointer}
+.hc b{margin-left:3px}
+.hc.zero{color:var(--ok);background:var(--ok-soft);border-color:#bbf7d0}
+.hc.some{color:var(--danger);background:#fef2f2;border-color:#fecaca}
+.hc.on{outline:2px solid var(--accent)}
+.hl{margin-top:6px;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.hl .hi{padding:5px 8px;border-bottom:1px solid #f3f3f3;font-size:11px}
+.hl .hi:last-child{border-bottom:0}
+.hl .hi a{color:inherit;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hl .hi span{color:var(--text3);font-size:10px}
 @media (max-width:760px){main{flex-direction:column}#work{width:auto;height:180px}}
 </style>
 </head>
@@ -291,6 +304,7 @@ function render() {
 
 // ---------- Tasks tab (R-01..R-03, R-14, R-17, R-18, R-21) ----------
 const ui = { tab: 'tasks' };
+const hs = { open: null };
 const tasks = { data: null, error: null, loading: false, touched: new Set(), rows: {} };
 const META = /comms calendar sync|daily inbox digest|morning-board|pepper-eod/i;
 const HEALTH = /רופא|בדיק|דם|נוירולוג|רפוא|doctor|medical|health|appointment|🩺/i;
@@ -371,6 +385,17 @@ function renderWork() {
   $('stats').hidden = true; return renderTasks();
 }
 
+// Board health strip: counts of known rule violations. Each count opens its proposal list. Nothing auto-fixes.
+function healthStrip(d) {
+  if (!d.health) return `<div class="banner">Board health unavailable: ${esc(d.healthError || 'no data')}. The task list is unaffected.</div>`;
+  const open = d.health.find((r) => r.id === hs.open);
+  return `<div class="hs"><div class="t">Board health · proposals only, nothing changes without your approval${d.truncated ? ' · partial board, counts incomplete' : ''}</div><div class="chips">`
+    + d.health.map((r) => `<button class="hc ${r.count ? 'some' : 'zero'} ${hs.open === r.id ? 'on' : ''}" data-hr="${r.id}" title="${esc(r.label)}${r.heuristic ? ' (keyword guess)' : ''}">${r.id}${r.heuristic ? '~' : ''} ${esc(r.label)}<b>${r.count}</b></button>`).join('')
+    + '</div>'
+    + (open ? `<div class="hl">${open.items.length ? open.items.map((i) => `<div class="hi"><a href="https://monday.monday.com/boards/${d.config.board}/pulses/${esc(i.id)}" target="_blank" rel="noopener">${esc(i.name)}</a><span>${esc(i.proposal)}</span></div>`).join('') : '<div class="hi"><span>Nothing to fix.</span></div>'}</div>` : '')
+    + '</div>';
+}
+
 function renderTasks() {
   const body = $('workbody'), stats = $('stats');
   stats.hidden = true;
@@ -381,7 +406,7 @@ function renderTasks() {
   stats.innerHTML = `<div class="stat"><b>${v.today.length}</b><span>Today</span></div><div class="stat danger"><b>${v.overdue.length}</b><span>Overdue</span></div><div class="stat"><b>${v.total}</b><span>Total</span></div>`;
   const cap = d.config.groups.canonical.today.cap;
   const sec = (label, list, kind, extra = '') => list.length ? `<div class="sec ${kind === 'personal' ? 'personal' : ''}"><span>${label} · ${list.length}${extra}</span></div>${list.map((t) => taskRow(t, d, kind)).join('')}` : '';
-  let html = '';
+  let html = healthStrip(d);
   if (d.truncated) html += `<div class="banner">Showing a partial board: pagination hit the ${d.pages}-page cap. Counts are incomplete.</div>`;
   if (v.today.length > cap) html += `<div class="banner">🔥 Today holds ${v.today.length} items (cap ${cap}).</div>`;
   html += sec('🔥 Today', v.today, 'today') + sec('🔴 Overdue', v.overdue, 'overdue') + sec('📅 This Week', v.week, 'week') + sec('📦 Active', v.active, 'active');
@@ -389,6 +414,7 @@ function renderTasks() {
   if (!v.total && !v.personal.length) html += '<div class="msg">Nothing open.</div>';
   body.innerHTML = html;
   $('dry').hidden = !d.dryRun;
+  body.querySelectorAll('button[data-hr]').forEach((b) => b.onclick = () => { hs.open = hs.open === b.dataset.hr ? null : b.dataset.hr; renderWork(); });
   const all = [...v.today, ...v.overdue, ...v.week, ...v.active, ...v.personal];
   body.querySelectorAll('.row .cb').forEach((cb) => {
     const t = all.find((x) => x.id === cb.closest('.row').dataset.id);

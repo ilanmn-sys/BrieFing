@@ -97,4 +97,15 @@ async function setRequestStatus(itemId, label) {
   return r.data.change_column_value.id;
 }
 
-module.exports = { gql, health, listTasks, setDone, listRequests, postUpdate, setRequestStatus };
+// Latest update text for a set of items (used to find whether a blocked item names who holds it).
+async function updateTexts(ids) {
+  const out = new Map();
+  for (let i = 0; i < ids.length; i += 100) {
+    const r = await gql('query($ids:[ID!]){ items(ids:$ids){ id updates(limit:3){ text_body } } }', { ids: ids.slice(i, i + 100).map(String) });
+    if (r.errors) throw new Error(JSON.stringify(r.errors).slice(0, 200));
+    for (const it of r.data.items) out.set(it.id, (it.updates || []).map((u) => u.text_body || '').join('\n'));
+  }
+  return out;
+}
+
+module.exports = { gql, health, listTasks, setDone, listRequests, postUpdate, setRequestStatus, updateTexts };
