@@ -110,4 +110,71 @@ async function updateTexts(ids) {
   return out;
 }
 
-module.exports = { gql, health, listTasks, setDone, listRequests, postUpdate, setRequestStatus, updateTexts };
+// ---- Strategy proposals (Apply all) ----
+const C = config.columns;
+const names = (d) => (d.errors ? (() => { throw new Error(JSON.stringify(d.errors).slice(0, 200)); })() : d.data);
+
+// Items in a group (id, name, status). One page of 500 is plenty for 📥 Pepper Tasks.
+async function groupItems(groupId) {
+  const q = `query($id:[ID!]){ boards(ids:$id){ items_page(limit:500, query_params:{rules:[{column_id:"group",compare_value:["${groupId}"],operator:any_of}]}){ items{ id name column_values(ids:["${C.status}"]){ text } } } } }`;
+  const d = names(await gql(q, { id: [String(config.boards.projects)] }));
+  return d.boards[0].items_page.items.map((i) => ({ id: i.id, name: i.name, status: (i.column_values[0] || {}).text || '' }));
+}
+
+async function itemUpdates(itemId, limit = 30) {
+  const d = names(await gql('query($ids:[ID!]){ items(ids:$ids){ id updates(limit:' + limit + '){ text_body created_at } } }', { ids: [String(itemId)] }));
+  return d.items[0] ? d.items[0].updates : [];
+}
+
+// Current group / date / priority for a set of items, and which board they are on.
+async function itemStates(ids) {
+  const out = new Map();
+  for (let i = 0; i < ids.length; i += 100) {
+    const q = `query($ids:[ID!]){ items(ids:$ids){ id board{ id } group{ id } column_values(ids:["${C.deadline}","${C.priority}"]){ id text } } }`;
+    const d = names(await gql(q, { ids: ids.slice(i, i + 100).map(String) }));
+    for (const it of d.items) {
+      if (String(it.board.id) !== String(config.boards.projects)) continue; // never touch another board
+      const cv = Object.fromEntries(it.column_values.map((c) => [c.id, c.text || '']));
+      out.set(it.id, { group: it.group.id, date: cv[C.deadline] || null, priority: cv[C.priority] || '' });
+    }
+  }
+  return out;
+}
+
+async function moveToGroup(itemId, groupId) {
+  const d = names(await gql('mutation($i:ID!,$g:String!){ move_item_to_group(item_id:$i, group_id:$g){ id } }', { i: String(itemId), g: groupId }));
+  if (!d.move_item_to_group) throw new Error('monday: move returned nothing');
+}
+
+// date === null clears the Date column (null clears a column in change_multiple_column_values).
+async function setDate(itemId, date) {
+  const v = JSON.stringify({ [C.deadline]: date ? { date } : null });
+  const d = names(await gql('mutation($b:ID!,$i:ID!,$v:JSON!){ change_multiple_column_values(board_id:$b,item_id:$i,column_values:$v){ id } }', { b: String(config.boards.projects), i: String(itemId), v }));
+  if (!d.change_multiple_column_values) throw new Error('monday: date change returned nothing');
+}
+
+async function setPriority(itemId, label) {
+  const d = names(await gql('mutation($b:ID!,$i:ID!,$c:String!,$v:JSON!){ change_column_value(board_id:$b,item_id:$i,column_id:$c,value:$v){ id } }',
+    { b: String(config.boards.projects), i: String(itemId), c: C.priority, v: JSON.stringify({ label }) }));
+  if (!d.change_column_value) throw new Error('monday: priority change returned nothing');
+}
+
+// An email task for Pepper: in 📥 Pepper Tasks, owner Ilan, "Working on it".
+async function createEmailTask({ name, due, body }) {
+  const cv = { [C.status]: { label: 'Working on it' }, [C.person]: { personsAndTeams: [{ id: config.me.mondayUserId, kind: 'person' }] } };
+  if (due) cv[C.deadline] = { date: due };
+  const d = names(await gql('mutation($b:ID!,$g:String!,$n:String!,$v:JSON!){ create_item(board_id:$b, group_id:$g, item_name:$n, column_values:$v){ id } }',
+    { b: String(config.boards.projects), g: config.groups.canonical.pepperTasks.id, n: name, v: JSON.stringify(cv) }));
+  if (!d.create_item) throw new Error('monday: create_item returned nothing');
+  if (body) await postUpdate(d.create_item.id, body);
+  return d.create_item.id;
+}
+
+// Sets the Status column on a projects-board item (e.g. the strategy item to Done).
+async function setRequestStatusOn(itemId, label) {
+  const d = names(await gql('mutation($b:ID!,$i:ID!,$c:String!,$v:JSON!){ change_column_value(board_id:$b,item_id:$i,column_id:$c,value:$v){ id } }',
+    { b: String(config.boards.projects), i: String(itemId), c: config.columns.status, v: JSON.stringify({ label }) }));
+  if (!d.change_column_value) throw new Error('monday: status change returned nothing');
+}
+
+module.exports = { setRequestStatusOn, gql, health, listTasks, setDone, listRequests, postUpdate, setRequestStatus, updateTexts, groupItems, itemUpdates, itemStates, moveToGroup, setDate, setPriority, createEmailTask };

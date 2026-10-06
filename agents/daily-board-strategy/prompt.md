@@ -64,6 +64,7 @@ Tool notes. Slack: to DM a person, pass their **user id** as `channel_id`, to re
 Look for `🗓️ Daily Strategy — <today>` in 📥 Pepper Tasks.
 
 - Not found: **PROPOSE mode**. Run sections 2-9.
+- Found, and an update contains `APPLIED | strategy_date:<today>`: the dashboard's Apply all button already handled it. Exit silently with `RESULT` delivery `n/a`.
 - Found, and its latest update contains `AWAITING_APPROVAL`: **APPLY mode**. Go to section 10.
 - Found, but it has a proposals update and no `AWAITING_APPROVAL` marker (an earlier run died mid-way): **REPAIR**. Read Pepper's DM, find your brief sent today, take its `Message TS`, post the marker update, then continue as APPLY mode. If no brief was sent, send it (section 9) and post the marker.
 - Found and marked `Done`: exit silently with `RESULT` delivery `n/a`.
@@ -125,7 +126,13 @@ Report these at the bottom of the brief as done: items already `Done` or `Comple
 
 **Read the calendar first.** Today's events for Ilan, {{me.tz}}. Ignore events Ilan has declined. An all-day or multi-day Out of Office is context, not a meeting; if Ilan is out today, say so at the top and keep the day light. Find real open gaps 08:00-19:00. A suggested time block that collides with a meeting destroys trust in the whole brief. Put deep work in the longest gap, calls and approvals in short gaps, quick wins in 15-30 minute fragments. If the calendar is unreachable, still send the brief, omit time blocks, and say why.
 
-Create `🗓️ Daily Strategy — <YYYY-MM-DD>` in 📥 Pepper Tasks (status `Working on it`, owner Ilan). Post an update with the full numbered proposal list: every group move, date, priority and email task, one numbered line each. Then send the Hebrew brief to Pepper (DM by her user id), check the send result, read Pepper's DM to get the sent message's `Message TS`, and post a second update on the strategy item containing exactly:
+Create `🗓️ Daily Strategy — <YYYY-MM-DD>` in 📥 Pepper Tasks (status `Working on it`, owner Ilan). Post an update with the full numbered proposal list: every group move, date, priority and email task, one numbered line each. **In the same update, add exactly one more line, on a single line with no line breaks, that the dashboard's Apply all button reads:**
+
+```
+PROPOSALS_JSON: [{"n":1,"text":"<same words as line 1>","ops":[{"type":"move","itemId":"<id>","fromGroup":"<current group id>","toGroup":"{{groups.canonical.today.id}}"},{"type":"date","itemId":"<id>","fromDate":null,"date":"<YYYY-MM-DD>"}]}, ...]
+```
+
+Rules for that line. Only the JSON is ever applied; prose is never interpreted. Numbers match the numbered list exactly. Each numbered proposal has 1-5 operations. Operation types: `move` (itemId, fromGroup, toGroup), `date` (itemId, fromDate or null, date or null to clear), `priority` (itemId, from as the current label or "", label one of 🔥 High / 🟡 Medium / 🟢 Low), `email_task` (name starting `📧 מענה למייל:`, due or null, body). `fromGroup`, `fromDate` and `from` are the values you read from the board this run; the button uses them to refuse anything that changed since. A `toGroup` may be: {{groups.canonical.today.id}}, {{groups.canonical.thisWeek.id}}, {{groups.canonical.waiting.id}}, {{groups.canonical.pepperTasks.id}}, {{groups.canonical.completed.id}}, topics, {{groups.parking.recurring}}, {{groups.parking.noise}} or {{groups.personal}}, never a legacy or excluded group. A line that is only a flag (duplicates, a note) has no operations: leave it out of the JSON. If a proposal cannot be written as operations, leave it out of the JSON and end its line in the list with "(ידני)". Check that the line is valid JSON before posting it. Then send the Hebrew brief to Pepper (DM by her user id), check the send result, read Pepper's DM to get the sent message's `Message TS`, and post a second update on the strategy item containing exactly:
 
 ```
 AWAITING_APPROVAL | strategy_date:<YYYY-MM-DD> | ask_ts:<Message TS of the brief>
@@ -182,8 +189,8 @@ Never more than {{groups.canonical.today.cap}} under היום. Every item needs 
 1. Read the strategy item's updates and recover `ask_ts` and the numbered proposal list.
 2. Read Pepper's DM (by her user id) for a message from Ilan ({{me.slackUserId}}) newer than `ask_ts`.
 3. Interpret it: "apply all" / "הכל" / "אשר" means everything; "apply 1,3,5" means those numbers; "skip" / "לא" means nothing; mixed or unclear means apply the confident part and ask about the rest, never guess at the ambiguous half; no reply yet means exit silently and check next run.
-4. Apply the approved items: group moves (`move_item_to_group` through `all_monday_api`), column changes, and creating approved `📧 מענה למייל:` tasks. Re-check each item first: if it changed since the proposal, skip it and say so.
-5. Post a confirmation update listing exactly what was applied and what was skipped, and set the strategy item to Done.
+4. Apply the approved items from the `PROPOSALS_JSON` line: group moves (`move_item_to_group` through `all_monday_api`), column changes, and creating approved `📧 מענה למייל:` tasks. Re-check each operation against its `fromGroup` / `fromDate` / `from` first: if the board changed since the proposal, skip that proposal and say so. Skip an email task whose name already exists in 📥 Pepper Tasks. If there is no `PROPOSALS_JSON` line (an older strategy item), apply nothing automatically: tell Ilan in the DM that this item can only be applied by hand.
+5. Post a confirmation update listing exactly what was applied and what was skipped, ending with `APPLIED | strategy_date:<YYYY-MM-DD> | applied:<n> | skipped:<m> | by:agent`, and set the strategy item to Done.
 6. Reply in Pepper's DM: `✅ הוחל: <n> שינויים · דולג: <m>` with the item link. Check the send result.
 7. **Record the signal.** Append an entry to section 2 of `LEARNING-LOG.md`, newest first, numbered one above the highest existing `S-` number in the file (some numbers appear twice; use the maximum):
    - `approval`: how many proposals were accepted and rejected, and **which specific ones were rejected**, naming what the judgement got wrong.

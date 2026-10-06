@@ -15,6 +15,7 @@ const slackApi = require('./slackApi');
 const requests = require('./requestsApi');
 const decisions = require('./decisionsApi');
 const agents = require('./agents');
+const strategy = require('./strategyApi');
 const boardHealth = require('./healthLogic');
 const { spawn } = require('child_process');
 
@@ -61,6 +62,24 @@ const server = http.createServer(async (req, res) => {
         const status = e instanceof NotConfigured ? 'not_configured' : 'error';
         return send(502, { status, error: e.message, retry: '/api/calendar' });
       }
+    }
+    // ---- Strategy proposals: Apply all (board writes only with DRY_RUN=0) ----
+    if (url.pathname.startsWith('/api/strategy')) {
+      try {
+        if (req.method === 'GET' && url.pathname === '/api/strategy') return send(200, await strategy.load());
+        if (req.method !== 'POST') return send(405, { error: 'GET or POST only' });
+        const origin = req.headers.origin;
+        if (origin && !/^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(origin)) return send(403, { error: 'bad origin' });
+        let raw = ''; for await (const c of req) { raw += c; if (raw.length > 5000) return send(413, { error: 'too large' }); }
+        const b = JSON.parse(raw || '{}');
+        if (url.pathname === '/api/strategy/apply') {
+          const numbers = b.numbers === 'all' ? 'all' : Array.isArray(b.numbers) ? b.numbers.map(Number).filter(Number.isInteger) : null;
+          if (!numbers) return send(400, { error: 'numbers must be "all" or a list of proposal numbers' });
+          return send(200, await strategy.apply(numbers));
+        }
+        if (url.pathname === '/api/strategy/skip') return send(200, await strategy.skip());
+        return send(404, { error: 'not found' });
+      } catch (e) { return send(e.code || (e instanceof NotConfigured ? 503 : 502), { status: e instanceof NotConfigured ? 'not_configured' : 'error', error: e.message }); }
     }
     // ---- Agents (registry, health, enable toggle, Run now) ----
     if (url.pathname.startsWith('/api/agents')) {

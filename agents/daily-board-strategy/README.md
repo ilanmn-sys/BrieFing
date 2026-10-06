@@ -20,7 +20,7 @@ Reads the projects board, the last 7 days of email and today's calendar. Scores 
 
 ## Open questions for Ilan
 1. **R-13 vs this agent.** R-13 says automations write only to 🔁 Recurring or 📦 Active Projects, yet this agent creates its strategy item and the approved email tasks in 📥 Pepper Tasks (build prompt 6A). The prompt follows 6A. Amend R-13 to name this exception, or tell me to change the agent.
-2. **Approval in the dashboard.** H-05 was decided as "Apply all" in the dashboard. That button is not built yet, so APPLY mode still reads Ilan's reply in Pepper's DM.
+2. **Approval in the dashboard.** Built: the Tasks tab shows today's proposals with Apply all / Apply selected / Skip all (see below). It only works on items where the agent wrote the `PROPOSALS_JSON` line. APPLY mode in the agent remains as the Slack-reply fallback, and exits silently once the dashboard has handled the day (`APPLIED` marker).
 3. **Tool names.** `allowed-tools.json` uses the MCP tool names from the cloud session (`mcp__monday_com__*`, `mcp__Gmail__*`, `mcp__Slack__*`, `mcp__Google_Calendar__*`). They must match `claude mcp list` on the Mac. If they differ, edit the file.
 4. **`all_monday_api` is broad.** It is needed for `move_item_to_group` but can run any monday mutation. The prompt restricts its use; the tool list cannot. A narrow local endpoint for moves would remove the risk.
 
@@ -29,3 +29,6 @@ Reads the projects board, the last 7 days of email and today's calendar. Scores 
 node scripts/run-agent.js daily-board-strategy --dry-run --force   # prints the brief and intended writes, writes nothing
 ```
 Then enable it from the Agents tab. The first live run should be watched.
+
+## Apply all (dashboard)
+The agent writes one `PROPOSALS_JSON:` line on the strategy item next to the human list. The dashboard reads only that line, validates every operation (never into legacy or excluded groups, strict dates and labels, at most 5 operations per proposal), and re-checks each item against the values the agent saw (`fromGroup`, `fromDate`, `from`). Anything that changed since is skipped and reported. Email tasks that already exist are skipped. After applying it posts a confirmation with an `APPLIED | ... | by:dashboard` marker, sets the item Done, DMs Pepper, and appends an `approval` entry to the learning log naming every proposal Ilan did not select. Older strategy items (prose only, like 2026-10-05) have no JSON line and are shown as "apply by hand".

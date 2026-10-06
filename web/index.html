@@ -146,6 +146,16 @@ main{flex:1;display:flex;gap:12px;padding:0 16px 16px;min-height:0}
 .hl .hi:last-child{border-bottom:0}
 .hl .hi a{color:inherit;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hl .hi span{color:var(--text3);font-size:10px}
+.stg{margin:8px 10px;border:1px solid var(--accent-line);background:var(--accent-soft);border-radius:10px;padding:8px 10px}
+.stg h4{margin:0 0 4px;font-size:12px;display:flex;justify-content:space-between;gap:6px}
+.stg label{display:flex;gap:6px;align-items:flex-start;font-size:11px;padding:2px 0}
+.stg .n{color:var(--text3);min-width:16px}
+.stg .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.stg button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.stg button.armed{background:var(--danger);border-color:var(--danger);color:#fff}
+.stg .out{margin-top:6px;font-size:11px;border-top:1px solid var(--accent-line);padding-top:6px}
+.stg .out .bad{color:var(--danger)}.stg .out .good{color:var(--ok)}.stg .out .mute{color:var(--text3)}
+.stg.quiet{background:var(--panel);border-color:var(--line);font-size:11px;color:var(--text3)}
 @media (max-width:760px){main{flex-direction:column}#work{width:auto;height:180px}}
 </style>
 </head>
@@ -313,6 +323,7 @@ function render() {
 // ---------- Tasks tab (R-01..R-03, R-14, R-17, R-18, R-21) ----------
 const ui = { tab: 'tasks' };
 const hs = { open: null };
+const stg = { data: null, error: null, picks: new Set(), armed: null, busy: false, out: null };
 const tasks = { data: null, error: null, loading: false, touched: new Set(), rows: {} };
 const META = /comms calendar sync|daily inbox digest|morning-board|pepper-eod/i;
 const HEALTH = /רופא|בדיק|דם|נוירולוג|רפוא|doctor|medical|health|appointment|🩺/i;
@@ -380,6 +391,7 @@ async function loadTasks() {
     if (!r.ok) throw new Error(j.error || `HTTP ${r.status}`);
     tasks.data = j; tasks.error = null;
     console.log(`loaded: ${j.items.length} tasks in ${j.pages} pages${j.truncated ? ' (TRUNCATED)' : ''}`);
+    if (!stg.data && !stg.error) loadStrategy();
   } catch (e) { tasks.error = e.message; console.error('tasks load failed', e); }
   tasks.loading = false; renderWork();
 }
@@ -391,6 +403,67 @@ function renderWork() {
   if (ui.tab === 'decisions') return renderDecisions();
   if (ui.tab === 'agents') return renderAgents();
   $('stats').hidden = true; return renderTasks();
+}
+
+// ---------- Strategy proposals: Apply all (replaces replying "apply all" in Pepper's DM) ----------
+async function loadStrategy() {
+  try {
+    stg.data = await api('/api/strategy'); stg.error = null;
+    if (stg.data.state === 'awaiting') stg.picks = new Set(stg.data.proposals.map((p) => p.n)); // everything ticked by default
+    console.log(`loaded: strategy ${stg.data.state}${stg.data.proposals ? ', ' + stg.data.proposals.length + ' proposals' : ''}`);
+  } catch (e) { stg.error = e.message; console.error('strategy load failed', e); }
+  if (ui.tab === 'tasks') renderWork();
+}
+
+function strategyCard() {
+  if (stg.error) return `<div class="banner">Strategy proposals unavailable: ${esc(stg.error)} <button id="stgRetry">Retry</button></div>`;
+  const d = stg.data;
+  if (!d || d.state === 'none') return '';
+  const link = d.itemUrl ? ` <a href="${esc(d.itemUrl)}" target="_blank" rel="noopener">open item</a>` : '';
+  if (d.state === 'applied' || d.state === 'done') return stg.out ? outCard(d) : `<div class="stg quiet">Today's strategy proposals were handled.${link}</div>`;
+  if (d.state === 'no_json') return `<div class="banner">Today's strategy item has no machine-readable proposals (older format), so the dashboard cannot apply it. Reply in Pepper's DM or apply by hand.${link}</div>`;
+  if (d.state === 'bad_json' || d.state === 'no_marker') return `<div class="banner">Today's strategy item could not be read (${esc(d.state === 'bad_json' ? 'its proposal list is not valid JSON' : 'no approval marker')}).${link}</div>`;
+  if (d.state !== 'awaiting') return '';
+  const n = d.proposals.length, k = [...stg.picks].filter((x) => d.proposals.some((p) => p.n === x)).length;
+  const armed = stg.armed;
+  return `<div class="stg"><h4><span>Strategy proposals · ${esc(d.date)} · ${n}</span><span>${link.trim()}</span></h4>`
+    + d.proposals.map((p) => `<label><input type="checkbox" data-pick="${p.n}" ${stg.picks.has(p.n) ? 'checked' : ''}><span class="n">${p.n}.</span><span>${esc(p.text)}</span></label>`).join('')
+    + (d.invalid && d.invalid.length ? `<div class="out mute">${d.invalid.length} proposal${d.invalid.length > 1 ? 's' : ''} could not be validated and will not be applied: ${d.invalid.map((x) => `#${esc(x.n)} (${esc(x.error)})`).join('; ')}</div>` : '')
+    + `<div class="acts"><button class="primary ${armed === 'all' ? 'armed' : ''}" data-stg="all" ${stg.busy ? 'disabled' : ''}>${armed === 'all' ? `Click again: apply all ${n}` : `Apply all (${n})`}</button>`
+    + `<button class="${armed === 'sel' ? 'armed' : ''}" data-stg="sel" ${stg.busy || !k ? 'disabled' : ''}>${armed === 'sel' ? `Click again: apply ${k}` : `Apply selected (${k})`}</button>`
+    + `<button data-stg="skip" ${stg.busy ? 'disabled' : ''}>${armed === 'skip' ? 'Click again: skip all' : 'Skip all'}</button>${stg.busy ? '<span class="mute">working…</span>' : ''}</div>`
+    + (stg.out ? outBlock() : '') + '</div>';
+}
+
+function outBlock() {
+  const r = stg.out, line = (cls, t) => `<div class="${cls}">${t}</div>`;
+  if (r.error) return `<div class="out">${line('bad', 'Not applied: ' + esc(r.error))}</div>`;
+  const rec = r.record ? Object.entries(r.record).map(([k, v]) => `${k}: ${v.startsWith('ok') ? '✓' : '<b class="bad">' + esc(v) + '</b>'}`).join(' · ') : '';
+  return '<div class="out">'
+    + (r.dryRun ? line('mute', 'Dry-run: nothing was written. This is what would happen.') : '')
+    + (r.skippedAll !== undefined ? line('good', `Skipped all ${r.skippedAll}.`) : '')
+    + (r.applied ? r.applied.map((x) => line('good', `${r.dryRun ? '○' : '✓'} ${x.n}. ${esc(x.text)}${x.would ? ' <span class="mute">(' + esc(x.would.join('; ')) + ')</span>' : ''}`)).join('') : '')
+    + (r.skipped && r.skipped.length ? r.skipped.map((x) => line('mute', `↷ ${x.n}. ${esc(x.text)}: ${esc(x.reason)}`)).join('') : '')
+    + (r.failed && r.failed.length ? r.failed.map((x) => line('bad', `✗ ${x.n}. ${esc(x.text)}: ${esc(x.error)}`)).join('') : '')
+    + (r.rejected && r.rejected.length ? line('mute', `Not selected: ${r.rejected.map((x) => x.n).join(', ')} (logged as rejected)`) : '')
+    + (rec ? line('mute', 'Recorded → ' + rec) : '') + '</div>';
+}
+const outCard = () => `<div class="stg quiet">${outBlock()}</div>`;
+
+function bindStrategy(body) {
+  const rt = $('stgRetry'); if (rt) rt.onclick = loadStrategy;
+  body.querySelectorAll('input[data-pick]').forEach((c) => c.onchange = () => { c.checked ? stg.picks.add(+c.dataset.pick) : stg.picks.delete(+c.dataset.pick); stg.armed = null; renderWork(); });
+  body.querySelectorAll('button[data-stg]').forEach((b) => b.onclick = async () => {
+    const kind = b.dataset.stg, live = stg.data && !stg.data.dryRun;
+    if (live && stg.armed !== kind) { stg.armed = kind; renderWork(); setTimeout(() => { if (stg.armed === kind) { stg.armed = null; renderWork(); } }, 6000); return; } // second click confirms
+    stg.armed = null; stg.busy = true; stg.out = null; renderWork();
+    try {
+      if (kind === 'skip') { const r = await api('/api/strategy/skip', {}); stg.out = { ...r, skippedAll: r.skipped, skipped: [] }; }
+      else stg.out = await api('/api/strategy/apply', { numbers: kind === 'all' ? 'all' : [...stg.picks] });
+    } catch (e) { stg.out = { error: e.message }; }
+    stg.busy = false; renderWork();
+    if (stg.out && stg.out.dryRun === false) { await loadStrategy(); loadTasks(); } // re-read: the board changed
+  });
 }
 
 // Board health strip: counts of known rule violations. Each count opens its proposal list. Nothing auto-fixes.
@@ -414,7 +487,7 @@ function renderTasks() {
   stats.innerHTML = `<div class="stat"><b>${v.today.length}</b><span>Today</span></div><div class="stat danger"><b>${v.overdue.length}</b><span>Overdue</span></div><div class="stat"><b>${v.total}</b><span>Total</span></div>`;
   const cap = d.config.groups.canonical.today.cap;
   const sec = (label, list, kind, extra = '') => list.length ? `<div class="sec ${kind === 'personal' ? 'personal' : ''}"><span>${label} · ${list.length}${extra}</span></div>${list.map((t) => taskRow(t, d, kind)).join('')}` : '';
-  let html = healthStrip(d);
+  let html = strategyCard() + healthStrip(d);
   if (d.truncated) html += `<div class="banner">Showing a partial board: pagination hit the ${d.pages}-page cap. Counts are incomplete.</div>`;
   if (v.today.length > cap) html += `<div class="banner">🔥 Today holds ${v.today.length} items (cap ${cap}).</div>`;
   html += sec('🔥 Today', v.today, 'today') + sec('🔴 Overdue', v.overdue, 'overdue') + sec('📅 This Week', v.week, 'week') + sec('📦 Active', v.active, 'active');
@@ -423,6 +496,7 @@ function renderTasks() {
   body.innerHTML = html;
   $('dry').hidden = !d.dryRun;
   body.querySelectorAll('button[data-hr]').forEach((b) => b.onclick = () => { hs.open = hs.open === b.dataset.hr ? null : b.dataset.hr; renderWork(); });
+  bindStrategy(body);
   const all = [...v.today, ...v.overdue, ...v.week, ...v.active, ...v.personal];
   body.querySelectorAll('.row .cb').forEach((cb) => {
     const t = all.find((x) => x.id === cb.closest('.row').dataset.id);
@@ -783,7 +857,7 @@ function renderTabs() {
   $('tabs').querySelectorAll('button:not([disabled])').forEach((b) => b.onclick = () => { ui.tab = b.dataset.t; renderTabs(); if (ui.tab === 'email' && !email.data && !email.loading) loadEmail(); if (ui.tab === 'slack' && !sl.data && !sl.loading) loadSlack(); if (ui.tab === 'requests' && !rq.data && !rq.loading) loadRequests(); if (ui.tab === 'decisions' && !dc.data && !dc.loading) loadDecisions(); if (ui.tab === 'agents') loadAgents(); renderWork(); });
 }
 renderTabs();
-$('refresh').onclick = () => { load(); loadTasks(); if (ui.tab === 'email') loadEmail(); else email.data = null; if (ui.tab === 'slack') loadSlack(); else sl.data = null; if (ui.tab === 'requests') loadRequests(); else rq.data = null; if (ui.tab === 'decisions') loadDecisions(); else dc.data = null; loadAgents(); };
+$('refresh').onclick = () => { stg.data = null; stg.error = null; load(); loadTasks(); if (ui.tab === 'email') loadEmail(); else email.data = null; if (ui.tab === 'slack') loadSlack(); else sl.data = null; if (ui.tab === 'requests') loadRequests(); else rq.data = null; if (ui.tab === 'decisions') loadDecisions(); else dc.data = null; loadAgents(); };
 const h = new Date().getHours();
 $('greet').textContent = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', Ilan';
 load(); loadTasks(); loadAgents();

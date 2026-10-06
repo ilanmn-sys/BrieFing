@@ -30,6 +30,7 @@ test('prompt carries the mechanical rules at the source (R-12) and the lessons f
   for (const s of ['system clock', 'LEARNING-LOG.md', 'AWAITING_APPROVAL', 'never use a DM channel id'.replace('never use', 'Never use'), 'Never more than', 'RESULT:', 'declined', 'Out of Office']) assert.ok(prompt.includes(s), s);
   assert.match(prompt, /24 hours|more than 15 recipients/); // broadcast filter from the Gmail check
   assert.match(prompt, /-filename:ics/);                     // calendar noise removed in the query
+  assert.match(prompt, /PROPOSALS_JSON:/); assert.match(prompt, /APPLIED \| strategy_date/); // the dashboard contract
 });
 
 test('allowed tools: a scoped list, no wildcards, nothing that can delete or send mail', () => {
@@ -74,4 +75,12 @@ test('a broken placeholder fails the run loudly instead of sending a half-filled
   fs.writeFileSync(path.join(ad, 'prompt.md'), 'use {{pepper.nothing}}'); fs.writeFileSync(path.join(ad, 'allowed-tools.json'), '[]');
   const r = spawnSync(process.execPath, [path.join(root, 'scripts', 'run-agent.js'), 'bad', '--force'], { env: { ...process.env, AGENTS_DIR: path.join(tmp, 'agents'), AGENTS_DATA_DIR: tmp }, encoding: 'utf8' });
   assert.equal(r.status, 1); assert.match(r.stdout, /unresolved placeholder/);
+});
+
+test('the prompt, rendered, teaches exactly the operation types and groups the dashboard accepts', () => {
+  const out = render(prompt, config);
+  for (const t of ['"type":"move"', '`date`', '`priority`', '`email_task`', 'fromGroup', 'fromDate']) assert.ok(out.includes(t), t);
+  for (const id of [config.groups.canonical.today.id, config.groups.canonical.thisWeek.id, config.groups.parking.noise]) assert.ok(out.includes(id), id);
+  const toGroupLine = out.split('\n').find((l) => l.includes('A `toGroup` may be')) || out.match(/A `toGroup` may be[^.]*\./)[0];
+  for (const bad of [...config.groups.legacy, ...config.groups.excluded]) assert.ok(!toGroupLine.includes(bad), 'legacy/excluded group offered as a target: ' + bad);
 });
