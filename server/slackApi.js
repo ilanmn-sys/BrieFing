@@ -1,11 +1,11 @@
 const { config, today } = require('./lib');
 const slack = require('./connectors/slack');
 const llm = require('./llm');
-const { dmUnread, channelUnread, oldestTs } = require('./slackLogic');
+const { dmUnread, channelUnread, oldestTs, cleanText } = require('./slackLogic');
 const { isDryRun } = require('./done');
 
 const DM_DAYS = 7, CH_DAYS = 2, MAX_CONVS = 200;
-const compact = async (m) => ({ ts: m.ts, from: await slack.userName(m.user), text: String(m.text || '').slice(0, 600) });
+const compact = async (m) => ({ ts: m.ts, from: await slack.userName(m.user), text: cleanText(m.text).slice(0, 600) });
 
 // Unread DMs + unread counts for the key channels. Reads only; nothing here writes.
 async function load() {
@@ -30,13 +30,25 @@ async function load() {
   });
   const dms = dmResults.filter(Boolean).sort((a, b) => Number(b.lastTs) - Number(a.lastTs));
 
-  // Channels: exclude only mine / bots / empty. Summaries are fetched per channel by the client.
-  const wanted = new Set(config.slackChannels.map((c) => c.replace(/^#/, '')));
-  const chans = await slack.paged('conversations.list', { types: 'public_channel,private_channel', exclude_archived: true }, 'channels', 10);
-  const notFound = [...wanted].filter((n) => !chans.items.some((c) => c.name === n));
-  const channels = (await slack.mapLimit(chans.items.filter((c) => wanted.has(c.name)), 4, async (c) => {
-    const un = channelUnread(await slack.history(c.id, chOldest, 100), myId);
-    return un.length ? { id: c.id, name: c.name, count: un.length } : null;
+  // Channels: exclude only mine / bots / empty. Configured IDs are read directly; a channel that cannot be read
+  // (not a member, wrong scope) is reported by name instead of failing the whole tab. Names with no known ID
+  // fall back to scanning the channel list.
+  const wanted = config.slackChannels.map((c) => c.replace(/^#/, ''));
+  const ids = config.slackChannelIds || {};
+  let byName = new Map(wanted.filter((n) => ids[n]).map((n) => [n, ids[n]]));
+  const unresolved = wanted.filter((n) => !byName.has(n));
+  if (unresolved.length) {
+    const chans = await slack.paged('conversations.list', { types: 'public_channel,private_channel', exclude_archived: true }, 'channels', 10);
+    for (const c of chans.items) if (unresolved.includes(c.name)) byName.set(c.name, c.id);
+  }
+  const notFound = [];
+  const channels = (await slack.mapLimit(wanted, 4, async (name) => {
+    const id = byName.get(name);
+    if (!id) { notFound.push(`${name} (not found)`); return null; }
+    try {
+      const un = channelUnread(await slack.history(id, chOldest, 100), myId);
+      return un.length ? { id, name, count: un.length } : null;
+    } catch (e) { notFound.push(`${name} (${e.message.replace(/^slack [\w.]+: /, '')})`); return null; }
   })).filter(Boolean);
 
   console.log(`loaded: ${dms.length} DMs, ${channels.length} channels`);
@@ -47,7 +59,7 @@ async function summarize(channelId) {
   const myId = await slack.me();
   const un = channelUnread(await slack.history(channelId, oldestTs(today(), CH_DAYS, config.me.tz), 100), myId);
   if (!un.length) return { summary: 'Nothing new.' };
-  const lines = await Promise.all(un.slice(-60).map(async (m) => `${await slack.userName(m.user)}: ${String(m.text).slice(0, 400)}`));
+  const lines = await Promise.all(un.slice(-60).map(async (m) => `${await slack.userName(m.user)}: ${cleanText(m.text).slice(0, 400)}`));
   const summary = await llm.complete(`Summarise these Slack messages in 2-3 short bullet points for Ilan (comms lead). Flag anything that needs him.\n\n${lines.join('\n')}`, { maxTokens: 400 });
   return { summary: summary.trim() };
 }
@@ -55,7 +67,7 @@ async function summarize(channelId) {
 // Draft uses the last ~12 messages of the conversation as context. Drafting never sends.
 async function draftReply(channelId) {
   const msgs = (await slack.history(channelId, 0, 12)).reverse();
-  const lines = await Promise.all(msgs.map(async (m) => `${await slack.userName(m.user)}: ${String(m.text || '').slice(0, 400)}`));
+  const lines = await Promise.all(msgs.map(async (m) => `${await slack.userName(m.user)}: ${cleanText(m.text).slice(0, 400)}`));
   const draft = await llm.complete(`Write Ilan's next reply in this Slack DM. Match the language and tone. Short. Never invent facts or commitments. Return ONLY the reply text.\n\n${lines.join('\n')}`, { maxTokens: 400 });
   return { draft: draft.trim() };
 }

@@ -87,7 +87,7 @@
     "#media-relations",
     "#communications-team",
     "#monday_in_the_news",
-    "#global-agencies",
+    "#monday-global-agencies",
     "#ask-comms"
   ],
   "vips": [
@@ -228,5 +228,15 @@
       "match": "Mauricio Prado"
     }
   ],
-  "decisionSeedsNote": "From LEARNING-LOG S-006 (2026-09-22). A seed hides itself once a board item or email mentions its match text. Dismiss any that are already decided."
+  "decisionSeedsNote": "From LEARNING-LOG S-006 (2026-09-22). A seed hides itself once a board item or email mentions its match text. Dismiss any that are already decided.",
+  "slackChannelsNote": "Checked against the real workspace: #global-agencies is actually #monday-global-agencies. #ilan-pa, #media-relations, #communications-team and #monday-global-agencies are PRIVATE channels, so the Slack token needs groups:read/groups:history and you must be a member.",
+  "slackChannelIds": {
+    "ilan-pa": "C0AHF7BRB7U",
+    "media-relations": "C04NTEN0H7H",
+    "communications-team": "C08STFTQFME",
+    "monday_in_the_news": "C010G6MMCLB",
+    "monday-global-agencies": "C0B868DM6SH",
+    "ask-comms": "C0ACVN9EUMT"
+  },
+  "slackChannelIdsNote": "IDs verified against the real workspace. They let the server read each channel directly instead of scanning the whole channel list (a large workspace can have thousands of channels)."
 }

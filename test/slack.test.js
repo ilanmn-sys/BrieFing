@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert');
 process.env.SLACK_TOKEN = 'x';
-const { dmUnread, channelUnread, oldestTs } = require('../server/slackLogic');
+const { dmUnread, channelUnread, oldestTs, cleanText } = require('../server/slackLogic');
 
 const ME = 'UME';
 const m = (ts, user, text = 'hi', o = {}) => ({ ts: String(ts), user, text, ...o });
@@ -92,4 +92,41 @@ test('Ask Pepper captures her latest message as the baseline before sending', as
 test('empty messages are rejected', async () => {
   await assert.rejects(() => api.send('UABC123', '  '), /empty/);
   await assert.rejects(() => api.askPepper(''), /empty/);
+});
+
+test('real-world noise: joins and leaves never count as unread, even without a subtype', () => {
+  const noise = [m(1, 'UA', '<@UA|Alexis Pumerantz> has left the channel'), m(2, 'UB', '<@UB|Luis> has joined the channel', { subtype: 'channel_join' }), m(3, 'UC', '<@UC> has joined the group')];
+  assert.equal(channelUnread(noise, ME).length, 0); assert.equal(dmUnread(noise, {}, ME).length, 0);
+  assert.equal(channelUnread([...noise, m(4, 'UD', 'a real post that mentions has left the channel in passing')], ME).length, 1);
+});
+
+test('cleanText turns Slack markup into readable text', () => {
+  assert.equal(cleanText('On it <@U08EGV5CKQX|Gilad Livnat>'), 'On it @Gilad Livnat');
+  assert.equal(cleanText('<!here>\n :mega: <http://Startups.com.br|Startups.com.br> piece'), '@here\n :mega: Startups.com.br piece');
+  assert.equal(cleanText('see <https://x.com/a?b=1&amp;c=2>'), 'see https://x.com/a?b=1&c=2');
+  assert.equal(cleanText('ping <@U123> in <#C1|ask-comms>'), 'ping @someone in #ask-comms');
+  assert.equal(cleanText(null), '');
+});
+
+test('load(): configured channel IDs are read directly (no channel-list scan); one unreadable channel is reported, not fatal', async () => {
+  process.env.DRY_RUN = '0'; calls = [];
+  const { config } = require('../server/lib');
+  const ids = Object.values(config.slackChannelIds), bad = config.slackChannelIds['communications-team'];
+  const realFetch = global.fetch;
+  global.fetch = async (url, opts = {}) => {
+    const u = String(url), body = String(opts.body || '');
+    calls.push(u.split('/api/')[1] + ' ' + body);
+    const j = (o) => ({ ok: true, status: 200, text: async () => JSON.stringify(o) });
+    if (u.includes('auth.test')) return j({ ok: true, user_id: 'UME' });
+    if (u.includes('conversations.list')) return j({ ok: true, channels: [], response_metadata: {} });
+    if (u.includes('conversations.history')) return body.includes(`channel=${bad}`) ? j({ ok: false, error: 'channel_not_found' })
+      : j({ ok: true, messages: [{ ts: String(Date.now() / 1000), user: 'UOTHER', text: 'hello team' }, { ts: String(Date.now() / 1000 - 5), user: 'UX', text: '<@UX|Joe> has joined the channel', subtype: 'channel_join' }] });
+    throw new Error('unexpected ' + u);
+  };
+  const r = await require('../server/slackApi').load();
+  global.fetch = realFetch;
+  assert.equal(r.channels.length, ids.length - 1);                 // every readable channel, the join message not counted
+  assert.ok(r.channels.every((c) => c.count === 1));
+  assert.deepEqual(r.notFound, ['communications-team (channel_not_found)']);
+  assert.ok(!calls.some((c) => c.startsWith('conversations.list') && c.includes('public_channel')), 'no scan of the channel list');
 });

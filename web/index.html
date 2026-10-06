@@ -560,7 +560,7 @@ function renderSlack() {
   let html = `<div class="sl-ask"><textarea id="ask-t" dir="auto" placeholder="Ask Pepper (she answers in Slack)…">${esc(a.text)}</textarea><div class="sl-act"><button id="ask-send">Ask Pepper</button>${a.baseline !== undefined ? '<button id="ask-check">Check reply</button>' : ''}<span class="res" id="ask-res" style="color:var(--text3)">${esc(a.msg)}</span></div>`
     + (a.reply ? `<div class="sl-sum" dir="auto">${esc(a.reply)}</div>${sl.active ? '<div class="sl-act"><button id="ask-use">Use this as my reply</button></div>' : ''}` : '') + '</div>';
   if (d.truncated) html += `<div class="banner">Only ${d.scanned} DM conversations were scanned. Some unread DMs may be missing.</div>`;
-  if (d.notFound.length) html += `<div class="banner">Not found or no access: ${d.notFound.map((n) => '#' + esc(n)).join(', ')}.</div>`;
+  if (d.notFound.length) html += `<div class="banner">Could not read: ${d.notFound.map((n) => '#' + esc(n)).join(', ')}.</div>`;
   html += `<div class="sl-head">Unread DMs · ${d.dms.length}</div>`;
   for (const dm of d.dms) {
     const draft = sl.drafts[dm.channel], r = sl.res[dm.channel];

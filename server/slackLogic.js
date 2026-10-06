@@ -6,7 +6,19 @@
 // Channels : exclude only my own messages, bots, and empty ones.
 
 const NOISE_SUBTYPES = new Set(['channel_join', 'channel_leave', 'channel_topic', 'channel_purpose', 'channel_name', 'pinned_item']);
-const hasText = (m) => !!(m.text && m.text.trim());
+const JOIN_LEAVE = /^<@[A-Z0-9]+(?:\|[^>]*)?> has (?:joined|left) the (?:channel|group)\.?$/;
+// On the real #monday_in_the_news, 5 of the 8 latest messages were joins and leaves. Filter by subtype AND by text,
+// in case a message arrives without its subtype.
+const hasText = (m) => !!(m.text && m.text.trim()) && !JOIN_LEAVE.test(m.text.trim());
+
+// Slack markup -> readable text: <@U1|Name> -> @Name, <http://x|label> -> label, <!here> -> @here.
+function cleanText(t) {
+  return String(t || '')
+    .replace(/<@[A-Z0-9]+\|([^>]+)>/g, '@$1').replace(/<@[A-Z0-9]+>/g, '@someone')
+    .replace(/<!(here|channel|everyone)(?:\|[^>]*)?>/g, '@$1').replace(/<#[A-Z0-9]+\|([^>]+)>/g, '#$1')
+    .replace(/<(?:https?:|mailto:)[^|>]*\|([^>]+)>/g, '$1').replace(/<((?:https?:|mailto:)[^>]+)>/g, '$1')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').trim();
+}
 
 function dmUnread(messages, replies, myId) {
   const groups = new Map(); // groupKey -> messages
@@ -33,4 +45,4 @@ function oldestTs(todayStr, daysBack, tz) {
   return Math.floor(d.getTime() / 1000) - daysBack * 86400;
 }
 
-module.exports = { dmUnread, channelUnread, oldestTs };
+module.exports = { dmUnread, channelUnread, oldestTs, cleanText };
