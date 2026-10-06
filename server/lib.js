@@ -2,6 +2,14 @@
 const fs = require('fs');
 const path = require('path');
 
+// Load .env (KEY=VALUE per line) without overriding variables already set in the shell.
+try {
+  for (const line of fs.readFileSync(path.join(__dirname, '..', '.env'), 'utf8').split(/\r?\n/)) {
+    const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/);
+    if (m && !line.trim().startsWith('#') && process.env[m[1]] === undefined) process.env[m[1]] = m[2].replace(/^(['"])(.*)\1$/, '$2');
+  }
+} catch (_) { /* no .env is fine: connectors report "not configured" */ }
+
 const config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config.json'), 'utf8'));
 
 function today() {
