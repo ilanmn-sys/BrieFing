@@ -13,6 +13,7 @@ const { triage, classify } = require('./triage');
 const llm = require('./llm');
 const slackApi = require('./slackApi');
 const requests = require('./requestsApi');
+const decisions = require('./decisionsApi');
 
 const CHECKS = {
   monday: monday.health,
@@ -57,6 +58,17 @@ const server = http.createServer(async (req, res) => {
         const status = e instanceof NotConfigured ? 'not_configured' : 'error';
         return send(502, { status, error: e.message, retry: '/api/calendar' });
       }
+    }
+    // ---- Decisions (never drafts; board-sourced outcomes are posted on the item) ----
+    if (url.pathname.startsWith('/api/decisions')) {
+      try {
+        if (req.method === 'GET' && url.pathname === '/api/decisions') return send(200, await decisions.load((url.searchParams.get('emails') || '').split('|').filter(Boolean)));
+        if (req.method !== 'POST' || url.pathname !== '/api/decisions/resolve') return send(405, { error: 'GET /api/decisions or POST /api/decisions/resolve only' });
+        const origin = req.headers.origin;
+        if (origin && !/^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(origin)) return send(403, { error: 'bad origin' });
+        let raw = ''; for await (const c of req) { raw += c; if (raw.length > 20000) return send(413, { error: 'too large' }); }
+        return send(200, await decisions.resolve(JSON.parse(raw || '{}')));
+      } catch (e) { return send(e.code || (e instanceof NotConfigured ? 503 : 502), { status: e instanceof NotConfigured ? 'not_configured' : 'error', error: e.message }); }
     }
     // ---- Requests (Switchboard board; writes are dry-run unless DRY_RUN=0) ----
     if (url.pathname.startsWith('/api/requests')) {

@@ -179,5 +179,44 @@
       "infra admin"
     ],
     "botNamesNote": "First 11 are from the build prompt. 'brie fing' (the comms desk agent) and 'infra admin' (Monday Infra Admin) were added because both post automated updates on this board. Confirm."
-  }
+  },
+  "decisionSeeds": [
+    {
+      "key": "seed:narrative-ruben-hassid",
+      "name": "Narrative proposal: Ruben Hassid",
+      "amount": "$27K",
+      "match": "Ruben Hassid"
+    },
+    {
+      "key": "seed:narrative-riley-brown",
+      "name": "Narrative proposal: Riley Brown",
+      "amount": "$40K",
+      "match": "Riley Brown"
+    },
+    {
+      "key": "seed:narrative-sebastian-raschka",
+      "name": "Narrative proposal: Sebastian Raschka",
+      "amount": "$12.5K",
+      "match": "Sebastian Raschka"
+    },
+    {
+      "key": "seed:narrative-wes-roth",
+      "name": "Narrative proposal: Wes Roth",
+      "amount": "$13.5K",
+      "match": "Wes Roth"
+    },
+    {
+      "key": "seed:emma-steuer",
+      "name": "Emma Steuer go/no-go",
+      "amount": "$21K",
+      "match": "Emma Steuer"
+    },
+    {
+      "key": "seed:mauricio-prado-report",
+      "name": "Mauricio Prado: performance report follow-up",
+      "amount": "",
+      "match": "Mauricio Prado"
+    }
+  ],
+  "decisionSeedsNote": "From LEARNING-LOG S-006 (2026-09-22). A seed hides itself once a board item or email mentions its match text. Dismiss any that are already decided."
 }

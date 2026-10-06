@@ -109,6 +109,17 @@ main{flex:1;display:flex;gap:12px;padding:0 16px 16px;min-height:0}
 .r{display:inline-block;font-size:9px;font-weight:700;border-radius:4px;padding:1px 5px;letter-spacing:.3px;white-space:nowrap}
 .r.r0{background:#f1f5f9;color:#64748b}.r.r1{background:#fee2e2;color:var(--danger)}.r.r2{background:#fef3c7;color:#92400e}.r.r3{background:#e0f2fe;color:#0369a1}.r.r4{background:var(--ok-soft);color:var(--ok)}
 .tier{font-size:9px;border:1px solid var(--line);border-radius:4px;padding:0 4px}
+.dc{padding:6px 10px;border-bottom:1px solid #f3f3f3}
+.dc .top{display:flex;gap:6px;justify-content:space-between;align-items:flex-start}
+.dc .nm{flex:1;min-width:0}
+.dc .why{font-size:10px;color:var(--text3)}
+.dc .acts{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;align-items:center}
+.dc input{font:inherit;font-size:11px;flex:1;min-width:90px;border:1px solid var(--line);border-radius:6px;padding:2px 6px}
+.dc .res{font-size:10px}
+.amt{font-size:10px;font-weight:700;background:#fef3c7;color:#92400e;border-radius:4px;padding:0 5px;margin-right:4px}
+.src{font-size:9px;border:1px solid var(--line);border-radius:4px;padding:0 4px;color:var(--text3);white-space:nowrap}
+.dc.done{opacity:.55}
+.note{margin:8px 10px;padding:6px 8px;border-radius:8px;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);font-size:11px}
 @media (max-width:760px){main{flex-direction:column}#work{width:auto;height:180px}}
 </style>
 </head>
@@ -341,6 +352,7 @@ function renderWork() {
   if (ui.tab === 'email') return renderEmail();
   if (ui.tab === 'slack') return renderSlack();
   if (ui.tab === 'requests') return renderRequests();
+  if (ui.tab === 'decisions') return renderDecisions();
   $('stats').hidden = true; return renderTasks();
 }
 
@@ -383,7 +395,7 @@ async function loadEmail() {
     email.data = j; email.error = null;
     console.log(`loaded: ${j.threads.length} email threads${j.triageOk ? '' : ' (UNTRIAGED)'}`);
   } catch (e) { email.error = e.message; console.error('email load failed', e); }
-  email.loading = false; if (ui.tab === 'email') renderWork();
+  email.loading = false; if (ui.tab === 'email' || ui.tab === 'decisions') renderWork();
 }
 
 async function loadThread(id) {
@@ -596,14 +608,69 @@ async function rqAct(id, path, extra, okText, after) {
   renderWork();
 }
 
+// ---------- Decisions tab (principle 8 / R-19: a decision is yours, never a draft) ----------
+const dc = { data: null, error: null, loading: false, res: {}, notes: {}, showResolved: false };
+
+async function loadDecisions() {
+  dc.loading = true; if (ui.tab === 'decisions') renderWork();
+  if (!email.data && !email.loading) loadEmail(); // email decisions come from the Email tab's triage
+  const names = email.data ? email.data.threads.flatMap((t) => [t.subject, t.from]).join('|').replace(/[&#]/g, ' ') : '';
+  try { dc.data = await api('/api/decisions' + (names ? '?emails=' + encodeURIComponent(names) : '')); dc.error = null; console.log(`loaded: ${dc.data.items.length} board/seed decisions`); }
+  catch (e) { dc.error = e.message; console.error('decisions load failed', e); }
+  dc.loading = false; if (ui.tab === 'decisions') renderWork();
+}
+
+function allDecisions() {
+  const d = dc.data, threads = email.data ? email.data.threads.filter((t) => t.verdict === 'decision') : [];
+  const mailNames = email.data ? email.data.threads.map((t) => (t.subject + ' ' + t.from).toLowerCase()).join('\n') : '';
+  const items = d.items.filter((i) => i.source !== 'seed' || !mailNames.includes(String(i.match || '').toLowerCase()));
+  for (const t of threads) items.push({ key: 'email:' + t.id, source: 'email', name: t.subject, amount: '', value: 0, deadline: '', reason: `From ${t.from}${t.reason ? ': ' + t.reason : ''}` });
+  return items;
+}
+
+function renderDecisions() {
+  const body = $('workbody'); $('stats').hidden = true;
+  if (dc.error) { body.innerHTML = `<div class="msg err">Decisions unavailable<code>${esc(dc.error)}</code><button id="retryD">Retry</button></div>`; $('retryD').onclick = loadDecisions; return; }
+  if (!dc.data) { body.innerHTML = '<div class="msg">Loading…</div>'; return; }
+  const d = dc.data, all = allDecisions(), open = all.filter((i) => !d.resolved[i.key]), done = all.filter((i) => d.resolved[i.key]);
+  let html = '<div class="note">These are yours to decide. Nothing here drafts a reply or delegates.</div>';
+  if (d.truncated) html += `<div class="banner">Pagination hit the ${d.pages}-page cap. Board decisions may be missing.</div>`;
+  if (email.error) html += '<div class="banner">Email decisions are missing because the Email tab failed to load.</div>';
+  else if (!email.data) html += '<div class="banner">Loading email decisions…</div>';
+  const row = (i, isDone) => {
+    const r = dc.res[i.key], res = d.resolved[i.key];
+    return `<div class="dc ${isDone ? 'done' : ''}" data-key="${esc(i.key)}"><div class="top"><span class="nm">${i.amount ? `<span class="amt">${esc(i.amount)}</span>` : ''}${esc(i.name)}</span><span class="src">${i.source.toUpperCase()}</span></div>`
+      + `<div class="why">${esc(i.reason)}${i.deadline ? ' · due ' + esc(i.deadline.slice(5).split('-').reverse().join('.')) : ''}</div>`
+      + (isDone ? `<div class="why"><b>${esc(res.outcome)}</b>${res.note ? ': ' + esc(res.note) : ''}</div>`
+        : `<div class="acts"><input data-note="${esc(i.key)}" placeholder="Note (optional)" value="${esc(dc.notes[i.key] || '')}"><button data-o="approved" data-k="${esc(i.key)}">Approve</button><button data-o="declined" data-k="${esc(i.key)}">Decline</button><button data-o="deferred" data-k="${esc(i.key)}">Defer</button></div>`)
+      + (r ? `<div class="res" style="color:${r.bad ? 'var(--danger)' : r.dry ? 'var(--accent)' : 'var(--ok)'}">${esc(r.text)}</div>` : '') + '</div>';
+  };
+  html += `<div class="sec"><span>Open decisions · ${open.length}</span></div>` + open.sort((a, b) => (a.deadline || '9999').localeCompare(b.deadline || '9999') || b.value - a.value).map((i) => row(i, false)).join('');
+  if (!open.length) html += '<div class="msg" style="padding:10px">No open decisions.</div>';
+  if (done.length) html += `<div class="sec"><span><a href="#" id="tgl" style="color:inherit">${dc.showResolved ? '▾' : '▸'} Resolved · ${done.length}</a></span></div>` + (dc.showResolved ? done.map((i) => row(i, true)).join('') : '');
+  body.innerHTML = html;
+  const tg = $('tgl'); if (tg) tg.onclick = (e) => { e.preventDefault(); dc.showResolved = !dc.showResolved; renderWork(); };
+  body.querySelectorAll('input[data-note]').forEach((n) => n.oninput = () => { dc.notes[n.dataset.note] = n.value; });
+  body.querySelectorAll('button[data-o]').forEach((b) => b.onclick = async () => {
+    const key = b.dataset.k, item = all.find((x) => x.key === key);
+    dc.res[key] = { text: '…' }; renderWork();
+    try {
+      const j = await api('/api/decisions/resolve', { key, outcome: b.dataset.o, note: dc.notes[key] || '', itemId: item.itemId });
+      if (j.dryRun) dc.res[key] = { dry: true, text: 'dry-run: ' + j.would.join(' · ') };
+      else { d.resolved[key] = { outcome: b.dataset.o, note: dc.notes[key] || '' }; dc.res[key] = { text: j.localOnly ? '✓ Saved on this computer only (no board item)' : '✓ Recorded on the board' }; }
+    } catch (e) { dc.res[key] = { bad: true, text: 'Not recorded: ' + e.message }; }
+    renderWork();
+  });
+}
+
 const TABS = [['tasks', 'Tasks'], ['requests', 'Requests'], ['email', 'Email'], ['slack', 'Slack'], ['decisions', 'Decisions'], ['agents', 'Agents']];
-const LIVE_TABS = new Set(['tasks', 'requests', 'email', 'slack']);
+const LIVE_TABS = new Set(['tasks', 'requests', 'email', 'slack', 'decisions']);
 function renderTabs() {
   $('tabs').innerHTML = TABS.map(([k, l]) => `<button data-t="${k}" class="${ui.tab === k ? 'on' : ''}" ${LIVE_TABS.has(k) ? '' : 'disabled title="Next in the build order"'}>${l}</button>`).join('');
-  $('tabs').querySelectorAll('button:not([disabled])').forEach((b) => b.onclick = () => { ui.tab = b.dataset.t; renderTabs(); if (ui.tab === 'email' && !email.data && !email.loading) loadEmail(); if (ui.tab === 'slack' && !sl.data && !sl.loading) loadSlack(); if (ui.tab === 'requests' && !rq.data && !rq.loading) loadRequests(); renderWork(); });
+  $('tabs').querySelectorAll('button:not([disabled])').forEach((b) => b.onclick = () => { ui.tab = b.dataset.t; renderTabs(); if (ui.tab === 'email' && !email.data && !email.loading) loadEmail(); if (ui.tab === 'slack' && !sl.data && !sl.loading) loadSlack(); if (ui.tab === 'requests' && !rq.data && !rq.loading) loadRequests(); if (ui.tab === 'decisions' && !dc.data && !dc.loading) loadDecisions(); renderWork(); });
 }
 renderTabs();
-$('refresh').onclick = () => { load(); loadTasks(); if (ui.tab === 'email') loadEmail(); else email.data = null; if (ui.tab === 'slack') loadSlack(); else sl.data = null; if (ui.tab === 'requests') loadRequests(); else rq.data = null; };
+$('refresh').onclick = () => { load(); loadTasks(); if (ui.tab === 'email') loadEmail(); else email.data = null; if (ui.tab === 'slack') loadSlack(); else sl.data = null; if (ui.tab === 'requests') loadRequests(); else rq.data = null; if (ui.tab === 'decisions') loadDecisions(); else dc.data = null; };
 const h = new Date().getHours();
 $('greet').textContent = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', Ilan';
 load(); loadTasks();
