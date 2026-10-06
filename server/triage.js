@@ -40,9 +40,11 @@ async function triage(threads, llm = complete) {
 function classify(thread, tri) {
   const t = tri || UNTRIAGED;
   let verdict;
-  if (thread.lastFromMe) verdict = 'waiting';
+  if (thread.automated || thread.selfOnly) verdict = 'automated';       // system mail and notes to myself are never "unreplied"
+  else if (thread.lastFromMe) verdict = 'waiting';
+  else if (thread.broadcast) verdict = 'fyi';                            // sent to a big list: not a conversation with me
   else if (t.action === 'decision') verdict = 'decision';
-  else if (t.action === 'reply') verdict = 'reply';
+  else if (t.action === 'reply') verdict = thread.ccOnly ? 'fyi' : 'reply'; // copied, not addressed: no reply expected
   else if (t.action === 'untriaged') verdict = 'untriaged';
   else verdict = 'fyi';
   return { verdict, urgency: t.urgency, reason: t.reason, proposedBody: verdict === 'reply' ? t.proposedBody : '', unreplied: verdict === 'reply' || verdict === 'decision' };

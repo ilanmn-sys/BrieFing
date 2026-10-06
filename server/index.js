@@ -132,11 +132,11 @@ const server = http.createServer(async (req, res) => {
     // ---- Email (drafts only: nothing here can send) ----
     if (url.pathname === '/api/email') {
       try {
-        const threads = await gmail.listThreads(30);
-        const tri = await triage(threads);
+        const { threads, estimate } = await gmail.listThreads(50);
+        const tri = await triage(threads.filter((t) => !t.automated && !t.selfOnly && !t.lastFromMe && !t.broadcast)); // only threads that could need me
         const out = threads.map((t) => ({ ...t, ...classify(t, tri.results.get(t.id)) }));
-        console.log(`email loaded: ${out.length} threads, triage ${tri.ok ? 'ok' : 'FAILED (' + tri.error + ')'}`);
-        return send(200, { threads: out, triageOk: tri.ok, triageError: tri.error || null, dryRun: isDryRun() });
+        console.log(`email loaded: ${out.length} of ~${estimate} threads, triage ${tri.ok ? 'ok' : 'FAILED (' + tri.error + ')'}`);
+        return send(200, { threads: out, estimate, triageOk: tri.ok, triageError: tri.error || null, dryRun: isDryRun() });
       } catch (e) { return send(e instanceof NotConfigured ? 503 : 502, { status: e instanceof NotConfigured ? 'not_configured' : 'error', error: e.message }); }
     }
     if (url.pathname === '/api/email/thread') {

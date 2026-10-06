@@ -57,3 +57,52 @@ test('MIME: Hebrew subject is RFC2047-encoded, body base64 UTF-8, threading head
   assert.match(m, /charset=UTF-8/);
   assert.equal(Buffer.from(m.split('\r\n\r\n')[1], 'base64').toString('utf8'), 'שלום');
 });
+
+// ---- found on the real inbox: bulk mail, notes to self, broadcasts, cc-only ----
+const { AUTOMATED, emails } = require('../server/connectors/gmail');
+
+test('automated-sender detection: system mail yes, colleagues and contacts no', () => {
+  for (const a of ['notifications@monday.ziphq.com', 'no_reply@monday.com', 'newsletter@techmeme.com', 'alerts@muckrack.com', 'noreply@github.com',
+    'googlealerts-noreply@google.com', 'hello@mail.grammarly.com', 'help@sproutsocial.com', 'DoNotReply@hilantech.co.il', 'postmaster@microsoft.com']) assert.ok(AUTOMATED.test(a), a);
+  for (const a of ['megan.kusch@muckrack.com', 'alicesi@monday.com', 'noamsa@monday.com', 'sharons@signaltours.com', 'povursarah@gmail.com', 'ore@monday.com']) assert.ok(!AUTOMATED.test(a), a);
+});
+
+test('emails() pulls addresses out of header text, including names and quotes', () => {
+  assert.deepEqual(emails('"Cohen, Dana" <Dana@Example.com>, other@x.co.il'), ['dana@example.com', 'other@x.co.il']);
+  assert.deepEqual(emails(''), []);
+});
+
+test('classify: automated and self-only threads are never reply/waiting; broadcasts and cc-only are FYI', () => {
+  const tri = { action: 'reply', proposedBody: 'hi', urgency: 'high' };
+  assert.equal(classify(T('a', { automated: true }), tri).verdict, 'automated');
+  assert.equal(classify(T('a', { selfOnly: true, lastFromMe: true }), tri).verdict, 'automated');   // a note to myself is not "waiting on them"
+  assert.equal(classify(T('a', { broadcast: true }), tri).verdict, 'fyi');
+  assert.equal(classify(T('a', { broadcast: true }), { action: 'decision' }).verdict, 'fyi');
+  const cc = classify(T('a', { ccOnly: true }), tri); assert.equal(cc.verdict, 'fyi'); assert.equal(cc.proposedBody, '');
+  assert.equal(classify(T('a', { ccOnly: true }), { action: 'decision' }).verdict, 'decision'); // a decision in a cc'd thread still reaches me
+  assert.equal(classify(T('a'), tri).verdict, 'reply');
+});
+
+test('listThreads: flags cc-only, broadcast, self-only and automated; reports the size estimate; follows the query', async () => {
+  process.env.GOOGLE_CLIENT_ID = 'c'; process.env.GOOGLE_CLIENT_SECRET = 's'; process.env.GOOGLE_REFRESH_TOKEN = 'r';
+  const ME = 'me@monday.com', real = global.fetch, urls = [];
+  const msg = (from, to, cc, labels = ['INBOX']) => ({ internalDate: '1790000000000', snippet: 's', labelIds: labels, payload: { headers: [{ name: 'From', value: from }, { name: 'To', value: to }, { name: 'Cc', value: cc }, { name: 'Subject', value: 'subj' }, { name: 'Message-ID', value: '<m@x>' }] } });
+  const big = Array.from({ length: 20 }, (_, i) => `p${i}@monday.com`).join(', ');
+  const threads = { t1: [msg('Megan <megan@muckrack.com>', 'noam@monday.com', ME)], t2: [msg('boss@monday.com', big + ', ' + ME, '')], t3: [msg(ME, ME, '', ['SENT', 'INBOX'])], t4: [msg('notifications@monday.ziphq.com', ME, '')], t5: [msg('dana@monday.com', ME, '')] };
+  const j = (o) => ({ ok: true, status: 200, text: async () => JSON.stringify(o) });
+  global.fetch = async (url) => {
+    const u = String(url); urls.push(u);
+    if (u.includes('oauth2.googleapis.com')) return j({ access_token: 'tok' });
+    if (u.endsWith('/profile')) return j({ emailAddress: ME });
+    if (u.includes('/threads?')) return j({ threads: Object.keys(threads).map((id) => ({ id })), resultSizeEstimate: 201 });
+    const id = u.match(/threads\/(t\d)/)[1]; return j({ id, messages: threads[id] });
+  };
+  try {
+    const r = await require('../server/connectors/gmail').listThreads(50);
+    const by = Object.fromEntries(r.threads.map((t) => [t.id, t]));
+    assert.equal(r.estimate, 201);
+    assert.equal(by.t1.ccOnly, true); assert.equal(by.t2.broadcast, true); assert.equal(by.t3.selfOnly, true);
+    assert.equal(by.t4.automated, true); assert.equal(by.t5.ccOnly, false); assert.equal(by.t5.automated, false);
+    assert.ok(urls.some((u) => u.includes('/threads?') && decodeURIComponent(u).includes('newer_than:7d')));
+  } finally { global.fetch = real; }
+});

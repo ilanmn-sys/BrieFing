@@ -431,9 +431,9 @@ function renderTasks() {
 }
 
 // ---------- Email tab (drafts only; R-19, R-22) ----------
-const email = { data: null, error: null, loading: false, open: new Set(), threads: {}, compose: null };
-const VORDER = { decision: 0, reply: 1, untriaged: 2, fyi: 3, waiting: 4 };
-const VLABEL = { decision: 'DECISION (yours)', reply: 'REPLY', waiting: 'WAITING ON THEM', fyi: 'FYI', untriaged: 'UNTRIAGED' };
+const email = { data: null, error: null, loading: false, open: new Set(), threads: {}, compose: null, showAuto: false };
+const VORDER = { decision: 0, reply: 1, untriaged: 2, fyi: 3, waiting: 4, automated: 5 };
+const VLABEL = { decision: 'DECISION (yours)', reply: 'REPLY', waiting: 'WAITING ON THEM', fyi: 'FYI', untriaged: 'UNTRIAGED', automated: 'AUTOMATED' };
 const URG = { high: 0, med: 1, low: 2 };
 
 async function loadEmail() {
@@ -465,8 +465,11 @@ function renderEmail() {
   let html = '';
   if (!d.triageOk) html += `<div class="banner">Triage failed, showing threads untriaged: ${esc(d.triageError || 'unknown')}. <button id="retryTri">Retry</button></div>`;
   // Group by sender; best verdict (then urgency, then recency) decides group order.
+  const autoCount = d.threads.filter((t) => t.verdict === 'automated').length;
+  if (d.estimate > d.threads.length) html += `<div class="banner">Showing the latest ${d.threads.length} of about ${d.estimate} threads from the last 7 days.</div>`;
+  if (autoCount) html += `<div class="sec"><span><a href="#" id="tga" style="color:inherit">${email.showAuto ? '▾' : '▸'} Automated and notes to self · ${autoCount}</a></span></div>`;
   const groups = new Map();
-  for (const t of d.threads) { const k = t.fromEmail || t.from; (groups.get(k) || groups.set(k, []).get(k)).push(t); }
+  for (const t of d.threads.filter((x) => email.showAuto || x.verdict !== 'automated')) { const k = t.fromEmail || t.from; (groups.get(k) || groups.set(k, []).get(k)).push(t); }
   const rank = (t) => [VORDER[t.verdict] ?? 9, URG[t.urgency] ?? 3, -t.date];
   const cmp = (a, b) => { const x = rank(a), y = rank(b); return x[0] - y[0] || x[1] - y[1] || x[2] - y[2]; };
   const list = [...groups.values()].map((ts) => ts.sort(cmp)).sort((a, b) => cmp(a[0], b[0]));
@@ -482,6 +485,7 @@ function renderEmail() {
         else html += msgs.map((m) => `<div class="msgb"><small>${esc(m.from)}</small>${esc(m.body)}</div>`).join('');
         if (t.verdict === 'decision') html += '<div class="why" style="margin-top:6px"><b>This is a decision, not a draft.</b> Nothing to delegate; it is yours to make.</div>';
         else if (t.verdict === 'waiting') html += '<div class="why" style="margin-top:6px">Your reply was last. The ball is with them.</div>';
+        else if (t.verdict === 'automated') html += '<div class="why" style="margin-top:6px">System mail or a note to yourself. Nothing to reply to.</div>';
         else html += `<div style="margin-top:6px"><button data-draft="${esc(t.id)}">Draft reply</button></div>`;
         html += '</div>';
       }
@@ -490,6 +494,7 @@ function renderEmail() {
   if (!d.threads.length) html += '<div class="msg">Inbox is clear.</div>';
   body.innerHTML = html;
   const rt = $('retryTri'); if (rt) rt.onclick = loadEmail;
+  const ta = $('tga'); if (ta) ta.onclick = (e) => { e.preventDefault(); email.showAuto = !email.showAuto; renderWork(); };
   body.querySelectorAll('.th').forEach((el) => el.onclick = () => {
     const id = el.dataset.id;
     if (email.open.has(id)) email.open.delete(id); else { email.open.add(id); if (!email.threads[id]) loadThread(id); }

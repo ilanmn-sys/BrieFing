@@ -11,18 +11,27 @@ const auth = async () => ({ Authorization: `Bearer ${await accessToken()}` });
 let meCache = null;
 async function me() { if (!meCache) meCache = (await http(`${API}/profile`, { headers: await auth() })).emailAddress.toLowerCase(); return meCache; }
 
+const EMAILS = /[\w.+'-]+@[\w-]+(?:\.[\w-]+)+/g;
+const emails = (v) => (String(v || '').match(EMAILS) || []).map((x) => x.toLowerCase());
+// Bulk and system mail (checked on the real inbox: ~half of the latest threads are notifications and newsletters).
+const AUTOMATED = /(?:^|[^a-z])(?:no[-_.]?reply|do[-_.]?not[-_.]?reply|notifications?|newsletter|alerts?|mailer-daemon|postmaster|bounce|digest|help|support|billing)@|@(?:mail|email|news|notify|notifications|e)\./i;
+const BROADCAST_AT = 15; // more recipients than this = a broadcast, not a conversation with me
+
 const hdr = (m, n) => ((m.payload.headers || []).find((h) => h.name.toLowerCase() === n.toLowerCase()) || {}).value || '';
 const addr = (v) => ((v.match(/<([^>]+)>/) || [null, v])[1] || '').trim().toLowerCase();
 const name = (v) => v.replace(/<[^>]*>/, '').replace(/"/g, '').trim() || addr(v);
 
-async function listThreads(max = 30) {
+async function listThreads(max = 50) {
   const h = await auth(), mine = await me();
-  const ids = (await http(`${API}/threads?${new URLSearchParams({ q: QUERY, maxResults: String(max) })}`, { headers: h })).threads || [];
+  const listed = await http(`${API}/threads?${new URLSearchParams({ q: QUERY, maxResults: String(max) })}`, { headers: h });
+  const ids = listed.threads || [];
   const meta = new URLSearchParams([['format', 'metadata'], ...['From', 'To', 'Cc', 'Subject', 'Date', 'Message-ID'].map((x) => ['metadataHeaders', x])]);
-  const threads = await Promise.all(ids.map((t) => http(`${API}/threads/${t.id}?${meta}`, { headers: h })));
-  return threads.map((t) => {
+  const threads = await mapLimit(ids, 8, (t) => http(`${API}/threads/${t.id}?${meta}`, { headers: h }));
+  const out = threads.map((t) => {
     const msgs = t.messages, last = msgs[msgs.length - 1], first = msgs[0];
     const lastFrom = hdr(last, 'From');
+    const to = emails(hdr(last, 'To')), cc = emails(hdr(last, 'Cc')), fromAddr = addr(lastFrom);
+    const everyone = new Set([...to, ...cc, fromAddr]);
     return {
       id: t.id, subject: hdr(first, 'Subject') || '(no subject)', messageCount: msgs.length,
       from: name(lastFrom), fromEmail: addr(lastFrom), date: Number(last.internalDate),
@@ -30,8 +39,20 @@ async function listThreads(max = 30) {
       // Reply targets come from the real thread, so a draft goes to the right people.
       replyTo: addr(hdr(last, 'Reply-To') || lastFrom), lastMessageId: hdr(last, 'Message-ID'),
       unread: (last.labelIds || []).includes('UNREAD'),
+      recipientCount: to.length + cc.length,
+      ccOnly: !to.includes(mine) && cc.includes(mine),                        // I am copied, not addressed
+      broadcast: to.length + cc.length > BROADCAST_AT,
+      selfOnly: [...everyone].every((x) => x === mine),                        // a note to myself
+      automated: AUTOMATED.test(fromAddr),
     };
   }).sort((a, b) => b.date - a.date);
+  return { threads: out, estimate: Number(listed.resultSizeEstimate) || out.length };
+}
+
+async function mapLimit(arr, n, fn) {
+  const res = new Array(arr.length); let i = 0;
+  await Promise.all(Array.from({ length: Math.min(n, arr.length) }, async () => { while (i < arr.length) { const k = i++; res[k] = await fn(arr[k]); } }));
+  return res;
 }
 
 function bodyText(payload) {
@@ -67,4 +88,4 @@ async function createDraft({ threadId, to, cc, subject, body, inReplyTo }) {
   return r.id;
 }
 
-module.exports = { QUERY, listThreads, getThread, createDraft, buildMime };
+module.exports = { QUERY, listThreads, getThread, createDraft, buildMime, AUTOMATED, emails };
