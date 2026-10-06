@@ -1,0 +1,9 @@
+{
+  "id": "pepper-eod-status-report",
+  "name": "Pepper end-of-day report",
+  "group": "Board & Pepper",
+  "cron": "30 17 * * 0-4",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "17:30 Sun–Thu"
+}

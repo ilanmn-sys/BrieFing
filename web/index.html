@@ -120,6 +120,19 @@ main{flex:1;display:flex;gap:12px;padding:0 16px 16px;min-height:0}
 .src{font-size:9px;border:1px solid var(--line);border-radius:4px;padding:0 4px;color:var(--text3);white-space:nowrap}
 .dc.done{opacity:.55}
 .note{margin:8px 10px;padding:6px 8px;border-radius:8px;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);font-size:11px}
+.ag{padding:6px 10px;border-bottom:1px solid #f3f3f3}
+.ag.off{opacity:.6}
+.ag .top{display:flex;gap:6px;justify-content:space-between;align-items:flex-start}
+.ag .nm{font-weight:600;font-size:12px}
+.ag .sub,.ag .line{font-size:10px;color:var(--text3)}
+.ag .flag{font-size:11px;border-radius:6px;padding:3px 6px;margin-top:3px}
+.ag .flag.red{background:#fee2e2;color:var(--danger)}.ag .flag.amber{background:#fef3c7;color:#92400e}
+.ag .acts{display:flex;gap:6px;margin-top:4px;align-items:center;flex-wrap:wrap}
+.ag .res{font-size:10px}
+.ag label{font-size:11px;display:inline-flex;gap:4px;align-items:center}
+.pill{font-size:9px;font-weight:700;border-radius:4px;padding:0 5px}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}.pill.bad{background:#fee2e2;color:var(--danger)}.pill.unk{background:#fef3c7;color:#92400e}.pill.np{background:#f1f5f9;color:#64748b}
+.chip.alert{background:#fee2e2;border-color:#fecaca;color:var(--danger)}
 @media (max-width:760px){main{flex-direction:column}#work{width:auto;height:180px}}
 </style>
 </head>
@@ -128,6 +141,7 @@ main{flex:1;display:flex;gap:12px;padding:0 16px 16px;min-height:0}
   <h1 id="greet">Ilan's Command Center</h1>
   <span class="date" id="dateline"></span>
   <span class="chip" id="nextup" hidden></span>
+  <span class="chip alert" id="agentchip" hidden></span>
   <span class="badge" id="dry" hidden title="Board and Slack writes are disabled. Start the server with DRY_RUN=0 to enable them.">DRY RUN</span>
   <span class="spacer"></span>
   <button id="refresh" title="Re-pulls data. After a deploy, reload the page too.">Refresh</button>
@@ -353,6 +367,7 @@ function renderWork() {
   if (ui.tab === 'slack') return renderSlack();
   if (ui.tab === 'requests') return renderRequests();
   if (ui.tab === 'decisions') return renderDecisions();
+  if (ui.tab === 'agents') return renderAgents();
   $('stats').hidden = true; return renderTasks();
 }
 
@@ -663,17 +678,76 @@ function renderDecisions() {
   });
 }
 
+// ---------- Agents tab (the fleet obeys "degrade loudly" too) ----------
+const ag = { data: null, error: null, loading: false, res: {}, poll: null };
+
+async function loadAgents() {
+  ag.loading = true; if (ui.tab === 'agents') renderWork();
+  try { ag.data = await api('/api/agents'); ag.error = null; console.log(`loaded: ${ag.data.agents.length} agents, ${ag.data.agents.filter((a) => a.flag).length} flagged`); }
+  catch (e) { ag.error = e.message; console.error('agents load failed', e); }
+  ag.loading = false; updateAgentChip(); if (ui.tab === 'agents') renderWork();
+}
+function updateAgentChip() {
+  const n = ag.data ? ag.data.agents.filter((a) => a.flag && a.flag.level === 'red').length : 0;
+  const c = $('agentchip'); c.hidden = !n; c.textContent = n ? `⚠ ${n} agent${n > 1 ? 's need' : ' needs'} attention` : '';
+}
+function relTime(ms, now) {
+  const m = Math.round((now - ms) / 60000);
+  return m < 1 ? 'just now' : m < 60 ? `${m}m ago` : m < 2880 ? `${Math.round(m / 60)}h ago` : `${Math.round(m / 1440)}d ago`;
+}
+function fmtNext(ms, tz) { return new Date(ms).toLocaleString('en-GB', { timeZone: tz, weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }); }
+
+function renderAgents() {
+  const body = $('workbody'); $('stats').hidden = true;
+  if (ag.error) { body.innerHTML = `<div class="msg err">Agents unavailable<code>${esc(ag.error)}</code><button id="retryA">Retry</button></div>`; $('retryA').onclick = loadAgents; return; }
+  if (!ag.data) { body.innerHTML = '<div class="msg">Loading…</div>'; return; }
+  const d = ag.data, now = d.now;
+  const w = (a) => (a.flag ? (a.flag.level === 'red' ? 0 : 1) : a.enabled ? 2 : a.ported ? 3 : 4);
+  const list = [...d.agents].sort((a, b) => w(a) - w(b) || a.name.localeCompare(b.name));
+  const red = list.filter((a) => a.flag && a.flag.level === 'red').length, amber = list.filter((a) => a.flag && a.flag.level === 'amber').length;
+  let html = `<div class="stats"><div class="stat"><b>${list.filter((a) => a.enabled).length}</b><span>Enabled</span></div><div class="stat danger"><b>${red + amber}</b><span>Need attention</span></div><div class="stat"><b>${list.filter((a) => !a.ported).length}</b><span>Not ported</span></div></div>`;
+  for (const a of list) {
+    const lr = a.lastRun, r = ag.res[a.id];
+    const pill = !a.ported ? '<span class="pill np">NOT PORTED</span>' : lr ? (lr.ok === false || lr.delivery === 'failed' ? '<span class="pill bad">FAILED</span>' : lr.delivery === 'unknown' ? '<span class="pill unk">UNCONFIRMED</span>' : '<span class="pill ok">OK</span>') : '';
+    html += `<div class="ag ${a.enabled ? '' : 'off'}" data-id="${esc(a.id)}"><div class="top"><span class="nm">${esc(a.name)}</span>${pill}</div>`
+      + `<div class="sub">${esc(a.group)} · ${esc(a.schedule || a.cron)}</div>`
+      + `<div class="line">Last: ${lr ? `${relTime(lr.at, now)}${lr.dryRun ? ' (dry-run)' : ''}${lr.summary ? ' · ' + esc(lr.summary) : ''}` : 'never'} · Next: ${a.nextRun ? fmtNext(a.nextRun, d.tz) : (a.enabled ? '—' : 'disabled')}</div>`
+      + (a.flag ? `<div class="flag ${a.flag.level}">${a.flag.level === 'red' ? '🔴' : '🟠'} ${esc(a.flag.reason)}</div>` : '')
+      + `<div class="acts"><label title="${a.ported ? '' : 'Not ported yet: no prompt.md'}"><input type="checkbox" data-tg="${esc(a.id)}" ${a.enabled ? 'checked' : ''} ${a.ported ? '' : 'disabled'}> Enabled</label>`
+      + `<button data-run="${esc(a.id)}" ${a.ported && !a.running ? '' : 'disabled'}>${a.running ? 'Running…' : (d.dryRun ? 'Run now (dry-run)' : 'Run now')}</button>`
+      + (r ? `<span class="res" style="color:${r.bad ? 'var(--danger)' : 'var(--ok)'}">${esc(r.text)}</span>` : '') + '</div></div>';
+  }
+  body.innerHTML = html;
+  body.querySelectorAll('input[data-tg]').forEach((c) => c.onchange = async () => {
+    const id = c.dataset.tg;
+    try { await api('/api/agents/toggle', { id, enabled: c.checked }); ag.res[id] = { text: c.checked ? '✓ Enabled' : '✓ Disabled' }; }
+    catch (e) { ag.res[id] = { bad: true, text: e.message }; }
+    loadAgents();
+  });
+  body.querySelectorAll('button[data-run]').forEach((b) => b.onclick = async () => {
+    const id = b.dataset.run; ag.res[id] = { text: 'starting…' }; renderWork();
+    try { await api('/api/agents/run', { id }); ag.res[id] = { text: 'Started. Refreshing…' }; pollAgents(); }
+    catch (e) { ag.res[id] = { bad: true, text: e.message }; }
+    renderWork();
+  });
+}
+// After "Run now", re-read the fleet until nothing is running (max ~2 minutes).
+function pollAgents(n = 0) {
+  clearTimeout(ag.poll);
+  ag.poll = setTimeout(async () => { await loadAgents(); if (n < 40 && ag.data && ag.data.agents.some((a) => a.running)) pollAgents(n + 1); }, 3000);
+}
+
 const TABS = [['tasks', 'Tasks'], ['requests', 'Requests'], ['email', 'Email'], ['slack', 'Slack'], ['decisions', 'Decisions'], ['agents', 'Agents']];
-const LIVE_TABS = new Set(['tasks', 'requests', 'email', 'slack', 'decisions']);
+const LIVE_TABS = new Set(['tasks', 'requests', 'email', 'slack', 'decisions', 'agents']);
 function renderTabs() {
   $('tabs').innerHTML = TABS.map(([k, l]) => `<button data-t="${k}" class="${ui.tab === k ? 'on' : ''}" ${LIVE_TABS.has(k) ? '' : 'disabled title="Next in the build order"'}>${l}</button>`).join('');
-  $('tabs').querySelectorAll('button:not([disabled])').forEach((b) => b.onclick = () => { ui.tab = b.dataset.t; renderTabs(); if (ui.tab === 'email' && !email.data && !email.loading) loadEmail(); if (ui.tab === 'slack' && !sl.data && !sl.loading) loadSlack(); if (ui.tab === 'requests' && !rq.data && !rq.loading) loadRequests(); if (ui.tab === 'decisions' && !dc.data && !dc.loading) loadDecisions(); renderWork(); });
+  $('tabs').querySelectorAll('button:not([disabled])').forEach((b) => b.onclick = () => { ui.tab = b.dataset.t; renderTabs(); if (ui.tab === 'email' && !email.data && !email.loading) loadEmail(); if (ui.tab === 'slack' && !sl.data && !sl.loading) loadSlack(); if (ui.tab === 'requests' && !rq.data && !rq.loading) loadRequests(); if (ui.tab === 'decisions' && !dc.data && !dc.loading) loadDecisions(); if (ui.tab === 'agents') loadAgents(); renderWork(); });
 }
 renderTabs();
-$('refresh').onclick = () => { load(); loadTasks(); if (ui.tab === 'email') loadEmail(); else email.data = null; if (ui.tab === 'slack') loadSlack(); else sl.data = null; if (ui.tab === 'requests') loadRequests(); else rq.data = null; if (ui.tab === 'decisions') loadDecisions(); else dc.data = null; };
+$('refresh').onclick = () => { load(); loadTasks(); if (ui.tab === 'email') loadEmail(); else email.data = null; if (ui.tab === 'slack') loadSlack(); else sl.data = null; if (ui.tab === 'requests') loadRequests(); else rq.data = null; if (ui.tab === 'decisions') loadDecisions(); else dc.data = null; loadAgents(); };
 const h = new Date().getHours();
 $('greet').textContent = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', Ilan';
-load(); loadTasks();
+load(); loadTasks(); loadAgents();
 setInterval(() => { if (state.data) render(); }, 60000); // keep now-line and next-up fresh
 </script>
 </body>

@@ -1,0 +1,9 @@
+{
+  "id": "weekly-learning-review",
+  "name": "Weekly learning review",
+  "group": "Board & Pepper",
+  "cron": "0 16 * * 4",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "Thu 16:00"
+}

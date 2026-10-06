@@ -1,0 +1,9 @@
+{
+  "id": "log-claude-work-to-board",
+  "name": "Log Claude work to board",
+  "group": "Board & Pepper",
+  "cron": "0 18 * * *",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "18:00 daily"
+}

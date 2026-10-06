@@ -1,0 +1,9 @@
+{
+  "id": "monday-in-the-news-cross-post",
+  "name": "In-the-news cross-post",
+  "group": "News",
+  "cron": "0 9 * * *",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "09:00 daily"
+}

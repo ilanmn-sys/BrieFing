@@ -1,0 +1,9 @@
+{
+  "id": "comms-calendar-sync",
+  "name": "Comms calendar sync",
+  "group": "Comms",
+  "cron": "0 8 * * 0-4",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "08:00 Sun–Thu"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "daily-inbox-action-items-to-ilan-pa",
+  "name": "Daily inbox action items",
+  "group": "Agencies & content",
+  "cron": "5 8 * * *",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "08:05 daily"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "daily-board-strategy",
+  "name": "Daily board strategy",
+  "group": "Board & Pepper",
+  "cron": "0 7-12 * * 0-4",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "Hourly 07–12 Sun–Thu; first run does the pass, later runs handle approvals"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "influencer-crm-daily-scan",
+  "name": "Influencer CRM daily scan",
+  "group": "Agencies & content",
+  "cron": "0 8 * * *",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "08:00 daily"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "quarterly-pr-template-refresh",
+  "name": "Quarterly PR template refresh",
+  "group": "News",
+  "cron": "0 9 1 1,4,7,10 *",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "1st of Jan/Apr/Jul/Oct, 09:00"
+}

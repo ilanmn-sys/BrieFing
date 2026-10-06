@@ -1,0 +1,9 @@
+{
+  "id": "slack-flag-to-task",
+  "name": "Slack flag to task",
+  "group": "Board & Pepper",
+  "cron": "0 9-18/2 * * 0-4",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "Every 2h 09–18 Sun–Thu"
+}

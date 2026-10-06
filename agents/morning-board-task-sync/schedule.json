@@ -1,0 +1,9 @@
+{
+  "id": "morning-board-task-sync",
+  "name": "Morning board task sync",
+  "group": "Board & Pepper",
+  "cron": "0 8 * * 0-4",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "08:00 Sun–Thu"
+}

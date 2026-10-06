@@ -1,0 +1,9 @@
+{
+  "id": "monday-news-board-cleanup",
+  "name": "News board cleanup",
+  "group": "News",
+  "cron": "0 8 * * 0",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "Sun 08:00"
+}

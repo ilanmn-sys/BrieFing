@@ -1,0 +1,9 @@
+{
+  "id": "weekly-linkedin-post-proposal",
+  "name": "Weekly LinkedIn post proposal",
+  "group": "Agencies & content",
+  "cron": "0 9 * * 3",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "Wed 09:00"
+}

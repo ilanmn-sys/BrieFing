@@ -1,0 +1,9 @@
+{
+  "id": "agencies-daily-nudge",
+  "name": "Agencies daily nudge",
+  "group": "Agencies & content",
+  "cron": "0 8 * * 1-5",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "08:00 Mon–Fri"
+}

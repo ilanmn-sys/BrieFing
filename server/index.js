@@ -14,6 +14,8 @@ const llm = require('./llm');
 const slackApi = require('./slackApi');
 const requests = require('./requestsApi');
 const decisions = require('./decisionsApi');
+const agents = require('./agents');
+const { spawn } = require('child_process');
 
 const CHECKS = {
   monday: monday.health,
@@ -58,6 +60,26 @@ const server = http.createServer(async (req, res) => {
         const status = e instanceof NotConfigured ? 'not_configured' : 'error';
         return send(502, { status, error: e.message, retry: '/api/calendar' });
       }
+    }
+    // ---- Agents (registry, health, enable toggle, Run now) ----
+    if (url.pathname.startsWith('/api/agents')) {
+      try {
+        if (req.method === 'GET' && url.pathname === '/api/agents') return send(200, { now: Date.now(), tz: config.me.tz, dryRun: isDryRun(), agents: agents.list() });
+        if (req.method !== 'POST') return send(405, { error: 'GET or POST only' });
+        const origin = req.headers.origin;
+        if (origin && !/^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(origin)) return send(403, { error: 'bad origin' });
+        let raw = ''; for await (const c of req) { raw += c; if (raw.length > 5000) return send(413, { error: 'too large' }); }
+        const b = JSON.parse(raw || '{}');
+        if (url.pathname === '/api/agents/toggle') return send(200, agents.setEnabled(String(b.id), !!b.enabled));
+        if (url.pathname === '/api/agents/run') {
+          const a = agents.find(String(b.id)); // validated against the registry; no shell, fixed argv
+          if (agents.isRunning(a.id, Date.now())) return send(409, { error: 'already running' });
+          const args = ['scripts/run-agent.js', a.id, '--force', ...(isDryRun() ? ['--dry-run'] : [])];
+          spawn(process.execPath, args, { cwd: agents.root, detached: true, stdio: 'ignore' }).unref();
+          return send(202, { started: true, dryRun: isDryRun() });
+        }
+        return send(404, { error: 'not found' });
+      } catch (e) { return send(e.code || 500, { error: e.message }); }
     }
     // ---- Decisions (never drafts; board-sourced outcomes are posted on the item) ----
     if (url.pathname.startsWith('/api/decisions')) {

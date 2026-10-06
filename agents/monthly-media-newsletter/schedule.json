@@ -1,0 +1,9 @@
+{
+  "id": "monthly-media-newsletter",
+  "name": "Monthly media newsletter",
+  "group": "News",
+  "cron": "0 9 1 * *",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "1st of the month, 09:00"
+}

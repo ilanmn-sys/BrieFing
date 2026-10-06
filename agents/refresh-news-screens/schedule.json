@@ -1,0 +1,9 @@
+{
+  "id": "refresh-news-screens",
+  "name": "Refresh news screens",
+  "group": "News",
+  "cron": "0 8 * * 1",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "Mon 08:00"
+}

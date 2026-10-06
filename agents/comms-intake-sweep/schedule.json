@@ -1,0 +1,9 @@
+{
+  "id": "comms-intake-sweep",
+  "name": "Comms intake sweep",
+  "group": "Comms",
+  "cron": "0 8-18/2 * * 0-5",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "Every 2h 08–18 Sun–Fri"
+}

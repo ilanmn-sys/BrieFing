@@ -1,0 +1,9 @@
+{
+  "id": "agencies-weekly-roundup",
+  "name": "Agencies weekly roundup",
+  "group": "Agencies & content",
+  "cron": "30 8 * * 1",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "Mon 08:30"
+}
