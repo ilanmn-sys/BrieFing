@@ -269,10 +269,18 @@ function render() {
   if (!d) { body.innerHTML = '<div class="msg">Loading…</div>'; return; }
 
   const dayKey = addDays(d.today, state.day);
-  const adEvents = d.events.filter((e) => e.allDay && e.start <= dayKey && e.end > dayKey);
-  if (adEvents.length) { $('allday').hidden = false; $('allday').innerHTML = adEvents.map((e) => `<span class="tag">${esc(e.title)}</span>`).join(''); }
+  // Banners: all-day events (date strings) and long timed events such as a multi-week Out of Office.
+  const adEvents = d.events.filter((e) => {
+    if (!e.banner && !e.allDay) return false;
+    const a = e.allDay ? e.start.slice(0, 10) : parts(e.start, d.tz).key, z = e.allDay ? e.end.slice(0, 10) : parts(e.end, d.tz).key;
+    return a <= dayKey && dayKey < z;
+  });
+  const notes = [];
+  if (d.declinedHidden) notes.push(`${d.declinedHidden} declined meeting${d.declinedHidden > 1 ? 's' : ''} hidden`);
+  if (d.truncated) notes.push('calendar list was cut off at 300 events');
+  if (adEvents.length || notes.length) { $('allday').hidden = false; $('allday').innerHTML = adEvents.map((e) => `<span class="tag">${e.eventType === 'OUT_OF_OFFICE' ? '🏖 ' : ''}${esc(e.title)}</span>`).join('') + notes.map((n) => `<span class="why" style="font-size:10px;color:var(--text3)">${esc(n)}</span>`).join(''); }
 
-  const items = layout(d.events, d.tz, dayKey);
+  const items = layout(d.events.filter((e) => !e.banner), d.tz, dayKey);
   const H = (END_H - START_H) * 60 * PX_PER_MIN;
   let html = `<div class="grid" style="height:${H + 12}px;margin-top:10px">`;
   for (let h = START_H; h <= END_H; h++) {
@@ -296,7 +304,7 @@ function render() {
   body.innerHTML = html;
 
   // Next-up chip: next event today that hasn't started yet.
-  const todays = layout(d.events, d.tz, d.today);
+  const todays = layout(d.events.filter((e) => !e.banner), d.tz, d.today);
   const next = todays.find((it) => it.startMin > nowP.min);
   if (next && nowP.key === d.today) { $('nextup').hidden = false; $('nextup').textContent = `Next: ${next.s.label} ${next.e.title}`; }
 }

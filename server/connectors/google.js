@@ -24,27 +24,24 @@ async function calendarHealth() {
   return `primary calendar ok (${(r.items || []).length} upcoming sampled)`;
 }
 
-// Events for [today, today+days) in the configured timezone. Read-only.
+// Events for [today, today+days) in the configured timezone. Read-only. Follows nextPageToken (max 3 pages).
 async function listEvents(days, tz, todayStr) {
+  const { normalize } = require('../calendarLogic');
   const t = await accessToken();
   const off = new Intl.DateTimeFormat('en-US', { timeZone: tz, timeZoneName: 'longOffset' })
     .formatToParts(new Date()).find((x) => x.type === 'timeZoneName').value.replace('GMT', '') || '+00:00';
-  const offset = off.length > 0 ? off : '+00:00';
-  const start = new Date(`${todayStr}T00:00:00${offset}`);
+  const start = new Date(`${todayStr}T00:00:00${off}`);
   const end = new Date(start.getTime() + days * 86400000);
-  const q = new URLSearchParams({
-    timeMin: start.toISOString(), timeMax: end.toISOString(),
-    singleEvents: 'true', orderBy: 'startTime', maxResults: '100',
-  });
-  const r = await http(`https://www.googleapis.com/calendar/v3/calendars/primary/events?${q}`, { headers: { Authorization: `Bearer ${t}` } });
-  return (r.items || [])
-    .filter((e) => e.status !== 'cancelled')
-    .map((e) => ({
-      id: e.id, title: e.summary || '(no title)', link: e.htmlLink,
-      allDay: !!e.start.date,
-      start: e.start.dateTime || e.start.date, end: e.end.dateTime || e.end.date,
-      location: e.location || null,
-    }));
+  const items = []; let pageToken, truncated = false;
+  for (let i = 0; i < 3; i++) {
+    const q = new URLSearchParams({ timeMin: start.toISOString(), timeMax: end.toISOString(), singleEvents: 'true', orderBy: 'startTime', maxResults: '100', ...(pageToken ? { pageToken } : {}) });
+    const r = await http(`https://www.googleapis.com/calendar/v3/calendars/primary/events?${q}`, { headers: { Authorization: `Bearer ${t}` } });
+    items.push(...(r.items || []));
+    pageToken = r.nextPageToken;
+    if (!pageToken) break;
+    if (i === 2) truncated = true;
+  }
+  return { ...normalize(items), truncated };
 }
 
 module.exports = { gmailHealth, calendarHealth, listEvents, accessToken };

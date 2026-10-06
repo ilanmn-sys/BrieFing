@@ -55,8 +55,8 @@ const server = http.createServer(async (req, res) => {
     if (url.pathname === '/api/calendar') {
       const days = Math.min(Math.max(parseInt(url.searchParams.get('days') || '4', 10), 1), 14);
       try {
-        const events = await google.listEvents(days, config.me.tz, today());
-        return send(200, { today: today(), tz: config.me.tz, days, events });
+        const cal = await google.listEvents(days, config.me.tz, today());
+        return send(200, { today: today(), tz: config.me.tz, days, ...cal });
       } catch (e) {
         const status = e instanceof NotConfigured ? 'not_configured' : 'error';
         return send(502, { status, error: e.message, retry: '/api/calendar' });
