@@ -75,7 +75,11 @@
     "neverUse": [
       "color_mm65szsk",
       "color_mm65n798"
-    ]
+    ],
+    "initiative": "dropdown_mm4r8rd5",
+    "effort": "color_mm4rnt2z",
+    "source": "dropdown_mm4r32ve",
+    "calendarBlockId": "text_mm4rwr1z"
   },
   "pepper": {
     "dmChannel": "D0BCAGJV0AD",
