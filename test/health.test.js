@@ -43,7 +43,7 @@ test('R-06: Not Relevant items still sitting in active groups (not in Noise/Comp
 });
 
 test('R-16: blocked items need a named holder in the title or recent updates', () => {
-  for (const n of ['Waiting on Dana', 'blocked by Legal', 'with Or', 'ממתין ל-דנה', 'Held by Noam']) assert.ok(HOLDER.test(n), n);
+  for (const n of ['Waiting on Dana', 'blocked by Legal', 'with Or', 'ממתין ל-דנה', 'Held by Noam', '👤 בעל אחריות: *אילן*', 'Holder: Dana']) assert.ok(HOLDER.test(n), n);
   for (const n of ['Waiting on approval', 'Blocked', 'waiting for a quote', 'Stuck']) assert.ok(!HOLDER.test(n), n); // no name, no holder
   const holderText = new Map([['2', 'Update: waiting on Dana for the quote']]);
   const r = by(health([
@@ -70,4 +70,10 @@ test('meta items and Done items never count; one item may appear under two rules
     t(3, 'Stuck, by 5.9', { status: 'Stuck' }),
   ], { groups: G, today: TODAY }));
   assert.equal(r['R-21'].count, 0); assert.equal(r['R-05'].count, 1); assert.deepEqual(ids(r['R-16']), ['3']);
+});
+
+test('the excluded 🛒 shopping group never counts toward board health', () => {
+  const shop = G.excluded[0];
+  const r = by(health([t(1, 'late', { group: shop, deadline: '2026-01-01' }), t(2, 'nr', { group: shop, status: 'Not Relevant' }), t(3, 'Waiting on approval', { group: shop, status: 'Stuck' })], { groups: G, today: TODAY }));
+  for (const rule of Object.values(r)) assert.equal(rule.count, 0, rule.id);
 });

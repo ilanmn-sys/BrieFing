@@ -61,7 +61,11 @@
       "t3": "group_mm77ttps",
       "parked": "group_mm7718vv",
       "closed": "group_mm77qrtv"
-    }
+    },
+    "excluded": [
+      "group_mm71jbpg"
+    ],
+    "excludedNote": "group_mm71jbpg is the 🛒 shopping list (household errands). It is not part of the work or personal track, so Tasks, Decisions and board health skip it. Found when checking the real board."
   },
   "columns": {
     "status": "status",
@@ -178,7 +182,13 @@
       "brie fing",
       "infra admin"
     ],
-    "botNamesNote": "First 11 are from the build prompt. 'brie fing' (the comms desk agent) and 'infra admin' (Monday Infra Admin) were added because both post automated updates on this board. Confirm."
+    "botNamesNote": "First 11 are from the build prompt. 'brie fing' (the comms desk agent) and 'infra admin' (Monday Infra Admin) were added because both post automated updates on this board. Confirm.",
+    "terminalStatusIds": [
+      1,
+      10,
+      17,
+      18
+    ]
   },
   "decisionSeeds": [
     {

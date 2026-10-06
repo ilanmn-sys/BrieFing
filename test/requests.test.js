@@ -66,3 +66,11 @@ test('empty or oversized updates are rejected', async () => {
   await assert.rejects(() => api.update('123', '  '), /empty/);
   await assert.rejects(() => api.update('123', 'x'.repeat(4001)), /too long/);
 });
+
+test('the Requests query filters on owner AND non-terminal status server-side (verified on the real board)', async () => {
+  let q = '';
+  global.fetch = async (url, opts = {}) => { q = JSON.parse(opts.body).query; return { ok: true, status: 200, text: async () => JSON.stringify({ data: { boards: [{ items_page: { cursor: null, items: [] } }] } }) }; };
+  await require('../server/connectors/monday').listRequests();
+  assert.match(q, /assigned_to_me/); assert.match(q, /not_any_of/); assert.match(q, /\[1,10,17,18\]/);
+  assert.match(q, /color_mm77yyq9/); assert.match(q, /multiple_person_mm77ct8p/);
+});

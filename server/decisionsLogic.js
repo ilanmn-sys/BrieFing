@@ -12,7 +12,7 @@ function parseAmount(text) {
 
 // Board items whose substance is a decision. Same visibility rules as the Tasks tab.
 function detectBoard(items, g) {
-  const hidden = new Set([g.canonical.completed.id, g.parking.recurring, g.parking.noise]);
+  const hidden = new Set([g.canonical.completed.id, g.parking.recurring, g.parking.noise, ...(g.excluded || [])]);
   const out = [];
   for (const t of items) {
     if (hidden.has(t.group) || t.status === 'Done' || t.status === 'Not Relevant' || META.test(t.name)) continue;

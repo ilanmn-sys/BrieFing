@@ -312,7 +312,7 @@ const PRI = { '🔥 High': 0, '🟡 Medium': 1, '🟢 Low': 2 };
 
 function buildTaskView(d) {
   const g = d.config.groups, c = g.canonical;
-  const hidden = new Set([c.completed.id, g.parking.recurring, g.parking.noise]);
+  const hidden = new Set([c.completed.id, g.parking.recurring, g.parking.noise, ...(g.excluded || [])]);
   const view = { today: [], overdue: [], week: [], active: [], personal: [], hiddenCount: 0, total: 0 };
   for (const t of d.items) {
     if (hidden.has(t.group) || t.status === 'Done' || t.status === 'Not Relevant' || META.test(t.name)) { view.hiddenCount++; continue; }

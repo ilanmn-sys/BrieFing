@@ -61,7 +61,9 @@ const RITEM = `id name group { id } column_values(ids: ${JSON.stringify(RCOLS)})
 // Open items I own. Owner filter and terminal-status filter run server-side in monday AND again
 // here, so a changed filter semantic can never leak closed items into the list.
 async function listRequests() {
-  const rules = `query_params:{rules:[{column_id:"${RQ.columns.owner}",compare_value:["assigned_to_me"],operator:any_of}],operator:and}`;
+  // Checked against the real board: owner AND status-not-terminal in one server-side filter returns exactly the open items
+  // (the owner filter alone returned ~97% closed items). The terminal check is repeated below as a safety net.
+  const rules = `query_params:{rules:[{column_id:"${RQ.columns.owner}",compare_value:["assigned_to_me"],operator:any_of},{column_id:"${RQ.columns.status}",compare_value:${JSON.stringify(RQ.terminalStatusIds)},operator:not_any_of}],operator:and}`;
   const items = []; let pages = 0, truncated = false;
   let r = await gql(`query($id:[ID!]){ boards(ids:$id){ items_page(limit:100, ${rules}){ cursor items{ ${RITEM} } } } }`, { id: [String(RQ.boardId)] });
   let page = r.data && r.data.boards[0] && r.data.boards[0].items_page;

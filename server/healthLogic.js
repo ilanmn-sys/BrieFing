@@ -5,12 +5,12 @@ const META = /comms calendar sync|daily inbox digest|morning-board|pepper-eod/i;
 // A deadline written in the title: "עד 10.8", "by 10/8", "due 5.9", "48h מקבלה".
 const TITLE_DATE = /((?:עד|by|due|until|before)\s*\d{1,2}[./-]\d{1,2})|(\b\d{1,3}\s?h\b\s*(?:מקבלה|from|after)?)/i;
 const AUTOMATION = /automation|scheduled task|cron|daily digest|weekly (?:review|report|roundup|digest)|\bsync\b.*\b(?:daily|weekly)\b/i;
-const HOLDER = /(?:[Ww]aiting (?:on|for)|[Bb]locked (?:on|by)|[Hh]eld by|[Ww]ith|ממתי(?:ן|נה|נים) (?:ל|על|מ))\s*-?\s*[A-Z֐-׿][\w֐-׿.'-]+/;
+const HOLDER = /(?:[Ww]aiting (?:on|for)|[Bb]locked (?:on|by)|[Hh]eld by|[Ww]ith|ממתי(?:ן|נה|נים) (?:ל|על|מ))\s*-?\s*[A-Z֐-׿][\w֐-׿.'-]+|(?:בעל אחריות|[Hh]older)\s*:\s*\*?[\w֐-׿]/;
 
 const isBlocked = (t, g) => t.group === g.canonical.waiting.id || t.status === 'With steakholder' || t.status === 'Stuck';
 
 function health(items, { groups: g, today, agentNames = [], holderText = new Map() }) {
-  const parked = new Set([g.canonical.completed.id, g.parking.recurring, g.parking.noise]);
+  const parked = new Set([g.canonical.completed.id, g.parking.recurring, g.parking.noise, ...(g.excluded || [])]);
   const names = agentNames.map((n) => n.toLowerCase());
   const open = items.filter((t) => !parked.has(t.group) && t.status !== 'Done' && !META.test(t.name));
   const live = open.filter((t) => t.status !== 'Not Relevant');
