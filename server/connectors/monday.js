@@ -53,4 +53,48 @@ async function setDone(itemId) {
   return r.data.change_column_value.id;
 }
 
-module.exports = { gql, health, listTasks, setDone };
+// ---- Requests (Switchboard board) ----
+const RQ = config.requests;
+const RCOLS = [RQ.columns.status, RQ.columns.deadline, RQ.columns.tier, RQ.columns.region];
+const RITEM = `id name group { id } column_values(ids: ${JSON.stringify(RCOLS)}) { id text } updates(limit: 10) { created_at text_body creator { id name } }`;
+
+// Open items I own. Owner filter and terminal-status filter run server-side in monday AND again
+// here, so a changed filter semantic can never leak closed items into the list.
+async function listRequests() {
+  const rules = `query_params:{rules:[{column_id:"${RQ.columns.owner}",compare_value:["assigned_to_me"],operator:any_of}],operator:and}`;
+  const items = []; let pages = 0, truncated = false;
+  let r = await gql(`query($id:[ID!]){ boards(ids:$id){ items_page(limit:100, ${rules}){ cursor items{ ${RITEM} } } } }`, { id: [String(RQ.boardId)] });
+  let page = r.data && r.data.boards[0] && r.data.boards[0].items_page;
+  while (page) {
+    if (r.errors) throw new Error(JSON.stringify(r.errors).slice(0, 200));
+    pages++;
+    for (const it of page.items) {
+      const cv = Object.fromEntries(it.column_values.map((c) => [c.id, c.text || '']));
+      const status = cv[RQ.columns.status];
+      if (it.group.id === RQ.closedGroup || RQ.terminalStatuses.includes(status)) continue;
+      items.push({ id: it.id, name: it.name, group: it.group.id, status, deadline: cv[RQ.columns.deadline], tier: cv[RQ.columns.tier], region: cv[RQ.columns.region],
+        updates: (it.updates || []).map((u) => ({ createdAt: u.created_at, text: String(u.text_body || '').slice(0, 300), creatorId: u.creator && u.creator.id, creatorName: u.creator && u.creator.name })) });
+    }
+    if (!page.cursor) break;
+    if (pages >= MAX_PAGES) { truncated = true; break; }
+    r = await gql(`query($c:String!){ next_items_page(limit:100, cursor:$c){ cursor items{ ${RITEM} } } }`, { c: page.cursor });
+    page = r.data && r.data.next_items_page;
+  }
+  if (!pages) throw new Error('requests board returned no pages');
+  return { items, pages, truncated };
+}
+
+async function postUpdate(itemId, text) {
+  const r = await gql('mutation($i:ID!,$b:String!){ create_update(item_id:$i, body:$b){ id } }', { i: String(itemId), b: text });
+  if (r.errors || !r.data || !r.data.create_update) throw new Error(`monday: ${JSON.stringify(r.errors || r).slice(0, 200)}`);
+  return r.data.create_update.id;
+}
+
+async function setRequestStatus(itemId, label) {
+  const r = await gql('mutation($b:ID!,$i:ID!,$c:String!,$v:JSON!){ change_column_value(board_id:$b,item_id:$i,column_id:$c,value:$v){ id } }',
+    { b: String(RQ.boardId), i: String(itemId), c: RQ.columns.status, v: JSON.stringify({ label }) });
+  if (r.errors || !r.data || !r.data.change_column_value) throw new Error(`monday: ${JSON.stringify(r.errors || r).slice(0, 200)}`);
+  return r.data.change_column_value.id;
+}
+
+module.exports = { gql, health, listTasks, setDone, listRequests, postUpdate, setRequestStatus };

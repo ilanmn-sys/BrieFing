@@ -12,6 +12,7 @@ const gmail = require('./connectors/gmail');
 const { triage, classify } = require('./triage');
 const llm = require('./llm');
 const slackApi = require('./slackApi');
+const requests = require('./requestsApi');
 
 const CHECKS = {
   monday: monday.health,
@@ -56,6 +57,21 @@ const server = http.createServer(async (req, res) => {
         const status = e instanceof NotConfigured ? 'not_configured' : 'error';
         return send(502, { status, error: e.message, retry: '/api/calendar' });
       }
+    }
+    // ---- Requests (Switchboard board; writes are dry-run unless DRY_RUN=0) ----
+    if (url.pathname.startsWith('/api/requests')) {
+      const fail = (e) => send(e.code || (e instanceof NotConfigured ? 503 : 502), { status: e instanceof NotConfigured ? 'not_configured' : 'error', error: e.message });
+      try {
+        if (req.method === 'GET' && url.pathname === '/api/requests') return send(200, await requests.load());
+        if (req.method !== 'POST') return send(405, { error: 'GET /api/requests or POST only' });
+        const origin = req.headers.origin;
+        if (origin && !/^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(origin)) return send(403, { error: 'bad origin' });
+        let raw = ''; for await (const c of req) { raw += c; if (raw.length > 20000) return send(413, { error: 'too large' }); }
+        const b = JSON.parse(raw || '{}');
+        if (url.pathname === '/api/requests/update') return send(200, await requests.update(b.id, b.text));
+        if (url.pathname === '/api/requests/status') return send(200, await requests.status(b.id, b.label));
+        return send(404, { error: 'not found' });
+      } catch (e) { return fail(e); }
     }
     // ---- Slack (reads; sends only on explicit click and only with DRY_RUN=0) ----
     if (url.pathname.startsWith('/api/slack')) {

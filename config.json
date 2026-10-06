@@ -132,5 +132,52 @@
     "scheduler": "launchd",
     "runtime": "local-server",
     "coworkMigration": "one-at-a-time"
+  },
+  "requests": {
+    "boardId": 18431118484,
+    "columns": {
+      "owner": "multiple_person_mm77ct8p",
+      "status": "color_mm77yyq9",
+      "deadline": "date_mm77dyk5",
+      "tier": "color_mm773zjg",
+      "region": "dropdown_mm7775sx"
+    },
+    "closedGroup": "group_mm77qrtv",
+    "terminalStatuses": [
+      "Done",
+      "Cancelled",
+      "Deflected",
+      "Duplicate"
+    ],
+    "statusLabels": [
+      "New",
+      "Triaged",
+      "In progress",
+      "With requester",
+      "With 3rd party",
+      "In review",
+      "Approved - pending publication",
+      "Blocked",
+      "Done",
+      "Deflected",
+      "Cancelled",
+      "Duplicate"
+    ],
+    "botNames": [
+      "claude",
+      "dennis",
+      "pepper",
+      "clark",
+      "airflow",
+      "bigbrain",
+      "n8n",
+      "bot",
+      "agent",
+      "automation",
+      "monday.com",
+      "brie fing",
+      "infra admin"
+    ],
+    "botNamesNote": "First 11 are from the build prompt. 'brie fing' (the comms desk agent) and 'infra admin' (Monday Infra Admin) were added because both post automated updates on this board. Confirm."
   }
 }

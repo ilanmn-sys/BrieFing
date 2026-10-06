@@ -96,6 +96,19 @@ main{flex:1;display:flex;gap:12px;padding:0 16px 16px;min-height:0}
 .sl-ask{padding:8px 10px;border-bottom:1px solid var(--line);background:var(--slack-soft)}
 .sl-ask textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:8px;padding:5px 8px;min-height:44px}
 .sl-head{padding:8px 10px 2px;font-size:11px;font-weight:600;color:var(--text2)}
+.rq{padding:6px 10px;border-bottom:1px solid #f3f3f3}
+.rq .top{display:flex;gap:6px;align-items:flex-start;justify-content:space-between}
+.rq .nm{flex:1;min-width:0;text-decoration:none;color:inherit;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rq .meta{font-size:10px;color:var(--text3);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.rq .meta .late{color:var(--danger)}
+.rq .last{font-size:10px;color:var(--text2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rq .acts{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;align-items:center}
+.rq select,.rq textarea{font:inherit;font-size:11px;border:1px solid var(--line);border-radius:6px;padding:2px 4px;background:var(--panel);color:var(--text)}
+.rq textarea{width:100%;min-height:50px;margin-top:4px}
+.rq .res{font-size:10px}
+.r{display:inline-block;font-size:9px;font-weight:700;border-radius:4px;padding:1px 5px;letter-spacing:.3px;white-space:nowrap}
+.r.r0{background:#f1f5f9;color:#64748b}.r.r1{background:#fee2e2;color:var(--danger)}.r.r2{background:#fef3c7;color:#92400e}.r.r3{background:#e0f2fe;color:#0369a1}.r.r4{background:var(--ok-soft);color:var(--ok)}
+.tier{font-size:9px;border:1px solid var(--line);border-radius:4px;padding:0 4px}
 @media (max-width:760px){main{flex-direction:column}#work{width:auto;height:180px}}
 </style>
 </head>
@@ -327,6 +340,7 @@ async function loadTasks() {
 function renderWork() {
   if (ui.tab === 'email') return renderEmail();
   if (ui.tab === 'slack') return renderSlack();
+  if (ui.tab === 'requests') return renderRequests();
   $('stats').hidden = true; return renderTasks();
 }
 
@@ -534,14 +548,62 @@ function renderSlack() {
   });
 }
 
+// ---------- Requests tab (Switchboard board; "whose turn" ladder) ----------
+const rq = { data: null, error: null, loading: false, touched: new Set(), res: {}, open: new Set(), drafts: {} };
+const RUNG = { 0: 'BOT ONLY', 1: 'THEIR REPLY', 2: 'YOU REPLIED, DUE SOON', 3: 'YOU REPLIED', 4: 'TOUCHED' };
+
+async function loadRequests() {
+  rq.loading = true; if (ui.tab === 'requests') renderWork();
+  try { rq.data = await api('/api/requests'); rq.error = null; console.log(`loaded: ${rq.data.items.length} requests${rq.data.truncated ? ' (TRUNCATED)' : ''}`); }
+  catch (e) { rq.error = e.message; console.error('requests load failed', e); }
+  rq.loading = false; if (ui.tab === 'requests') renderWork();
+}
+
+function renderRequests() {
+  const body = $('workbody'); $('stats').hidden = true;
+  if (rq.error) { body.innerHTML = `<div class="msg err">Requests unavailable<code>${esc(rq.error)}</code><button id="retryR">Retry</button></div>`; $('retryR').onclick = loadRequests; return; }
+  if (!rq.data) { body.innerHTML = '<div class="msg">Loading…</div>'; return; }
+  const d = rq.data;
+  // Server order is the ladder; anything acted on this session sinks (rung 4), keeping the server order within it.
+  const items = d.items.map((i, n) => ({ ...i, n, rung: rq.touched.has(i.id) ? 4 : i.rung })).sort((a, b) => a.rung - b.rung || a.n - b.n);
+  let html = '';
+  if (d.truncated) html += `<div class="banner">Pagination hit the ${d.pages}-page cap. The list is incomplete.</div>`;
+  html += `<div class="sec"><span>Requests that are yours · ${items.length}</span></div>`;
+  for (const i of items) {
+    const last = (i.updates || [])[0], r = rq.res[i.id], late = i.deadline && i.deadline < d.today;
+    html += `<div class="rq" data-id="${esc(i.id)}"><div class="top"><a class="nm" href="https://monday.monday.com/boards/18431118484/pulses/${esc(i.id)}" target="_blank" rel="noopener">${esc(i.name)}</a><span class="r r${i.rung}">${RUNG[i.rung]}</span></div>`
+      + `<div class="meta">${i.tier ? `<span class="tier">${esc(i.tier.split(' ')[0])}</span>` : ''}${i.region ? `<span>${esc(i.region)}</span>` : ''}${i.deadline ? `<span class="${late ? 'late' : ''}">${esc(i.deadline.slice(5).split('-').reverse().join('.'))}${late ? ' (late)' : ''}</span>` : ''}</div>`
+      + (last ? `<div class="last"><b>${esc(last.creatorName || 'unknown')}</b>: ${esc(last.text)}</div>` : '')
+      + `<div class="acts"><select data-st="${esc(i.id)}" aria-label="Status">${d.statusLabels.map((l) => `<option ${l === i.status ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select>`
+      + `<button data-upd="${esc(i.id)}">${rq.open.has(i.id) ? 'Close' : 'Post update'}</button>${r ? `<span class="res" style="color:${r.bad ? 'var(--danger)' : r.dry ? 'var(--accent)' : 'var(--ok)'}">${esc(r.text)}</span>` : ''}</div>`
+      + (rq.open.has(i.id) ? `<textarea dir="auto" data-txt="${esc(i.id)}" placeholder="Write an update…">${esc(rq.drafts[i.id] || '')}</textarea><div class="acts"><button data-send="${esc(i.id)}">Post</button></div>` : '') + '</div>';
+  }
+  if (!items.length) html += '<div class="msg">No open requests are assigned to you.</div>';
+  body.innerHTML = html; $('dry').hidden = !d.dryRun;
+  body.querySelectorAll('select[data-st]').forEach((sel) => sel.onchange = () => rqAct(sel.dataset.st, '/api/requests/status', { label: sel.value }, `Status set to ${sel.value}`));
+  body.querySelectorAll('button[data-upd]').forEach((b) => b.onclick = () => { const id = b.dataset.upd; rq.open.has(id) ? rq.open.delete(id) : rq.open.add(id); renderWork(); });
+  body.querySelectorAll('textarea[data-txt]').forEach((t) => t.oninput = () => { rq.drafts[t.dataset.txt] = t.value; });
+  body.querySelectorAll('button[data-send]').forEach((b) => b.onclick = () => rqAct(b.dataset.send, '/api/requests/update', { text: rq.drafts[b.dataset.send] || '' }, 'Update posted', () => { rq.open.delete(b.dataset.send); delete rq.drafts[b.dataset.send]; }));
+}
+
+async function rqAct(id, path, extra, okText, after) {
+  rq.res[id] = { text: '…' }; renderWork();
+  try {
+    const j = await api(path, { id, ...extra });
+    if (j.dryRun) rq.res[id] = { dry: true, text: 'dry-run: ' + j.would };
+    else { rq.res[id] = { text: '✓ ' + okText }; rq.touched.add(id); if (extra.label) rq.data.items.find((x) => x.id === id).status = extra.label; if (after) after(); }
+  } catch (e) { rq.res[id] = { bad: true, text: 'Failed: ' + e.message }; }
+  renderWork();
+}
+
 const TABS = [['tasks', 'Tasks'], ['requests', 'Requests'], ['email', 'Email'], ['slack', 'Slack'], ['decisions', 'Decisions'], ['agents', 'Agents']];
-const LIVE_TABS = new Set(['tasks', 'email', 'slack']);
+const LIVE_TABS = new Set(['tasks', 'requests', 'email', 'slack']);
 function renderTabs() {
   $('tabs').innerHTML = TABS.map(([k, l]) => `<button data-t="${k}" class="${ui.tab === k ? 'on' : ''}" ${LIVE_TABS.has(k) ? '' : 'disabled title="Next in the build order"'}>${l}</button>`).join('');
-  $('tabs').querySelectorAll('button:not([disabled])').forEach((b) => b.onclick = () => { ui.tab = b.dataset.t; renderTabs(); if (ui.tab === 'email' && !email.data && !email.loading) loadEmail(); if (ui.tab === 'slack' && !sl.data && !sl.loading) loadSlack(); renderWork(); });
+  $('tabs').querySelectorAll('button:not([disabled])').forEach((b) => b.onclick = () => { ui.tab = b.dataset.t; renderTabs(); if (ui.tab === 'email' && !email.data && !email.loading) loadEmail(); if (ui.tab === 'slack' && !sl.data && !sl.loading) loadSlack(); if (ui.tab === 'requests' && !rq.data && !rq.loading) loadRequests(); renderWork(); });
 }
 renderTabs();
-$('refresh').onclick = () => { load(); loadTasks(); if (ui.tab === 'email') loadEmail(); else email.data = null; if (ui.tab === 'slack') loadSlack(); else sl.data = null; };
+$('refresh').onclick = () => { load(); loadTasks(); if (ui.tab === 'email') loadEmail(); else email.data = null; if (ui.tab === 'slack') loadSlack(); else sl.data = null; if (ui.tab === 'requests') loadRequests(); else rq.data = null; };
 const h = new Date().getHours();
 $('greet').textContent = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', Ilan';
 load(); loadTasks();
