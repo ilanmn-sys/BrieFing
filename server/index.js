@@ -17,6 +17,7 @@ const decisions = require('./decisionsApi');
 const agents = require('./agents');
 const strategy = require('./strategyApi');
 const boardHealth = require('./healthLogic');
+const syncStatus = require('./syncStatus');
 const { spawn } = require('child_process');
 
 const CHECKS = {
@@ -42,7 +43,7 @@ async function runCheck(name, fn) {
 async function health(only) {
   const names = only ? [only] : Object.keys(CHECKS);
   const results = await Promise.all(names.map((n) => runCheck(n, CHECKS[n])));
-  return { today: today(), tz: config.me.tz, checked_at: new Date().toISOString(), connectors: results };
+  return { today: today(), tz: config.me.tz, checked_at: new Date().toISOString(), connectors: results, learningLogSync: syncStatus.read() };
 }
 
 const server = http.createServer(async (req, res) => {
