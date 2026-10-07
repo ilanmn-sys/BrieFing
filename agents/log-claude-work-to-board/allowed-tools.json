@@ -1,0 +1,10 @@
+[
+  "Read",
+  "Bash(node scripts/list-sessions.js)",
+  "Bash(node scripts/list-sessions.js --mark:*)",
+  "mcp__monday_com__get_board_items_page",
+  "mcp__monday_com__get_board_info",
+  "mcp__monday_com__get_updates",
+  "mcp__monday_com__create_item",
+  "mcp__monday_com__create_update"
+]

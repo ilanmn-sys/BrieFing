@@ -65,7 +65,8 @@
     "excluded": [
       "group_mm71jbpg"
     ],
-    "excludedNote": "group_mm71jbpg is the 🛒 shopping list (household errands). It is not part of the work or personal track, so Tasks, Decisions and board health skip it. Found when checking the real board."
+    "excludedNote": "group_mm71jbpg is the 🛒 shopping list (household errands). It is not part of the work or personal track, so Tasks, Decisions and board health skip it. Found when checking the real board.",
+    "activeProjects": "topics"
   },
   "columns": {
     "status": "status",
