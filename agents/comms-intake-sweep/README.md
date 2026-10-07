@@ -13,7 +13,7 @@ Collects new comms requests from #ask-comms, `:brie:` / `:comms:` reactions (pub
 `prompt.md`, `allowed-tools.json`, `schedule.json`. Config gained: `boards.routingTable`, `boards.triageRules`, `routingTable`, `triageRules`, the full Switchboard column map under `requests.columns`, `requests.intake`, `requests.groupByTier`. `server/template.js` now accepts hyphens in placeholder paths.
 
 ## Caveats and questions
-- **The Routing board.** Earlier I recorded "Routing = Ilan's projects board" from a one-word answer. Searching monday I found **"Comms Routing — who owns what"** (18432388543), which is what the Switchboard triage notes ("1st priority for Social/Digital (routing board), Available, weighted open items") actually refer to, and **"Comms Triage — Rules & Hypotheses"** (18431311457). This agent uses those. `boards.routing` is left unchanged (nothing reads it); please confirm and I'll correct it.
+- **Routing board (confirmed 2026-10-07):** "Comms Routing — who owns what" (18432388543). `boards.routing` now points there.
 - **Reaction emoji.** The build prompt says `:brie:`; the Switchboard description and hypothesis H-06 say `:comms:`. Both are swept until you say which.
 - **Press page and email are not configured.** Nothing on disk says where press-page requests land or which mailbox/query to use (`requests.intake.pressPageUrl`, `requests.intake.emailQuery`, both empty). The agent says "not configured" in every RESULT instead of guessing. Give me the URL and the Gmail query/label.
 - **Deadlines.** The tier resolution targets are not in config, so the agent sets a Deadline only when the requester stated one. Give me the targets per tier and I'll add them.

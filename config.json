@@ -15,13 +15,12 @@
     "influencersCrm": 18425284143,
     "officialPrMaterials": 834321359,
     "switchboard": 18431118484,
-    "routing": 18416855289,
+    "routing": 18432388543,
     "requests": 18431118484,
     "teamRequestsArchive": 467729906,
-    "routingNote": "Per Ilan: Routing = projects board 18416855289. Confirm intake owner-assignment reads from it.",
     "routingTable": 18432388543,
     "triageRules": 18431311457,
-    "routingTableNote": "Found 2026-10-07 by searching monday: 'Comms Routing — who owns what' (18432388543) is the routing table the Switchboard triage notes refer to (domain, region, 1st/2nd priority, availability). 'routing' above still points at the projects board per the earlier answer; the intake agent uses routingTable. Confirm which is meant."
+    "routingTableNote": "Ilan confirmed 2026-10-07: Routing is 'Comms Routing — who owns what' (18432388543), the routing table the Switchboard triage reads. routing and routingTable are the same board."
   },
   "groups": {
     "canonical": {
