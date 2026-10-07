@@ -31,7 +31,7 @@ test('cron: next/prev in the configured timezone, steps, dow, dom, months', () =
 test('every shipped schedule.json parses and has a next run', () => {
   const real = path.join(__dirname, '..', 'agents');
   const ids = fs.readdirSync(real).filter((d) => fs.existsSync(path.join(real, d, 'schedule.json')));
-  assert.equal(ids.length, 20);
+  assert.equal(ids.length, 19); // morning-board-task-sync dropped 2026-10-07
   for (const id of ids) { const s = JSON.parse(fs.readFileSync(path.join(real, id, 'schedule.json'))); assert.ok(cron.next(s.cron, NOW, s.tz), id); assert.equal(s.enabled, false); }
 });
 
