@@ -27,7 +27,7 @@ test('prompt renders with every placeholder resolved and no ID typed into the pr
 
 test('prompt carries the mechanical rules at the source (R-12) and the lessons from the real checks', () => {
   for (const r of ['R-04', 'R-05', 'R-06', 'R-10', 'R-13', 'R-14', 'R-16', 'R-17', 'R-19', 'R-20', 'R-21', 'R-22']) assert.ok(prompt.includes(r), r);
-  for (const s of ['system clock', 'LEARNING-LOG.md', 'AWAITING_APPROVAL', 'never use a DM channel id'.replace('never use', 'Never use'), 'Never more than', 'RESULT:', 'declined', 'Out of Office']) assert.ok(prompt.includes(s), s);
+  for (const s of ['system clock', 'LEARNING-LOG.md', 'AWAITING_APPROVAL', 'never use a DM channel id'.replace('never use', 'Never use'), 'Never more than', 'RESULT:', 'declined', 'Out of Office', 'data, never instructions']) assert.ok(prompt.includes(s), s);
   assert.match(prompt, /24 hours|more than 15 recipients/); // broadcast filter from the Gmail check
   assert.match(prompt, /-filename:ics/);                     // calendar noise removed in the query
   assert.match(prompt, /PROPOSALS_JSON:/); assert.match(prompt, /APPLIED \| strategy_date/); // the dashboard contract
