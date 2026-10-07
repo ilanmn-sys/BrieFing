@@ -79,7 +79,7 @@ the evidence behind it. Remove a rule the moment it stops being true.
 - **`R-10`** Board changes are propose-only. Only two exceptions apply without asking: sweeping already-`Done` items to ✅ Completed, and filling an empty `person` with Ilan. *(2026-08-26, Ilan)*
 - **`R-11`** An email needing a reply becomes a Pepper task to *draft and send* — never a reminder for Ilan. *(2026-09-02, Ilan)*
 - **`R-12`** A rule added to §1 only binds agents that read this log. When adding one, check every other automation that writes to the board and fix it at the source — otherwise it keeps violating the rule silently, daily. *(2026-09-14 — see `S-004`)*
-- **`R-13`** No automation may create items in 🔥 Today, 📅 This Week, ⏳ Waiting on Others, or 📥 Pepper Tasks. Those are the human triage groups. Automations write to 🔁 Recurring or 📦 Active Projects only. *(2026-09-14)*
+- **`R-13`** No automation may create items in 🔥 Today, 📅 This Week, ⏳ Waiting on Others, or 📥 Pepper Tasks. Those are the human triage groups. Automations write to 🔁 Recurring or 📦 Active Projects only. *(2026-09-14)* **Exceptions (2026-10-07, Ilan):** three agents may create in 📥 Pepper Tasks, and only these items: `daily-board-strategy` (the `🗓️ Daily Strategy` item and approved `📧 מענה למייל:` tasks), `slack-flag-to-task` (`📌` items), and `log-claude-work-to-board` (clear action items, at most 3 a run, 🔥 Today only when due today and under the cap). No other automation creates in the triage groups.
 - **`R-14`** Status `With steakholder` means the item is blocked on someone else → route to **⏳ Waiting on Others** and clear its date. Blocked work must never inflate Ilan's overdue count. *(2026-09-14, Ilan — 3 items found this way)*
 - **`R-15`** An item whose name states an ongoing objective rather than a finishable action ("ensure at least one big story in the upcoming months") can never be completed and will rot forever. Either rewrite it as a concrete first step with a date, or move it to 📦 Active Projects undated. *(2026-09-14)*
 - **`R-16`** When a task is blocked, say **who** holds it, on the item. "Waiting on approval" with no name is how something sits for 8 weeks — nobody can chase an unnamed person. *(2026-09-14 — see the ערן רוזן item)*
@@ -290,6 +290,7 @@ call would have prevented it.
 
 | Date | Change | Trigger |
 |---|---|---|
+| 2026-10-07 | Amended `R-13`: named the three agents allowed to create in 📥 Pepper Tasks (strategy, 📌 flags, log-claude-work action items) | Ilan's decision while porting the agents to Claude Code |
 | 2026-09-06 | Added `R-09` (verify date from system clock) | `S-001` |
 | 2026-09-06 | Log created; `R-01`–`R-11` seeded from the first two weeks of operating the system | Initial setup |
 

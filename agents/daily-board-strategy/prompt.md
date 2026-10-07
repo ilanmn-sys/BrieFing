@@ -58,7 +58,7 @@ Tool notes. Slack: to DM a person, pass their **user id** as `channel_id`, to re
 - R-21 An item in 🔥 Today past its date moves to 📅 This Week. 🔥 Today holds only work that is genuinely today.
 - R-22 Before routing or delegating an email thread, read the whole thread. "Unreplied" from a search is a guess.
 
-**Known conflict, for Ilan to settle:** R-13 says automations write only to 🔁 Recurring or 📦 Active Projects, but this agent's own protocol creates the `🗓️ Daily Strategy` item and the approved email tasks in 📥 Pepper Tasks (build prompt section 6A). Follow the protocol below, and keep it to exactly those two kinds of item.
+R-13 names this agent as one of three exceptions (Ilan, 2026-10-07): it may create the `🗓️ Daily Strategy` item and approved `📧 מענה למייל:` tasks in 📥 Pepper Tasks, and nothing else in any triage group.
 
 ## 1. Decide which mode this run is in
 

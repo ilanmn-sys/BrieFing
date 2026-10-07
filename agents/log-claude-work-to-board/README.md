@@ -17,7 +17,7 @@ No Slack, email or calendar tools. Board writes are `create_update` and `create_
 ## Caveats
 - **Inferred port.** There was no source prompt. The build prompt row, S-004 and R-04/R-13 were the spec; the session source (local transcripts), the ledger and the update format are my design. Paste the Cowork prompt to reconcile.
 - **Where are the sessions?** The Cowork version presumably read Cowork sessions. This one reads Claude Code transcripts from `~/.claude/projects` on the Mac (`CLAUDE_PROJECTS_DIR` to override). Sessions in the Claude app/cloud are not on that disk and are not logged. Is that acceptable?
-- **R-13 conflict.** The row says action items go to 📥 Pepper Tasks / 🔥 Today; R-13 forbids automations from creating there. The agent follows the build prompt, capped at 3 a run. Ilan to settle; the fix is one line in section 3 of the prompt.
+- **R-13 (resolved 2026-10-07).** Ilan amended R-13 to name this agent as one of three allowed to create in 📥 Pepper Tasks; see the learning log §1 and §3.
 - **Ledger is local.** If the Mac's `data/` folder is wiped, the last 48h of sessions are re-listed; the `CLAUDE_SESSION` marker on the item is the dedupe of last resort.
 - Matching a session to an item is the model's judgement; unmatched sessions are never force-fitted.
 

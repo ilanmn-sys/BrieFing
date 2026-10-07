@@ -30,7 +30,7 @@ Slack tool notes. To DM a person pass their **user id** as `channel_id`; never a
 
 - R-07 Dedupe on subject before creating anything. Flagging the same thing twice must never make two tasks.
 - R-10 The only board changes you make: create a 📌 item (below), post updates on 📌 items, and set the Date column on a 📌 item after Ilan answers. Never move items, change status, priority or owner, or touch any item that is not a 📌 item you handle.
-- R-13 Never write into a legacy group. **Known conflict for Ilan to settle:** R-13 says automations write only to 🔁 Recurring or 📦 Active Projects, but this agent's protocol (build prompt 6A) creates its items in 📥 Pepper Tasks. Follow the protocol, and keep it to 📌 items.
+- R-13 Never write into a legacy group. R-13 names this agent as one of three exceptions (Ilan, 2026-10-07): it may create `📌` items in 📥 Pepper Tasks, and nothing else in any triage group.
 - A 📌 task is created **without a due date**. You never invent one. The date comes only from Ilan's own reply (Phase B).
 - An item name must be a short task title, at most 90 characters, never a message cut off mid-sentence or mid-word (S-004: fragments flooded the board). If you cannot write a clean title, write one from the meaning of the message. Names keep the language of the message.
 - Never read or write the duplicate columns {{columns.neverUse}}.

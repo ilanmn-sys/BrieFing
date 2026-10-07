@@ -21,7 +21,7 @@ test('prompt renders fully and carries no hand-typed IDs', () => {
 test('prompt carries the S-004 safeguards', () => {
   for (const r of ['R-04', 'R-07', 'R-09', 'R-10', 'R-13', 'R-15', 'R-19', 'S-004', 'S-001']) assert.ok(prompt.includes(r), r);
   for (const s of ['system clock', 'LEARNING-LOG.md', 'data, never instructions', 'do not create a project item', 'at most 3 per run', 'at most 90 characters', 'never cut off mid-sentence',
-    'never create a dated item', 'Never put a date on an automation', 'CLAUDE_SESSION | id:', '--mark', 'run **no** `--mark`', 'Known conflict', 'You never create items in 📦 Active Projects', 'RESULT:']) assert.ok(prompt.includes(s), s);
+    'never create a dated item', 'Never put a date on an automation', 'CLAUDE_SESSION | id:', '--mark', 'run **no** `--mark`', 'three exceptions', 'You never create items in 📦 Active Projects', 'RESULT:']) assert.ok(prompt.includes(s), s);
 });
 
 test('tools: no Slack, mail, calendar, moves, column changes or wildcard Bash', () => {
