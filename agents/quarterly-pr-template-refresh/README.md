@@ -10,7 +10,7 @@ Checks the Global Partnership Press Release Template (item 12272450331 on Offici
 - Built from the item's real update history (June, Sept and Oct 2026 refreshes): same three checks, same "only announce when the version actually changes" habit.
 
 ## Caveats and questions
-- **Past refreshes posted `@everyone` on the board item.** This port drafts the note to you instead of posting it (Principle 1). Say if you want it to post directly.
+- **Draft, not post (decided 2026-10-07):** the agent drafts the note to Ilan; he posts the `@everyone` update himself.
 - The live Google Doc id isn't on disk (updates say it was updated by hand), so the agent compares against the Drive file and says which version it read.
 - The October 2026 refresh was already posted on 2026-10-04, so the first real run should find the template current.
 - Official source URLs are limited to the two domains in config; there is no press-kit URL on disk.
