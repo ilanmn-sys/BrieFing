@@ -130,12 +130,12 @@ async function itemUpdates(itemId, limit = 30) {
 async function itemStates(ids) {
   const out = new Map();
   for (let i = 0; i < ids.length; i += 100) {
-    const q = `query($ids:[ID!]){ items(ids:$ids){ id board{ id } group{ id } column_values(ids:["${C.deadline}","${C.priority}"]){ id text } } }`;
+    const q = `query($ids:[ID!]){ items(ids:$ids){ id board{ id } group{ id } column_values(ids:["${C.deadline}","${C.priority}","${C.status}"]){ id text } } }`;
     const d = names(await gql(q, { ids: ids.slice(i, i + 100).map(String) }));
     for (const it of d.items) {
       if (String(it.board.id) !== String(config.boards.projects)) continue; // never touch another board
       const cv = Object.fromEntries(it.column_values.map((c) => [c.id, c.text || '']));
-      out.set(it.id, { group: it.group.id, date: cv[C.deadline] || null, priority: cv[C.priority] || '' });
+      out.set(it.id, { group: it.group.id, date: cv[C.deadline] || null, priority: cv[C.priority] || '', status: cv[C.status] || '' });
     }
   }
   return out;

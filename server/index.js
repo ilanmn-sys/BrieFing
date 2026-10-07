@@ -18,6 +18,7 @@ const agents = require('./agents');
 const strategy = require('./strategyApi');
 const boardHealth = require('./healthLogic');
 const syncStatus = require('./syncStatus');
+const boardMove = require('./boardMove');
 const { spawn } = require('child_process');
 
 const CHECKS = {
@@ -63,6 +64,17 @@ const server = http.createServer(async (req, res) => {
         const status = e instanceof NotConfigured ? 'not_configured' : 'error';
         return send(502, { status, error: e.message, retry: '/api/calendar' });
       }
+    }
+    // ---- Narrow board move (agents call this instead of holding all_monday_api) ----
+    if (url.pathname === '/api/board/move') {
+      try {
+        if (req.method !== 'POST') return send(405, { error: 'POST only' });
+        const origin = req.headers.origin;
+        if (origin && !/^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(origin)) return send(403, { error: 'bad origin' });
+        let raw = ''; for await (const c of req) { raw += c; if (raw.length > 2000) return send(413, { error: 'too large' }); }
+        let b; try { b = JSON.parse(raw || '{}'); } catch (_) { return send(400, { error: 'body must be JSON' }); }
+        return send(200, await boardMove.move(b, { monday, findStrategy: strategy.find, isDryRun }));
+      } catch (e) { return send(e.code || (e instanceof NotConfigured ? 503 : 502), { ok: false, status: e instanceof NotConfigured ? 'not_configured' : 'error', error: e.message }); }
     }
     // ---- Strategy proposals: Apply all (board writes only with DRY_RUN=0) ----
     if (url.pathname.startsWith('/api/strategy')) {
@@ -231,8 +243,8 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-const port = process.env.PORT || 3737;
+const port = process.env.PORT || config.server.port;
 if (require.main === module) {
-  server.listen(port, '127.0.0.1', () => console.log(`command-center listening on http://127.0.0.1:${port} (today=${today()})`));
+  server.listen(port, config.server.host, () => console.log(`command-center listening on http://127.0.0.1:${port} (today=${today()})`));
 }
 module.exports = { health, server };

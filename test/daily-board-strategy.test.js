@@ -36,8 +36,10 @@ test('prompt carries the mechanical rules at the source (R-12) and the lessons f
 test('allowed tools: a scoped list, no wildcards, nothing that can delete or send mail', () => {
   const tools = JSON.parse(fs.readFileSync(path.join(dir, 'allowed-tools.json'), 'utf8'));
   assert.ok(Array.isArray(tools) && tools.length > 5);
-  assert.ok(tools.every((t) => !t.includes('*')), 'no wildcards');
-  for (const bad of ['Bash', 'mcp__Gmail__send_message', 'mcp__Gmail__reply', 'mcp__Gmail__forward', 'mcp__Gmail__trash_thread', 'mcp__Gmail__create_draft', 'mcp__Google_Calendar__create_event', 'mcp__Google_Calendar__delete_event']) assert.ok(!tools.includes(bad), bad);
+  assert.deepEqual(tools.filter((t) => t.includes('*')), ['Bash(curl -sS -X POST http://127.0.0.1:3737/api/board/move:*)'], 'the only wildcard is the arguments of the local move endpoint call');
+  assert.ok(!tools.includes('mcp__monday_com__all_monday_api'), 'group moves go through the narrow endpoint, not a broad monday tool');
+  assert.ok(tools.filter((t) => t.startsWith('Bash')).length === 1 && tools.find((t) => t.startsWith('Bash')).includes(`:${config.server.port}/api/board/move`));
+  for (const bad of ['Bash', 'mcp__monday_com__move_object', 'mcp__Gmail__send_message', 'mcp__Gmail__reply', 'mcp__Gmail__forward', 'mcp__Gmail__trash_thread', 'mcp__Gmail__create_draft', 'mcp__Google_Calendar__create_event', 'mcp__Google_Calendar__delete_event']) assert.ok(!tools.includes(bad), bad);
   for (const need of ['mcp__monday_com__get_board_items_page', 'mcp__Gmail__search_threads', 'mcp__Gmail__get_thread', 'mcp__Google_Calendar__list_events', 'mcp__Slack__slack_send_message']) assert.ok(tools.includes(need), need);
 });
 

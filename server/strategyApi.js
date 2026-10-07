@@ -108,4 +108,4 @@ async function step(result, name, fn) {
   try { const v = await fn(); result.record[name] = v ? `ok (${v})` : 'ok'; } catch (e) { result.record[name] = `FAILED: ${e.message}`; }
 }
 
-module.exports = { load, apply, skip };
+module.exports = { load, apply, skip, find };

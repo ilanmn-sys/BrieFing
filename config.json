@@ -486,5 +486,13 @@
     "activityDocId": "",
     "maxWords": 150,
     "note": "No rolling activity doc id is on disk, so activityDocId is empty and the agent says so. Source of posts: published coverage on the news board."
+  },
+  "server": {
+    "port": 3737,
+    "host": "127.0.0.1"
+  },
+  "boardMove": {
+    "maxPerDay": 40,
+    "note": "POST /api/board/move: the narrow replacement for all_monday_api in the strategy agent. Only moves that belong to an approved strategy proposal, or a Done item into ✅ Completed. Dry-run unless DRY_RUN=0 on the server."
   }
 }

@@ -22,7 +22,7 @@ Reads the projects board, the last 7 days of email and today's calendar. Scores 
 1. **R-13 vs this agent.** R-13 says automations write only to 🔁 Recurring or 📦 Active Projects, yet this agent creates its strategy item and the approved email tasks in 📥 Pepper Tasks (build prompt 6A). The prompt follows 6A. Amend R-13 to name this exception, or tell me to change the agent.
 2. **Approval in the dashboard.** Built: the Tasks tab shows today's proposals with Apply all / Apply selected / Skip all (see below). It only works on items where the agent wrote the `PROPOSALS_JSON` line. APPLY mode in the agent remains as the Slack-reply fallback, and exits silently once the dashboard has handled the day (`APPLIED` marker).
 3. **Tool names.** `allowed-tools.json` uses the MCP tool names from the cloud session (`mcp__monday_com__*`, `mcp__Gmail__*`, `mcp__Slack__*`, `mcp__Google_Calendar__*`). They must match `claude mcp list` on the Mac. If they differ, edit the file.
-4. **`all_monday_api` is broad.** It is needed for `move_item_to_group` but can run any monday mutation. The prompt restricts its use; the tool list cannot. A narrow local endpoint for moves would remove the risk.
+4. **Group moves go through a narrow local endpoint** (`POST /api/board/move`), so `all_monday_api` is no longer in this agent's tool list. The endpoint only performs a move that belongs to today's approved proposal (or a Done item into ✅ Completed), checks the item is still where the proposal saw it, never writes into legacy or excluded groups, caps 🔥 Today, limits 40 moves a day, logs every call to `data/board-moves.log`, and does nothing unless the server runs with `DRY_RUN=0`. The server must be running (`com.ilan.cc.server`) for the agent to apply moves.
 
 ## Run it
 ```
