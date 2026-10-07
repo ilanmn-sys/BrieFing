@@ -11,7 +11,7 @@ Computes last month's coverage numbers from the news board (totals by tier, type
 
 ## Caveats and questions
 - No source prompt and no past newsletter on disk, so the structure is my design. Paste a past issue or the old prompt and I'll match the format and audience.
-- English; no emoji, per the LinkedIn-style rule in the build prompt. Say if the newsletter should be Hebrew.
+- **Language (decided 2026-10-07):** English; headlines keep their original language. No emoji.
 - Config: the `news` block in `config.json` (board, groups, column ids, caps), read from the real boards on 2026-10-07.
 - MCP tool names must be checked against `claude mcp list` on the Mac.
 
