@@ -84,3 +84,9 @@ test('the prompt, rendered, teaches exactly the operation types and groups the d
   const toGroupLine = out.split('\n').find((l) => l.includes('A `toGroup` may be')) || out.match(/A `toGroup` may be[^.]*\./)[0];
   for (const bad of [...config.groups.legacy, ...config.groups.excluded]) assert.ok(!toGroupLine.includes(bad), 'legacy/excluded group offered as a target: ' + bad);
 });
+
+test('{{json path}} renders objects as JSON; a plain object placeholder is still an error', () => {
+  assert.equal(render('{{json me.tz}}', config), JSON.stringify(config.me.tz));
+  assert.deepEqual(JSON.parse(render('{{json commsOwners}}', config)), config.commsOwners);
+  assert.throws(() => render('{{json nope.nothing}}', config), /unresolved/);
+});

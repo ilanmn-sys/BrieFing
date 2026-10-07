@@ -250,5 +250,27 @@
     "lookbackDays": 14,
     "claudeAppUserId": "U0BCD2EJ9JR",
     "note": "claudeAppUserId is the Claude Slack app, seen in the footer of messages the agents send as Ilan ('Sent using Claude'). It lets the agent tell its own DMs from Ilan's real replies, since both come from Ilan's user."
+  },
+  "commsCalendar": {
+    "boardId": 3822310880,
+    "groups": {
+      "external": "group_mkxmz8rv",
+      "internal": "group_mkxmj91f",
+      "externalComplete": "group_mm0vh5n4",
+      "internalComplete": "group_mm0w9e4y"
+    },
+    "columns": {
+      "timeline": "timeline",
+      "owner": "person",
+      "status": "status8",
+      "category": "dropdown1",
+      "audience": "dropdown_mm3a61yp",
+      "focusArea": "status_1_mkkp9tde",
+      "effortType": "color_mktqv9yn"
+    },
+    "scheduledStatus": "Scheduled",
+    "lookaheadDays": 45,
+    "maxCreatesPerRun": 8,
+    "note": "Read from the real board 2026-10-07. Create only in the 2026 External group. Never write into the Complete groups or any 2023-2025 group. 'Scheduled' exists twice on the status column (one deactivated): use the label text."
   }
 }

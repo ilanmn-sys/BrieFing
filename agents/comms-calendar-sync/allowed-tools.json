@@ -1,0 +1,12 @@
+[
+  "Read",
+  "mcp__Google_Calendar__list_events",
+  "mcp__Google_Calendar__get_event",
+  "mcp__Slack__slack_read_channel",
+  "mcp__Slack__slack_read_thread",
+  "mcp__monday_com__get_board_items_page",
+  "mcp__monday_com__get_board_info",
+  "mcp__monday_com__get_updates",
+  "mcp__monday_com__create_item",
+  "mcp__monday_com__create_update"
+]
