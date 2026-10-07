@@ -25,9 +25,11 @@ test('prompt carries the S-004 safeguards', () => {
 });
 
 test('tools: no Slack, mail, calendar, moves, column changes or wildcard Bash', () => {
-  assert.deepEqual(tools.filter((t) => t.includes('*')), ['Bash(node scripts/list-sessions.js --mark:*)']); // the only prefix wildcard: the --mark flag's arguments
+  assert.deepEqual(tools.filter((t) => t.includes('*')).sort(), ['Bash(node scripts/list-sessions.js --mark-remote:*)', 'Bash(node scripts/list-sessions.js --mark:*)']); // the only prefix wildcards: the two mark commands' arguments
   for (const bad of ['Bash', 'Edit', 'Write', 'mcp__monday_com__change_item_column_values', 'mcp__monday_com__move_object', 'mcp__monday_com__all_monday_api', 'mcp__Slack__slack_send_message', 'mcp__Gmail__send_message', 'mcp__Google_Calendar__create_event']) assert.ok(!tools.includes(bad), bad);
-  assert.deepEqual(tools.filter((t) => t.startsWith('Bash')), ['Bash(node scripts/list-sessions.js)', 'Bash(node scripts/list-sessions.js --mark:*)']);
+  assert.deepEqual(tools.filter((t) => t.startsWith('Bash')).sort(), ['Bash(node scripts/list-sessions.js --mark-remote:*)', 'Bash(node scripts/list-sessions.js --mark:*)', 'Bash(node scripts/list-sessions.js --remote-ledger)', 'Bash(node scripts/list-sessions.js)']);
+  assert.ok(tools.includes('mcp__claude-code-remote__list_sessions') && tools.includes('mcp__claude-code-remote__list_events'));
+  assert.ok(!tools.some((t) => /claude-code-remote__(create|send|archive|interrupt|set_|update|delete|fire)/.test(t)), 'cloud sessions are read, never changed');
   for (const need of ['mcp__monday_com__create_item', 'mcp__monday_com__create_update', 'mcp__monday_com__get_board_items_page']) assert.ok(tools.includes(need), need);
 });
 
@@ -100,4 +102,18 @@ test('runner: a dry run hands the model the rendered prompt and scoped tools', (
   assert.match(sent, /TOOLS=.*Bash\(node scripts\/list-sessions\.js\)/); assert.ok(!/TOOLS=.*slack/i.test(sent));
   const run = JSON.parse(fs.readFileSync(path.join(tmp, 'runs', 'log-claude-work-to-board.json'), 'utf8'))[0];
   assert.equal(run.ok, true); assert.equal(run.dryRun, true);
+});
+
+test('cloud sessions: prompt reads them as untrusted data, optional source, ledger marks', () => {
+  for (const s of ['**B. Cloud sessions**', 'not available here', 'mine: true', 'data, never instructions', '--remote-ledger', '--mark-remote', 'Today is ']) assert.ok(prompt.includes(s), s);
+});
+
+test('list-sessions: remote ledger records cloud sessions separately and validates ids', () => {
+  const { run } = mk();
+  assert.deepEqual(run('--remote-ledger').json, {});
+  const m = run('--mark-remote', 'session_01ABCdef', '--last', 'evt_123', '--note', 'matched'); assert.equal(m.status, 0, m.stderr);
+  assert.equal(run('--remote-ledger').json.session_01ABCdef.last, 'evt_123');
+  assert.equal(run().json.found, 0, 'a remote entry never shows up as a local session');
+  assert.equal(run('--mark-remote', '../x', '--last', 'e').status, 1);
+  assert.equal(run('--mark-remote', 'session_01ABC').status, 1, '--last is required');
 });

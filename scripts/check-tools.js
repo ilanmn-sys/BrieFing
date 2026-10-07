@@ -10,6 +10,8 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 const root = path.join(__dirname, '..');
 const norm = (s) => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
+// Servers an agent can do without (it reports the source as unavailable instead of failing).
+const OPTIONAL = new Set(['claude-code-remote']);
 
 function wanted(agentsDir) {
   const need = new Map(); // server -> Set(agent ids)
@@ -38,7 +40,7 @@ function check(agentsDir, listText) {
   const have = connected(listText), need = wanted(agentsDir), rows = [];
   for (const [server, agents] of [...need].sort()) {
     const hit = [...have].find(([n]) => norm(n) === norm(server) || norm(n).endsWith(norm(server)));
-    rows.push({ server, agents: [...agents].sort(), found: hit ? hit[0] : null, connected: hit ? hit[1] : false });
+    rows.push({ server, agents: [...agents].sort(), found: hit ? hit[0] : null, connected: hit ? hit[1] : false, optional: OPTIONAL.has(server) });
   }
   return rows;
 }
@@ -56,8 +58,8 @@ if (require.main === module) {
   const rows = check(path.join(root, 'agents'), text);
   let bad = 0;
   for (const r of rows) {
-    const ok = r.found && r.connected; if (!ok) bad++;
-    console.log(`${ok ? 'OK     ' : r.found ? 'NOT CONNECTED' : 'MISSING'}  ${r.server}${r.found && r.found !== r.server ? ` (as "${r.found}")` : ''}  used by ${r.agents.length} agent(s): ${r.agents.join(', ')}`);
+    const ok = r.found && r.connected; if (!ok && !r.optional) bad++;
+    console.log(`${ok ? 'OK     ' : r.optional ? 'OPTIONAL (not connected)' : r.found ? 'NOT CONNECTED' : 'MISSING'}  ${r.server}${r.found && r.found !== r.server ? ` (as "${r.found}")` : ''}  used by ${r.agents.length} agent(s): ${r.agents.join(', ')}`);
   }
   console.log(bad ? `\n${bad} MCP server(s) need attention. Agents that use them will run without those tools.` : '\nAll MCP servers the agents use are connected.');
   process.exit(bad ? 1 : 0);

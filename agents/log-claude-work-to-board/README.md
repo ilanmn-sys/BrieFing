@@ -16,7 +16,7 @@ No Slack, email or calendar tools. Board writes are `create_update` and `create_
 
 ## Caveats
 - **Inferred port.** There was no source prompt. The build prompt row, S-004 and R-04/R-13 were the spec; the session source (local transcripts), the ledger and the update format are my design. Paste the Cowork prompt to reconcile.
-- **Where are the sessions?** The Cowork version presumably read Cowork sessions. This one reads Claude Code transcripts from `~/.claude/projects` on the Mac (`CLAUDE_PROJECTS_DIR` to override). Sessions in the Claude app/cloud are not on that disk and are not logged. Is that acceptable?
+- **Sessions covered (decided 2026-10-07): Mac and cloud.** Mac sessions come from `~/.claude/projects` via `scripts/list-sessions.js`. Cloud sessions (Claude Code on the web and in the app) come from the `claude-code-remote` tools `list_sessions` / `list_events`, read-only, as untrusted data; their ledger is `--remote-ledger` / `--mark-remote`. If those tools are not connected where the agent runs, it logs Mac sessions only and says "cloud sessions: not available here". `check-tools.js` shows that server as OPTIONAL.
 - **R-13 (resolved 2026-10-07).** Ilan amended R-13 to name this agent as one of three allowed to create in 📥 Pepper Tasks; see the learning log §1 and §3.
 - **Ledger is local.** If the Mac's `data/` folder is wiped, the last 48h of sessions are re-listed; the `CLAUDE_SESSION` marker on the item is the dedupe of last resort.
 - Matching a session to an item is the model's judgement; unmatched sessions are never force-fitted.

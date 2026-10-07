@@ -2,6 +2,8 @@
 // Lists Claude Code sessions (from the local transcripts) that log-claude-work-to-board has not logged yet.
 //   node scripts/list-sessions.js [--since ISO] [--max N]        -> JSON on stdout
 //   node scripts/list-sessions.js --mark <id> [--lines N] [--note matched|unmatched|skipped]
+//   node scripts/list-sessions.js --remote-ledger                 -> what was logged of cloud sessions (JSON)
+//   node scripts/list-sessions.js --mark-remote <session_id> --last <event_id> [--note ...]
 // Only what the person typed and what Claude said is extracted: never tool results (web pages, mail, board text).
 // Sessions started by the scheduled agents themselves (first prompt "Today is ...") are skipped.
 // Ledger: data/agents/log-claude-work.ledger.json (override LEDGER_FILE). Transcripts: ~/.claude/projects (override CLAUDE_PROJECTS_DIR).
@@ -95,12 +97,23 @@ function mark(id, { lines, note = 'matched' } = {}) {
   return l[id];
 }
 
-module.exports = { list, mark, parseSession };
+// Cloud sessions are read by the agent through the claude-code-remote MCP tools; only their ledger lives here.
+const REMOTE_ID = /^session_[A-Za-z0-9]+$/, EVENT_ID = /^[A-Za-z0-9_-]{1,80}$/;
+function remoteLedger() { const l = readLedger(); return Object.fromEntries(Object.entries(l).filter(([k]) => k.startsWith('remote:')).map(([k, v]) => [k.slice(7), v])); }
+function markRemote(id, { last, note = 'matched' } = {}) {
+  if (!REMOTE_ID.test(String(id))) throw new Error('bad cloud session id');
+  if (!last || !EVENT_ID.test(String(last))) throw new Error('--last needs the id of the last event logged');
+  const l = readLedger(); l['remote:' + id] = { last: String(last), note, loggedAt: new Date().toISOString() }; writeLedger(l); return l['remote:' + id];
+}
+
+module.exports = { list, mark, parseSession, remoteLedger, markRemote };
 
 if (require.main === module) {
   const a = process.argv.slice(2), get = (k) => { const i = a.indexOf(k); return i >= 0 ? a[i + 1] : undefined; };
   try {
-    if (a.includes('--mark')) console.log(JSON.stringify(mark(get('--mark'), { lines: get('--lines') ? Number(get('--lines')) : undefined, note: get('--note') })));
+    if (a.includes('--remote-ledger')) console.log(JSON.stringify(remoteLedger(), null, 2));
+    else if (a.includes('--mark-remote')) console.log(JSON.stringify(markRemote(get('--mark-remote'), { last: get('--last'), note: get('--note') })));
+    else if (a.includes('--mark')) console.log(JSON.stringify(mark(get('--mark'), { lines: get('--lines') ? Number(get('--lines')) : undefined, note: get('--note') })));
     else console.log(JSON.stringify(list({ since: get('--since'), max: get('--max') ? Number(get('--max')) : 15 }), null, 2));
   } catch (e) { console.error('list-sessions: ' + e.message); process.exit(1); }
 }

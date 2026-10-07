@@ -6,5 +6,9 @@
   "mcp__monday_com__get_board_info",
   "mcp__monday_com__get_updates",
   "mcp__monday_com__create_item",
-  "mcp__monday_com__create_update"
+  "mcp__monday_com__create_update",
+  "Bash(node scripts/list-sessions.js --remote-ledger)",
+  "Bash(node scripts/list-sessions.js --mark-remote:*)",
+  "mcp__claude-code-remote__list_sessions",
+  "mcp__claude-code-remote__list_events"
 ]

@@ -166,7 +166,8 @@ test('check-tools: parses `claude mcp list`, matches servers by name, flags miss
   assert.equal(by.Gmail.connected, true); assert.equal(by.Gmail.found, 'claude.ai Gmail'); assert.equal(by.monday_com.connected, true);
   assert.equal(by.Slack.found, 'Slack'); assert.equal(by.Slack.connected, false);
   assert.equal(by.Google_Calendar.found, null); assert.ok(by.monday_com.agents.length >= 10);
+  assert.equal(by['claude-code-remote'].optional, true);
   const f = path.join(tmp('ct-'), 'list.txt'); fs.writeFileSync(f, text);
   const r = sh([process.execPath, path.join(root, 'scripts', 'check-tools.js'), '--from', f]);
-  assert.equal(r.status, 1); assert.match(r.stdout, /MISSING\s+Google_Calendar/); assert.match(r.stdout, /NOT CONNECTED\s+Slack/); assert.match(r.stdout, /OK\s+monday_com/);
+  assert.equal(r.status, 1); assert.match(r.stdout, /MISSING\s+Google_Calendar/); assert.match(r.stdout, /NOT CONNECTED\s+Slack/); assert.match(r.stdout, /OK\s+monday_com/); assert.match(r.stdout, /OPTIONAL \(not connected\)\s+claude-code-remote/);
 });
