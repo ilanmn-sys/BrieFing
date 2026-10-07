@@ -412,7 +412,9 @@
       "maxSpokespersonSlides": 5,
       "coverageWindowDays": 45,
       "draftFolderId": "",
-      "note": "Nothing on disk says where the office-screen slideshow lives, so the agent writes a plan document and never edits the live deck. Put a Drive folder id in draftFolderId to choose where the plan lands."
+      "note": "The live decks are Google Slides owned by Ilan: 'Media relations screens' and 'Media relations screens (London)', found in Drive 2026-10-07. The agent reads the deck to see what is already on screen but never edits it (Drive tools cannot edit slides safely); it writes a plan document a person applies.",
+      "deckFileId": "1CGk_5AOXMR0p3j46aY4fpPnwUvFhO4Kb6Ho09le3Rho",
+      "londonDeckFileId": "17Sb8tRObILg5QVAci_jVl2Kygl5CK9ACCPRMR24ga38"
     },
     "prTemplate": {
       "boardId": 834321359,
@@ -466,11 +468,12 @@
       "dealValue": "numeric_mm5y6ykh",
       "followers": "numeric_mm5ywa2b"
     },
-    "gmailQuery": "newer_than:2d (Narrative OR Regev)",
+    "gmailQuery": "newer_than:2d (narrativegroup.co OR creator OR influencer) -from:me",
     "maxScanPerRun": 25,
     "maxCreatesPerRun": 10,
     "slackChannel": "ilan-pa",
-    "note": "Board read 2026-10-07. The Gmail query is a guess (no sender address on disk): confirm the Narrative/Regev addresses. Pepper's and Mandy's posts are read from #ilan-pa. Nitter is down, so X follower and engagement numbers are unavailable; the agent never fills them."
+    "note": "Board read 2026-10-07. Narrative is narrativegroup.co (Margo Aronovic margo@, Regev Gur regev@), found in Gmail 2026-10-07. -from:me drops Ilan's own self-sent digests. Mandy is 'Mandy Monday' (mandy@monday.com, U0AKZM2R96Y); she had no Slack posts since 2026-09-01, so where she posts is still unconfirmed. Nitter is down: X numbers are never filled.",
+    "mandyUserId": "U0AKZM2R96Y"
   },
   "inbox": {
     "channel": "ilan-pa",

@@ -10,7 +10,7 @@ Prepares the office-screens lineup: up to 20 recent coverage slides (Tier 1 → 
 - A person sets the board status `Done - added to Screens deck` after adding a story.
 
 ## Caveats and questions
-- **Where is the live slideshow?** Nothing on disk says (a Google Slides deck? a monday-all MiniSite?). Until you tell me, the agent produces the plan, not the deck. Tell me the deck type/location and I can wire a real refresh.
+- The live decks are Google Slides in your Drive: "Media relations screens" and "Media relations screens (London)". The agent reads the main deck to see what is on screen. It does not edit slides: the Drive tools can't edit slides safely, so a person applies the plan.
 - The board titled "Spokespeople" (8182656618) is an empty template; the news board's "monday spokespeople" relation points to **457713771**, which is what this uses. Confirm.
 - Drive `create_file` is untested; set `news.screens.draftFolderId` to choose the folder.
 - Config: the `news` block in `config.json` (board, groups, column ids, caps), read from the real boards on 2026-10-07.

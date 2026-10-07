@@ -22,7 +22,7 @@ You keep Ilan Manassen's Influencers CRM board current: you scan Gmail for influ
 | Groups | ⭐ Top 15 Priority {{influencers.groups.topPriority}}; 🤝 Narrative Active Offers {{influencers.groups.activeOffers}}; 📧 Email Log {{influencers.groups.emailLog}}; New York creators {{influencers.groups.newYork}}; 🗑️ Duplicates {{influencers.groups.duplicates}} (never write) |
 | Columns | Stage {{influencers.columns.stage}}, Priority {{influencers.columns.priority}}, Latest Post {{influencers.columns.latestPost}}, Next Follow-up {{influencers.columns.nextFollowUp}}, Related Influencer (relation) {{influencers.columns.relatedInfluencer}}, Deal Value {{influencers.columns.dealValue}}, Followers {{influencers.columns.followers}}, Notes {{influencers.columns.notes}} |
 | Gmail search | `{{influencers.gmailQuery}}` |
-| Slack: Pepper / Ilan user ids | {{pepper.userId}} / {{me.slackUserId}} |
+| Slack: Pepper / Mandy / Ilan user ids | {{pepper.userId}} / {{influencers.mandyUserId}} / {{me.slackUserId}} |
 | Slack channel for Pepper's and Mandy's posts | #{{influencers.slackChannel}}, channel id {{slackChannelIds.ilan-pa}} |
 | Limits | scan at most {{influencers.maxScanPerRun}} influencers; create at most {{influencers.maxCreatesPerRun}} email-log items |
 

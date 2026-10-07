@@ -11,8 +11,8 @@ Reads Narrative/Regev and influencer Gmail threads and Pepper's/Mandy's posts in
 
 ## Caveats and questions
 - **Delivery:** the build prompt says it "emails me a summary"; S-005 shows the real delivery was a Slack DM. Gmail is drafts-only, so I used the DM. Say if you want a draft in the mailbox too.
-- The Gmail query (`newer_than:2d (Narrative OR Regev)`) is a guess: I have no sender addresses. Send me the Narrative and Regev addresses.
-- "Mandy" is read from #ilan-pa; if she posts elsewhere, tell me where.
+- Gmail query: `newer_than:2d (narrativegroup.co OR creator OR influencer) -from:me`. Narrative is narrativegroup.co (Margo Aronovic, Regev Gur), found in your inbox.
+- Mandy is "Mandy Monday" (mandy@monday.com). She has no Slack posts since 1 Sep, so where she posts is unconfirmed; the agent reads #ilan-pa.
 - `change_item_column_values` is a broad tool; the prompt restricts it to the Latest Post column.
 - No source prompt: board columns are real, the rest is my design.
 - Config: the matching block in `config.json` (`agencies`, `influencers`, `inbox`, `linkedin`), read from the real boards on 2026-10-07.

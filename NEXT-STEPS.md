@@ -39,9 +39,9 @@ Work top to bottom. Send me the output or answer after each part and I fix what 
 ## D. Facts I need from you (I cannot find them)
 
 - Press-page URL, and the Gmail query or label for email requests (intake). Also resolution targets per tier if you want Deadlines set automatically.
-- Narrative and Regev sender addresses; where Mandy posts (I assumed #ilan-pa).
+- ~~Narrative and Regev addresses~~ found (narrativegroup.co). Where Mandy Monday posts (no Slack posts since 1 Sep).
 - The Drive file id of the rolling LinkedIn activity doc, and one LinkedIn post you liked.
-- Where the office-screen slideshow lives (Google Slides? something else?).
+- ~~Office-screen slideshow~~ found: "Media relations screens" (Google Slides).
 - Confirm the spokespeople board is 457713771 (not the empty "Spokespeople" 8182656618).
 - **The old Cowork prompts** for all agents, if you still have them. Pasting them lets me replace my spec-based versions with the real behaviour. This is the single most valuable input.
 
