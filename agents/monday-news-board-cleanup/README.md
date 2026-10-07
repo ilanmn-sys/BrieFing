@@ -10,7 +10,7 @@ Finds noise on the news board (stock-ticker blurbs, non-outlet spam, syndicated 
 - **Broad tool:** archiving needs `all_monday_api` (no narrow archive tool exists). The prompt limits it to the `archive_item` mutation, but the tool itself can do more. This is the same open question as the other agents' broad tools.
 
 ## Caveats and questions
-- The build prompt says "archives". The mark-then-archive delay is my safety design; say if you want a one-step archive.
+- **Two steps (decided 2026-10-07):** mark, then archive a week later unless a person vetoes.
 - No source prompt; classification is the model's judgement, so dry-run it and read the marks before enabling.
 - Config: the `news` block in `config.json` (board, groups, column ids, caps), read from the real boards on 2026-10-07.
 - MCP tool names must be checked against `claude mcp list` on the Mac.
