@@ -1,0 +1,14 @@
+[
+  "Read",
+  "mcp__monday_com__get_board_items_page",
+  "mcp__monday_com__get_board_info",
+  "mcp__monday_com__get_updates",
+  "mcp__monday_com__create_item",
+  "mcp__monday_com__create_update",
+  "mcp__monday_com__change_item_column_values",
+  "mcp__Slack__slack_search_public_and_private",
+  "mcp__Slack__slack_read_channel",
+  "mcp__Slack__slack_read_thread",
+  "mcp__Slack__slack_send_message",
+  "mcp__Slack__slack_add_reaction"
+]

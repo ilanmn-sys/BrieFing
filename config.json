@@ -242,5 +242,12 @@
     "monday-global-agencies": "C0B868DM6SH",
     "ask-comms": "C0ACVN9EUMT"
   },
-  "slackChannelIdsNote": "IDs verified against the real workspace. They let the server read each channel directly instead of scanning the whole channel list (a large workspace can have thousands of channels)."
+  "slackChannelIdsNote": "IDs verified against the real workspace. They let the server read each channel directly instead of scanning the whole channel list (a large workspace can have thousands of channels).",
+  "slack": {
+    "flagEmoji": "pushpin",
+    "doneEmoji": "inbox_tray",
+    "lookbackDays": 14,
+    "claudeAppUserId": "U0BCD2EJ9JR",
+    "note": "claudeAppUserId is the Claude Slack app, seen in the footer of messages the agents send as Ilan ('Sent using Claude'). It lets the agent tell its own DMs from Ilan's real replies, since both come from Ilan's user."
+  }
 }

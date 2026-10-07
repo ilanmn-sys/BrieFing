@@ -1,5 +1,5 @@
 {
   "name": "command-center",
   "private": true,
-  "scripts": { "start": "node server/index.js", "test": "node --test test/done-sync.test.js test/email.test.js test/slack.test.js test/requests.test.js test/decisions.test.js test/agents.test.js test/health.test.js test/tasks-health.test.js test/calendar.test.js test/daily-board-strategy.test.js test/strategy.test.js test/pepper-inbox.test.js", "lint": "python3 scripts/lint-rules.py" }
+  "scripts": { "start": "node server/index.js", "test": "node --test test/done-sync.test.js test/email.test.js test/slack.test.js test/requests.test.js test/decisions.test.js test/agents.test.js test/health.test.js test/tasks-health.test.js test/calendar.test.js test/daily-board-strategy.test.js test/strategy.test.js test/pepper-inbox.test.js test/slack-flag-to-task.test.js", "lint": "python3 scripts/lint-rules.py" }
 }
