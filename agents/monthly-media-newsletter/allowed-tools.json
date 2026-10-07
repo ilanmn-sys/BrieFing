@@ -1,0 +1,8 @@
+[
+  "Read",
+  "WebFetch",
+  "mcp__monday_com__get_board_items_page",
+  "mcp__monday_com__get_board_info",
+  "mcp__Gmail__list_drafts",
+  "mcp__Gmail__create_draft"
+]

@@ -1,0 +1,9 @@
+[
+  "Read",
+  "mcp__monday_com__get_board_items_page",
+  "mcp__monday_com__get_board_info",
+  "mcp__monday_com__get_updates",
+  "mcp__monday_com__create_update",
+  "mcp__monday_com__change_item_column_values",
+  "mcp__monday_com__all_monday_api"
+]

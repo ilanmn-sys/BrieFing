@@ -322,5 +322,108 @@
       "active": "group_mm78nrsc",
       "hypotheses": "group_mm78x40w"
     }
+  },
+  "news": {
+    "boardId": 446791074,
+    "groups": {
+      "newArticles": "new_group52193",
+      "latestQuarter": "group_mm1qym02"
+    },
+    "columns": {
+      "link": "text6",
+      "publishDate": "date",
+      "outlets": "connect_boards24",
+      "tier": "tier",
+      "publication": "dropdown0",
+      "language": "status3",
+      "country": "country",
+      "website": "status0",
+      "type": "feature__mention_",
+      "spokespersonPeople": "interviewee_",
+      "spokespersonText": "text_mm3ae7q1",
+      "focusArea": "dropdown5",
+      "topic": "article_topic6",
+      "audience": "outlet_s_target_audience_",
+      "sentiment": "status2",
+      "coverageType": "type_of_coverage_",
+      "highlightQbr": "boolean2",
+      "outletTrigger": "status1",
+      "salience": "color_mm72nfy4",
+      "outletDomain": "link_mm5dw3ns"
+    },
+    "websiteStatus": {
+      "new": "Pending Review",
+      "notCoverage": "Not coverage",
+      "duplicate": "Duplicate",
+      "inScreens": "Done - added to Screens deck",
+      "excluded": [
+        "Not coverage",
+        "Duplicate",
+        "Paywall",
+        "Messaging off",
+        "Rejected correction ask",
+        "Fix link",
+        "No"
+      ]
+    },
+    "outletTriggerLabel": "Connect media outlet",
+    "muckrack": {
+      "query": "from:alerts@muckrack.com newer_than:2d",
+      "lookbackNote": "Sender verified 2026-10-07: alerts@muckrack.com to Ilan. One rolling thread holds 80+ messages, so read the thread's newest messages, not the search preview."
+    },
+    "excludeDomains": [
+      "nairaland.com",
+      "dailypolitical.com",
+      "zolmax.com",
+      "theenterpriseleader.com"
+    ],
+    "excludeDomainsNote": "From the description of the news board (the MuckRack exclude filter).",
+    "maxCreatesPerRun": 15,
+    "cleanup": {
+      "scanDays": 14,
+      "markMaxPerRun": 40,
+      "archiveMaxPerRun": 40,
+      "graceDays": 7
+    },
+    "crossPost": {
+      "fromChannel": "monday_in_the_news",
+      "toChannel": "monday-global-agencies",
+      "lookbackHours": 30,
+      "maxPerRun": 5
+    },
+    "spokespeople": {
+      "boardId": 457713771,
+      "groups": {
+        "active": "topics",
+        "potential": "new_group86140"
+      },
+      "columns": {
+        "title": "text3",
+        "bio": "long_text",
+        "lastArticle": "lookup_mkpsxngq",
+        "needsBio": "check5",
+        "needsPhoto": "boolean",
+        "photo": "files"
+      },
+      "note": "Board 8182656618 titled 'Spokespeople' is an empty template; the news board's 'monday spokespeople' relation column points to 457713771."
+    },
+    "screens": {
+      "maxCoverageSlides": 20,
+      "maxSpokespersonSlides": 5,
+      "coverageWindowDays": 45,
+      "draftFolderId": "",
+      "note": "Nothing on disk says where the office-screen slideshow lives, so the agent writes a plan document and never edits the live deck. Put a Drive folder id in draftFolderId to choose where the plan lands."
+    },
+    "prTemplate": {
+      "boardId": 834321359,
+      "itemId": 12272450331,
+      "driveFileId": "14EA6o3km5ughfyqvdBpzukqLtd-3QZbv",
+      "processItemId": 12273284829,
+      "sourceDomains": [
+        "monday.com",
+        "ir.monday.com"
+      ],
+      "note": "Item 'Global Partnership Press Release Template' on Official PR materials; its updates show how past refreshes were written. The live Google Doc id is not on disk."
+    }
   }
 }
