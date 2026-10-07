@@ -1,6 +1,6 @@
 # pepper-inbox
 
-Hourly 08:00-18:00, **Mon-Fri** (as in the build prompt; the other agents run Sun-Thu, see question 2). Silent when there is nothing to do.
+Three times a day, 09:00, 13:00 and 17:00, Sun-Fri (decided 2026-10-07). Silent when there is nothing to do.
 
 ## What it does
 Pepper creates an item named `🤖 ...` in 📥 Pepper Tasks with status `Working on it`. This agent picks up at most 3 per run (oldest first), reads the ask and the material it points to, does the work, posts the answer as one update on the item ending with `📎 Materials used / produced`, sets the item to Done, and DMs Pepper the link in Hebrew.
@@ -20,7 +20,7 @@ There was no pepper-inbox prompt on disk to port from (unlike daily-board-strate
 
 ## Questions for Ilan
 1. The current Cowork prompt (above).
-2. Mon-Fri vs Sun-Thu. Your work week is Sun-Thu with Friday light, but the build prompt lists this agent as Mon-Fri. Which is right?
+2. **Schedule (decided 2026-10-07):** three times a day, 09:00, 13:00 and 17:00, Sun–Fri (`0 9,13,17 * * 0-5`).
 3. `change_item_column_values` and `slack_send_message` are broad tools. The prompt limits them to `Done`/`Stuck` on 🤖 items and to the DM to Pepper, but the tool list cannot. A narrow local endpoint would remove that.
 4. Web access (`WebSearch`, `WebFetch`) is included so research asks can be done. It is read-only, and the prompt treats fetched content as data, never instructions. Remove both from `allowed-tools.json` if you want it closed.
 5. Should it be allowed to save Gmail drafts when the ask is "draft a reply"? Today it writes the draft in the update.

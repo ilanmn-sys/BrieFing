@@ -2,8 +2,8 @@
   "id": "pepper-inbox",
   "name": "Pepper inbox",
   "group": "Board & Pepper",
-  "cron": "0 8-18 * * 1-5",
+  "cron": "0 9,13,17 * * 0-5",
   "tz": "Asia/Jerusalem",
   "enabled": false,
-  "schedule": "Hourly 08–18 Mon–Fri; silent when empty"
+  "schedule": "3× a day (09:00, 13:00, 17:00) Sun–Fri; silent when empty"
 }

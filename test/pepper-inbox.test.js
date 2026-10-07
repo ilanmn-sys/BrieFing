@@ -39,7 +39,7 @@ test('tools: scoped, no wildcards, nothing that creates, moves, sends mail or ed
 
 test('the schedule is the one in the build prompt and the agent stays disabled until a clean dry-run', () => {
   const s = JSON.parse(fs.readFileSync(path.join(dir, 'schedule.json'), 'utf8'));
-  assert.equal(s.cron, '0 8-18 * * 1-5'); assert.equal(s.enabled, false);
+  assert.equal(s.cron, '0 9,13,17 * * 0-5'); assert.equal(s.enabled, false);
   process.env.AGENTS_DATA_DIR = fs.mkdtempSync(path.join(os.tmpdir(), 'pi-'));
   delete require.cache[require.resolve('../server/agents')];
   const agents = require('../server/agents');
