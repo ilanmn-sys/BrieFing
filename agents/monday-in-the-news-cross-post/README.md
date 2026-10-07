@@ -10,7 +10,7 @@ Reads new top-level article posts in #monday_in_the_news (last 30 h), skips thos
 - Holds anything that looks internal, a draft, confidential or embargoed.
 
 ## Caveats and questions
-- **Principle 1 tension:** this posts to a channel the agencies read without a click from Ilan. I followed the build prompt ("Cross-posts new stories to #global-agencies"). If you want a human step, I can switch it to a Hebrew draft DM to Pepper instead. Confirm.
+- **Posting without a click (decided 2026-10-07):** Ilan confirmed it posts automatically, as the build prompt says. Watch the first week of dry-runs before enabling.
 - The build prompt says `#global-agencies`; config's channel is `#monday-global-agencies` (id verified earlier). I used the config one.
 - No source prompt; message format is my design.
 - Config: the `news` block in `config.json` (board, groups, column ids, caps), read from the real boards on 2026-10-07.
