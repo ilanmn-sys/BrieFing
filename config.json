@@ -425,5 +425,66 @@
       ],
       "note": "Item 'Global Partnership Press Release Template' on Official PR materials; its updates show how past refreshes were written. The live Google Doc id is not on disk."
     }
+  },
+  "agencies": {
+    "names": [
+      "Scherf",
+      "Another Brazil",
+      "Another BR",
+      "Another Mexico",
+      "Another Co"
+    ],
+    "boardId": 18416855289,
+    "syncNotesBoardId": 473764901,
+    "channel": "monday-global-agencies",
+    "maxItemsInDm": 12,
+    "staleDays": 7,
+    "note": "Agency items live on Ilan's projects board with the agency in the name (e.g. '📞 Scherf — … — עד 10.8', '💰 Another Co (Mexico) — Latam invoices review'). 473764901 holds the agency sync-meeting notes (Scherf sync items). Per H-01, agency chases slip about a week: the agents flag, never re-date."
+  },
+  "influencers": {
+    "boardId": 18425284143,
+    "groups": {
+      "topPriority": "topics",
+      "activeOffers": "group_mm6qet2w",
+      "emailLog": "group_mm6bw9km",
+      "duplicates": "group_mm63b5xd",
+      "newYork": "group_mm7tsp9y"
+    },
+    "columns": {
+      "owner": "multiple_person_mm5y3cjy",
+      "stage": "color_mm5yncht",
+      "tier": "color_mm5ytjgg",
+      "platform": "color_mm5ye0h3",
+      "priority": "color_mm5yjy65",
+      "region": "color_mm5yy4v8",
+      "notes": "long_text_mm5yc64t",
+      "latestPost": "long_text_mm70dpn",
+      "nextFollowUp": "date_mm5yyvm3",
+      "email": "email_mm5yt9y7",
+      "relatedInfluencer": "board_relation_mm6byww",
+      "relevant": "color_mm7th7nj",
+      "dealValue": "numeric_mm5y6ykh",
+      "followers": "numeric_mm5ywa2b"
+    },
+    "gmailQuery": "newer_than:2d (Narrative OR Regev)",
+    "maxScanPerRun": 25,
+    "maxCreatesPerRun": 10,
+    "slackChannel": "ilan-pa",
+    "note": "Board read 2026-10-07. The Gmail query is a guess (no sender address on disk): confirm the Narrative/Regev addresses. Pepper's and Mandy's posts are read from #ilan-pa. Nitter is down, so X follower and engagement numbers are unavailable; the agent never fills them."
+  },
+  "inbox": {
+    "channel": "ilan-pa",
+    "lookbackHours": 26,
+    "maxDraftsPerRun": 8,
+    "maxItemsInDigest": 10,
+    "query": "in:inbox newer_than:2d -filename:ics -filename:invite.ics -from:calendar-notification@google.com -subject:invitation -subject:\"updated invitation\" -subject:\"accepted:\" -subject:\"declined:\" -subject:\"tentatively accepted:\" -category:promotions",
+    "note": "Same query as the dashboard's Gmail connector (calendar noise filtered in the query, trap 9), with a 2-day window. The old 'inbox-triage page' is replaced by the dashboard's Email tab."
+  },
+  "linkedin": {
+    "boardId": 446791074,
+    "lookbackDays": 14,
+    "activityDocId": "",
+    "maxWords": 150,
+    "note": "No rolling activity doc id is on disk, so activityDocId is empty and the agent says so. Source of posts: published coverage on the news board."
   }
 }
