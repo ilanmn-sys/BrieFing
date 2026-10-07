@@ -3,7 +3,7 @@
 Every 2h 08–18 Sun–Fri (`0 8-18/2 * * 0-5`, Asia/Jerusalem). Disabled until a clean dry-run exists.
 
 ## What it does
-Collects new comms requests from #ask-comms, `:brie:` / `:comms:` reactions (public and private channels only), the press page and email; **de-duplicates first** (Slack permalink, requester + subject within 14 days, doc URL, cross-door collision); classifies each (Domain, Tier, Type, Region, Requesting team, Deadline); picks an owner from the **Comms Routing** board (Confirmed group only); and creates one item per request on the Switchboard (board 18431118484), max 10 a run.
+Collects new comms requests from #ask-comms, `:comms:` reactions (public and private channels only), the press page and email; **de-duplicates first** (Slack permalink, requester + subject within 14 days, doc URL, cross-door collision); classifies each (Domain, Tier, Type, Region, Requesting team, Deadline); picks an owner from the **Comms Routing** board (Confirmed group only); and creates one item per request on the Switchboard (board 18431118484), max 10 a run.
 
 - Reads the **Comms Triage — Rules & Hypotheses** board (active rules) at the start of every run; those rules, not the prompt, decide classification and routing. Hard rules are also in the prompt (R-12 journalists always get a human, R-11 fast-lane exclusions, R-18 no owner rather than default to Ilan).
 - Low confidence → Inbox, Status `New`, "needs your eyes". Not comms → Closed, `Deflected`. Past deadlines are kept and flagged, never re-dated.
@@ -14,7 +14,7 @@ Collects new comms requests from #ask-comms, `:brie:` / `:comms:` reactions (pub
 
 ## Caveats and questions
 - **Routing board (confirmed 2026-10-07):** "Comms Routing — who owns what" (18432388543). `boards.routing` now points there.
-- **Reaction emoji.** The build prompt says `:brie:`; the Switchboard description and hypothesis H-06 say `:comms:`. Both are swept until you say which.
+- **Reaction emoji (decided 2026-10-07):** `:comms:` only.
 - **Press page and email are not configured.** Nothing on disk says where press-page requests land or which mailbox/query to use (`requests.intake.pressPageUrl`, `requests.intake.emailQuery`, both empty). The agent says "not configured" in every RESULT instead of guessing. Give me the URL and the Gmail query/label.
 - **Deadlines.** The tier resolution targets are not in config, so the agent sets a Deadline only when the requester stated one. Give me the targets per tier and I'll add them.
 - **Board description mentions a DM sweep.** The build prompt says never read DMs; the agent follows the build prompt.

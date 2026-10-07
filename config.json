@@ -211,7 +211,6 @@
     ],
     "intake": {
       "reactionEmojis": [
-        "brie",
         "comms"
       ],
       "askChannel": "ask-comms",
@@ -220,7 +219,7 @@
       "maxCreatesPerRun": 10,
       "pressPageUrl": "",
       "emailQuery": "",
-      "note": "Build prompt says :brie: reactions; the board description and hypothesis H-06 say :comms:. Both are swept until Ilan says which. pressPageUrl and emailQuery are empty because nothing on disk says where press-page and email requests arrive: the agent reports those sources as not configured instead of guessing."
+      "note": "Ilan decided 2026-10-07: only the :comms: reaction is swept (matches the Switchboard description and H-06). pressPageUrl and emailQuery are empty because nothing says where press-page and email requests arrive: the agent reports those sources as not configured instead of guessing."
     },
     "groupByTier": {
       "T0 Live": "t0",
