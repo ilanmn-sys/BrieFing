@@ -28,7 +28,7 @@ scripts/launchd.sh uninstall    # unloads and removes every com.ilan.cc.* job an
 - Logs: `logs/launchd/<job>.log`. Run history for the agents is in the dashboard's Agents tab.
 - Re-run `install` after you change a schedule or add an agent; stale jobs are removed.
 
-`morning-board-task-sync` has no job: it is not ported (the dashboard reads the board live).
+`morning-board-task-sync` was dropped (2026-10-07): the dashboard reads the board live. Disable its Cowork version when you switch over.
 
 ## Bringing an agent online (one at a time)
 

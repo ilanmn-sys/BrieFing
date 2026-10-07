@@ -21,20 +21,18 @@ Work top to bottom. Send me the output or answer after each part and I fix what 
 7. `scripts/launchd.sh install`, then `scripts/launchd.sh status`. All agents stay disabled, so nothing runs for real yet.
 8. **Publishing the learning log.** Find your old `sync-learning-log.sh` (it published to ilanmn.md.page/pepperandclaudprodprocess). Send me its contents (hide any token), or put its command in `.env` as `LEARNINGLOG_PUBLISH_CMD`. Test: `scripts/sync-learning-log.sh`; check `/health` shows `learningLogSync: ok`.
 
-## C. Decisions only you can make (answer in one message)
+## C. Decisions (all made 2026-10-07)
 
-| # | Question | My recommendation |
-|---|---|---|
-| 1 | R-13 forbids automations from creating in 📥 Pepper Tasks / 🔥 Today, but the strategy, Slack-flag and log-claude-work agents do (per your build prompt). Amend R-13 or change the agents? | Amend R-13 to name those three agents as exceptions. |
-| 2 | Which board is "Routing"? The Switchboard triage notes point to **Comms Routing — who owns what** (18432388543), not your projects board. | Use 18432388543; I will correct `boards.routing`. |
-| 3 | Reaction emoji for intake: `:brie:` (build prompt) or `:comms:` (board description)? Currently both. | Keep the one the team really uses. |
-| 4 | Cross-post to #monday-global-agencies posts without a click from you. Keep, or turn into a draft DM to Pepper? | Keep for a week of dry-runs, then decide. |
-| 5 | Quarterly PR template note: draft it to you (current) or post `@everyone` directly like before? | Keep as a draft. |
-| 6 | News cleanup: mark then archive a week later (current) or archive in one step? | Keep two steps. |
-| 7 | pepper-inbox: Mon–Fri (build prompt) or Sun–Thu? May it use web tools and save Gmail drafts? | Sun–Thu; web read-only yes; drafts yes. |
-| 8 | Newsletter: English or Hebrew? | English. |
-| 9 | `log-claude-work-to-board` reads only Claude Code sessions on this Mac, not the Claude app or cloud sessions. Acceptable? | Yes for now. |
-| 10 | `morning-board-task-sync` is not ported (the dashboard reads the board live). Fine to drop? | Drop it. |
+1. R-13 amended: strategy, 📌 flags and log-claude-work may create in 📥 Pepper Tasks.
+2. Routing board = Comms Routing (18432388543).
+3. Intake sweeps `:comms:` only.
+4. Cross-post posts automatically.
+5. PR template note is drafted to Ilan.
+6. News cleanup: mark, archive a week later.
+7. pepper-inbox: 09:00, 13:00, 17:00 Sun–Fri; web read-only; no Gmail drafts.
+8. Newsletter in English.
+9. log-claude-work logs Mac and cloud sessions (cloud needs the claude-code-remote tools; see `check-tools`).
+10. morning-board-task-sync dropped.
 
 ## D. Facts I need from you (I cannot find them)
 

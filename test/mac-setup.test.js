@@ -69,7 +69,7 @@ test('gen-launchd CLI: writes the real fleet, parses, skips the unported agent, 
   assert.equal(files.length, ported.length + 2);
   for (const id of ported) assert.ok(files.includes(`com.ilan.cc.${id}.plist`), id);
   assert.ok(files.includes('com.ilan.learninglog-sync.plist') && files.includes('com.ilan.cc.server.plist'));
-  assert.match(r.stdout, /skipped morning-board-task-sync/);
+  assert.ok(!/skipped/.test(r.stdout), 'every agent folder is ported');
   const py = sh(['python3', '-I', '-c', 'import plistlib,glob,sys\nn=0\nfor f in glob.glob(sys.argv[1]+"/*.plist"): plistlib.load(open(f,"rb")); n+=1\nprint(n)', out]);
   assert.equal(Number(py.stdout.trim()), files.length);
   const bad = sh([process.execPath, path.join(root, 'scripts', 'gen-launchd.js'), '--out', tmp('gen-')], { GEN_SYSTEM_TZ: 'Europe/London' });
