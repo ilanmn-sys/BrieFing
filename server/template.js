@@ -2,7 +2,7 @@
 // (config.json is the only place IDs live). An unknown placeholder is an error, never an empty string.
 // {{json path}} renders an object or array as compact JSON (for tables such as the comms owner map).
 function render(text, config) {
-  return String(text).replace(/\{\{\s*(json\s+)?([\w.]+)\s*\}\}/g, (_, asJson, p) => {
+  return String(text).replace(/\{\{\s*(json\s+)?([\w.-]+)\s*\}\}/g, (_, asJson, p) => {
     const v = p.split('.').reduce((o, k) => (o == null ? undefined : o[k]), config);
     if (v === undefined || v === null) throw new Error(`unresolved placeholder {{${p}}}`);
     if (asJson) return JSON.stringify(v);
