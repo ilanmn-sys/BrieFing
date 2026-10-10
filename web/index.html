@@ -165,6 +165,7 @@ main{flex:1;display:flex;gap:12px;padding:0 16px 16px;min-height:0}
   <span class="date" id="dateline"></span>
   <span class="chip" id="nextup" hidden></span>
   <span class="chip alert" id="agentchip" hidden></span>
+  <span class="chip" id="srcchip" hidden style="cursor:pointer" title="Data comes through Claude Code's connectors (no API tokens), refreshed every 15 minutes. Click to refresh now."></span>
   <span class="badge" id="dry" hidden title="Board and Slack writes are disabled. Start the server with DRY_RUN=0 to enable them.">DRY RUN</span>
   <span class="spacer"></span>
   <button id="refresh" title="Re-pulls data. After a deploy, reload the page too.">Refresh</button>
@@ -850,6 +851,23 @@ function pollAgents(n = 0) {
   ag.poll = setTimeout(async () => { await loadAgents(); if (n < 40 && ag.data && ag.data.agents.some((a) => a.running)) pollAgents(n + 1); }, 3000);
 }
 
+
+// Data source chip: shown when any connector runs through Claude Code (no token). Click = refresh the snapshot now.
+const src = { data: null, poll: null };
+async function loadSource() {
+  try { src.data = await api('/api/source'); } catch (e) { src.data = null; }
+  const c = $('srcchip'), d = src.data;
+  const via = d ? Object.entries(d.modes).filter(([k, m]) => m === 'connectors' && k !== 'llm').map(([k]) => k) : [];
+  c.hidden = !via.length; if (!via.length) return;
+  const at = via.map((k) => d.sources && d.sources[k]).filter(Boolean);
+  const failed = at.filter((s) => !s.ok).length;
+  const oldest = at.length ? Math.min(...at.map((s) => Date.parse(s.at))) : null;
+  c.classList.toggle('alert', !at.length || failed > 0);
+  c.textContent = d.running ? 'Via connectors · refreshing…' : !at.length ? 'Via connectors · no data yet, click to fetch' : `Via connectors · updated ${relTime(oldest, Date.now())}${failed ? ` · ${failed} failed` : ''}`;
+  clearTimeout(src.poll); if (d.running) src.poll = setTimeout(async () => { await loadSource(); if (!src.data || !src.data.running) $('refresh').click(); }, 5000);
+}
+$('srcchip').onclick = async () => { try { await fetch('/api/source/refresh', { method: 'POST' }); } catch (_) {} loadSource(); };
+
 const TABS = [['tasks', 'Tasks'], ['requests', 'Requests'], ['email', 'Email'], ['slack', 'Slack'], ['decisions', 'Decisions'], ['agents', 'Agents']];
 const LIVE_TABS = new Set(['tasks', 'requests', 'email', 'slack', 'decisions', 'agents']);
 function renderTabs() {
@@ -860,8 +878,9 @@ renderTabs();
 $('refresh').onclick = () => { stg.data = null; stg.error = null; load(); loadTasks(); if (ui.tab === 'email') loadEmail(); else email.data = null; if (ui.tab === 'slack') loadSlack(); else sl.data = null; if (ui.tab === 'requests') loadRequests(); else rq.data = null; if (ui.tab === 'decisions') loadDecisions(); else dc.data = null; loadAgents(); };
 const h = new Date().getHours();
 $('greet').textContent = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', Ilan';
-load(); loadTasks(); loadAgents();
-setInterval(() => { if (state.data) render(); }, 60000); // keep now-line and next-up fresh
+load(); loadTasks(); loadAgents(); loadSource();
+setInterval(() => { if (state.data) render(); }, 60000);
+setInterval(loadSource, 60000); // keep now-line and next-up fresh
 </script>
 </body>
 </html>

@@ -1,6 +1,8 @@
 // Gmail: read inbox threads, read one thread, create DRAFTS. Never sends (principle 1).
 const { http } = require('../lib');
 const { accessToken } = require('./google');
+const { viaClaude } = require('../via/mode');
+const via = () => require('../via/gmail');
 
 // Calendar noise is filtered in the query itself, not after the fact (trap 9).
 const QUERY = 'in:inbox newer_than:7d -filename:ics -filename:invite.ics -from:calendar-notification@google.com '
@@ -22,6 +24,7 @@ const addr = (v) => ((v.match(/<([^>]+)>/) || [null, v])[1] || '').trim().toLowe
 const name = (v) => v.replace(/<[^>]*>/, '').replace(/"/g, '').trim() || addr(v);
 
 async function listThreads(max = 50) {
+  if (viaClaude('gmail')) return via().listThreads();
   const h = await auth(), mine = await me();
   const listed = await http(`${API}/threads?${new URLSearchParams({ q: QUERY, maxResults: String(max) })}`, { headers: h });
   const ids = listed.threads || [];
@@ -64,6 +67,7 @@ function bodyText(payload) {
 }
 
 async function getThread(id) {
+  if (viaClaude('gmail')) return via().getThread(id);
   const t = await http(`${API}/threads/${encodeURIComponent(id)}?format=full`, { headers: await auth() });
   return t.messages.map((m) => ({ from: name(hdr(m, 'From')), date: Number(m.internalDate), body: bodyText(m.payload).slice(0, 6000) }));
 }
@@ -80,6 +84,7 @@ function buildMime({ to, cc, subject, body, inReplyTo }) {
 
 // Creates a draft only. Needs the gmail.compose scope.
 async function createDraft({ threadId, to, cc, subject, body, inReplyTo }) {
+  if (viaClaude('gmail')) return via().createDraft({ to, cc, subject, body, inReplyTo });
   const raw = Buffer.from(buildMime({ to, cc, subject, body, inReplyTo })).toString('base64url');
   const r = await http(`${API}/drafts`, {
     method: 'POST', headers: { ...(await auth()), 'Content-Type': 'application/json' },

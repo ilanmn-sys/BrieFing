@@ -1,6 +1,8 @@
 const { config, http, need } = require('../lib');
+const { viaClaude } = require('../via/mode');
 
 async function gql(query, variables) {
+  if (viaClaude('monday')) return require('../via/monday').gql(query, variables); // no token: Claude Code's monday connector
   return http('https://api.monday.com/v2', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: need('MONDAY_API_TOKEN'), 'API-Version': '2024-10' },
@@ -10,6 +12,7 @@ async function gql(query, variables) {
 
 // Read-only: confirms auth and that the projects board is reachable.
 async function health() {
+  if (viaClaude('monday')) return require('../via/store').health('monday');
   const r = await gql('query($id:[ID!]){ me{ id name } boards(ids:$id){ id name } }', { id: [String(config.boards.projects)] });
   if (r.errors) throw new Error(JSON.stringify(r.errors).slice(0, 200));
   const board = r.data.boards[0];

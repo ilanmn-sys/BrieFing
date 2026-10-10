@@ -9,6 +9,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 const root = path.join(__dirname, '..');
+const mcpNames = require('../server/mcpNames');
 const norm = (s) => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
 // Servers an agent can do without (it reports the source as unavailable instead of failing).
 const OPTIONAL = new Set(['claude-code-remote']);
@@ -56,11 +57,16 @@ if (require.main === module) {
     text = r.stdout;
   }
   const rows = check(path.join(root, 'agents'), text);
+  // Remember the real server names so agents and the dashboard call the tools by the names this machine uses.
+  const map = Object.fromEntries(rows.filter((r) => r.found).map((r) => [r.server, mcpNames.sanitize(r.found)]));
+  if (!process.argv.includes('--no-save')) mcpNames.save(map);
   let bad = 0;
   for (const r of rows) {
     const ok = r.found && r.connected; if (!ok && !r.optional) bad++;
     console.log(`${ok ? 'OK     ' : r.optional ? 'OPTIONAL (not connected)' : r.found ? 'NOT CONNECTED' : 'MISSING'}  ${r.server}${r.found && r.found !== r.server ? ` (as "${r.found}")` : ''}  used by ${r.agents.length} agent(s): ${r.agents.join(', ')}`);
   }
+  const renamed = Object.entries(map).filter(([k, v]) => k !== v);
+  if (renamed.length) console.log(`\nTool names on this machine: ${renamed.map(([k, v]) => `mcp__${k}__* -> mcp__${v}__*`).join(', ')} (saved to data/mcp-servers.json)`);
   console.log(bad ? `\n${bad} MCP server(s) need attention. Agents that use them will run without those tools.` : '\nAll MCP servers the agents use are connected.');
   process.exit(bad ? 1 : 0);
 }

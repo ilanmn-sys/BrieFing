@@ -34,13 +34,14 @@ const base = { agents: agentsList, root: '/Users/ilan/BrieFing', nodePath: '/opt
 
 test('buildAll: one plist per ported agent, plus the sync and the server; unported skipped; labels unique', () => {
   const r = buildAll(base);
-  assert.deepEqual(r.files.map((f) => f.label), ['com.ilan.cc.a-one', 'com.ilan.learninglog-sync', 'com.ilan.cc.server']);
+  assert.deepEqual(r.files.map((f) => f.label), ['com.ilan.cc.a-one', 'com.ilan.learninglog-sync', 'com.ilan.cc.snapshot', 'com.ilan.cc.server']);
+  const snap = r.files[2].body; assert.match(snap, /scripts\/snapshot\.js/); assert.match(snap, /<key>StartInterval<\/key>\s*<integer>900<\/integer>/);
   assert.deepEqual(r.skipped, [{ id: 'a-two', reason: 'not ported (no prompt.md)' }]);
   const a = r.files[0].body;
   assert.match(a, /<string>\/opt\/homebrew\/bin\/node<\/string>\s*<string>\/Users\/ilan\/BrieFing\/scripts\/run-agent\.js<\/string>\s*<string>a-one<\/string>/);
   assert.match(a, /<key>WorkingDirectory<\/key>\s*<string>\/Users\/ilan\/BrieFing<\/string>/); assert.match(a, /<key>RunAtLoad<\/key>\s*<false\/>/);
   const sync = r.files[1].body; assert.match(sync, /sync-learning-log\.sh/); assert.deepEqual(cronToIntervals('0 18 * * 0-4').length, 5);
-  const server = r.files[2].body; assert.match(server, /<key>KeepAlive<\/key>\s*<true\/>/); assert.match(server, /<key>RunAtLoad<\/key>\s*<true\/>/); assert.ok(!/StartCalendarInterval/.test(server));
+  const server = r.files[3].body; assert.match(server, /<key>KeepAlive<\/key>\s*<true\/>/); assert.match(server, /<key>RunAtLoad<\/key>\s*<true\/>/); assert.ok(!/StartCalendarInterval/.test(server));
   assert.ok(!/DRY_RUN/.test(a + server), 'the plists must not switch dry-run off: that is a deliberate choice in .env');
 });
 
@@ -66,9 +67,9 @@ test('gen-launchd CLI: writes the real fleet, parses, skips the unported agent, 
   assert.equal(r.status, 0, r.stderr);
   const files = fs.readdirSync(out).sort();
   const ported = fs.readdirSync(path.join(root, 'agents')).filter((a) => fs.existsSync(path.join(root, 'agents', a, 'prompt.md')));
-  assert.equal(files.length, ported.length + 2);
+  assert.equal(files.length, ported.length + 3);
   for (const id of ported) assert.ok(files.includes(`com.ilan.cc.${id}.plist`), id);
-  assert.ok(files.includes('com.ilan.learninglog-sync.plist') && files.includes('com.ilan.cc.server.plist'));
+  assert.ok(files.includes('com.ilan.learninglog-sync.plist') && files.includes('com.ilan.cc.server.plist') && files.includes('com.ilan.cc.snapshot.plist'));
   assert.ok(!/skipped/.test(r.stdout), 'every agent folder is ported');
   const py = sh(['python3', '-I', '-c', 'import plistlib,glob,sys\nn=0\nfor f in glob.glob(sys.argv[1]+"/*.plist"): plistlib.load(open(f,"rb")); n+=1\nprint(n)', out]);
   assert.equal(Number(py.stdout.trim()), files.length);
@@ -168,6 +169,9 @@ test('check-tools: parses `claude mcp list`, matches servers by name, flags miss
   assert.equal(by.Google_Calendar.found, null); assert.ok(by.monday_com.agents.length >= 10);
   assert.equal(by['claude-code-remote'].optional, true);
   const f = path.join(tmp('ct-'), 'list.txt'); fs.writeFileSync(f, text);
-  const r = sh([process.execPath, path.join(root, 'scripts', 'check-tools.js'), '--from', f]);
+  const names = path.join(tmp('ct-'), 'mcp.json');
+  const r = sh([process.execPath, path.join(root, 'scripts', 'check-tools.js'), '--from', f], { MCP_NAMES_FILE: names });
   assert.equal(r.status, 1); assert.match(r.stdout, /MISSING\s+Google_Calendar/); assert.match(r.stdout, /NOT CONNECTED\s+Slack/); assert.match(r.stdout, /OK\s+monday_com/); assert.match(r.stdout, /OPTIONAL \(not connected\)\s+claude-code-remote/);
+  assert.deepEqual(JSON.parse(fs.readFileSync(names, 'utf8')), { Gmail: 'claude_ai_Gmail', Slack: 'Slack', monday_com: 'monday_com' }, 'the real server names are saved for the agents');
+  assert.match(r.stdout, /mcp__Gmail__\* -> mcp__claude_ai_Gmail__\*/);
 });

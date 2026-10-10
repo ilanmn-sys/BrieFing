@@ -57,6 +57,7 @@ function plist(spec) {
     `  <key>EnvironmentVariables</key>\n  <dict>\n${envDict(spec.env)}\n  </dict>`,
   ];
   if (spec.intervals) parts.push(intervalXml(spec.intervals));
+  if (spec.startInterval) parts.push(`  <key>StartInterval</key>\n  <integer>${spec.startInterval}</integer>`);
   if (spec.keepAlive) parts.push('  <key>KeepAlive</key>\n  <true/>');
   parts.push(`  <key>RunAtLoad</key>\n  <${spec.runAtLoad ? 'true' : 'false'}/>`);
   parts.push(`  <key>StandardOutPath</key>\n  <string>${esc(spec.log)}</string>`, `  <key>StandardErrorPath</key>\n  <string>${esc(spec.log)}</string>`);
@@ -67,7 +68,7 @@ function plist(spec) {
 const labelFor = (id) => `${PREFIX}.${id}`;
 
 // Builds every plist. agents: [{id, cron, tz, ported}], returns { files:[{name,label,body,kind}], skipped:[{id,reason}], warnings[] }.
-function buildAll({ agents, root, nodePath, envPath, home, claudeBin, systemTz, allowTzMismatch = false, syncSchedule = { cron: '0 18 * * 0-4', tz: 'Asia/Jerusalem' } }) {
+function buildAll({ agents, root, nodePath, envPath, home, claudeBin, systemTz, allowTzMismatch = false, syncSchedule = { cron: '0 18 * * 0-4', tz: 'Asia/Jerusalem' }, snapshotEverySec = 900 }) {
   const files = [], skipped = [], warnings = [];
   const env = { PATH: envPath, HOME: home, CLAUDE_BIN: claudeBin };
   const logDir = `${root}/logs/launchd`;
@@ -87,6 +88,10 @@ function buildAll({ agents, root, nodePath, envPath, home, claudeBin, systemTz, 
   checkTz('learning-log sync', syncSchedule.tz);
   files.push({ kind: 'sync', id: 'learninglog-sync', label: 'com.ilan.learninglog-sync', name: 'com.ilan.learninglog-sync.plist',
     body: plist({ label: 'com.ilan.learninglog-sync', args: ['/bin/bash', `${root}/scripts/sync-learning-log.sh`], root, env, intervals: cronToIntervals(syncSchedule.cron), log: `${logDir}/learninglog-sync.log` }) });
+  // Dashboard data through Claude Code's connectors (only does work for connectors without a token; it skips
+  // itself outside working hours, so a fixed interval is fine).
+  files.push({ kind: 'snapshot', id: 'snapshot', label: labelFor('snapshot'), name: `${labelFor('snapshot')}.plist`,
+    body: plist({ label: labelFor('snapshot'), args: [nodePath, `${root}/scripts/snapshot.js`], root, env, startInterval: snapshotEverySec, runAtLoad: true, log: `${logDir}/snapshot.log` }) });
   files.push({ kind: 'server', id: 'server', label: labelFor('server'), name: `${labelFor('server')}.plist`,
     body: plist({ label: labelFor('server'), args: [nodePath, `${root}/server/index.js`], root, env, keepAlive: true, runAtLoad: true, log: `${logDir}/server.log` }) });
   return { files, skipped, warnings };

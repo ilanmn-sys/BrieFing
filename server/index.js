@@ -9,16 +9,17 @@ const slack = require('./connectors/slack');
 const drive = require('./connectors/drive');
 const { doneSync, isDryRun } = require('./done');
 const gmail = require('./connectors/gmail');
-const { triage, classify } = require('./triage');
 const llm = require('./llm');
 const slackApi = require('./slackApi');
 const requests = require('./requestsApi');
 const decisions = require('./decisionsApi');
 const agents = require('./agents');
 const strategy = require('./strategyApi');
-const boardHealth = require('./healthLogic');
 const syncStatus = require('./syncStatus');
 const boardMove = require('./boardMove');
+const tasksApi = require('./tasksApi');
+const emailApi = require('./emailApi');
+const { SnapshotMissing } = require('./via/store');
 const { spawn } = require('child_process');
 
 const CHECKS = {
@@ -64,6 +65,20 @@ const server = http.createServer(async (req, res) => {
         const status = e instanceof NotConfigured ? 'not_configured' : 'error';
         return send(502, { status, error: e.message, retry: '/api/calendar' });
       }
+    }
+    // ---- Data source (API tokens or Claude Code connectors) and a manual snapshot refresh ----
+    if (url.pathname === '/api/source' || url.pathname === '/api/source/refresh') {
+      const { mode } = require('./via/mode'), store = require('./via/store');
+      const lock = path.join(store.dir(), '.lock');
+      const running = fs.existsSync(lock) && Date.now() - fs.statSync(lock).mtimeMs < 20 * 60000;
+      if (req.method === 'GET') return send(200, { modes: Object.fromEntries(['monday', 'gmail', 'calendar', 'slack', 'drive', 'llm'].map((n) => [n, mode(n)])), ...store.status(), running });
+      if (req.method !== 'POST') return send(405, { error: 'GET or POST only' });
+      const origin = req.headers.origin;
+      if (origin && !/^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(origin)) return send(403, { error: 'bad origin' });
+      if (running) return send(409, { error: 'a snapshot is already running' });
+      const child = spawn(process.execPath, [path.join(__dirname, '..', 'scripts', 'snapshot.js'), '--force'], { cwd: path.join(__dirname, '..'), detached: true, stdio: 'ignore', env: process.env });
+      child.unref();
+      return send(202, { started: true });
     }
     // ---- Narrow board move (agents call this instead of holding all_monday_api) ----
     if (url.pathname === '/api/board/move') {
@@ -163,13 +178,8 @@ const server = http.createServer(async (req, res) => {
     }
     // ---- Email (drafts only: nothing here can send) ----
     if (url.pathname === '/api/email') {
-      try {
-        const { threads, estimate } = await gmail.listThreads(50);
-        const tri = await triage(threads.filter((t) => !t.automated && !t.selfOnly && !t.lastFromMe && !t.broadcast)); // only threads that could need me
-        const out = threads.map((t) => ({ ...t, ...classify(t, tri.results.get(t.id)) }));
-        console.log(`email loaded: ${out.length} of ~${estimate} threads, triage ${tri.ok ? 'ok' : 'FAILED (' + tri.error + ')'}`);
-        return send(200, { threads: out, estimate, triageOk: tri.ok, triageError: tri.error || null, dryRun: isDryRun() });
-      } catch (e) { return send(e instanceof NotConfigured ? 503 : 502, { status: e instanceof NotConfigured ? 'not_configured' : 'error', error: e.message }); }
+      try { return send(200, await emailApi.load()); }
+      catch (e) { return send(e instanceof NotConfigured || e instanceof SnapshotMissing ? 503 : 502, { status: e instanceof NotConfigured || e instanceof SnapshotMissing ? 'not_configured' : 'error', error: e.message }); }
     }
     if (url.pathname === '/api/email/thread') {
       try { return send(200, { messages: await gmail.getThread(url.searchParams.get('id') || '') }); }
@@ -209,20 +219,9 @@ const server = http.createServer(async (req, res) => {
       }
     }
     if (url.pathname === '/api/tasks') {
-      try {
-        const t = await monday.listTasks();
-        console.log(`tasks loaded: ${t.items.length} items, ${t.pages} pages${t.truncated ? ' (TRUNCATED)' : ''}`);
-        // Board health rides on the same read. A failure here must never hide the task list.
-        let healthRules = null, healthError = null;
-        try {
-          const g = config.groups;
-          const blocked = t.items.filter((i) => boardHealth.isBlocked(i, g) && i.status !== 'Done' && i.group !== g.canonical.completed.id).map((i) => i.id);
-          const holderText = blocked.length ? await monday.updateTexts(blocked) : new Map();
-          healthRules = boardHealth.health(t.items, { groups: g, today: today(), agentNames: agents.registry().flatMap((a) => [a.id.replace(/-/g, ' '), a.name]), holderText });
-        } catch (e) { healthError = e.message; console.error('board health failed', e); }
-        return send(200, { today: today(), tz: config.me.tz, dryRun: isDryRun(), config: { groups: config.groups, board: config.boards.projects }, health: healthRules, healthError, ...t });
-      } catch (e) {
-        const status = e instanceof NotConfigured ? 'not_configured' : 'error';
+      try { return send(200, await tasksApi.load()); }
+      catch (e) {
+        const status = e instanceof NotConfigured || e instanceof SnapshotMissing ? 'not_configured' : 'error';
         return send(502, { status, error: e.message, retry: '/api/tasks' });
       }
     }

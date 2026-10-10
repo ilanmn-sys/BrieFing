@@ -495,5 +495,23 @@
   "boardMove": {
     "maxPerDay": 40,
     "note": "POST /api/board/move: the narrow replacement for all_monday_api in the strategy agent. Only moves that belong to an approved strategy proposal, or a Done item into ✅ Completed. Dry-run unless DRY_RUN=0 on the server."
+  },
+  "dataMode": {
+    "snapshotDir": "data/snapshot",
+    "staleMinutes": 45,
+    "snapshotEveryMinutes": 15,
+    "workHours": {
+      "from": 7,
+      "to": 21,
+      "days": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "note": "Per connector: if its token is in .env the server calls the API directly; otherwise it goes through Claude Code's connectors (snapshot every 15 minutes for reads, a short claude -p run for each write). DATA_MODE=api|connectors forces one mode for all."
   }
 }

@@ -1,5 +1,6 @@
 // Gmail + Calendar via a Google OAuth refresh token (read-only scopes for /health).
 const { http, need } = require('../lib');
+const { viaClaude } = require('../via/mode');
 
 async function accessToken() {
   const body = new URLSearchParams({
@@ -11,12 +12,14 @@ async function accessToken() {
 }
 
 async function gmailHealth() {
+  if (viaClaude('gmail')) return require('../via/store').health('gmail');
   const t = await accessToken();
   const r = await http('https://gmail.googleapis.com/gmail/v1/users/me/profile', { headers: { Authorization: `Bearer ${t}` } });
   return `mailbox ${r.emailAddress}`;
 }
 
 async function calendarHealth() {
+  if (viaClaude('calendar')) return require('../via/store').health('calendar');
   const t = await accessToken();
   const now = new Date().toISOString();
   const r = await http(`https://www.googleapis.com/calendar/v3/calendars/primary/events?maxResults=1&timeMin=${encodeURIComponent(now)}`,
@@ -26,6 +29,7 @@ async function calendarHealth() {
 
 // Events for [today, today+days) in the configured timezone. Read-only. Follows nextPageToken (max 3 pages).
 async function listEvents(days, tz, todayStr) {
+  if (viaClaude('calendar')) return require('../via/calendar').listEvents(days, tz, todayStr);
   const { normalize } = require('../calendarLogic');
   const t = await accessToken();
   const off = new Intl.DateTimeFormat('en-US', { timeZone: tz, timeZoneName: 'longOffset' })

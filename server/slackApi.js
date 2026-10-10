@@ -3,12 +3,15 @@ const slack = require('./connectors/slack');
 const llm = require('./llm');
 const { dmUnread, channelUnread, oldestTs, cleanText } = require('./slackLogic');
 const { isDryRun } = require('./done');
+const { viaClaude } = require('./via/mode');
+const via = () => require('./via/slack');
 
 const DM_DAYS = 7, CH_DAYS = 2, MAX_CONVS = 200;
 const compact = async (m) => ({ ts: m.ts, from: await slack.userName(m.user), text: cleanText(m.text).slice(0, 600) });
 
 // Unread DMs + unread counts for the key channels. Reads only; nothing here writes.
 async function load() {
+  if (viaClaude('slack')) return via().load();
   const myId = await slack.me();
   const t = today(), tz = config.me.tz;
   const dmOldest = oldestTs(t, DM_DAYS, tz), chOldest = oldestTs(t, CH_DAYS, tz);
@@ -56,6 +59,11 @@ async function load() {
 }
 
 async function summarize(channelId) {
+  if (viaClaude('slack')) {
+    const text = await via().history(channelId, 60);
+    const summary = await llm.complete(`Summarise the Slack messages from the last ${CH_DAYS} days below in 2-3 short bullet points for Ilan (comms lead). Flag anything that needs him. Ignore older messages.\n\n${String(text).slice(0, 20000)}`, { maxTokens: 400 });
+    return { summary: summary.trim() };
+  }
   const myId = await slack.me();
   const un = channelUnread(await slack.history(channelId, oldestTs(today(), CH_DAYS, config.me.tz), 100), myId);
   if (!un.length) return { summary: 'Nothing new.' };
@@ -66,6 +74,11 @@ async function summarize(channelId) {
 
 // Draft uses the last ~12 messages of the conversation as context. Drafting never sends.
 async function draftReply(channelId) {
+  if (viaClaude('slack')) {
+    const text = await via().history(channelId, 12);
+    const draft = await llm.complete(`Write Ilan's next reply in this Slack DM (messages are newest first). Match the language and tone. Short. Never invent facts or commitments. Return ONLY the reply text.\n\n${String(text).slice(0, 12000)}`, { maxTokens: 400 });
+    return { draft: draft.trim() };
+  }
   const msgs = (await slack.history(channelId, 0, 12)).reverse();
   const lines = await Promise.all(msgs.map(async (m) => `${await slack.userName(m.user)}: ${cleanText(m.text).slice(0, 400)}`));
   const draft = await llm.complete(`Write Ilan's next reply in this Slack DM. Match the language and tone. Short. Never invent facts or commitments. Return ONLY the reply text.\n\n${lines.join('\n')}`, { maxTokens: 400 });
@@ -82,6 +95,7 @@ async function send(userId, text) {
 // "Ask Pepper" round trip (Slack has no callback): capture her latest message as a baseline,
 // send the request, and let the client re-read and compare. Compare content, never timestamps.
 async function latestFromPepper() {
+  if (viaClaude('slack')) return via().latestFromPepper();
   const myId = await slack.me();
   const m = (await slack.history(config.pepper.dmChannel, 0, 15)).find((x) => x.user !== myId && hasText(x));
   return m ? { ts: m.ts, text: String(m.text).slice(0, 4000) } : null;

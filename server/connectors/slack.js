@@ -1,6 +1,8 @@
 const { config, http, need } = require('../lib');
+const { viaClaude } = require('../via/mode');
 
 async function health() {
+  if (viaClaude('slack')) return require('../via/store').health('slack');
   const r = await http('https://slack.com/api/auth.test', { method: 'POST', headers: { Authorization: `Bearer ${need('SLACK_TOKEN')}` } });
   if (!r.ok) throw new Error(`slack: ${r.error}`);
   return `workspace ${r.team}; user ${r.user_id}`;
@@ -10,6 +12,7 @@ async function health() {
 async function dmPepper(text) {
   const target = config.pepper.userId;
   if (!target || target === 'VERIFY') throw new Error('pepper.userId not set');
+  if (viaClaude('slack')) return require('../via/slack').sendDm(target, text);
   const open = await http('https://slack.com/api/conversations.open', {
     method: 'POST',
     headers: { Authorization: `Bearer ${need('SLACK_TOKEN')}`, 'Content-Type': 'application/json' },
@@ -63,6 +66,7 @@ async function history(channel, oldest, limit = 50) { return (await call('conver
 async function replies(channel, ts) { try { return (await call('conversations.replies', { channel, ts, limit: 50 })).messages || []; } catch (_) { return []; } }
 
 async function sendDm(userId, text) {
+  if (viaClaude('slack')) return require('../via/slack').sendDm(userId, text);
   if (!/^U[A-Z0-9]+$/.test(userId)) throw new Error('DM target must be a user id (user:<id>), never a channel id');
   const open = await call('conversations.open', { users: userId });
   const sent = await call('chat.postMessage', { channel: open.channel.id, text });

@@ -1,7 +1,9 @@
 const { http, need } = require('../lib');
 const google = require('./google');
+const { viaClaude } = require('../via/mode');
 
 async function health() {
+  if (viaClaude('drive')) return require('../via/store').health('drive');
   // Reuses the Google refresh token; needs a Drive read scope.
   const body = new URLSearchParams({
     client_id: need('GOOGLE_CLIENT_ID'), client_secret: need('GOOGLE_CLIENT_SECRET'),
