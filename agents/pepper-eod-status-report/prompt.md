@@ -57,6 +57,10 @@ Read the board {{boards.projects}} (follow cursors to the end, cap 20 pages). Ne
 - **Pepper Tasks:** 🤖 items done today, 🤖 items `Stuck` (name each with the reason from its latest update), 📌 items still waiting for a date (marker `AWAITING_DUE_DATE` and no `DUE_DATE_SET` or `DUE_DATE_SKIPPED`).
 - **Strategy:** today's `🗓️ Daily Strategy — <today>` item if it exists: applied, skipped, or never answered (`APPLIED` marker, or none).
 
+**Read the updates, do not skip this.** The board page does not contain markers or reasons. For every item in 📥 Pepper Tasks that is `Stuck` or whose name starts with 📌, and for today's strategy item, call `get_updates` (latest 10) and read them before you write the 🤖, 📌 and 🗓️ lines. A `Stuck` item without the 🤖 prefix still goes in the 🤖 line if Pepper created it. `לא ידוע` is allowed only when the updates call itself failed; say which call failed in your RESULT.
+
+**Stale Today items:** an item in 🔥 Today whose date is before today counts under "נשאר פתוח להיום" and also under "באיחור"; mark it with its date, e.g. `(23.09)`, so Ilan sees it is stale.
+
 Meta items (Comms calendar sync, Daily inbox digest, morning-board, pepper-eod) and recurring/noise items are not counted. Never infer today from item dates. A number you cannot compute is written as `לא ידוע`, never guessed.
 
 ## 4. The report (DM to Pepper, Hebrew)
