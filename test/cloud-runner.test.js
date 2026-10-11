@@ -44,3 +44,9 @@ test('a live mode in schedule.json switches off the dry-run line; the CLI prints
   assert.equal(cli.status, 0); assert.match(cli.stdout, /mode: DRY-RUN/);
   assert.equal(spawnSync(process.execPath, [path.join(root, 'scripts', 'render-agent.js'), 'nope'], { encoding: 'utf8' }).status, 1);
 });
+
+test('agents that use Gmail get the pagination and plain-text note; others do not', () => {
+  const note = (id) => renderFor(id).prompt.split('\n').filter((l) => l.startsWith('Cloud note')).join('\n');
+  assert.match(note('coverage-inbox-cycle'), /pageToken/); assert.match(note('coverage-inbox-cycle'), /PLAIN_TEXT/);
+  assert.ok(!/PLAIN_TEXT/.test(note('slack-flag-to-task')));
+});
