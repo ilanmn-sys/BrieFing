@@ -1,0 +1,204 @@
+<title>Ilan's Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Heebo:wght@400;500;600&display=swap">
+<style>
+/* Layout: a comms desk. Summary strip on top, tomorrow's agenda on the left, the work queue (decisions first) on the right. */
+:root{
+  --bg:#EDF0F3; --panel:#FFFFFF; --sunk:#F5F7F9; --ink:#18202B; --muted:#5B6676; --faint:#8A95A3; --line:#DCE1E7;
+  --accent:#1D6A86; --accent-soft:#E2EFF4; --accent-ink:#0F4A5F;
+  --crit:#B93C28; --crit-soft:#FBEAE6; --warn:#9A6512; --warn-soft:#FBF1DE; --ok:#2B7349; --ok-soft:#E5F3EA; --idle:#6B7685; --idle-soft:#EEF1F4;
+  --f-display:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
+  --f-body:"Public Sans","Heebo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F141A; --panel:#161D25; --sunk:#1B232D; --ink:#E6EBF0; --muted:#9AA6B4; --faint:#6F7B89; --line:#27313C;
+  --accent:#62B4D0; --accent-soft:#16303B; --accent-ink:#A9DCEC;
+  --crit:#F0806A; --crit-soft:#3A1F1A; --warn:#E2B460; --warn-soft:#352A16; --ok:#73C493; --ok-soft:#173022; --idle:#9AA6B4; --idle-soft:#1E2731;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F141A; --panel:#161D25; --sunk:#1B232D; --ink:#E6EBF0; --muted:#9AA6B4; --faint:#6F7B89; --line:#27313C;
+  --accent:#62B4D0; --accent-soft:#16303B; --accent-ink:#A9DCEC;
+  --crit:#F0806A; --crit-soft:#3A1F1A; --warn:#E2B460; --warn-soft:#352A16; --ok:#73C493; --ok-soft:#173022; --idle:#9AA6B4; --idle-soft:#1E2731;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--f-body);padding:20px 16px 40px;margin:0}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* Header */
+header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 20px}
+header .who{display:flex;flex-direction:column;gap:2px;min-width:0}
+header h1{font:700 26px/1.1 var(--f-display);letter-spacing:-.01em;margin:0;text-wrap:balance}
+header .sub{color:var(--muted);font-size:13px}
+header .chips{margin-left:auto;display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:4px 10px;font-size:12px;color:var(--muted);white-space:nowrap}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--idle);flex:none}
+.dot.ok{background:var(--ok)}.dot.warn{background:var(--warn)}.dot.crit{background:var(--crit)}
+.chip.next{color:var(--accent-ink);background:var(--accent-soft);border-color:transparent}
+
+/* Summary strip */
+.strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0;position:relative;overflow:hidden}
+.tile::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--idle)}
+.tile.crit::before{background:var(--crit)}.tile.warn::before{background:var(--warn)}.tile.acc::before{background:var(--accent)}
+.tile b{font:700 30px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.tile.crit b{color:var(--crit)}
+.tile .lbl{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.tile .hint{font-size:12px;color:var(--faint)}
+
+/* Main grid */
+main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);min-width:0}
+.ph{display:flex;align-items:baseline;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.ph h2{font:700 16px/1.2 var(--f-display);margin:0}
+.ph .meta{color:var(--faint);font-size:12px;margin-left:auto}
+
+/* Agenda */
+.allday{display:flex;flex-wrap:wrap;gap:6px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.allday span{font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:6px;padding:2px 8px;color:var(--muted)}
+.agenda{position:relative;margin:10px 12px 14px 56px}
+.hr{position:absolute;left:0;right:0;border-top:1px solid var(--line)}
+.hr span{position:absolute;left:-48px;top:-8px;font:12px var(--f-mono);color:var(--faint)}
+.ev{position:absolute;border-radius:8px;padding:5px 8px;font-size:12.5px;line-height:1.3;border-left:3px solid var(--accent);background:var(--accent-soft);color:var(--ink);overflow:hidden;text-decoration:none}
+.ev b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev small{font:11.5px var(--f-mono);color:var(--muted)}
+.ev.personal{border-color:var(--ok);background:var(--ok-soft)}
+.ev.clash{border-color:var(--warn);background:var(--warn-soft)}
+.note{margin:0 16px 14px;font-size:12.5px;color:var(--warn);background:var(--warn-soft);border-radius:8px;padding:8px 10px}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{font:500 13px var(--f-body);color:var(--muted);background:none;border:0;border-radius:8px;padding:6px 10px;cursor:pointer;white-space:nowrap;display:inline-flex;gap:6px;align-items:center}
+.tab:hover{background:var(--sunk);color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--accent-soft);color:var(--accent-ink)}
+.tab .n{font:500 11px var(--f-mono);background:var(--sunk);border-radius:999px;padding:0 6px;color:var(--muted)}
+.tab[aria-selected="true"] .n{background:var(--panel)}
+.pane{padding:4px 0 8px}
+.sec{display:flex;justify-content:space-between;align-items:baseline;padding:12px 16px 4px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.sec small{font:500 12px var(--f-mono);letter-spacing:0;text-transform:none;color:var(--faint)}
+
+/* Rows */
+.row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 12px;align-items:start;padding:10px 16px;border-top:1px solid var(--line)}
+.sec + .row{border-top:0}
+.row .t{font-weight:500;min-width:0;overflow-wrap:anywhere}
+.row .d{grid-column:2;color:var(--muted);font-size:13px;min-width:0;overflow-wrap:anywhere}
+.row .r{font:500 12.5px var(--f-mono);color:var(--muted);white-space:nowrap;text-align:right}
+.row .r.money{color:var(--ink);font-weight:500}
+.mark{width:8px;height:8px;border-radius:50%;margin-top:7px;background:var(--idle)}
+.mark.crit{background:var(--crit)}.mark.warn{background:var(--warn)}.mark.ok{background:var(--ok)}.mark.acc{background:var(--accent)}
+.pill{display:inline-block;font:600 11px/1.6 var(--f-body);letter-spacing:.03em;border-radius:999px;padding:0 8px;text-transform:uppercase}
+.pill.crit{background:var(--crit-soft);color:var(--crit)}.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}.pill.acc{background:var(--accent-soft);color:var(--accent-ink)}.pill.idle{background:var(--idle-soft);color:var(--idle)}
+[dir="rtl"]{font-family:"Heebo",var(--f-body)}
+.foot{padding:10px 16px 6px;color:var(--faint);font-size:12.5px}
+
+/* Agents table */
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);font-weight:600;padding:8px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 16px;border-top:1px solid var(--line);vertical-align:top}
+td.when{font-family:var(--f-mono);font-size:12.5px;white-space:nowrap;color:var(--muted)}
+td .nm{font-weight:500}
+td .what{display:block;color:var(--muted);font-size:12.5px}
+
+.disclaimer{color:var(--faint);font-size:12.5px;text-align:center}
+
+@media (max-width:900px){main{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:620px){.strip{grid-template-columns:repeat(2,minmax(0,1fr))}header .chips{margin-left:0}.row{grid-template-columns:auto minmax(0,1fr)}.row .r{grid-column:2;text-align:left}}
+@media (prefers-reduced-motion:no-preference){.tab,.row{transition:background-color .15s}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="who">
+      <h1>Ilan's Command Center</h1>
+      <span class="sub" id="sub"></span>
+    </div>
+    <div class="chips" id="chips"></div>
+  </header>
+  <section class="strip" aria-label="Summary" id="strip"></section>
+  <main>
+    <section class="panel" aria-labelledby="ag-h">
+      <div class="ph"><h2 id="ag-h"></h2><span class="meta" id="ag-src"></span></div>
+      <div class="allday" id="allday"></div>
+      <div class="agenda" id="agenda"></div>
+      <div class="note" id="ag-note" hidden></div>
+    </section>
+    <section class="panel" aria-label="Work queue">
+      <div class="tabs" role="tablist" id="tabs"></div>
+      <div id="panes"></div>
+    </section>
+  </main>
+  <p class="disclaimer" id="disclaimer"></p>
+</div>
+
+<script type="application/json" id="snapshot-data">__SNAPSHOT_DATA__</script>
+<script>
+const D = JSON.parse(document.getElementById("snapshot-data").textContent);
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const MARKS = new Set(["crit", "warn", "ok", "acc", "idle"]);
+const mk = (m) => (MARKS.has(m) ? m : "idle");
+
+$("sub").textContent = D.subtitle || "";
+$("chips").innerHTML = (D.nextUp ? `<span class="chip next">${esc(D.nextUp)}</span>` : "")
+  + (D.chips || []).map((c) => `<span class="chip"><i class="dot ${mk(c.dot)}"></i>${esc(c.text)}</span>`).join("");
+$("strip").innerHTML = (D.tiles || []).map((t) => `<div class="tile ${mk(t.kind)}"><span class="lbl">${esc(t.label)}</span><b>${esc(t.value)}</b><span class="hint">${esc(t.hint)}</span></div>`).join("");
+
+// Agenda: hours and events share one scale.
+const A = D.agenda || {};
+$("ag-h").textContent = A.title || "Agenda";
+$("ag-src").textContent = A.source || "";
+$("allday").innerHTML = (A.allDay || []).map((x) => `<span>${esc(x)}</span>`).join("");
+$("allday").hidden = !(A.allDay || []).length;
+if (A.note) { $("ag-note").hidden = false; $("ag-note").textContent = A.note; }
+const toMin = (hm) => { const [h, m] = String(hm).split(":").map(Number); return h * 60 + (m || 0); };
+const evs = (A.events || []).map((e) => ({ ...e, a: toMin(e.s), b: toMin(e.e) })).filter((e) => e.b > e.a);
+const ag = $("agenda");
+if (A.error) { ag.outerHTML = `<div class="note">${esc(A.error)}</div>`; }
+else if (!evs.length) { ag.outerHTML = `<div class="foot">No meetings.</div>`; }
+else {
+  const START = Math.min(...evs.map((e) => Math.floor(e.a / 60))), END = Math.max(...evs.map((e) => Math.ceil(e.b / 60))), PX = 1.1;
+  let h = "";
+  for (let x = START; x <= END; x++) h += `<div class="hr" style="top:${(x - START) * 60 * PX}px"><span>${String(x).padStart(2, "0")}:00</span></div>`;
+  for (const ev of evs) {
+    const peers = evs.filter((o) => o.a < ev.b && o.b > ev.a), n = peers.length, i = peers.indexOf(ev), w = 100 / n;
+    const top = (ev.a - START * 60) * PX, hgt = Math.max((ev.b - ev.a) * PX - 3, 26);
+    const kind = ev.kind === "personal" || ev.kind === "clash" ? ev.kind : "";
+    h += `<div class="ev ${kind}" style="top:${top}px;height:${hgt}px;left:calc(${i * w}% + ${i ? 3 : 0}px);width:calc(${w}% - ${n > 1 ? 3 : 0}px)"><b dir="auto">${esc(ev.t)}</b><small>${esc(ev.s)}–${esc(ev.e)}</small></div>`;
+  }
+  ag.innerHTML = h;
+  ag.style.height = (END - START) * 60 * PX + 8 + "px";
+}
+
+// Work panes.
+const row = (r) => `<div class="row"><i class="mark ${mk(r.mark)}"></i><span class="t" dir="auto">${esc(r.t)}</span>${r.r ? `<span class="r${r.money ? " money" : ""}">${esc(r.r)}</span>` : ""}${r.d ? `<span class="d" dir="auto">${esc(r.d)}</span>` : ""}</div>`;
+const PILL = { ok: "Live · ok", idle: "Live · quiet", acc: "Live", warn: "Testing", crit: "Failed" };
+function pane(tab) {
+  if (tab.type === "agents") {
+    const rows = (D.agents || []).map((a) => `<tr><td><span class="nm mono">${esc(a.id)}</span><span class="what">${esc(a.what)}</span></td><td class="when">${esc(a.when)}</td><td><span class="pill ${mk(a.state)}">${esc(PILL[a.state] || a.state)}</span><span class="what">${esc(a.last)}</span></td></tr>`).join("");
+    return `<div class="tbl"><table><thead><tr><th>Agent</th><th>Runs</th><th>Last run</th></tr></thead><tbody>${rows}</tbody></table></div>${tab.foot ? `<div class="foot">${esc(tab.foot)}</div>` : ""}`;
+  }
+  return (tab.sections || []).map((s) => `<div class="sec">${esc(s.title)}${s.small ? ` <small>${esc(s.small)}</small>` : ""}</div>${(s.rows || []).map(row).join("")}${s.foot ? `<div class="foot">${esc(s.foot)}</div>` : ""}`).join("")
+    || `<div class="foot">Nothing here today.</div>`;
+}
+const TABS = D.tabs || [];
+$("tabs").innerHTML = TABS.map((t) => `<button class="tab" role="tab" id="t-${esc(t.id)}" aria-controls="p-${esc(t.id)}" aria-selected="false">${esc(t.label)}${t.count != null ? `<span class="n">${esc(t.count)}</span>` : ""}</button>`).join("");
+$("panes").innerHTML = TABS.map((t) => `<div class="pane" role="tabpanel" id="p-${esc(t.id)}" hidden>${pane(t)}</div>`).join("");
+function show(k) {
+  if (!TABS.some((t) => t.id === k)) k = TABS.length ? TABS[0].id : "";
+  for (const t of TABS) { $("t-" + t.id).setAttribute("aria-selected", String(t.id === k)); $("p-" + t.id).hidden = t.id !== k; }
+  try { localStorage.setItem("cc-tab", k); } catch (_) {}
+}
+$("tabs").addEventListener("click", (e) => { const b = e.target.closest(".tab"); if (b) show(b.id.slice(2)); });
+let first = location.hash.slice(1);
+if (!first) { try { first = localStorage.getItem("cc-tab") || ""; } catch (_) {} }
+show(first);
+$("disclaimer").textContent = D.disclaimer || "";
+</script>
