@@ -464,14 +464,30 @@
       "relatedInfluencer": "board_relation_mm6byww",
       "relevant": "color_mm7th7nj",
       "dealValue": "numeric_mm5y6ykh",
-      "followers": "numeric_mm5ywa2b"
+      "followers": "numeric_mm5ywa2b",
+      "elevate": "color_mm6y6wrt"
     },
     "gmailQuery": "newer_than:2d (narrativegroup.co OR creator OR influencer) -from:me",
     "maxScanPerRun": 25,
     "maxCreatesPerRun": 10,
     "slackChannel": "ilan-pa",
     "note": "Board read 2026-10-07. Narrative is narrativegroup.co (Margo Aronovic margo@, Regev Gur regev@), found in Gmail 2026-10-07. -from:me drops Ilan's own self-sent digests. Mandy is 'Mandy Monday' (mandy@monday.com, U0AKZM2R96Y); she had no Slack posts since 2026-09-01, so where she posts is still unconfirmed. Nitter is down: X numbers are never filled.",
-    "mandyUserId": "U0AKZM2R96Y"
+    "mandyUserId": "U0AKZM2R96Y",
+    "engaged": {
+      "note": "Scan scope set by Ilan 2026-10-11: an influencer is in scope if ANY of these holds.",
+      "elevate": [
+        "Attending",
+        "Elevate EMEA",
+        "Considering"
+      ],
+      "stage": [
+        "Negotiating"
+      ],
+      "relevant": [
+        "Yes",
+        "Considering"
+      ]
+    }
   },
   "inbox": {
     "channel": "ilan-pa",

@@ -5,6 +5,8 @@
 ## What it does
 Reads Narrative/Regev and influencer Gmail threads and Pepper's/Mandy's posts in #ilan-pa, then: creates up to 10 email-log items (deduped on a `THREAD:<id>` marker), refreshes **Latest Post** for Top 15 / Active Offers / High-priority influencers (up to 25, only from what it actually finds), posts factual updates, and DMs Ilan a summary dated from the clock. It never changes Stage, Priority, Owner, Deal Value, Followers or Next Follow-up: offers, prices and stage changes go to Ilan as decisions.
 
+**Scope (Ilan, 2026-10-11):** only influencers we are engaged with: Elevate Attendance Attending / Elevate EMEA / Considering, or Stage Negotiating, or Relevant? Yes / Considering (`config.json` → `influencers.engaged`). Everyone else is skipped.
+
 ## Tools and limits
 - Fixes the three known bugs: header date from the clock, DM by user id with the send result checked, X metrics reported as unavailable (Nitter down), never filled.
 - Tools: Gmail read, Slack read + send (DM), board read/create/update/`change_item_column_values` (used only for Latest Post), WebSearch/WebFetch.
