@@ -99,6 +99,13 @@ the evidence behind it. Remove a rule the moment it stops being true.
 
 Newest first. Types: `approval` · `accuracy` · `correction` · `pepper` · `slippage`.
 
+### S-008 · 2026-10-10 · `pepper` · severity: medium
+**What happened.** Copied from the Cowork learning log (weekly summary sent to Pepper's DM on 2026-10-10, ts 1791655303.999739). Two observations: (1) during OOO the proxy protocol ("DM approval before an external action") created a bottleneck: Vin Matano waited from 05:10 for an A/B/C answer, contradicting the OOO brief that named Yuval owner of Influencers; (2) the INFRA item (pip install beautifulsoup4 + ~/.bdata/env) sat 16+ days with no owner and no date, so the influencer scans were partial for two weeks while the daily reports said "ok". Pepper also proposed a permanent "agents focus" filter in `build_slack_digest.py` (a script change, not a §1 rule).
+**Why it matters.** Same failure shape as S-004/S-005: a silent failure in a scheduled job, and a manual approval step that blocks work when Ilan is away.
+**Implication.** Proposed in that summary, still awaiting Ilan's decision: R-23 (during OOO a proxy request inside a handoff area is approved by the handoff owner: Yuval=Influencers, Or=IL/general, Noam=Media, Bea=BR; money or commitments stay with Ilan, continuing R-19), R-24 (a silent infrastructure failure becomes an item with owner and date within a day, and the daily report says "pipeline degraded" until it is closed; no "ok" on partial output), and removing R-07 and R-08 (no mention or signal since August).
+
+---
+
 ### S-005 · 2026-09-14 · `pepper` · severity: medium
 **What happened.** In her reply to the 09-10 weekly learning-capture block, Pepper confirmed "apply 1"
 (R-09 expansion) and reported that she had already updated `build_slack_digest.py` — replacing hardcoded

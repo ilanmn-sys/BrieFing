@@ -26,7 +26,7 @@ Read the last 40 messages of Pepper's DM. A message that you sent and that start
 
 ## 2. Phase B first: apply last week's decision
 
-1. Find the newest `📚 סקירה שבועית` message before today that contains numbered proposals. Its `Message TS` is `review_ts`. If there is none, go to section 3.
+1. Find the newest `📚 סקירה שבועית` message before today that contains numbered proposals. During the move from Cowork, a message that starts `📚 סיכום למידה שבועי` (the Cowork twin's weekly summary, same reply forms) counts as a review message too. Its `Message TS` is `review_ts`. If there is none, go to section 3.
 2. Search `LEARNING-LOG.md` for the text `review_ts:<that ts>`. If found, that review is closed: go to section 3.
 3. Collect Ilan's messages after `review_ts` (replies in the thread and messages in the DM). Accept only these forms, case-insensitive: `apply all`, `apply 1,3,5` (any list of the proposal numbers), `skip`, and the Hebrew `אשר הכל`, `אשר 1,3`, `דלג`. Use the **latest** such message. If Pepper wrote "apply" or "אשר" but Ilan did not, it is **not** an approval: record it in your RESULT summary and do nothing.
 4. No accepted reply:
