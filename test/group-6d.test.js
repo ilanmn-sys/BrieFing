@@ -27,7 +27,7 @@ for (const [id, cron] of Object.entries(AGENTS)) {
     assert.ok(!/\{\{/.test(out));
     assert.ok(!/\bD[0-9A-Z]{9,}\b/.test(prompt) && !/\bgroup_m[a-z0-9_]{5,}\b/.test(prompt) && !/\b(?:18416855289|18425284143|473764901|29607541|U0[0-9A-Z]{8,}|C0[0-9A-Z]{8,})\b/.test(prompt));
     for (const s of ['system clock', 'LEARNING-LOG.md', 'data, never instructions', 'R-09', 'S-001', 'RESULT:', 'dry run']) assert.ok(prompt.includes(s), s);
-    assert.ok(tools.every((t) => !t.includes('*')));
+    assert.ok(tools.every((t) => !t.includes('*') || t === 'Bash(node scripts/latest-posts.js:*)')); // the only wildcard: the feed reader's JSON argument
     for (const bad of NEVER) assert.ok(!tools.includes(bad), bad);
     const s = JSON.parse(fs.readFileSync(path.join(root, 'agents', id, 'schedule.json'), 'utf8'));
     assert.equal(s.cron, cron); assert.equal(s.enabled, false);
