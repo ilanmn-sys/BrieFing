@@ -39,7 +39,7 @@ const finish = (run) => { agents.recordRun(id, run); agents.clearRunning(id); co
   const bin = process.env.CLAUDE_BIN || 'claude';
   let out = '', err = '', timedOut = false, spawnError = null;
   const mapped = tools.map((t) => mcpNames.mapToolName(t)); // this machine's real MCP server names
-  const child = spawn(bin, ['-p', prompt, '--allowedTools', mapped.join(',')], { cwd: agents.root, env: process.env });
+  const child = spawn(bin, ['-p', prompt, '--allowedTools', mapped.join(',')], { cwd: agents.root, env: process.env, stdio: ['ignore', 'pipe', 'pipe'] }); // stdin closed: never hang on an interactive prompt
   const timer = setTimeout(() => { timedOut = true; child.kill('SIGKILL'); }, TIMEOUT);
   child.stdout.on('data', (d) => { out = (out + d).slice(-20000); });
   child.stderr.on('data', (d) => { err = (err + d).slice(-4000); });

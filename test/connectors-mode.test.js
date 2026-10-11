@@ -105,3 +105,14 @@ test('a live monday read that is not cached is fetched once, then served from th
   assert.deepEqual(a, b); assert.match(JSON.stringify(a), /בעל אחריות/);
   assert.ok(calls().length - before <= 1, 'fetched at most once');
 });
+
+test('a claude that stops to ask a question fails fast with its own message, never hangs', async () => {
+  const keep = process.env.CLAUDE_BIN; process.env.CLAUDE_BIN = path.join(__dirname, 'fixtures', 'fake-claude-broken.js');
+  const t0 = Date.now();
+  try {
+    const r = await claude.fetchAll([{ key: 'a', server: 'Gmail', tool: 'search_threads', args: { query: 'x' } }]);
+    assert.equal(r.get('a').ok, false);
+    assert.match(r.get('a').error, /claude could not run/); assert.match(r.get('a').error, /credential mismatch/);
+    assert.ok(Date.now() - t0 < 10000, 'returned quickly');
+  } finally { process.env.CLAUDE_BIN = keep; }
+});

@@ -37,7 +37,8 @@ function run({ prompt, tools = [], maxTurns = 10, json = false }) {
     if (tools.length) args.push('--allowedTools', tools.join(','));
     if (process.env.CLAUDE_FETCH_MODEL) args.push('--model', process.env.CLAUDE_FETCH_MODEL);
     let out = '', err = '', done = false;
-    const child = spawn(bin, args, { cwd: workDir(), env: process.env });
+    // stdin closed: a CLI that stops to ask a question (login, provider switch) gets EOF and fails fast instead of hanging.
+    const child = spawn(bin, args, { cwd: workDir(), env: process.env, stdio: ['ignore', 'pipe', 'pipe'] });
     const timer = setTimeout(() => { if (!done) child.kill('SIGKILL'); }, TIMEOUT());
     child.stdout.on('data', (d) => { out += d; });
     child.stderr.on('data', (d) => { err = (err + d).slice(-2000); });
@@ -77,7 +78,11 @@ async function fetchAll(specs, { label = 'fetch' } = {}) {
   for (const s of specs) {
     const t = mcpNames.tool(s.server, s.tool, names);
     const call = parsed.calls.find((c) => !used.has(c.id) && c.name === t && (s.args ? subsetEqual(s.args, c.input) : true));
-    if (!call) { out.set(s.key, { ok: false, error: r.code !== 0 ? `${label}: claude exited ${r.code}: ${(r.err || '').trim().slice(-300)}` : `${label}: the call to ${t} was not made` }); continue; }
+    if (!call) {
+      const said = (r.err || r.out.split('\n').filter((l) => l.trim() && !l.trim().startsWith('{')).join(' ')).trim().slice(-300);
+      out.set(s.key, { ok: false, error: r.code !== 0 || !parsed.calls.length && said ? `${label}: claude could not run (exit ${r.code})${said ? ': ' + said : ''}` : `${label}: the call to ${t} was not made` });
+      continue;
+    }
     used.add(call.id);
     if (call.result === null) out.set(s.key, { ok: false, error: `${label}: ${t} returned nothing`, input: call.input });
     else if (call.isError) out.set(s.key, { ok: false, error: `${t}: ${String(call.result).slice(0, 300)}`, input: call.input });

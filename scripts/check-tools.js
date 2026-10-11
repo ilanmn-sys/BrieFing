@@ -52,7 +52,7 @@ if (require.main === module) {
   let text;
   if (i >= 0) text = fs.readFileSync(process.argv[i + 1], 'utf8');
   else {
-    const r = spawnSync(process.env.CLAUDE_BIN || 'claude', ['mcp', 'list'], { encoding: 'utf8', timeout: 60000 });
+    const r = spawnSync(process.env.CLAUDE_BIN || 'claude', ['mcp', 'list'], { encoding: 'utf8', timeout: 60000, stdio: ['ignore', 'pipe', 'pipe'] });
     if (r.error || r.status !== 0) { console.error('check-tools: could not run `claude mcp list`: ' + (r.error ? r.error.message : (r.stderr || r.stdout).trim().slice(-300))); process.exit(2); }
     text = r.stdout;
   }
