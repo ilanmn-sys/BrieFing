@@ -41,6 +41,7 @@ Read the last 40 messages of Pepper's DM. A message that you sent and that start
 
 ## 3. Phase A: this week's proposals
 
+0. **Dashboard notes first.** Ilan sends lessons from the Command Center dashboard as messages in Pepper's DM that start with `📝 למידה (<kind>):`. They come from Ilan's user id and may carry the "Sent using Claude" footer, so for these messages the footer does not disqualify them. For each one sent in the last 14 days whose `Message TS` is not yet in `LEARNING-LOG.md`, append one section 2 entry directly under the line that starts `Newest first.`, numbered one higher than the highest `S-` number anywhere in the file, type `correction` when kind is correction and `observation` otherwise, quoting Ilan's text verbatim and ending with the line `slack_ts:<Message TS>`. These entries count as signals in this run's window.
 1. **Window.** Section 2 entries dated after the date of the latest section 3 row that carries a `review_ts` (or the last 14 days if there is none). Read each entry in full.
 2. **What qualifies**, by this standard only:
    - **New rule:** at least **two independent signals** show the same failure, or one `correction` entry where Ilan stated the rule himself. One instance is not a rule: propose a **hypothesis** for section 4 instead, as the log does ("one confirmed instance, not yet a rule").

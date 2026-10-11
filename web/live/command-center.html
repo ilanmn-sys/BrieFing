@@ -1,0 +1,701 @@
+<title>Ilan's Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Heebo:wght@400;500;600&display=swap">
+<style>
+/* A live comms desk: Claude's next moves on top, the day on the left, the work queue and inbox on the right.
+   Every write happens only on an explicit click, and email only ever goes to Drafts. */
+:root{
+  --bg:#EDF0F3; --panel:#FFFFFF; --sunk:#F5F7F9; --ink:#18202B; --muted:#5B6676; --faint:#7D8896; --line:#DCE1E7;
+  --accent:#1D6A86; --accent-soft:#E2EFF4; --accent-ink:#0F4A5F; --on-accent:#FFFFFF;
+  --crit:#B93C28; --crit-soft:#FBEAE6; --warn:#9A6512; --warn-soft:#FBF1DE; --ok:#2B7349; --ok-soft:#E5F3EA; --idle:#6B7685; --idle-soft:#EEF1F4;
+  --spark:#6A4BB8; --spark-soft:#EFEAFA;
+  --f-display:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
+  --f-body:"Public Sans","Heebo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F141A; --panel:#161D25; --sunk:#1B232D; --ink:#E6EBF0; --muted:#9AA6B4; --faint:#7A8694; --line:#27313C;
+  --accent:#62B4D0; --accent-soft:#16303B; --accent-ink:#A9DCEC; --on-accent:#0B1A21;
+  --crit:#F0806A; --crit-soft:#3A1F1A; --warn:#E2B460; --warn-soft:#352A16; --ok:#73C493; --ok-soft:#173022; --idle:#9AA6B4; --idle-soft:#1E2731;
+  --spark:#B39CF0; --spark-soft:#261F3A;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F141A; --panel:#161D25; --sunk:#1B232D; --ink:#E6EBF0; --muted:#9AA6B4; --faint:#7A8694; --line:#27313C;
+  --accent:#62B4D0; --accent-soft:#16303B; --accent-ink:#A9DCEC; --on-accent:#0B1A21;
+  --crit:#F0806A; --crit-soft:#3A1F1A; --warn:#E2B460; --warn-soft:#352A16; --ok:#73C493; --ok-soft:#173022; --idle:#9AA6B4; --idle-soft:#1E2731;
+  --spark:#B39CF0; --spark-soft:#261F3A;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--f-body);padding:20px 16px 48px;margin:0}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+[dir="auto"]{unicode-bidi:plaintext}
+
+header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 20px}
+header .who{display:flex;flex-direction:column;gap:2px;min-width:0}
+header h1{font:700 26px/1.1 var(--f-display);letter-spacing:-.01em;margin:0;text-wrap:balance}
+header .sub{color:var(--muted);font-size:13px}
+header .chips{margin-left:auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:4px 10px;font-size:12px;color:var(--muted);white-space:nowrap}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--idle);flex:none}
+.dot.ok{background:var(--ok)}.dot.warn{background:var(--warn)}.dot.crit{background:var(--crit)}
+.dot.load{background:var(--accent);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.3}}
+
+button{font:500 13px/1.2 var(--f-body);color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 10px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+button:hover{background:var(--sunk)}
+button:disabled{opacity:.55;cursor:default}
+button.pri{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+button.pri:hover{filter:brightness(1.08)}
+button.spark{color:var(--spark);border-color:transparent;background:var(--spark-soft)}
+button.ghost{border-color:transparent;background:none;color:var(--muted)}
+button.ghost:hover{background:var(--sunk);color:var(--ink)}
+button.sm{padding:4px 8px;font-size:12.5px}
+input,select,textarea{font:14px/1.45 var(--f-body);color:var(--ink);background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:7px 9px;min-width:0;max-width:100%}
+textarea{width:100%;resize:vertical;min-height:90px}
+label.f{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted);min-width:0}
+.hint{font-size:12.5px;color:var(--muted)}
+
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);min-width:0}
+.ph{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.ph h2{font:700 16px/1.2 var(--f-display);margin:0}
+.ph .meta{color:var(--faint);font-size:12px;margin-left:auto}
+.empty{padding:14px 16px;color:var(--muted);font-size:13px}
+.err{color:var(--crit);background:var(--crit-soft);margin:10px 16px;border-radius:8px;padding:10px 12px;font-size:13px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.skel{height:12px;border-radius:6px;background:var(--sunk);margin:14px 16px}
+
+/* Claude's next moves */
+.ideas{background:linear-gradient(var(--panel),var(--panel)) padding-box,linear-gradient(120deg,var(--spark),var(--accent)) border-box;border:1.5px solid transparent}
+.ideas .ph h2::before{content:"✦ ";color:var(--spark)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;padding:12px 16px 14px}
+.card{border:1px solid var(--line);border-radius:9px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;background:var(--sunk);min-width:0}
+.card .k{font:600 11px var(--f-body);letter-spacing:.05em;text-transform:uppercase;color:var(--spark)}
+.card b{font-weight:600;overflow-wrap:anywhere}
+.card p{margin:0;color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.card .acts{display:flex;gap:6px;margin-top:auto;flex-wrap:wrap;padding:0}
+.card.done{opacity:.55}
+.thinking{padding:12px 16px;color:var(--muted);font-size:13px}
+
+main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;align-items:start}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+
+/* Rows */
+.row{padding:10px 16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px;transition:background-color .3s}
+.list > .row:first-child{border-top:0}
+.rh{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:2px 10px;align-items:start}
+.rh .t{font-weight:500;min-width:0;overflow-wrap:anywhere}
+.rh .t a{color:inherit;text-decoration:none}
+.rh .t a:hover{text-decoration:underline}
+.rh .d{grid-column:2;color:var(--muted);font-size:13px;min-width:0;overflow-wrap:anywhere}
+.rh .d b{font-weight:500;color:var(--ink)}
+.rh .r{font:500 12.5px var(--f-mono);font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap;text-align:right}
+.mark{width:8px;height:8px;border-radius:50%;margin-top:7px;background:var(--idle)}
+.mark.crit{background:var(--crit)}.mark.warn{background:var(--warn)}.mark.ok{background:var(--ok)}.mark.acc{background:var(--accent)}
+.acts{display:flex;flex-wrap:wrap;gap:6px;padding-left:18px}
+.pill{display:inline-block;font:600 11px/1.6 var(--f-body);letter-spacing:.03em;border-radius:999px;padding:0 8px;text-transform:uppercase;margin-left:6px;vertical-align:1px}
+.pill.crit{background:var(--crit-soft);color:var(--crit)}.pill.idle{background:var(--idle-soft);color:var(--idle)}
+.row.flash{background:var(--spark-soft)}
+.row.gone{opacity:.5}
+
+/* Inline action drawer */
+.drawer{margin-left:18px;border:1px solid var(--line);border-radius:9px;background:var(--sunk);padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.drawer .line{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+.drawer .out{font-size:13px}
+.drawer .out.ok{color:var(--ok)}.drawer .out.bad{color:var(--crit)}
+.drawer textarea,.drawer input,.drawer select{background:var(--panel)}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{font:500 13px var(--f-body);color:var(--muted);background:none;border:0;border-radius:8px;padding:6px 10px}
+.tab[aria-selected="true"]{background:var(--accent-soft);color:var(--accent-ink)}
+.tab .n{font:500 11px var(--f-mono);background:var(--sunk);border-radius:999px;padding:0 6px;color:var(--muted)}
+.tab[aria-selected="true"] .n{background:var(--panel)}
+
+/* Day */
+.ev{display:grid;grid-template-columns:92px minmax(0,1fr);gap:10px;padding:8px 16px;border-top:1px solid var(--line);align-items:baseline}
+.list > .ev:first-child{border-top:0}
+.ev .when{font:500 12.5px var(--f-mono);font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.ev .what{min-width:0;overflow-wrap:anywhere}
+.ev .what a{color:inherit;text-decoration:none}
+.ev.now{background:var(--accent-soft)}
+.ev.past .what,.ev.past .when{color:var(--faint)}
+.allday{display:flex;flex-wrap:wrap;gap:6px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.allday span{font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:6px;padding:2px 8px;color:var(--muted)}
+.daysw{display:flex;gap:4px}
+
+.learn{padding:12px 16px;display:flex;flex-direction:column;gap:8px}
+.learn .line{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.foot{color:var(--faint);font-size:12.5px;text-align:center;max-width:70ch;margin:0 auto;text-wrap:balance}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:9px;font-size:13px;max-width:calc(100% - 32px);box-shadow:0 6px 24px rgba(0,0,0,.2);z-index:9}
+
+@media (max-width:900px){main{grid-template-columns:minmax(0,1fr)}.col.work{order:-1}}
+@media (max-width:620px){header .chips{margin-left:0}.rh{grid-template-columns:auto minmax(0,1fr)}.rh .r{grid-column:2;text-align:left}.acts{padding-left:0}.drawer{margin-left:0}.ev{grid-template-columns:78px minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.dot.load{animation:none}.row{transition:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="who">
+      <h1>Ilan's Command Center</h1>
+      <span class="sub" id="sub">Connecting…</span>
+    </div>
+    <div class="chips" id="chips"></div>
+  </header>
+
+  <section class="panel ideas" aria-labelledby="ideas-h">
+    <div class="ph"><h2 id="ideas-h">Claude's next moves</h2><span class="meta" id="ideas-meta"></span>
+      <button class="spark sm" id="more-ideas" hidden>✦ More ideas</button></div>
+    <div id="ideas"><div class="thinking">Waiting for your board, inbox and calendar…</div></div>
+  </section>
+
+  <main>
+    <div class="col">
+      <section class="panel" aria-labelledby="day-h">
+        <div class="ph"><h2 id="day-h">Today</h2>
+          <div class="daysw" role="tablist" aria-label="Day"><button class="tab" role="tab" data-day="0" aria-selected="true">Today</button><button class="tab" role="tab" data-day="1" aria-selected="false">Tomorrow</button></div>
+          <span class="meta" id="day-meta"></span></div>
+        <div id="day"><div class="skel"></div><div class="skel"></div></div>
+      </section>
+
+      <section class="panel" aria-labelledby="ag-h">
+        <div class="ph"><h2 id="ag-h">Agents</h2><span class="meta" id="ag-meta"></span></div>
+        <div id="agents"><div class="skel"></div></div>
+      </section>
+
+      <section class="panel" aria-labelledby="ln-h">
+        <div class="ph"><h2 id="ln-h">Teach the agents</h2></div>
+        <div class="learn">
+          <span class="hint">A correction, preference or rule. It goes to Pepper as a 📝 note, and the weekly learning review adds it to the learning log as a signal.</span>
+          <label class="f">Kind<select id="ln-kind"><option value="correction">Correction</option><option value="preference">Preference</option><option value="observation">Observation</option></select></label>
+          <textarea id="ln-text" dir="auto" placeholder="e.g. Never suggest Friday calls with US journalists"></textarea>
+          <div class="line"><button class="pri" id="ln-send">Send to Pepper</button><span class="hint" id="ln-out"></span></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="col work">
+      <section class="panel" aria-labelledby="tk-h">
+        <div class="ph"><h2 id="tk-h">Tasks</h2><span class="meta" id="tk-meta"></span></div>
+        <div class="tabs" role="tablist" id="tk-tabs"></div>
+        <div id="tasks"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+      </section>
+
+      <section class="panel" aria-labelledby="in-h">
+        <div class="ph"><h2 id="in-h">Inbox</h2><span class="meta" id="in-meta"></span></div>
+        <div id="inbox"><div class="skel"></div><div class="skel"></div></div>
+      </section>
+    </div>
+  </main>
+
+  <p class="foot">Live from monday, Gmail, Google Calendar, Slack and your Claude routines, with your own connector access. Nothing is written until you click. Email replies are saved to Gmail Drafts and never sent.</p>
+</div>
+
+<script>
+(() => {
+  // ---- Fixed IDs (from config.json in the BrieFing repo) ----
+  const TZ = 'Asia/Jerusalem';
+  const ME_EMAIL = 'ilanmn@monday.com';
+  const PEPPER = 'U0BBLHZH4DC';            // Pepper's Slack user id: DM by user id, never a channel id
+  const BOARD = 18416855289;               // Ilan's projects
+  const COL = { status: 'status', deadline: 'date4', priority: 'color_mm5wqmy7', person: 'person', calBlock: 'text_mm4rwr1z' };
+  const GROUPS = [
+    { id: 'group_mm4rgvq6', key: 'today', label: '🔥 Today' },
+    { id: 'group_mm4rm62r', key: 'week', label: 'This week' },
+    { id: 'group_title', key: 'waiting', label: 'Waiting' },
+    { id: 'group_mm4rym7v', key: 'pepper', label: 'Pepper' },
+  ];
+  const S = { MON: 'monday.com', GM: 'Gmail', CAL: 'Google Calendar', SL: 'Slack', CCR: 'Claude Code Remote' };
+  const TASK_KINDS = ['done', 'update', 'block', 'delegate'];
+
+  // ---- State ----
+  const st = { tasks: null, inbox: null, events: { 0: null, 1: null }, agents: null, src: {}, tab: 'today', day: 0, ideas: [], openDrawer: null, doneIds: new Set() };
+  let mcp = null, sample = null;
+
+  // ---- Small helpers ----
+  const $ = (id) => document.getElementById(id);
+  function h(tag, attrs, ...kids) {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) {
+      if (v == null || v === false) continue;
+      if (k === 'class') el.className = v;
+      else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+      else el.setAttribute(k, v === true ? '' : v);
+    }
+    for (const c of kids.flat()) if (c != null && c !== false && c !== '') el.append(c instanceof Node ? c : String(c));
+    return el;
+  }
+  const decode = (s) => { const t = document.createElement('textarea'); t.innerHTML = String(s || ''); return t.value; };
+  const fmt = (d, o) => new Intl.DateTimeFormat('en-GB', { timeZone: TZ, ...o }).format(d);
+  const ymd = (d) => new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
+  const hm = (d) => fmt(d, { hour: '2-digit', minute: '2-digit', hour12: false });
+  const today = () => ymd(new Date());
+  const dayStr = (off) => ymd(new Date(Date.now() + off * 864e5));
+  const ddmm = (s) => s ? s.slice(8, 10) + '.' + s.slice(5, 7) : '';
+  const plusMin = (date, time, mins) => { const [H, M] = time.split(':').map(Number); const d = new Date(date + 'T00:00:00Z'); d.setUTCMinutes(H * 60 + M + mins); return d.toISOString().slice(0, 16) + ':00'; };
+  const emailOf = (s) => { const m = String(s || '').match(/[\w.+-]+@[\w.-]+\.\w+/); return m ? m[0] : ''; };
+  const nameOf = (s) => { const t = String(s || '').replace(/<[^>]*>/, '').replace(/"/g, '').trim(); return t || emailOf(s); };
+  const escHtml = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const ago = (ms) => { const m = Math.round((Date.now() - ms) / 60000); return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : Math.round(m / 60) + ' h ago'; };
+  function toast(msg) { const t = h('div', { class: 'toast', role: 'status' }, msg); document.body.append(t); setTimeout(() => t.remove(), 3800); }
+
+  function errText(e, server) {
+    const c = e && e.code;
+    if (c === 'server_not_connected' || c === 'server_not_found') return `${server} isn't connected for you. Connect it in claude.ai → Settings → Connectors.`;
+    if (c === 'needs_reauth') return `${server} needs you to sign in again (claude.ai → Settings → Connectors).`;
+    if (c === 'not_granted' || c === 'consent_required' || c === 'not_in_manifest') return `Access to ${server} wasn't allowed for this page. Allow it in the artifact's Permissions menu.`;
+    if (c === 'selection_required') return `You have more than one ${server} connector: choose one in the page's Permissions menu.`;
+    if (c === 'rate_limited') return `${server} is rate-limiting. Wait a minute and retry.`;
+    if (c === 'blocked_by_policy') return `Your organization's policy blocks this ${server} action.`;
+    if (c === 'cancelled') return 'Cancelled.';
+    return `${server}: ${(e && e.message) || 'something went wrong'}`;
+  }
+  const isDenial = (e) => e && ['needs_reauth', 'server_not_connected', 'server_not_found', 'not_granted', 'consent_required', 'not_in_manifest', 'blocked_by_policy', 'selection_required'].includes(e.code);
+
+  function setSrc(key, state, note) { st.src[key] = { state, note }; renderChips(); }
+  function renderChips() {
+    const names = { mon: 'monday', gm: 'Gmail', cal: 'Calendar', ag: 'Agents' };
+    $('chips').replaceChildren(...Object.entries(names).map(([k, n]) => {
+      const s = st.src[k] || { state: 'load', note: 'Loading' };
+      return h('span', { class: 'chip', title: s.note || '' }, h('span', { class: 'dot ' + s.state }), n);
+    }), h('button', { class: 'ghost sm', onclick: refreshAll, title: 'Refresh everything' }, '↻ Refresh'));
+  }
+  function errBox(msg, retry) { return h('div', { class: 'err', role: 'alert' }, h('span', {}, msg), retry && h('button', { class: 'sm', onclick: retry }, 'Retry')); }
+
+  // ---- Writes: only from a click ----
+  async function call(server, tool, input) { const r = await mcp.callTool(server, tool, input); return r.payload; }
+  const dmPepper = (text) => call(S.SL, 'slack_send_message', { channel_id: PEPPER, message: text });
+
+  // ---- Reads: watched, so the page keeps itself current ----
+  const unsubs = [];
+  function watch(server, tool, input, key, onData, onErr, every) {
+    unsubs.push(mcp.watchTool(server, tool, input, (ev) => {
+      if (ev.type === 'data') {
+        const at = ev.result.cache ? ev.result.cache.storedAt : Date.now();
+        setSrc(key, 'ok', 'Updated ' + ago(at));
+        try { onData(ev.result.payload || {}, at); } catch (e) { onErr({ code: 'transform_error', message: e.message }, true); }
+      } else {
+        const e = ev.error;
+        setSrc(key, isDenial(e) ? 'crit' : 'warn', errText(e, server));
+        onErr(e, isDenial(e));
+      }
+    }, { cache: { staleTime: 60000 }, refetchInterval: every || 300000 }));
+  }
+
+  function startWatches() {
+    unsubs.splice(0).forEach((u) => u());
+    watch(S.MON, 'get_board_items_page', {
+      boardId: BOARD, limit: 300, includeColumns: true, includeGroup: true,
+      columnIds: [COL.status, COL.deadline, COL.priority, COL.person],
+      filters: [{ columnId: 'group', operator: 'any_of', compareValue: GROUPS.map((g) => g.id) }],
+    }, 'mon', (p, at) => {
+      st.tasks = (p.items || []).filter((it) => (it.column_values || {})[COL.status] !== 'Done').map((it) => {
+        const cv = it.column_values || {};
+        return { id: String(it.id), name: it.name, url: it.url, group: it.group && it.group.id, status: cv[COL.status], deadline: cv[COL.deadline], priority: cv[COL.priority], owner: cv[COL.person] };
+      });
+      $('tk-meta').textContent = 'Updated ' + ago(at);
+      renderTasks(); maybeIdeas();
+    }, (e, drop) => { if (drop || !st.tasks) { st.tasks = drop ? null : st.tasks; $('tk-tabs').replaceChildren(); $('tasks').replaceChildren(errBox(errText(e, 'monday'), refreshAll)); } });
+
+    watch(S.GM, 'search_threads', { query: 'in:inbox category:primary newer_than:3d -from:me', pageSize: 20 }, 'gm', (p, at) => {
+      st.inbox = (p.threads || []).map((t) => {
+        const ms = t.messages || []; const last = ms[ms.length - 1] || {};
+        return { id: String(t.id), count: t.messageCount || ms.length, from: last.sender, subject: decode(last.subject), snippet: decode(last.snippet), date: last.date, unread: (last.labelIds || []).includes('UNREAD'), url: t.viewUrl || last.viewUrl };
+      });
+      $('in-meta').textContent = 'Primary, last 3 days · ' + ago(at);
+      renderInbox(); maybeIdeas();
+    }, (e, drop) => { if (drop || !st.inbox) { st.inbox = drop ? null : st.inbox; $('inbox').replaceChildren(errBox(errText(e, 'Gmail'), refreshAll)); } });
+
+    for (const off of [0, 1]) {
+      watch(S.CAL, 'list_events', { startTime: dayStr(off) + 'T00:00:00', endTime: dayStr(off + 1) + 'T00:00:00', orderBy: 'startTime', pageSize: 60 }, 'cal', (p) => {
+        st.events[off] = (p.events || []).filter((e) => e.status !== 'cancelled' && !(e.attendees || []).some((a) => a.self && a.responseStatus === 'declined'));
+        if (st.day === off) renderDay();
+        maybeIdeas();
+      }, (e, drop) => { if (drop) st.events[off] = null; if (st.day === off && (drop || !st.events[off])) $('day').replaceChildren(errBox(errText(e, 'Google Calendar'), refreshAll)); });
+    }
+
+    watch(S.CCR, 'list_triggers', { enabled: true, limit: 60 }, 'ag', (p, at) => {
+      st.agents = (p.data || []).filter((t) => /^Agent:/i.test(t.name || '')).sort((a, b) => String(a.next_run_at).localeCompare(String(b.next_run_at)));
+      $('ag-meta').textContent = st.agents.length + ' on schedule · ' + ago(at);
+      renderAgents();
+    }, (e, drop) => { if (drop || !st.agents) { st.agents = drop ? null : st.agents; $('agents').replaceChildren(errBox(errText(e, 'Claude Code Remote'), refreshAll)); } }, 600000);
+  }
+
+  async function refreshAll() {
+    try { await mcp.invalidate(); } catch (_) { /* nothing cached; the watches refetch anyway */ }
+    startWatches(); toast('Refreshing…');
+  }
+
+  // ---- Tasks ----
+  const prioMark = (p) => /high|🔥|critical|urgent/i.test(p || '') ? 'crit' : /med/i.test(p || '') ? 'warn' : 'idle';
+  function renderTasks() {
+    if (!st.tasks) return;
+    const by = Object.fromEntries(GROUPS.map((g) => [g.key, st.tasks.filter((t) => t.group === g.id)]));
+    $('tk-tabs').replaceChildren(...GROUPS.map((g) => h('button', {
+      class: 'tab', role: 'tab', 'aria-selected': String(st.tab === g.key),
+      onclick: () => { st.tab = g.key; try { localStorage.setItem('cc-tab', g.key); } catch (_) {} renderTasks(); },
+    }, g.label, h('span', { class: 'n' }, by[g.key].length))));
+    const rows = (by[st.tab] || []).slice().sort((a, b) => (a.deadline || '9999').localeCompare(b.deadline || '9999'));
+    if (!rows.length) { $('tasks').replaceChildren(h('div', { class: 'empty' }, 'Nothing open here.')); return; }
+    const t0 = today();
+    $('tasks').replaceChildren(h('div', { class: 'list' }, rows.map((t) => {
+      const overdue = t.deadline && t.deadline < t0;
+      const row = h('div', { class: 'row' + (st.doneIds.has(t.id) ? ' gone' : ''), id: 'task-' + t.id },
+        h('div', { class: 'rh' },
+          h('span', { class: 'mark ' + (overdue ? 'crit' : prioMark(t.priority)) }),
+          h('span', { class: 't', dir: 'auto' }, h('a', { href: t.url, target: '_blank', rel: 'noopener' }, t.name),
+            overdue && h('span', { class: 'pill crit' }, 'overdue'), t.status && h('span', { class: 'pill idle' }, t.status)),
+          h('span', { class: 'r' }, t.deadline ? ddmm(t.deadline) : '—'),
+          (t.priority || t.owner) && h('span', { class: 'd' }, [t.priority, t.owner].filter(Boolean).join(' · '))),
+        h('div', { class: 'acts' },
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'done', t) }, '✓ Done'),
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'update', t) }, '✎ Update'),
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'block', t) }, '◷ Block time'),
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'delegate', t) }, '→ Hand off')));
+      return row;
+    })));
+  }
+
+  // ---- Inbox ----
+  function renderInbox() {
+    if (!st.inbox) return;
+    if (!st.inbox.length) { $('inbox').replaceChildren(h('div', { class: 'empty' }, 'Nothing new in Primary for the last 3 days.')); return; }
+    $('inbox').replaceChildren(h('div', { class: 'list' }, st.inbox.map((m) => {
+      const d = m.date ? new Date(m.date) : null;
+      const row = h('div', { class: 'row', id: 'mail-' + m.id },
+        h('div', { class: 'rh' },
+          h('span', { class: 'mark ' + (m.unread ? 'acc' : 'idle') }),
+          h('span', { class: 't', dir: 'auto' }, h('a', { href: m.url, target: '_blank', rel: 'noopener' }, m.subject || '(no subject)'), m.count > 1 && h('span', { class: 'pill idle' }, m.count)),
+          h('span', { class: 'r' }, d ? (ymd(d) === today() ? hm(d) : ddmm(ymd(d))) : ''),
+          h('span', { class: 'd', dir: 'auto' }, h('b', {}, nameOf(m.from)), ' — ', m.snippet)),
+        h('div', { class: 'acts' },
+          h('button', { class: 'sm spark', onclick: () => openDrawer(row, 'reply', m) }, '✦ Suggest reply'),
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'mailtask', m) }, '→ Make it a task')));
+      return row;
+    })));
+  }
+
+  // ---- Day ----
+  function renderDay() {
+    const evs = st.events[st.day];
+    $('day-h').textContent = st.day ? 'Tomorrow' : 'Today';
+    $('day-meta').textContent = fmt(new Date(Date.now() + st.day * 864e5), { weekday: 'short', day: '2-digit', month: '2-digit' });
+    if (!evs) { $('day').replaceChildren(h('div', { class: 'skel' })); return; }
+    const allDay = evs.filter((e) => e.start && e.start.date && !e.start.dateTime);
+    const timed = evs.filter((e) => e.start && e.start.dateTime);
+    const now = Date.now(), kids = [];
+    if (allDay.length) kids.push(h('div', { class: 'allday' }, allDay.map((e) => h('span', { dir: 'auto' }, e.summary || 'Busy'))));
+    if (!timed.length) kids.push(h('div', { class: 'empty' }, 'No meetings. Room to block focus time on a 🔥 task.'));
+    else kids.push(h('div', { class: 'list' }, timed.map((e) => {
+      const s = new Date(e.start.dateTime), en = new Date((e.end && e.end.dateTime) || e.start.dateTime);
+      const cls = 'ev' + (st.day === 0 && s <= now && en > now ? ' now' : st.day === 0 && en <= now ? ' past' : '');
+      const title = e.summary || 'Busy';
+      return h('div', { class: cls }, h('span', { class: 'when' }, hm(s) + '–' + hm(en)),
+        h('span', { class: 'what', dir: 'auto' }, e.htmlLink ? h('a', { href: e.htmlLink, target: '_blank', rel: 'noopener' }, title) : title));
+    })));
+    $('day').replaceChildren(...kids);
+  }
+  document.querySelectorAll('[data-day]').forEach((b) => b.addEventListener('click', () => {
+    st.day = Number(b.dataset.day);
+    document.querySelectorAll('[data-day]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+    renderDay();
+  }));
+
+  // ---- Agents ----
+  function renderAgents() {
+    if (!st.agents) return;
+    if (!st.agents.length) { $('agents').replaceChildren(h('div', { class: 'empty' }, 'No agent routines on a schedule yet.')); return; }
+    $('agents').replaceChildren(h('div', { class: 'list' }, st.agents.map((a) => {
+      const lr = a.last_run || {};
+      const ok = /SUCCEEDED/.test(lr.status || ''), bad = /FAIL/.test(lr.status || '');
+      const row = h('div', { class: 'row', id: 'agent-' + a.id },
+        h('div', { class: 'rh' },
+          h('span', { class: 'mark ' + (bad ? 'crit' : ok ? 'ok' : 'idle') }),
+          h('span', { class: 't' }, a.name.replace(/^Agent:\s*/i, '')),
+          h('span', { class: 'r' }, a.next_run_at ? 'next ' + fmt(new Date(a.next_run_at), { weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false }) : ''),
+          h('span', { class: 'd' }, lr.fired_at ? 'Last run ' + fmt(new Date(lr.fired_at), { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }) + (bad ? ' · failed' : ok ? ' · ok' : '') : 'Not run yet')),
+        h('div', { class: 'acts' }, h('button', { class: 'sm', onclick: () => openDrawer(row, 'run', a) }, '▶ Run now')));
+      return row;
+    })));
+  }
+
+  // ---- Drawers: one inline form at a time; every write sits behind its own button ----
+  function openDrawer(row, kind, obj, preset) {
+    if (!mcp) return;
+    if (st.openDrawer) st.openDrawer.remove();
+    const d = h('div', { class: 'drawer' });
+    const out = h('div', { class: 'out', role: 'status' });
+    const close = h('button', { class: 'ghost sm', onclick: () => { d.remove(); st.openDrawer = null; } }, 'Close');
+    const say = (msg, ok) => { out.className = 'out ' + (ok === true ? 'ok' : ok === false ? 'bad' : ''); out.textContent = msg; };
+    const busy = (btn, on, label) => { btn.disabled = on; if (label) btn.textContent = label; };
+    DRAWERS[kind](d, obj, { out, say, busy, close, preset: preset || {} });
+    row.append(d); st.openDrawer = d;
+    d.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    const f = d.querySelector('textarea,input'); if (f) f.focus({ preventScroll: true });
+  }
+
+  async function draftWithClaude(prompt, ta, btn, say) {
+    if (!sample) { say('Claude drafting is not available in this view.', false); return; }
+    const was = btn.textContent; btn.disabled = true; btn.textContent = '✦ Writing…';
+    try { await sample(prompt, { cache: false, onText: ({ text }) => { ta.value = text; } }); }
+    catch (e) { say(e.code === 'not_granted' ? 'Claude access was not allowed for this page.' : e.code === 'rate_limited' ? 'Claude is busy. Try again in a minute.' : 'Could not draft: ' + (e.message || e.code), false); }
+    btn.disabled = false; btn.textContent = was;
+  }
+
+  function markActed(ref) { st.ideas.forEach((i) => { if (String(i.ref) === String(ref)) i.done = true; }); renderIdeas(); maybeMoreAfterAction(); }
+
+  const DRAWERS = {
+    done(d, t, { out, say, busy, close }) {
+      const go = h('button', { class: 'pri' }, 'Mark Done + tell Pepper');
+      go.onclick = async () => {
+        busy(go, true, 'Working…');
+        try { await call(S.MON, 'change_item_column_values', { boardId: BOARD, itemId: Number(t.id), columnValues: JSON.stringify({ [COL.status]: { label: 'Done' } }) }); }
+        catch (e) { say('Board not updated and Pepper not told. ' + errText(e, 'monday'), false); busy(go, false, 'Retry'); return; }
+        try { await dmPepper(`✅ משימה הושלמה: «${t.name.slice(0, 200)}»`); say('Done on the board, and Pepper was told.', true); }
+        catch (e) { say('Done on the board, but telling Pepper failed. ' + errText(e, 'Slack'), false); }
+        st.doneIds.add(t.id); d.closest('.row').classList.add('gone'); go.remove();
+        mcp.invalidate(S.MON).catch(() => {}); markActed(t.id);
+      };
+      d.append(h('div', { class: 'hint' }, 'Sets status to Done on the board, then DMs Pepper: done means done everywhere.'), h('div', { class: 'line' }, go, close), out);
+    },
+
+    update(d, t, { say, busy, close, out, preset }) {
+      const ta = h('textarea', { dir: 'auto', placeholder: 'What changed, what is next, who owns it…' });
+      if (preset.text) ta.value = preset.text;
+      const ai = h('button', { class: 'spark sm' }, '✦ Draft with Claude');
+      ai.onclick = () => draftWithClaude(
+        `Write a short monday.com item update for Ilan Manassen (Senior Communications Manager, monday.com). Item: "${t.name}". Deadline: ${t.deadline || 'none'}. Status: ${t.status || 'not set'}. ` +
+        (ta.value.trim() ? `Ilan's notes to turn into the update: """${ta.value.trim()}""". ` : 'Ilan gave no notes: write a crisp status-update template with [brackets] for facts only he knows. ') +
+        'Format: 2-4 short lines covering what happened, the next step, and owner and date if known. Same language as the item name. Plain text, no markdown, no greeting. Reply with the update only.', ta, ai, say);
+      const go = h('button', { class: 'pri' }, 'Post update');
+      go.onclick = async () => {
+        const txt = ta.value.trim(); if (!txt) { say('Write something first.', false); return; }
+        busy(go, true, 'Posting…');
+        try { await call(S.MON, 'create_update', { itemId: Number(t.id), body: escHtml(txt).replace(/\n/g, '<br>') }); say('Update posted on the item.', true); go.remove(); markActed(t.id); }
+        catch (e) { say(errText(e, 'monday'), false); busy(go, false, 'Retry'); }
+      };
+      d.append(ta, h('div', { class: 'line' }, ai, go, close), out);
+    },
+
+    block(d, t, { say, busy, close, out, preset }) {
+      const nextHalf = new Date(Math.ceil(Date.now() / 18e5) * 18e5);
+      const date = h('input', { type: 'date', value: preset.date || today() });
+      const time = h('input', { type: 'time', value: preset.time || hm(nextHalf), step: 900 });
+      const dur = h('select', {}, [30, 45, 60, 90, 120].map((m) => h('option', { value: m, selected: m === (preset.mins || 60) }, m + ' min')));
+      const title = h('input', { type: 'text', value: 'Focus: ' + t.name.slice(0, 80), style: 'flex:1;min-width:180px', dir: 'auto' });
+      const go = h('button', { class: 'pri' }, 'Add to calendar');
+      go.onclick = async () => {
+        if (!date.value || !time.value) { say('Pick a day and a start time.', false); return; }
+        busy(go, true, 'Adding…');
+        try {
+          const ev = await call(S.CAL, 'create_event', { summary: title.value, startTime: date.value + 'T' + time.value + ':00', endTime: plusMin(date.value, time.value, Number(dur.value)), availability: 'AVAILABILITY_BUSY', description: 'From the Command Center. Task: ' + (t.url || t.name) });
+          let msg = `Blocked ${time.value}, ${ddmm(date.value)}.`;
+          if (ev && ev.id) {
+            try { await call(S.MON, 'change_item_column_values', { boardId: BOARD, itemId: Number(t.id), columnValues: JSON.stringify({ [COL.calBlock]: String(ev.id) }) }); msg += ' Linked on the task.'; }
+            catch (_) { msg += ' (Could not link it on the task.)'; }
+          }
+          say(msg, true); go.remove(); mcp.invalidate(S.CAL).catch(() => {}); markActed(t.id);
+        } catch (e) { say(errText(e, 'Google Calendar'), false); busy(go, false, 'Retry'); }
+      };
+      d.append(h('div', { class: 'hint' }, 'On your calendar only. No guests are invited.'),
+        h('div', { class: 'line' }, h('label', { class: 'f' }, 'Day', date), h('label', { class: 'f' }, 'Start', time), h('label', { class: 'f' }, 'Length', dur)),
+        h('label', { class: 'f' }, 'Title', title), h('div', { class: 'line' }, go, close), out);
+    },
+
+    delegate(d, t, { say, busy, close, out, preset }) {
+      const target = h('select', {}, h('option', { value: 'pepper' }, 'Pepper (Slack)'), (st.agents || []).map((a) => h('option', { value: a.id }, 'Agent: ' + a.name.replace(/^Agent:\s*/i, ''))));
+      const ta = h('textarea', { dir: 'auto' });
+      ta.value = preset.text || `Please take this on: «${t.name}»${t.deadline ? ' (due ' + ddmm(t.deadline) + ')' : ''}\n${t.url || ''}`;
+      const go = h('button', { class: 'pri' }, 'Send');
+      go.onclick = async () => {
+        busy(go, true, 'Sending…');
+        try {
+          if (target.value === 'pepper') { await dmPepper('🤖 ' + ta.value.trim()); say('Sent to Pepper.', true); }
+          else { await call(S.CCR, 'fire_trigger', { trigger_id: target.value, text: ta.value.trim() }); say('Agent started with your note. It reports where it always does.', true); }
+          go.remove(); markActed(t.id);
+        } catch (e) { say(errText(e, target.value === 'pepper' ? 'Slack' : 'Claude Code Remote'), false); busy(go, false, 'Retry'); }
+      };
+      d.append(h('label', { class: 'f' }, 'Hand to', target), ta, h('div', { class: 'line' }, go, close), out);
+    },
+
+    reply(d, m, { say, busy, close, out, preset }) {
+      const how = h('input', { type: 'text', placeholder: 'Optional direction, e.g. “yes for Tuesday, ask for questions in advance”', style: 'width:100%', dir: 'auto', value: preset.how || '' });
+      const ta = h('textarea', { dir: 'auto', placeholder: 'Claude drafts here. Edit freely.', style: 'min-height:150px' });
+      const ai = h('button', { class: 'spark sm' }, '✦ Draft reply');
+      const go = h('button', { class: 'pri' }, 'Save to Gmail Drafts');
+      let thread = null, replyTo = null;
+      async function loadThread() {
+        if (thread) return;
+        const p = await call(S.GM, 'get_thread', { threadId: m.id, messageFormat: 'PLAIN_TEXT' });
+        thread = p.messages || [];
+        replyTo = [...thread].reverse().find((x) => emailOf(x.sender).toLowerCase() !== ME_EMAIL) || thread[thread.length - 1] || null;
+      }
+      ai.onclick = async () => {
+        say('Reading the whole thread…');
+        try { await loadThread(); } catch (e) { say(errText(e, 'Gmail'), false); return; }
+        say('');
+        const text = thread.map((x) => `From: ${x.sender}\nDate: ${x.date}\n\n${(x.plaintextBody || decode(x.snippet) || '').replace(/\|\s*\|/g, ' ').replace(/\n{3,}/g, '\n\n')}`).join('\n\n---\n\n').slice(-9000);
+        await draftWithClaude(
+          'You draft email replies for Ilan Manassen, Senior Communications Manager at monday.com. Read the whole thread, then write ONLY the reply body: plain text, no subject line, no markdown. ' +
+          'Use the language of the latest message. Be concise, warm and specific, and answer every question asked. ' +
+          'Never commit to a budget, approval, price or decision: write [Ilan to decide: …] where one is needed. Never invent facts, dates or numbers: put anything unknown in [brackets]. Sign off as "Ilan". ' +
+          (how.value.trim() ? `Ilan's direction for this reply: """${how.value.trim()}""". ` : '') + '\n\nTHREAD (oldest first):\n' + text, ta, ai, say);
+      };
+      go.onclick = async () => {
+        const body = ta.value.trim(); if (!body) { say('The draft is empty.', false); return; }
+        busy(go, true, 'Saving…');
+        try {
+          await loadThread();
+          const subj = (replyTo && decode(replyTo.subject)) || m.subject || '';
+          const to = emailOf(replyTo && replyTo.sender) || emailOf(m.from);
+          const p = await call(S.GM, 'create_draft', { to: to ? [to] : [], subject: /^re:/i.test(subj) ? subj : 'Re: ' + subj, body, replyToMessageId: replyTo ? replyTo.id : undefined });
+          out.className = 'out ok';
+          out.replaceChildren('Saved to Drafts. Nothing was sent. ', p && p.viewUrl ? h('a', { href: p.viewUrl, target: '_blank', rel: 'noopener' }, 'Open in Gmail') : '');
+          go.remove(); markActed(m.id);
+        } catch (e) { say(errText(e, 'Gmail'), false); busy(go, false, 'Retry'); }
+      };
+      d.append(how, ta, h('div', { class: 'line' }, ai, go, close), out);
+      if (sample) ai.click();
+    },
+
+    mailtask(d, m, { say, busy, close, out }) {
+      const ta = h('textarea', { dir: 'auto' });
+      ta.value = `📌 Please add a task from this email: «${m.subject}» from ${nameOf(m.from)}\n${m.url || ''}`;
+      const go = h('button', { class: 'pri' }, 'Send to Pepper');
+      go.onclick = async () => {
+        busy(go, true, 'Sending…');
+        try { await dmPepper(ta.value.trim()); say('Sent. Pepper files it on the board.', true); go.remove(); markActed(m.id); }
+        catch (e) { say(errText(e, 'Slack'), false); busy(go, false, 'Retry'); }
+      };
+      d.append(h('div', { class: 'hint' }, 'Pepper runs the board, so she files it in the right group with the right owner.'), ta, h('div', { class: 'line' }, go, close), out);
+    },
+
+    run(d, a, { say, busy, close, out, preset }) {
+      const ta = h('input', { type: 'text', placeholder: 'Optional note for this run', style: 'width:100%', dir: 'auto', value: preset.text || '' });
+      const go = h('button', { class: 'pri' }, 'Run it now');
+      go.onclick = async () => {
+        busy(go, true, 'Starting…');
+        try {
+          await call(S.CCR, 'fire_trigger', ta.value.trim() ? { trigger_id: a.id, text: ta.value.trim() } : { trigger_id: a.id });
+          say('Started. It reports in Slack like a scheduled run.', true); go.remove(); mcp.invalidate(S.CCR).catch(() => {}); markActed(a.id);
+        } catch (e) { say(errText(e, 'Claude Code Remote'), false); busy(go, false, 'Retry'); }
+      };
+      d.append(h('div', { class: 'hint' }, 'Runs the same routine as its schedule, once, right now.'), ta, h('div', { class: 'line' }, go, close), out);
+    },
+  };
+
+  // ---- Teach the agents ----
+  $('ln-send').addEventListener('click', async () => {
+    const txt = $('ln-text').value.trim(), out = $('ln-out'), b = $('ln-send');
+    if (!txt) { out.textContent = 'Write the lesson first.'; out.style.color = ''; return; }
+    if (!mcp) { out.textContent = 'Not connected.'; return; }
+    b.disabled = true; out.textContent = 'Sending…'; out.style.color = '';
+    try { await dmPepper(`📝 למידה (${$('ln-kind').value}): ${txt}`); out.textContent = 'Sent. The weekly review picks it up.'; out.style.color = 'var(--ok)'; $('ln-text').value = ''; }
+    catch (e) { out.textContent = errText(e, 'Slack'); out.style.color = 'var(--crit)'; }
+    b.disabled = false;
+  });
+
+  // ---- Claude's next moves: proactive, and it keeps coming back with more ----
+  let ideasRan = false, ideasBusy = false, ideaTimer = null;
+  function maybeIdeas() {
+    if (ideasRan) return;
+    clearTimeout(ideaTimer);
+    const ready = st.tasks && st.inbox && st.events[0];
+    ideaTimer = setTimeout(() => { if (!ideasRan && (st.tasks || st.inbox)) { ideasRan = true; getIdeas(false); } }, ready ? 300 : 9000);
+  }
+  function maybeMoreAfterAction() { if (ideasRan && !ideasBusy && st.ideas.filter((i) => !i.done && !i.dismissed).length < 2) getIdeas(true); }
+
+  function context() {
+    const tasks = (st.tasks || []).filter((t) => !st.doneIds.has(t.id)).slice(0, 60).map((t) => ({ ref: t.id, name: t.name, group: (GROUPS.find((g) => g.id === t.group) || {}).label, deadline: t.deadline, priority: t.priority, status: t.status }));
+    const inbox = (st.inbox || []).slice(0, 20).map((m) => ({ ref: m.id, from: nameOf(m.from), subject: m.subject, snippet: (m.snippet || '').slice(0, 220), date: m.date, unread: m.unread }));
+    const cal = (ev) => (ev || []).map((e) => ({ title: e.summary, start: e.start && e.start.dateTime ? hm(new Date(e.start.dateTime)) : 'all day', end: e.end && e.end.dateTime ? hm(new Date(e.end.dateTime)) : '' }));
+    const agents = (st.agents || []).map((a) => ({ ref: a.id, name: a.name, last: a.last_run && a.last_run.status }));
+    return { now: `${today()} ${hm(new Date())} (${TZ}), work week Sun-Thu`, tasks, inbox, today: cal(st.events[0]), tomorrow: cal(st.events[1]), agents };
+  }
+
+  async function getIdeas(more) {
+    if (!sample) { $('ideas').replaceChildren(h('div', { class: 'thinking' }, 'Claude suggestions are not available in this view. Everything else works.')); return; }
+    if (ideasBusy) return; ideasBusy = true;
+    $('more-ideas').hidden = true;
+    const keep = st.ideas.filter((i) => !i.dismissed);
+    if (!keep.length) $('ideas').replaceChildren(h('div', { class: 'thinking' }, '✦ Reading your board, inbox and calendar…'));
+    $('ideas-meta').textContent = 'Thinking…';
+    const prompt =
+      'You are the proactive chief of staff for Ilan Manassen, Senior Communications Manager at monday.com. Find the next moves that finish or unblock his work. ' +
+      'Look for: overdue or due-today tasks that may already be done; emails that need a reply; tasks that need a status update; deep-work tasks that need calendar time in a free gap today or tomorrow; work Pepper (his Slack chief-of-staff agent) or one of the agents could take; agent runs that failed. ' +
+      'Decisions on budget or approvals are Ilan\'s: suggest a reply or time to decide, never decide. Prefer moves he can do in one click, and be specific: name the person, the item and the slot. ' +
+      (more ? 'Do NOT repeat these earlier suggestions: ' + JSON.stringify(st.ideas.map((i) => i.title)) + '. ' : '') +
+      'Reply with ONLY a JSON array of up to ' + (more ? 4 : 6) + ' objects, best first: ' +
+      '{"title": short imperative, max 12 words; "why": one sentence with the evidence; "kind": one of "done","update","block","delegate","reply","mailtask","agent"; "ref": the ref of the task (done, update, block, delegate), the email (reply, mailtask) or the agent (agent); ' +
+      '"time": "HH:MM" start (block only); "mins": minutes (block only); "day": "today" or "tomorrow" (block only); "text": optional draft text (update, delegate); "how": optional one-line direction (reply)}. ' +
+      'Use only refs from the data. Write in English but keep item names in their original language.\n\nDATA:\n' + JSON.stringify(context());
+    try {
+      const arr = await sample.json(prompt, more ? { cache: false } : {});
+      const known = new Set(st.ideas.map((i) => i.kind + ':' + i.ref));
+      const fresh = (Array.isArray(arr) ? arr : []).filter((i) => i && i.title && KIND[i.kind] && i.ref != null && findRef(i) && !known.has(i.kind + ':' + i.ref));
+      st.ideas = keep.concat(fresh);
+      $('ideas-meta').textContent = fresh.length ? 'Updated ' + hm(new Date()) : 'Nothing new right now';
+    } catch (e) {
+      $('ideas-meta').textContent = '';
+      if (!keep.length) $('ideas').replaceChildren(h('div', { class: 'thinking' }, e.code === 'not_granted' ? 'Claude suggestions were not allowed for this page.' : e.code === 'rate_limited' ? 'Claude is busy. Try “More ideas” in a minute.' : 'Could not get suggestions (' + (e.code || 'error') + ').'));
+    }
+    ideasBusy = false; $('more-ideas').hidden = false;
+    if (st.ideas.length) renderIdeas();
+  }
+  $('more-ideas').addEventListener('click', () => getIdeas(true));
+
+  function findRef(i) {
+    const r = String(i.ref);
+    if (TASK_KINDS.includes(i.kind)) return (st.tasks || []).find((t) => t.id === r && !st.doneIds.has(t.id));
+    if (i.kind === 'reply' || i.kind === 'mailtask') return (st.inbox || []).find((m) => m.id === r);
+    if (i.kind === 'agent') return (st.agents || []).find((a) => String(a.id) === r);
+    return null;
+  }
+  const KIND = { done: ['Close it', '✓ Mark Done'], update: ['Update', '✎ Write update'], block: ['Schedule', '◷ Block it'], delegate: ['Hand off', '→ Hand off'], reply: ['Reply', '✦ Draft reply'], mailtask: ['Track', '→ Make it a task'], agent: ['Agents', '▶ Run'] };
+
+  function act(i) {
+    const obj = findRef(i); if (!obj) { toast('That item is no longer open.'); i.dismissed = true; renderIdeas(); return; }
+    let rowId, kind = i.kind, preset = {};
+    if (TASK_KINDS.includes(kind)) {
+      const g = GROUPS.find((x) => x.id === obj.group); if (g && st.tab !== g.key) { st.tab = g.key; renderTasks(); }
+      rowId = 'task-' + obj.id;
+      if (kind === 'block') preset = { time: /^\d\d:\d\d$/.test(i.time || '') ? i.time : undefined, mins: [30, 45, 60, 90, 120].includes(Number(i.mins)) ? Number(i.mins) : 60, date: i.day === 'tomorrow' ? dayStr(1) : today() };
+      else preset = { text: i.text };
+    } else if (kind === 'agent') { rowId = 'agent-' + obj.id; kind = 'run'; preset = { text: i.text }; }
+    else { rowId = 'mail-' + obj.id; preset = { how: i.how }; }
+    const row = $(rowId); if (!row) return;
+    row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 1600);
+    openDrawer(row, kind, obj, preset);
+  }
+
+  function renderIdeas() {
+    const list = st.ideas.filter((i) => !i.dismissed);
+    if (!list.length) { $('ideas').replaceChildren(h('div', { class: 'thinking' }, 'All caught up. Ask for more ideas any time.')); return; }
+    $('ideas').replaceChildren(h('div', { class: 'cards' }, list.map((i) => {
+      const [k, btn] = KIND[i.kind];
+      return h('div', { class: 'card' + (i.done ? ' done' : '') },
+        h('span', { class: 'k' }, i.done ? 'Done ✓' : k), h('b', { dir: 'auto' }, i.title), i.why && h('p', { dir: 'auto' }, i.why),
+        !i.done && h('div', { class: 'acts' }, h('button', { class: 'sm pri', onclick: () => act(i) }, btn),
+          h('button', { class: 'sm ghost', onclick: () => { i.dismissed = true; renderIdeas(); maybeMoreAfterAction(); } }, 'Not now')));
+    })));
+  }
+
+  // ---- Boot ----
+  try { const t = localStorage.getItem('cc-tab'); if (GROUPS.some((g) => g.key === t)) st.tab = t; } catch (_) {}
+  renderChips();
+  const tick = () => { $('sub').textContent = fmt(new Date(), { weekday: 'long', day: 'numeric', month: 'long' }) + ' · ' + hm(new Date()) + ' Tel Aviv'; };
+  tick(); setInterval(tick, 30000);
+
+  (async () => {
+    const cl = window.claude;
+    const offline = (msg) => { for (const id of ['tasks', 'inbox', 'day', 'agents']) $(id).replaceChildren(h('div', { class: 'empty' }, msg)); $('ideas').replaceChildren(h('div', { class: 'thinking' }, msg)); ['mon', 'gm', 'cal', 'ag'].forEach((k) => setSrc(k, 'idle', msg)); };
+    if (!cl || !cl.use) { offline('Open this page in Claude to load your live data.'); return; }
+    [mcp, sample] = await Promise.all([cl.use('mcp'), cl.use('sample')]);
+    if (!mcp) { offline('Live connectors are not available in this view. Open it in claude.ai while signed in.'); return; }
+    startWatches();
+  })();
+})();
+</script>
