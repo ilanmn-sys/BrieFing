@@ -23,7 +23,7 @@ Slack: post to the channel by its channel id and check the send result (S-005).
 
 ## 1. Read
 
-Search Gmail with the query above. Call `get_thread` for each thread and **read the whole thread** before deciding anything (R-22): "unreplied" from a search preview is a guess, not a fact. Collect, per thread: sender, subject, who is addressed (To, Cc, a large list), the last message and who sent it, and the language.
+Search Gmail with the query above using `pageSize` 50, and follow `pageToken` until there are no more pages (cap 100 threads; say so in the RESULT if you hit the cap). Never stop after the first page. Call `get_thread` with `messageFormat: "PLAIN_TEXT"` (never the default full content, which can be millions of characters). If a thread is still too large to read, call it again with `MINIMAL` and judge from the last messages' sender, recipients and snippet, and say which threads you judged that way. Call `get_thread` for each thread and **read the whole thread** before deciding anything (R-22): "unreplied" from a search preview is a guess, not a fact. Collect, per thread: sender, subject, who is addressed (To, Cc, a large list), the last message and who sent it, and the language.
 
 ## 2. Classify each thread (the same verdicts as the dashboard's Email tab)
 
