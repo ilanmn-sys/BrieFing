@@ -7,6 +7,6 @@
   "enabled": false,
   "schedule": "08:05 daily",
   "cloud": {
-    "mode": "dry-run"
+    "mode": "live"
   }
 }
