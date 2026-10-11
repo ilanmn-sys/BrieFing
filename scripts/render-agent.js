@@ -40,7 +40,7 @@ function renderFor(id) {
   }))];
   const header = [
     `You are running the scheduled agent "${id}" for Ilan Manassen's Command Center, in a cloud session (mode: ${mode.toUpperCase()}).`,
-    `Hard rule: use only these tools: ${allowed.join(', ')}. Reading files in this repository is allowed. Do not call any other tool, even if it is available in this session; if a step needs one, skip that step and say so in your RESULT.`,
+    `Hard rule: use only these tools: ${allowed.join(', ')}. Reading files (this repository, or tool results saved to disk) is allowed, including with read-only shell commands such as cat, grep or jq; the setup steps (git, node scripts/render-agent.js) are allowed too. Do not call any other tool, even if it is available in this session; if a step needs one, skip that step and say so in your RESULT.`,
     ...cloudNotes(id, body, tools).map((n) => `Cloud note: ${n}`),
   ];
   return { mode, prompt: agentPrompt.build({ body, dryRun: mode !== 'live', extra: header }) };
