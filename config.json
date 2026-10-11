@@ -465,7 +465,15 @@
       "relevant": "color_mm7th7nj",
       "dealValue": "numeric_mm5y6ykh",
       "followers": "numeric_mm5ywa2b",
-      "elevate": "color_mm6y6wrt"
+      "elevate": "color_mm6y6wrt",
+      "profileUrl": "link_mm5yg4s0",
+      "linkedin": "link_mm5yvwjt",
+      "x": "link_mm5ys9yn",
+      "instagram": "link_mm63m4ga",
+      "youtube": "link_mm5yszks",
+      "tiktok": "link_mm5yf325",
+      "newsletter": "link_mm5ye50y",
+      "website": "link_mm5yk9ba"
     },
     "gmailQuery": "newer_than:2d (narrativegroup.co OR creator OR influencer) -from:me",
     "maxScanPerRun": 25,
