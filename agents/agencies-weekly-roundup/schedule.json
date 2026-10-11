@@ -5,5 +5,8 @@
   "cron": "30 8 * * 1",
   "tz": "Asia/Jerusalem",
   "enabled": false,
-  "schedule": "Mon 08:30"
+  "schedule": "Mon 08:30",
+  "cloud": {
+    "mode": "dry-run"
+  }
 }

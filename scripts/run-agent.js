@@ -5,8 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 const agents = require('../server/agents');
-const { today, config } = require('../server/lib');
-const { render } = require('../server/template');
+const agentPrompt = require('../server/agentPrompt');
 const mcpNames = require('../server/mcpNames');
 
 const [id, ...flags] = process.argv.slice(2);
@@ -23,18 +22,9 @@ const finish = (run) => { agents.recordRun(id, run); agents.clearRunning(id); co
   if (!force && !agents.enabledFor(a)) { console.log(`${id}: disabled, skipping`); process.exit(0); } // scheduled runs respect the toggle
   agents.markRunning(id);
   const dir = path.join(agents.agentsDir(), id);
-  const promptFile = path.join(dir, 'prompt.md'), toolsFile = path.join(dir, 'allowed-tools.json');
-  if (!fs.existsSync(promptFile)) return fail('not ported: no prompt.md');
-  if (!fs.existsSync(toolsFile)) return fail('allowed-tools.json is required (agents run with a scoped tool list)');
-  let tools; try { tools = JSON.parse(fs.readFileSync(toolsFile, 'utf8')); if (!Array.isArray(tools)) throw new Error('not an array'); } catch (e) { return fail('bad allowed-tools.json: ' + e.message); }
-
-  let body; try { body = render(fs.readFileSync(promptFile, 'utf8'), config); } catch (e) { return fail('prompt template: ' + e.message); }
-  const prompt = [
-    `Today is ${today()} (read from the system clock). Read LEARNING-LOG.md section 1 before anything else.`,
-    dryRun ? 'DRY RUN: do not write anywhere (no board writes, no Slack messages, no drafts, no learning-log edits). Read everything you need, then print the writes you would make and the exact brief you would send.' : '',
-    body,
-    'Finish with exactly one last line: RESULT: {"delivery":"ok|failed|n/a","summary":"one sentence"}',
-  ].filter(Boolean).join('\n\n');
+  let body, tools;
+  try { ({ body, tools } = agentPrompt.load(dir)); } catch (e) { return fail(e.message); }
+  const prompt = agentPrompt.build({ body, dryRun });
 
   const bin = process.env.CLAUDE_BIN || 'claude';
   let out = '', err = '', timedOut = false, spawnError = null;
