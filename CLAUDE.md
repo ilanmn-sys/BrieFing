@@ -4,7 +4,7 @@ Config: `config.json` (the only place IDs live). **Read LEARNING-LOG.md §1 befo
 
 ## Principles
 1. AI drafts, human sends. Gmail → Drafts only; Slack replies to others only on explicit click; journalist/exec-facing text is always a draft.
-2. Projects-board changes are propose-only (groups, deadlines, priorities, archiving). Silent exceptions: sweep Done → ✅ Completed; fill empty owner with Ilan. Comms-calendar item creation is not propose-only.
+2. Projects-board changes are propose-only (groups, deadlines, priorities, archiving). Silent exceptions: sweep Done → ✅ Completed; fill empty owner with Ilan. Values set on an item at its creation (R-25: action name, priority, effort) are part of creating it, not a change. Comms-calendar item creation is not propose-only.
 3. Done means done everywhere: board status + notify Pepper in one action.
 4. Degrade loudly: dead connector = visible error + Retry; failed delivery is flagged, never a clean exit.
 5. Verify the date: read the system clock first (shared `today()` helper). Never infer today from board data.

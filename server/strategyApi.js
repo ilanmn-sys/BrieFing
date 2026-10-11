@@ -57,6 +57,8 @@ async function apply(numbers) {
         if (o.type === 'move') await monday.moveToGroup(o.itemId, o.toGroup);
         else if (o.type === 'date') await monday.setDate(o.itemId, o.date);
         else if (o.type === 'priority') await monday.setPriority(o.itemId, o.label);
+        else if (o.type === 'effort') await monday.setEffort(o.itemId, o.label);
+        else if (o.type === 'rename') await monday.rename(o.itemId, o.name);
         else if (o.type === 'email_task') { await monday.createEmailTask(o); existingTasks.add(o.name); }
       }
       applied.push({ n: p.n, text: p.text });
@@ -101,7 +103,7 @@ async function skip() {
   return result;
 }
 
-const describe = (o) => o.type === 'move' ? `move ${o.itemId} to ${o.toGroup}` : o.type === 'date' ? `set date of ${o.itemId} to ${o.date || 'empty'}` : o.type === 'priority' ? `set priority of ${o.itemId} to ${o.label}` : `create email task "${o.name}"`;
+const describe = (o) => o.type === 'move' ? `move ${o.itemId} to ${o.toGroup}` : o.type === 'date' ? `set date of ${o.itemId} to ${o.date || 'empty'}` : o.type === 'priority' ? `set priority of ${o.itemId} to ${o.label}` : o.type === 'effort' ? `set effort of ${o.itemId} to ${o.label}` : o.type === 'rename' ? `rename ${o.itemId} to "${o.name}"` : `create email task "${o.name}"`;
 
 // One record-keeping step: never throws, so a failure is reported on the result instead of hiding the others.
 async function step(result, name, fn) {

@@ -563,7 +563,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
 
     mailtask(d, m, { say, busy, close, out }) {
       const ta = h('textarea', { dir: 'auto' });
-      ta.value = `📌 Please add a task from this email: «${m.subject}» from ${nameOf(m.from)}\n${m.url || ''}`;
+      ta.value = `📌 Please add a task from this email: «${m.subject}» from ${nameOf(m.from)}\n${m.url || ''}\nR-25: name it as the next action (verb first), set priority and effort, and end the first update with ✅ Done when.`;
       const go = h('button', { class: 'pri' }, 'Send to Pepper');
       go.onclick = async () => {
         busy(go, true, 'Sending…');

@@ -187,3 +187,17 @@ test('items on another board are never touched (they are simply not found)', asy
   try { const r = await api.apply([1]); assert.equal(r.applied.length, 0); assert.match(r.skipped[0].reason, /not found on the projects board/); assert.ok(!mutations().some((c) => c.startsWith('move'))); }
   finally { global.fetch = real; }
 });
+
+test('validate: rename and effort (R-25) are strict, and stale() refuses a changed name or effort', () => {
+  const ok = (p) => validateProposal(p, config).ok;
+  const rn = (from, name) => ({ type: 'rename', itemId: '1000001', from, name });
+  assert.ok(ok(prop(1, 't', rn('📌 Tavily case — Noam Safier', '📌 Send Noam the Tavily case draft for review'))));
+  assert.ok(!ok(prop(2, 't', rn('', 'x'))), 'rename needs the current name');
+  assert.ok(!ok(prop(3, 't', rn('a', 'a'))), 'same name is not a rename');
+  assert.ok(!ok(prop(4, 't', rn('a', 'x'.repeat(91)))), 'max 90 characters');
+  assert.ok(ok(prop(5, 't', { type: 'effort', itemId: '1000001', from: '', label: 'S (15-30m)' })));
+  assert.ok(!ok(prop(6, 't', { type: 'effort', itemId: '1000001', from: '', label: 'Tiny' })), 'known effort labels only');
+  assert.equal(stale({ type: 'rename', from: 'old' }, { name: 'old' }), null);
+  assert.match(stale({ type: 'rename', from: 'old' }, { name: 'new' }), /renamed/);
+  assert.match(stale({ type: 'effort', from: '' }, { effort: 'M (30-60m)' }), /effort/);
+});

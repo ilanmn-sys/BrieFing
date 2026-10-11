@@ -12,6 +12,7 @@ const ID = /^\d{6,}$/;
 const MARK_WAIT = /AWAITING_APPROVAL \| strategy_date:(\d{4}-\d{2}-\d{2}) \| ask_ts:([\d.]+)/;
 const MARK_DONE = /APPLIED \| strategy_date:(\d{4}-\d{2}-\d{2})/;
 const PRIORITIES = ['🔥 High', '🟡 Medium', '🟢 Low'];
+const EFFORTS = ['S (15-30m)', 'M (30-60m)', 'L (60m+)'];
 const MAX_PROPOSALS = 60, MAX_OPS = 5;
 
 function parseStrategy(updates, today) {
@@ -52,6 +53,16 @@ function validateProposal(p, cfg) {
       if (!ID.test(String(o.itemId)) || !PRIORITIES.includes(o.label)) return fail('priority needs itemId and a known label');
       if (!(o.from === '' || o.from === null || PRIORITIES.includes(o.from))) return fail('priority needs from');
       ops.push({ type: 'priority', itemId: String(o.itemId), from: o.from || '', label: o.label });
+    } else if (o.type === 'effort') {
+      if (!ID.test(String(o.itemId)) || !EFFORTS.includes(o.label)) return fail('effort needs itemId and a known label');
+      if (!(o.from === '' || o.from === null || EFFORTS.includes(o.from))) return fail('effort needs from');
+      ops.push({ type: 'effort', itemId: String(o.itemId), from: o.from || '', label: o.label });
+    } else if (o.type === 'rename') {
+      // R-25: rewrite a topic-style name as its next action. Only the name changes.
+      const name = String(o.name || '').trim();
+      if (!ID.test(String(o.itemId)) || typeof o.from !== 'string' || !o.from) return fail('rename needs itemId and from (the current name)');
+      if (!name || name.length > 90 || name === o.from) return fail('rename needs a new name of at most 90 characters');
+      ops.push({ type: 'rename', itemId: String(o.itemId), from: o.from, name });
     } else if (o.type === 'email_task') {
       const name = String(o.name || '');
       if (!name.startsWith('📧 מענה למייל:') || name.length > 255) return fail('email task name must start with "📧 מענה למייל:" and be at most 255 characters');
@@ -87,7 +98,9 @@ function stale(op, state) {
   if (op.type === 'move' && state.group !== op.fromGroup) return 'it was moved since the proposal';
   if (op.type === 'date' && (state.date || null) !== op.fromDate) return 'its date changed since the proposal';
   if (op.type === 'priority' && (state.priority || '') !== op.from) return 'its priority changed since the proposal';
+  if (op.type === 'effort' && (state.effort || '') !== op.from) return 'its effort changed since the proposal';
+  if (op.type === 'rename' && (state.name || '') !== op.from) return 'it was renamed since the proposal';
   return null;
 }
 
-module.exports = { parseStrategy, validateProposal, validateAll, select, stale, PRIORITIES, MARK_WAIT };
+module.exports = { parseStrategy, validateProposal, validateAll, select, stale, PRIORITIES, EFFORTS, MARK_WAIT };

@@ -133,12 +133,12 @@ async function itemUpdates(itemId, limit = 30) {
 async function itemStates(ids) {
   const out = new Map();
   for (let i = 0; i < ids.length; i += 100) {
-    const q = `query($ids:[ID!]){ items(ids:$ids){ id board{ id } group{ id } column_values(ids:["${C.deadline}","${C.priority}","${C.status}"]){ id text } } }`;
+    const q = `query($ids:[ID!]){ items(ids:$ids){ id name board{ id } group{ id } column_values(ids:["${C.deadline}","${C.priority}","${C.status}","${config.columns.effort}"]){ id text } } }`;
     const d = names(await gql(q, { ids: ids.slice(i, i + 100).map(String) }));
     for (const it of d.items) {
       if (String(it.board.id) !== String(config.boards.projects)) continue; // never touch another board
       const cv = Object.fromEntries(it.column_values.map((c) => [c.id, c.text || '']));
-      out.set(it.id, { group: it.group.id, date: cv[C.deadline] || null, priority: cv[C.priority] || '', status: cv[C.status] || '' });
+      out.set(it.id, { name: it.name, group: it.group.id, date: cv[C.deadline] || null, priority: cv[C.priority] || '', status: cv[C.status] || '', effort: cv[config.columns.effort] || '' });
     }
   }
   return out;
@@ -162,6 +162,18 @@ async function setPriority(itemId, label) {
   if (!d.change_column_value) throw new Error('monday: priority change returned nothing');
 }
 
+async function setEffort(itemId, label) {
+  const d = names(await gql('mutation($b:ID!,$i:ID!,$c:String!,$v:JSON!){ change_column_value(board_id:$b,item_id:$i,column_id:$c,value:$v){ id } }',
+    { b: String(config.boards.projects), i: String(itemId), c: config.columns.effort, v: JSON.stringify({ label }) }));
+  if (!d.change_column_value) throw new Error('monday: effort change returned nothing');
+}
+
+async function rename(itemId, name) {
+  const d = names(await gql('mutation($b:ID!,$i:ID!,$v:String!){ change_simple_column_value(board_id:$b,item_id:$i,column_id:"name",value:$v){ id } }',
+    { b: String(config.boards.projects), i: String(itemId), v: name }));
+  if (!d.change_simple_column_value) throw new Error('monday: rename returned nothing');
+}
+
 // An email task for Pepper: in 📥 Pepper Tasks, owner Ilan, "Working on it".
 async function createEmailTask({ name, due, body }) {
   const cv = { [C.status]: { label: 'Working on it' }, [C.person]: { personsAndTeams: [{ id: config.me.mondayUserId, kind: 'person' }] } };
@@ -180,4 +192,4 @@ async function setRequestStatusOn(itemId, label) {
   if (!d.change_column_value) throw new Error('monday: status change returned nothing');
 }
 
-module.exports = { setRequestStatusOn, gql, health, listTasks, setDone, listRequests, postUpdate, setRequestStatus, updateTexts, groupItems, itemUpdates, itemStates, moveToGroup, setDate, setPriority, createEmailTask };
+module.exports = { setRequestStatusOn, gql, health, listTasks, setDone, listRequests, postUpdate, setRequestStatus, updateTexts, groupItems, itemUpdates, itemStates, moveToGroup, setDate, setPriority, setEffort, rename, createEmailTask };

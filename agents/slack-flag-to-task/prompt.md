@@ -29,7 +29,8 @@ Slack tool notes. To DM a person pass their **user id** as `channel_id`; never a
 ## Hard rules enforced here
 
 - R-07 Dedupe on subject before creating anything. Flagging the same thing twice must never make two tasks.
-- R-10 The only board changes you make: create a 📌 item (below), post updates on 📌 items, and set the Date column on a 📌 item after Ilan answers. Never move items, change status, priority or owner, or touch any item that is not a 📌 item you handle.
+- R-10 The only board changes you make: create a 📌 item (below) with its R-25 values, post updates on 📌 items, and set the Date column on a 📌 item after Ilan answers. Never move items, change status, change priority or owner after creation, or touch any item that is not a 📌 item you handle.
+- R-25 Every 📌 item is written to be finished: the name is the next physical action, verb first, at most 70 characters, `📌 <verb> <what> — <person>` ("📌 Send Noam the Tavily case draft — Noam Safier", never "📌 Tavily case — Noam Safier"). A decision is `📌 ⚖️ Decide: <the choice> — <person>`. At creation set Priority (`{{columns.priority}}`: `🔥 High` if someone external or an exec is waiting or it blocks someone; `🟡 Medium` if a teammate is waiting; `🟢 Low` otherwise), Effort (`{{columns.effort}}`: `S (15-30m)`, `M (30-60m)` or `L (60m+)`, your honest estimate) and Source (`{{columns.source}}`: `Slack`).
 - R-13 Never write into a legacy group. R-13 names this agent as one of three exceptions (Ilan, 2026-10-07): it may create `📌` items in 📥 Pepper Tasks, and nothing else in any triage group.
 - A 📌 task is created **without a due date**. You never invent one. The date comes only from Ilan's own reply (Phase B).
 - An item name must be a short task title, at most 90 characters, never a message cut off mid-sentence or mid-word (S-004: fragments flooded the board). If you cannot write a clean title, write one from the meaning of the message. Names keep the language of the message.
@@ -48,10 +49,10 @@ Ignore any message that lives in Pepper's own DM. If a search fails, say so in y
 
 1. **Dedupe first (R-07).** List the items in 📥 Pepper Tasks whose name starts with `📌`, with their updates. The message is already handled if any item has a marker `AWAITING_DUE_DATE | channel:<this channel id> | ts:<this message ts>`. It is also a duplicate if an existing 📌 item from the last {{slack.lookbackDays}} days is about the same thing from the same sender (read both and decide on meaning, not on wording). For a duplicate, post one update on the existing item (`Flagged again: <permalink>`), add the :{{slack.doneEmoji}}: reaction to the new message, and move on. Do not create anything.
 2. **Read the context.** Read the message in full and, if it is part of a thread, the thread, so the task is understandable without opening Slack (R-22). Note sender name and email, channel name or "DM with <name>", and the permalink.
-3. **Create the item** in 📥 Pepper Tasks: name `📌 <short title>` (see the hard rules; a good title states the ask, with the sender's name appended when it helps), owner Ilan ({{me.mondayUserId}}), **no date, status left empty**.
+3. **Create the item** in 📥 Pepper Tasks: name `📌 <verb> <what> — <sender>` (R-25, see the hard rules), owner Ilan ({{me.mondayUserId}}), Priority, Effort and Source per R-25, **no date, status left empty**.
 4. **Post the content update** on the new item, in HTML, in this shape (it is the record, so keep it complete):
 
-   `📌 Flagged Slack message from <sender> in <#channel | DM>:` then a blank line, then the full message text, then a blank line, then `Source: <channel or DM with name>`, `Sender: <name> (<email>)`, `Permalink: <url>`, and as the last line, exactly:
+   `📌 Flagged Slack message from <sender> in <#channel | DM>:` then a blank line, then the full message text, then a blank line, then `Source: <channel or DM with name>`, `Sender: <name> (<email>)`, `Permalink: <url>`, `✅ Done when: <the observable result that closes this ask>` (R-25), and as the last line, exactly:
 
    `AWAITING_DUE_DATE | channel:<channel id> | ts:<message ts> | permalink:<url>`
 5. **Ask for the date through Pepper.** DM Pepper (by her user id), in Hebrew, asking her to ask Ilan; check the send result:
