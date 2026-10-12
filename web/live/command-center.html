@@ -340,7 +340,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   const RQ = { board: 18431118484, owner: 'multiple_person_mm77ct8p', status: 'color_mm77yyq9', deadline: 'date_mm77dyk5', tier: 'color_mm773zjg', region: 'dropdown_mm7775sx', requester: 'multiple_person_mm77t7hn', domain: 'color_mm77pzed', agent: 'text_mm7f4fmq',
     closed: 'group_mm77qrtv', inbox: 'group_mm77x4r1', terminal: ['Done', 'Cancelled', 'Deflected', 'Duplicate'],
     statuses: ['Triaged', 'In progress', 'With requester', 'With 3rd party', 'In review', 'Approved - pending publication', 'Blocked', 'Done', 'Deflected', 'Cancelled'] };
-  const BRIE = '117447635';   // config.requests.briefingAgentUserId
+  const BRIE_SLACK = 'U0C3YP1J77D';   // config.requests.briefingAgentSlackId: instructions go to Brie Fing's DM, never onto the request board
   const ME_NAME = 'Ilan Manassen';
   const S = { MON: 'monday.com', GM: 'Gmail', CAL: 'Google Calendar', SL: 'Slack', CCR: 'Claude Code Remote' };
   const TASK_KINDS = ['done', 'update', 'block', 'delegate'];
@@ -1047,7 +1047,8 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     // What the item is, in one line Pepper can act on: title, who, link.
     // (shared by "My update" and "Pepper follow-up" on tasks, emails and Slack messages)
     brie(d, r, { say, busy, close, out, preset }) {
-      // Brie Fing works from a mention in an item update (type User with the agent's user id).
+      // Instructions to Brie Fing are private: a Slack DM to the agent (by user id) with the request link. Never an update on the board,
+      // which requesters and the team can read (Ilan, 2026-10-12).
       const ASKS = {
         reply: 'Draft a reply to the requester with where this stands and the next step. Post it as a draft for Ilan to approve; do not send anything external.',
         triage: 'Triage this request: confirm domain, tier, region and owner per the routing table, and set the SLA date.',
@@ -1064,11 +1065,11 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
         const txt = ta.value.trim(); if (!txt) { say('Write what Brie Fing should do.', false); return; }
         busy(go, true, 'Sending…');
         try {
-          await call(S.MON, 'create_update', { itemId: Number(r.id), body: escHtml(txt).replace(/\n/g, '<br>') + '<br><br>— Ilan, via the Command Center', mentionsList: JSON.stringify([{ id: BRIE, type: 'User' }]) });
-          say('Brie Fing was tagged on the request with your ask.', true); go.remove(); markActed(r.id); mcp.invalidate(S.MON).catch(() => {});
-        } catch (e) { say(errText(e, 'monday'), false); busy(go, false, 'Retry'); }
+          await call(S.SL, 'slack_send_message', { channel_id: BRIE_SLACK, message: `Request: «${r.name}»${r.requester ? ' (from ' + r.requester + ')' : ''}\n${r.url}\n\n${txt}` });
+          say('Sent to Brie Fing in your private DM. Nothing was posted on the board.', true); go.remove(); markActed(r.id);
+        } catch (e) { say(errText(e, 'Slack'), false); busy(go, false, 'Retry'); }
       };
-      d.append(h('div', { class: 'hint' }, 'Posts an update on the request that tags Brie Fing, the request desk agent. Anything external comes back as a draft.'),
+      d.append(h('div', { class: 'hint' }, 'Goes to Brie Fing privately, in your Slack DM with it, with a link to the request. Nothing is posted on the board.'),
         h('label', { class: 'f' }, 'Ask', pick), ta, h('div', { class: 'line' }, go, close), out);
     },
 

@@ -229,7 +229,8 @@
       "T4 Parked": "parked"
     },
     "briefingAgentUserId": 117447635,
-    "briefingAgentNote": "Brie Fing, the comms request desk agent on this board. Two monday users carry the name; 117447635 is the one that posts on the board (checked 2026-10-12). Mention it in an item update (mentionsList type User) to hand it work."
+    "briefingAgentNote": "Brie Fing, the comms request desk agent on this board (external agent). Hand it work privately in its Slack DM (briefingAgentSlackId, DM by user id), never as an update on the request board: requesters and the team can read board updates (Ilan, 2026-10-12). 117447635 is its monday user, the one that posts on the board.",
+    "briefingAgentSlackId": "U0C3YP1J77D"
   },
   "decisionSeeds": [
     {
