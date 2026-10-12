@@ -236,6 +236,34 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
   const dayStr = (off) => ymd(new Date(Date.now() + off * 864e5));
   const ddmm = (s) => s ? s.slice(8, 10) + '.' + s.slice(5, 7) : '';
   const plusMin = (date, time, mins) => { const [H, M] = time.split(':').map(Number); const d = new Date(date + 'T00:00:00Z'); d.setUTCMinutes(H * 60 + M + mins); return d.toISOString().slice(0, 16) + ':00'; };
+  // ---- Availability from the real calendar: blocks are only ever suggested inside free gaps ----
+  const DAY_START = 8 * 60, DAY_END = 19 * 60;
+  const toMin = (t) => { const [H, M] = t.split(':').map(Number); return H * 60 + M; };
+  const toHM = (m) => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+  const isBusy = (e) => e.start && e.start.dateTime && e.availability !== 'AVAILABILITY_FREE' && e.transparency !== 'transparent' && !(e.attendees || []).some((a) => a.self && a.responseStatus === 'declined');
+  // Busy [start,end) minutes on `day` (YYYY-MM-DD, local), clamped to that day.
+  function busyOn(day, events) {
+    return (events || []).filter(isBusy).map((e) => {
+      const s = new Date(e.start.dateTime), en = new Date((e.end && e.end.dateTime) || e.start.dateTime);
+      const a = ymd(s) < day ? 0 : ymd(s) > day ? 1440 : toMin(hm(s));
+      const b = ymd(en) > day ? 1440 : ymd(en) < day ? 0 : toMin(hm(en));
+      return [a, b];
+    }).filter(([a, b]) => b > a).sort((x, y) => x[0] - y[0]);
+  }
+  // Free gaps of at least `mins` between 08:00 and 19:00; today starts from now (rounded up to 15 min).
+  function freeGaps(day, events, mins = 15) {
+    let from = DAY_START;
+    if (day === today()) from = Math.max(from, Math.ceil(toMin(hm(new Date())) / 15) * 15);
+    const gaps = []; let cur = from;
+    for (const [a, b] of busyOn(day, events)) { if (a - cur >= mins) gaps.push([cur, Math.min(a, DAY_END)]); cur = Math.max(cur, b); }
+    if (DAY_END - cur >= mins) gaps.push([cur, DAY_END]);
+    return gaps.filter(([a, b]) => b - a >= mins && a < DAY_END);
+  }
+  const fits = (gaps, start, mins) => gaps.some(([a, b]) => start >= a && start + mins <= b);
+  const firstFit = (gaps, mins) => { const g = gaps.find(([a, b]) => b - a >= mins); return g ? toHM(g[0]) : null; };
+  const gapText = (gaps) => gaps.map(([a, b]) => toHM(a) + '–' + toHM(b)).join(' · ');
+  const eventsFor = (day) => day === dayStr(0) ? st.events[0] : day === dayStr(1) ? st.events[1] : null;
+
   const emailOf = (s) => { const m = String(s || '').match(/[\w.+-]+@[\w.-]+\.\w+/); return m ? m[0] : ''; };
   const nameOf = (s) => { const t = String(s || '').replace(/<[^>]*>/, '').replace(/"/g, '').trim(); return t || emailOf(s); };
   const escHtml = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -481,14 +509,40 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
     },
 
     block(d, t, { say, busy, close, out, preset }) {
-      const nextHalf = new Date(Math.ceil(Date.now() / 18e5) * 18e5);
       const date = h('input', { type: 'date', value: preset.date || today() });
-      const time = h('input', { type: 'time', value: preset.time || hm(nextHalf), step: 900 });
+      const time = h('input', { type: 'time', value: preset.time || '', step: 900 });
       const dur = h('select', {}, [30, 45, 60, 90, 120].map((m) => h('option', { value: m, selected: m === (preset.mins || 60) }, m + ' min')));
       const title = h('input', { type: 'text', value: 'Focus: ' + t.name.slice(0, 80), style: 'flex:1;min-width:180px', dir: 'auto' });
+      const free = h('div', { class: 'hint' });
       const go = h('button', { class: 'pri' }, 'Add to calendar');
+      let gaps = null, confirmClash = false;
+      // Load the chosen day's calendar (today/tomorrow come from the live watch), then show and pick free time.
+      async function refreshFree(keepTime) {
+        const day = date.value, mins = Number(dur.value);
+        confirmClash = false; go.textContent = 'Add to calendar';
+        let evs = eventsFor(day);
+        if (!evs && day) {
+          free.textContent = 'Checking your calendar…';
+          try { const p = await call(S.CAL, 'list_events', { startTime: day + 'T00:00:00', endTime: plusMin(day, '00:00', 1440), orderBy: 'startTime', pageSize: 100 }); evs = p.events || []; }
+          catch (e) { gaps = null; free.textContent = 'Could not read your calendar for that day, so free time is unknown. ' + errText(e, 'Google Calendar'); return; }
+        }
+        if (day !== date.value) return; // the day changed while loading
+        gaps = freeGaps(day, evs, 15);
+        const fitting = gaps.filter(([a, b]) => b - a >= mins);
+        free.replaceChildren(fitting.length ? 'Free for ' + mins + ' min: ' : 'No free gap of ' + mins + ' min between 08:00 and 19:00 on this day.',
+          ...fitting.map(([a, b]) => h('button', { class: 'sm ghost', type: 'button', onclick: () => { time.value = toHM(a); refreshFree(true); } }, toHM(a) + '–' + toHM(b))));
+        if (!keepTime || !time.value || !fits(gaps, toMin(time.value), mins)) { const f = firstFit(gaps, mins); if (f) time.value = f; }
+      }
+      date.addEventListener('change', () => refreshFree(false));
+      dur.addEventListener('change', () => refreshFree(true));
+      time.addEventListener('change', () => { confirmClash = false; go.textContent = 'Add to calendar'; });
+      refreshFree(!!preset.time);
       go.onclick = async () => {
         if (!date.value || !time.value) { say('Pick a day and a start time.', false); return; }
+        if (gaps && !fits(gaps, toMin(time.value), Number(dur.value)) && !confirmClash) {
+          confirmClash = true; go.textContent = 'Add anyway';
+          say('That time overlaps a meeting or falls outside 08:00–19:00. Pick a free slot above, or click “Add anyway”.', false); return;
+        }
         busy(go, true, 'Adding…');
         try {
           const ev = await call(S.CAL, 'create_event', { summary: title.value, startTime: date.value + 'T' + time.value + ':00', endTime: plusMin(date.value, time.value, Number(dur.value)), availability: 'AVAILABILITY_BUSY', description: 'From the Command Center. Task: ' + (t.url || t.name) });
@@ -500,8 +554,8 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
           say(msg, true); go.remove(); mcp.invalidate(S.CAL).catch(() => {}); markActed(t.id);
         } catch (e) { say(errText(e, 'Google Calendar'), false); busy(go, false, 'Retry'); }
       };
-      d.append(h('div', { class: 'hint' }, 'On your calendar only. No guests are invited.'),
-        h('div', { class: 'line' }, h('label', { class: 'f' }, 'Day', date), h('label', { class: 'f' }, 'Start', time), h('label', { class: 'f' }, 'Length', dur)),
+      d.append(h('div', { class: 'hint' }, 'On your calendar only. No guests are invited. Suggested times come from your free time in the calendar.'),
+        h('div', { class: 'line' }, h('label', { class: 'f' }, 'Day', date), h('label', { class: 'f' }, 'Start', time), h('label', { class: 'f' }, 'Length', dur)), free,
         h('label', { class: 'f' }, 'Title', title), h('div', { class: 'line' }, go, close), out);
     },
 
@@ -613,7 +667,8 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
     const inbox = (st.inbox || []).slice(0, 20).map((m) => ({ ref: m.id, from: nameOf(m.from), subject: m.subject, snippet: (m.snippet || '').slice(0, 220), date: m.date, unread: m.unread }));
     const cal = (ev) => (ev || []).map((e) => ({ title: e.summary, start: e.start && e.start.dateTime ? hm(new Date(e.start.dateTime)) : 'all day', end: e.end && e.end.dateTime ? hm(new Date(e.end.dateTime)) : '' }));
     const agents = (st.agents || []).map((a) => ({ ref: a.id, name: a.name, last: a.last_run && a.last_run.status }));
-    return { now: `${today()} ${hm(new Date())} (${TZ}), work week Sun-Thu`, tasks, inbox, today: cal(st.events[0]), tomorrow: cal(st.events[1]), agents };
+    const gapsFor = (off) => st.events[off] ? gapText(freeGaps(dayStr(off), st.events[off], 15)) || 'none' : 'unknown';
+    return { now: `${today()} ${hm(new Date())} (${TZ}), work week Sun-Thu`, tasks, inbox, today: cal(st.events[0]), tomorrow: cal(st.events[1]), free_today: gapsFor(0), free_tomorrow: gapsFor(1), agents };
   }
 
   async function getIdeas(more) {
@@ -630,7 +685,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
       (more ? 'Do NOT repeat these earlier suggestions: ' + JSON.stringify(st.ideas.map((i) => i.title)) + '. ' : '') +
       'Reply with ONLY a JSON array of up to ' + (more ? 4 : 6) + ' objects, best first: ' +
       '{"title": short imperative, max 12 words; "why": one sentence with the evidence; "kind": one of "done","update","block","delegate","reply","mailtask","agent"; "ref": the ref of the task (done, update, block, delegate), the email (reply, mailtask) or the agent (agent); ' +
-      '"time": "HH:MM" start (block only); "mins": minutes (block only); "day": "today" or "tomorrow" (block only); "text": optional draft text (update, delegate); "how": optional one-line direction (reply)}. ' +
+      '"time": "HH:MM" start (block only, and it MUST be inside one of the free_today or free_tomorrow gaps with room for mins; never over a meeting, never outside the gaps);  "mins": minutes (block only); "day": "today" or "tomorrow" (block only); "text": optional draft text (update, delegate); "how": optional one-line direction (reply)}. ' +
       'Use only refs from the data. Write in English but keep item names in their original language.\n\nDATA:\n' + JSON.stringify(context());
     try {
       const arr = await sample.json(prompt, more ? { cache: false } : {});
@@ -662,7 +717,11 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
     if (TASK_KINDS.includes(kind)) {
       const g = GROUPS.find((x) => x.id === obj.group); if (g && st.tab !== g.key) { st.tab = g.key; renderTasks(); }
       rowId = 'task-' + obj.id;
-      if (kind === 'block') preset = { time: /^\d\d:\d\d$/.test(i.time || '') ? i.time : undefined, mins: [30, 45, 60, 90, 120].includes(Number(i.mins)) ? Number(i.mins) : 60, date: i.day === 'tomorrow' ? dayStr(1) : today() };
+      if (kind === 'block') {
+        const mins = [30, 45, 60, 90, 120].includes(Number(i.mins)) ? Number(i.mins) : 60, date = i.day === 'tomorrow' ? dayStr(1) : today();
+        const evs = eventsFor(date), ok = /^\d\d:\d\d$/.test(i.time || '') && (!evs || fits(freeGaps(date, evs, 15), toMin(i.time), mins));
+        preset = { time: ok ? i.time : undefined, mins, date }; // a suggested time over a meeting is dropped; the drawer picks the first free slot
+      }
       else preset = { text: i.text };
     } else if (kind === 'agent') { rowId = 'agent-' + obj.id; kind = 'run'; preset = { text: i.text }; }
     else { rowId = 'mail-' + obj.id; preset = { how: i.how }; }
