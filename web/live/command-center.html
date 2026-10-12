@@ -192,6 +192,9 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
 .allday{display:flex;flex-wrap:wrap;gap:6px;padding:10px 16px;border-bottom:1px solid var(--line)}
 .allday span{font-size:12px;background:var(--sunk);border-radius:999px;padding:2px 10px;color:var(--muted)}
 .daysw{display:flex;gap:4px}
+.chanpick{display:flex;flex-wrap:wrap;gap:6px;padding:10px 16px;border-bottom:1px solid var(--line);align-items:center}
+.chanpick .hint{margin-right:4px}
+.chanpick button[aria-pressed="true"]{background:var(--slack-soft);border-color:color-mix(in srgb,var(--slack) 40%,transparent);color:var(--slack)}
 
 .learn{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
 .learn .line{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -267,6 +270,8 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
 
       <section class="panel c-slack" aria-labelledby="sl-h" id="sec-slack">
         <div class="ph"><h2 id="sl-h"><span class="ic">#</span>Slack</h2><span class="meta" id="sl-meta"></span></div>
+        <div class="tabs" role="tablist" id="sl-tabs"></div>
+        <div class="chanpick" id="sl-chans" hidden></div>
         <div id="slack"><div class="skel"></div><div class="skel"></div></div>
       </section>
     </div>
@@ -282,6 +287,9 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   const ME_EMAIL = 'ilanmn@monday.com';
   const ME_SLACK = 'U038UEUQC1Y';
   const VIPS = ['Roy Segev', 'Eran Zinman', 'Or Elmaliah'];   // config.vips
+  const CHANNELS = { 'media-relations': 'C04NTEN0H7H', 'communications-team': 'C08STFTQFME', 'ask-comms': 'C0ACVN9EUMT', 'monday-global-agencies': 'C0B868DM6SH', 'monday_in_the_news': 'C010G6MMCLB', 'ilan-pa': 'C0AHF7BRB7U' };   // config.slackChannelIds
+  const CHAN_KEY = 'cc-slack-channels';
+  let chosenChans = (() => { try { const v = JSON.parse(localStorage.getItem(CHAN_KEY) || 'null'); if (Array.isArray(v)) return v.filter((c) => CHANNELS[c]); } catch (_) {} return ['media-relations', 'communications-team', 'ask-comms', 'monday-global-agencies']; })();
   // Unread only (reading it anywhere, Gmail included, takes it off the list); calendar invites and their replies filtered out.
   const INBOX_Q = 'in:inbox is:unread category:primary newer_than:3d -from:me -filename:ics -filename:invite.ics -from:calendar-notification@google.com -subject:invitation -subject:"updated invitation" -subject:"accepted:" -subject:"declined:" -subject:"tentatively accepted:"';
   const INVITE_RE = /^(invitation|updated invitation|accepted|declined|tentatively accepted|new event|canceled event|cancelled event|הזמנה|הזמנה מעודכנת|התקבל|נדחה|אירוע בוטל)\b|@ \w{3} \w{3} \d{1,2}, \d{4}/i;
@@ -309,7 +317,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   const TASK_KINDS = ['done', 'update', 'block', 'delegate'];
 
   // ---- State ----
-  const st = { tasks: null, inbox: null, slack: null, events: { 0: null, 1: null }, agents: null, src: {}, tab: 'today', day: 0, ideas: [], openDrawer: null, doneIds: new Set() };
+  const st = { tasks: null, inbox: null, slack: null, mentions: null, chan: null, mine: null, slTab: 'dm', events: { 0: null, 1: null }, agents: null, src: {}, tab: 'today', day: 0, ideas: [], openDrawer: null, doneIds: new Set() };
   let mcp = null, sample = null;
 
   // ---- Small helpers ----
@@ -395,7 +403,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     const overdue = (st.tasks || []).filter((t) => t.deadline && t.deadline < t0 && !st.doneIds.has(t.id)).length;
     const mail = (st.inbox || []).filter((m) => m.unread && !readHere[m.id]);
     const vip = mail.filter((m) => m.imp && m.imp.why.includes('VIP')).length;
-    const slack = (st.slack || []).filter((m) => !handled[m.id]);
+    const slack = [...dmList(), ...mentionList()];
     const ag = st.agents || [], bad = ag.filter((a) => /FAIL/.test((a.last_run || {}).status || '')).length;
     const moves = touchedHere.size;
     const tile = (cls, ico, lbl, val, hint, target) => h('button', { class: 'stat ' + cls, type: 'button', onclick: () => { const el = $(target); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
@@ -403,7 +411,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     $('stats').replaceChildren(
       tile('c-task', '☰', 'Today', st.tasks ? todayTasks.length : '–', st.tasks ? overdue + ' overdue on the board' : 'loading…', 'sec-tasks'),
       tile('c-mail', '✉', 'Unread', st.inbox ? mail.length : '–', st.inbox ? (vip ? vip + ' from VIPs' : 'most important first') : 'loading…', 'sec-inbox'),
-      tile('c-slack', '#', 'Slack', st.slack ? slack.length : '–', st.slack ? 'DMs waiting on you' : 'loading…', 'sec-slack'),
+      tile('c-slack', '#', 'Slack', st.slack ? slack.length : '–', st.slack ? dmList().length + ' DMs · ' + mentionList().length + ' mentions' : 'loading…', 'sec-slack'),
       tile('c-agent', '⚙', 'Agents', st.agents ? ag.length : '–', st.agents ? (bad ? bad + ' failed last run' : 'all ran fine') : 'loading…', 'sec-agents'),
       tile('c-spark', '✦', 'Moves today', moves, moves ? 'nice momentum' : 'pick one below', 'ideas'));
   }
@@ -444,7 +452,8 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   // ---- Reads: watched, so the page keeps itself current ----
   const unsubs = [];
   function watch(server, tool, input, key, onData, onErr, every) {
-    unsubs.push(mcp.watchTool(server, tool, input, (ev) => {
+    let u;
+    unsubs.push(u = mcp.watchTool(server, tool, input, (ev) => {
       if (ev.type === 'data') {
         const at = ev.result.cache ? ev.result.cache.storedAt : Date.now();
         setSrc(key, 'ok', 'Updated ' + ago(at));
@@ -455,6 +464,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
         onErr(e, isDenial(e));
       }
     }, { cache: { staleTime: 60000 }, refetchInterval: every || 300000 }));
+    return u;
   }
 
   function startWatches() {
@@ -500,6 +510,18 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       $('sl-meta').textContent = 'DMs, last 2 days · ' + ago(at);
       renderSlack(); maybeIdeas();
     }, (e, drop) => { if (drop || !st.slack) { st.slack = drop ? null : st.slack; $('slack').replaceChildren(errBox(errText(e, 'Slack'), refreshAll)); } });
+
+    // Mentions of Ilan in channels, and Ilan's own channel messages (a mention he replied to in its thread is answered).
+    const SL = { sort: 'timestamp', sort_dir: 'desc', limit: 20, include_context: false, response_format: 'detailed', channel_types: 'public_channel,private_channel' };
+    watch(S.SL, 'slack_search_public_and_private', { ...SL, keywords: ['<@' + ME_SLACK + '>'], filters: 'after:' + dayStr(-3) }, 'sl', (p) => {
+      st.mentions = parseSlackRaw(typeof p === 'string' ? p : (p.results || ''));
+      renderSlack(); maybeIdeas();
+    }, () => {});
+    watch(S.SL, 'slack_search_public_and_private', { ...SL, filters: 'from:<@' + ME_SLACK + '> after:' + dayStr(-3) }, 'sl', (p) => {
+      st.mine = parseSlackRaw(typeof p === 'string' ? p : (p.results || ''));
+      renderSlack();
+    }, () => {});
+    startChannelWatch();
 
     watch(S.CCR, 'list_triggers', { enabled: true, limit: 60 }, 'ag', (p, at) => {
       st.agents = (p.data || []).filter((t) => /^Agent:/i.test(t.name || '')).sort((a, b) => String(a.next_run_at).localeCompare(String(b.next_run_at)));
@@ -583,8 +605,9 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
 
   // ---- Slack ----
   // The search tool answers in Markdown blocks ("### Result n of m", then Channel/Participants/From/Time/Message_ts/Permalink/Text).
-  function parseSlack(md) {
-    const msgs = String(md).split(/\n### Result \d+ of \d+\n/).slice(1).map((b) => {
+  function parseSlack(md) { return waitingDMs(parseSlackRaw(md)); }
+  function parseSlackRaw(md) {
+    return String(md).split(/\n### Result \d+ of \d+\n/).slice(1).map((b) => {
       const g = (re) => { const m = b.match(re); return m ? m[1].trim() : ''; };
       const ids = [...(g(/^Participants:(.*)$/m).matchAll(/\(ID: (U[A-Z0-9]+)\)/g))].map((m) => m[1]);
       const permalink = g(/^Permalink: \[link\]\((.*?)\)/m).replace(/\\\//g, '/');
@@ -595,30 +618,66 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
         time: g(/^Time: (.*)$/m), ts: g(/^Message_ts: ([\d.]+)/m), permalink, thread,
         text: (b.split(/^Text:\s*\n?/m)[1] || '').split(/\n---\n/)[0].trim(),
       };
-    }).filter((m) => m.channel && m.ts);
+    }).filter((m) => m.channel && m.ts).map((m) => ({ ...m, id: m.channel + '-' + m.ts.replace('.', '') }));
+  }
+  function waitingDMs(msgs) {
     const seen = new Set(), out = [];
     for (const m of msgs) {                    // newest first: the first message per conversation is its latest
       const key = m.channel + ':' + (m.thread || '');
       if (seen.has(key)) continue; seen.add(key);
       if (m.fromId === ME_SLACK || m.bot || m.fromId === PEPPER) continue;   // already answered, or a bot / Pepper
-      out.push({ ...m, id: m.channel + '-' + m.ts.replace('.', '') });
+      out.push({ ...m, src: 'dm' });
     }
     return out;
+  }
+  // A channel message is answered when Ilan wrote later in the same thread.
+  const rootOf = (m) => m.thread || m.ts;
+  const answered = (m) => (st.mine || []).some((x) => x.channel === m.channel && rootOf(x) === rootOf(m) && Number(x.ts) > Number(m.ts));
+  const notMine = (m) => m.fromId !== ME_SLACK && !m.bot && m.fromId !== PEPPER;
+  // Replies to channel messages go in the message's thread.
+  const asChannel = (m, src) => ({ ...m, src, thread: rootOf(m) });
+  function mentionList() { return (st.mentions || []).filter((m) => notMine(m) && !handled[m.id] && !answered(m)).map((m) => asChannel(m, 'mention')); }
+  function chanList() { return (st.chan || []).filter((m) => notMine(m) && !handled[m.id]).slice(0, 25).map((m) => asChannel(m, 'chan')); }
+  function dmList() { return (st.slack || []).filter((m) => !handled[m.id]); }
+  function slackAll() { return [...dmList(), ...mentionList(), ...chanList()]; }
+
+  let chanUnsub = null;
+  function startChannelWatch() {
+    if (chanUnsub) { chanUnsub(); chanUnsub = null; }
+    if (!chosenChans.length) { st.chan = []; renderSlack(); return; }
+    const filters = chosenChans.map((c) => 'in:<#' + CHANNELS[c] + '>').join(' ') + ' after:' + dayStr(-2);
+    chanUnsub = watch(S.SL, 'slack_search_public_and_private', { sort: 'timestamp', sort_dir: 'desc', limit: 20, include_context: false, response_format: 'detailed', channel_types: 'public_channel,private_channel', filters }, 'sl', (p) => {
+      st.chan = parseSlackRaw(typeof p === 'string' ? p : (p.results || ''));
+      renderSlack();
+    }, () => {});
   }
   const HANDLED_KEY = 'cc-slack-handled';
   const handled = (() => { try { const o = JSON.parse(localStorage.getItem(HANDLED_KEY) || '{}'); const cut = Date.now() - 4 * 864e5; return Object.fromEntries(Object.entries(o).filter(([, t]) => t > cut)); } catch (_) { return {}; } })();
   function markHandled(id) { handled[id] = Date.now(); try { localStorage.setItem(HANDLED_KEY, JSON.stringify(handled)); } catch (_) {} touch(id); st.ideas = st.ideas.filter((i) => String(i.ref) !== id); renderIdeas(); renderSlack(); }
   function renderSlack() {
-    if (!st.slack) return;
-    const list = st.slack.filter((m) => !handled[m.id]);
-    if (!list.length) { $('slack').replaceChildren(h('div', { class: 'empty' }, 'No DM waiting on you from the last 2 days.')); return; }
+    const lists = { dm: dmList(), mention: mentionList(), chan: chanList() };
+    const loaded = { dm: !!st.slack, mention: !!st.mentions, chan: !!st.chan };
+    const labels = { dm: 'DMs', mention: '@ Mentions', chan: 'Channels' };
+    $('sl-tabs').replaceChildren(...Object.keys(labels).map((k) => h('button', { class: 'tab', role: 'tab', 'aria-selected': String(st.slTab === k), onclick: () => { st.slTab = k; renderSlack(); } }, labels[k], h('span', { class: 'n' }, loaded[k] ? lists[k].length : '…'))));
+    const pick = $('sl-chans'); pick.hidden = st.slTab !== 'chan';
+    if (st.slTab === 'chan') pick.replaceChildren(h('span', { class: 'hint' }, 'Show:'), ...Object.keys(CHANNELS).map((c) => h('button', { class: 'sm', type: 'button', 'aria-pressed': String(chosenChans.includes(c)), onclick: () => {
+      chosenChans = chosenChans.includes(c) ? chosenChans.filter((x) => x !== c) : [...chosenChans, c];
+      try { localStorage.setItem(CHAN_KEY, JSON.stringify(chosenChans)); } catch (_) {}
+      st.chan = null; startChannelWatch(); renderSlack();
+    } }, '#' + c)));
+    queueMicrotask(renderStats);
+    if (!loaded[st.slTab]) { $('slack').replaceChildren(h('div', { class: 'skel' })); return; }
+    const list = lists[st.slTab];
+    const emptyText = { dm: 'No DM waiting on you from the last 2 days.', mention: 'No unanswered mention from the last 2 days.', chan: chosenChans.length ? 'Nothing new in these channels in the last day.' : 'Pick channels to follow above.' }[st.slTab];
+    $('sl-meta').textContent = { dm: 'Waiting on you, last 2 days', mention: 'Mentions you have not answered', chan: 'Latest in your channels' }[st.slTab];
+    if (!list.length) { $('slack').replaceChildren(h('div', { class: 'empty' }, emptyText)); return; }
     $('slack').replaceChildren(h('div', { class: 'list' }, list.map((m) => {
       const row = h('div', { class: 'row', id: 'slack-' + m.id },
         h('div', { class: 'rh' },
-          h('span', { class: 'mark acc' }),
-          h('span', { class: 't', dir: 'auto' }, h('a', { href: m.permalink, target: '_blank', rel: 'noopener' }, m.from || 'Someone'), m.channelName && !/^DM$/i.test(m.channelName) && h('span', { class: 'pill idle' }, m.channelName), m.thread && h('span', { class: 'pill idle' }, 'thread')),
+          h('span', { class: 'mark ' + (m.src === 'chan' && !m.text.includes('<@' + ME_SLACK) ? 'idle' : 'acc') }),
+          h('span', { class: 't', dir: 'auto' }, h('a', { href: m.permalink, target: '_blank', rel: 'noopener' }, m.from || 'Someone'), m.channelName && !/^DM$/i.test(m.channelName) && h('span', { class: 'pill idle' }, m.channelName), m.src === 'chan' && m.text.includes('<@' + ME_SLACK) && h('span', { class: 'pill crit' }, '@you'), m.src === 'dm' && m.thread && h('span', { class: 'pill idle' }, 'thread')),
           h('span', { class: 'r' }, (m.time.match(/\d\d:\d\d/) || [''])[0]),
-          h('span', { class: 'd', dir: 'auto' }, m.text.slice(0, 280))),
+          h('span', { class: 'd', dir: 'auto' }, m.text.replace(/<@U[A-Z0-9]+\|([^>]+)>/g, '@$1').replace(/&amp;/g, '&').slice(0, 280))),
         h('div', { class: 'acts' },
           h('button', { class: 'sm spark', onclick: () => openDrawer(row, 'slackreply', m) }, '✦ Suggest reply'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'slacktask', m) }, '→ Make it a task'),
@@ -871,7 +930,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
 
     slackreply(d, m, { say, busy, close, out, preset }) {
       // Replies go out only on an explicit click (principle 1). A 1:1 DM goes to the person's user id, never the DM channel id.
-      const target = m.others.length === 1 && !m.thread ? m.others[0] : m.channel;
+      const target = m.src === 'dm' && m.others.length === 1 && !m.thread ? m.others[0] : m.channel;
       const how = h('input', { type: 'text', placeholder: 'Optional direction for the reply', style: 'width:100%', dir: 'auto', value: preset.how || '' });
       const ta = h('textarea', { dir: 'auto', placeholder: 'Claude drafts here. Edit freely.' });
       const ai = h('button', { class: 'spark sm' }, '✦ Draft reply');
@@ -1012,7 +1071,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     const cal = (ev) => (ev || []).map((e) => ({ title: e.summary, start: e.start && e.start.dateTime ? hm(new Date(e.start.dateTime)) : 'all day', end: e.end && e.end.dateTime ? hm(new Date(e.end.dateTime)) : '' }));
     const agents = (st.agents || []).map((a) => ({ ref: a.id, name: a.name, last: a.last_run && a.last_run.status }));
     const gapsFor = (off) => st.events[off] ? gapText(freeGaps(dayStr(off), st.events[off], 15)) || 'none' : 'unknown';
-    const slack = (st.slack || []).filter((m) => !isTouched(m.id) && !handled[m.id]).slice(0, 15).map((m) => ({ ref: m.id, from: m.from, text: m.text.slice(0, 220), time: m.time }));
+    const slack = [...dmList(), ...mentionList()].filter((m) => !isTouched(m.id)).slice(0, 15).map((m) => ({ ref: m.id, from: m.from, where: m.src === 'dm' ? 'DM' : m.channelName + ' (mentions Ilan)', text: m.text.slice(0, 220), time: m.time }));
     return { now: `${today()} ${hm(new Date())} (${TZ}), work week Sun-Thu`, tasks, inbox, slack, today: cal(st.events[0]), tomorrow: cal(st.events[1]), free_today: gapsFor(0), free_tomorrow: gapsFor(1), agents };
   }
 
@@ -1052,7 +1111,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     if (TASK_KINDS.includes(i.kind)) return (st.tasks || []).find((t) => t.id === r && !st.doneIds.has(t.id));
     if (i.kind === 'reply' || i.kind === 'mailtask') return (st.inbox || []).find((m) => m.id === r);
     if (i.kind === 'agent') return (st.agents || []).find((a) => String(a.id) === r);
-    if (i.kind === 'slackreply') return (st.slack || []).find((m) => m.id === r && !handled[m.id]);
+    if (i.kind === 'slackreply') return slackAll().find((m) => m.id === r);
     return null;
   }
   const KIND = { done: ['Close it', '✓ Mark Done'], update: ['Update', '✎ Write update'], block: ['Schedule', '◷ Block it'], delegate: ['Hand off', '→ Hand off'], reply: ['Reply', '✦ Draft reply'], mailtask: ['Track', '→ Make it a task'], slackreply: ['Slack', '✦ Draft reply'], agent: ['Agents', '▶ Run'] };
@@ -1070,7 +1129,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       }
       else preset = { text: i.text };
     } else if (kind === 'agent') { rowId = 'agent-' + obj.id; kind = 'run'; preset = { text: i.text }; }
-    else if (kind === 'slackreply') { rowId = 'slack-' + obj.id; preset = { how: i.how }; }
+    else if (kind === 'slackreply') { if (st.slTab !== obj.src) { st.slTab = obj.src; renderSlack(); } rowId = 'slack-' + obj.id; preset = { how: i.how }; }
     else { rowId = 'mail-' + obj.id; preset = { how: i.how }; }
     const row = $(rowId); if (!row) return;
     row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 1600);
