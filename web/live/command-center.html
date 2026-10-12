@@ -205,6 +205,21 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
   const TZ = 'Asia/Jerusalem';
   const ME_EMAIL = 'ilanmn@monday.com';
   const ME_SLACK = 'U038UEUQC1Y';
+  const VIPS = ['Roy Segev', 'Eran Zinman', 'Or Elmaliah'];   // config.vips
+  // Unread only (reading it anywhere, Gmail included, takes it off the list); calendar invites and their replies filtered out.
+  const INBOX_Q = 'in:inbox is:unread category:primary newer_than:3d -from:me -filename:ics -filename:invite.ics -from:calendar-notification@google.com -subject:invitation -subject:"updated invitation" -subject:"accepted:" -subject:"declined:" -subject:"tentatively accepted:"';
+  const INVITE_RE = /^(invitation|updated invitation|accepted|declined|tentatively accepted|new event|canceled event|cancelled event|הזמנה|הזמנה מעודכנת|התקבל|נדחה|אירוע בוטל)\b|@ \w{3} \w{3} \d{1,2}, \d{4}/i;
+  // Importance: VIP +5, journalist or other outside sender +3, Gmail's Important label +2, a question or ask +1, a live thread +1.
+  function importance(m) {
+    const from = String(m.from || ''), mail = emailOf(from).toLowerCase(), text = (m.subject + ' ' + m.snippet).toLowerCase();
+    const why = []; let score = 0;
+    if (VIPS.some((v) => from.toLowerCase().includes(v.toLowerCase()))) { score += 5; why.push('VIP'); }
+    else if (mail && !mail.endsWith('@monday.com') && !/no-?reply|notification|newsletter|digest|alerts?@|mailer|updates?@/.test(mail)) { score += 3; why.push('External'); }
+    if ((m.labels || []).includes('IMPORTANT')) { score += 2; why.push('Important'); }
+    if (/\?|please|can you|could you|deadline|urgent|asap|by (mon|tue|wed|thu|fri|sun)|בבקשה|דחוף|תוכל|אפשר|עד /.test(text)) { score += 1; why.push('Ask'); }
+    if (m.count > 2) score += 1;
+    return { score, why };
+  }
   const PEPPER = 'U0BBLHZH4DC';            // Pepper's Slack user id: DM by user id, never a channel id
   const BOARD = 18416855289;               // Ilan's projects
   const COL = { status: 'status', deadline: 'date4', priority: 'color_mm5wqmy7', person: 'person', calBlock: 'text_mm4rwr1z' };
@@ -340,12 +355,15 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
       renderTasks(); if (st.ideas.length) renderIdeas(); maybeIdeas();
     }, (e, drop) => { if (drop || !st.tasks) { st.tasks = drop ? null : st.tasks; $('tk-tabs').replaceChildren(); $('tasks').replaceChildren(errBox(errText(e, 'monday'), refreshAll)); } });
 
-    watch(S.GM, 'search_threads', { query: 'in:inbox category:primary newer_than:3d -from:me', pageSize: 20 }, 'gm', (p, at) => {
+    watch(S.GM, 'search_threads', { query: INBOX_Q, pageSize: 30 }, 'gm', (p, at) => {
       st.inbox = (p.threads || []).map((t) => {
         const ms = t.messages || []; const last = ms[ms.length - 1] || {};
-        return { id: String(t.id), count: t.messageCount || ms.length, from: last.sender, subject: decode(last.subject), snippet: decode(last.snippet), date: last.date, unread: (last.labelIds || []).includes('UNREAD'), url: t.viewUrl || last.viewUrl };
-      });
-      $('in-meta').textContent = 'Primary, last 3 days · ' + ago(at);
+        const labels = [...new Set(ms.flatMap((x) => x.labelIds || []))];
+        return { id: String(t.id), count: t.messageCount || ms.length, from: last.sender, subject: decode(last.subject), snippet: decode(last.snippet), date: last.date, unread: labels.includes('UNREAD'), labels, url: t.viewUrl || last.viewUrl };
+      }).filter((m) => !INVITE_RE.test(m.subject || '') && !/calendar-notification@google\.com/.test(m.from || ''))
+        .map((m) => ({ ...m, imp: importance(m) }))
+        .sort((a, b) => b.imp.score - a.imp.score || String(b.date).localeCompare(String(a.date)));
+      $('in-meta').textContent = 'Unread · most important first · ' + ago(at);
       renderInbox(); maybeIdeas();
     }, (e, drop) => { if (drop || !st.inbox) { st.inbox = drop ? null : st.inbox; $('inbox').replaceChildren(errBox(errText(e, 'Gmail'), refreshAll)); } });
 
@@ -424,14 +442,14 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
   }
   function renderInbox() {
     if (!st.inbox) return;
-    const list = st.inbox.filter((m) => !readHere[m.id]);
-    if (!list.length) { $('inbox').replaceChildren(h('div', { class: 'empty' }, 'Nothing left in Primary for the last 3 days.')); return; }
+    const list = st.inbox.filter((m) => !readHere[m.id] && m.unread);
+    if (!list.length) { $('inbox').replaceChildren(h('div', { class: 'empty' }, 'No unread mail in Primary from the last 3 days.')); return; }
     $('inbox').replaceChildren(h('div', { class: 'list' }, list.map((m) => {
       const d = m.date ? new Date(m.date) : null;
       const row = h('div', { class: 'row', id: 'mail-' + m.id },
         h('div', { class: 'rh' },
-          h('span', { class: 'mark ' + (m.unread ? 'acc' : 'idle') }),
-          h('span', { class: 't', dir: 'auto' }, h('a', { href: m.url, target: '_blank', rel: 'noopener' }, m.subject || '(no subject)'), m.count > 1 && h('span', { class: 'pill idle' }, m.count)),
+          h('span', { class: 'mark ' + (m.imp && m.imp.score >= 5 ? 'crit' : m.imp && m.imp.score >= 3 ? 'warn' : 'acc') }),
+          h('span', { class: 't', dir: 'auto' }, h('a', { href: m.url, target: '_blank', rel: 'noopener' }, m.subject || '(no subject)'), m.count > 1 && h('span', { class: 'pill idle' }, m.count), (m.imp ? m.imp.why : []).filter((w) => w !== 'Ask').map((w) => h('span', { class: 'pill ' + (w === 'VIP' ? 'crit' : 'idle') }, w))),
           h('span', { class: 'r' }, d ? (ymd(d) === today() ? hm(d) : ddmm(ymd(d))) : ''),
           h('span', { class: 'd', dir: 'auto' }, h('b', {}, nameOf(m.from)), ' — ', m.snippet)),
         h('div', { class: 'acts' },
