@@ -188,6 +188,11 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
         <div class="ph"><h2 id="in-h">Inbox</h2><span class="meta" id="in-meta"></span></div>
         <div id="inbox"><div class="skel"></div><div class="skel"></div></div>
       </section>
+
+      <section class="panel" aria-labelledby="sl-h">
+        <div class="ph"><h2 id="sl-h">Slack</h2><span class="meta" id="sl-meta"></span></div>
+        <div id="slack"><div class="skel"></div><div class="skel"></div></div>
+      </section>
     </div>
   </main>
 
@@ -199,6 +204,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
   // ---- Fixed IDs (from config.json in the BrieFing repo) ----
   const TZ = 'Asia/Jerusalem';
   const ME_EMAIL = 'ilanmn@monday.com';
+  const ME_SLACK = 'U038UEUQC1Y';
   const PEPPER = 'U0BBLHZH4DC';            // Pepper's Slack user id: DM by user id, never a channel id
   const BOARD = 18416855289;               // Ilan's projects
   const COL = { status: 'status', deadline: 'date4', priority: 'color_mm5wqmy7', person: 'person', calBlock: 'text_mm4rwr1z' };
@@ -212,7 +218,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
   const TASK_KINDS = ['done', 'update', 'block', 'delegate'];
 
   // ---- State ----
-  const st = { tasks: null, inbox: null, events: { 0: null, 1: null }, agents: null, src: {}, tab: 'today', day: 0, ideas: [], openDrawer: null, doneIds: new Set() };
+  const st = { tasks: null, inbox: null, slack: null, events: { 0: null, 1: null }, agents: null, src: {}, tab: 'today', day: 0, ideas: [], openDrawer: null, doneIds: new Set() };
   let mcp = null, sample = null;
 
   // ---- Small helpers ----
@@ -285,7 +291,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
 
   function setSrc(key, state, note) { st.src[key] = { state, note }; renderChips(); }
   function renderChips() {
-    const names = { mon: 'monday', gm: 'Gmail', cal: 'Calendar', ag: 'Agents' };
+    const names = { mon: 'monday', gm: 'Gmail', sl: 'Slack', cal: 'Calendar', ag: 'Agents' };
     $('chips').replaceChildren(...Object.entries(names).map(([k, n]) => {
       const s = st.src[k] || { state: 'load', note: 'Loading' };
       return h('span', { class: 'chip', title: s.note || '' }, h('span', { class: 'dot ' + s.state }), n);
@@ -345,6 +351,13 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
         maybeIdeas();
       }, (e, drop) => { if (drop) st.events[off] = null; if (st.day === off && (drop || !st.events[off])) $('day').replaceChildren(errBox(errText(e, 'Google Calendar'), refreshAll)); });
     }
+
+    // Slack: DMs and group DMs from the last 2 days; a conversation waits on Ilan when its latest message is someone else's.
+    watch(S.SL, 'slack_search_public_and_private', { filters: 'after:' + dayStr(-3), channel_types: 'im,mpim', sort: 'timestamp', sort_dir: 'desc', limit: 20, include_context: false, response_format: 'detailed' }, 'sl', (p, at) => {
+      st.slack = parseSlack(typeof p === 'string' ? p : (p.results || ''));
+      $('sl-meta').textContent = 'DMs, last 2 days · ' + ago(at);
+      renderSlack(); maybeIdeas();
+    }, (e, drop) => { if (drop || !st.slack) { st.slack = drop ? null : st.slack; $('slack').replaceChildren(errBox(errText(e, 'Slack'), refreshAll)); } });
 
     watch(S.CCR, 'list_triggers', { enabled: true, limit: 60 }, 'ag', (p, at) => {
       st.agents = (p.data || []).filter((t) => /^Agent:/i.test(t.name || '')).sort((a, b) => String(a.next_run_at).localeCompare(String(b.next_run_at)));
@@ -419,6 +432,52 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
           h('button', { class: 'sm spark', onclick: () => openDrawer(row, 'reply', m) }, '✦ Suggest reply'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'mailtask', m) }, '→ Make it a task'),
           h('button', { class: 'sm ghost', onclick: (ev) => markRead(m, row, ev.currentTarget) }, '✓ Mark read')));
+      return row;
+    })));
+  }
+
+  // ---- Slack ----
+  // The search tool answers in Markdown blocks ("### Result n of m", then Channel/Participants/From/Time/Message_ts/Permalink/Text).
+  function parseSlack(md) {
+    const msgs = String(md).split(/\n### Result \d+ of \d+\n/).slice(1).map((b) => {
+      const g = (re) => { const m = b.match(re); return m ? m[1].trim() : ''; };
+      const ids = [...(g(/^Participants:(.*)$/m).matchAll(/\(ID: (U[A-Z0-9]+)\)/g))].map((m) => m[1]);
+      const permalink = g(/^Permalink: \[link\]\((.*?)\)/m).replace(/\\\//g, '/');
+      const thread = (permalink.match(/thread_ts=([\d.]+)/) || [])[1] || '';
+      return {
+        channel: g(/^Channel:.*\(ID: ([A-Z0-9]+)\)/m), channelName: g(/^Channel: (.*?) \(ID:/m), others: ids.filter((u) => u !== ME_SLACK),
+        fromId: g(/^From:.*\(ID: (U[A-Z0-9]+)\)/m), from: g(/^From: ([^<(]*)/m), bot: /^From:.*\[BOT\]/m.test(b),
+        time: g(/^Time: (.*)$/m), ts: g(/^Message_ts: ([\d.]+)/m), permalink, thread,
+        text: (b.split(/^Text:\s*\n?/m)[1] || '').split(/\n---\n/)[0].trim(),
+      };
+    }).filter((m) => m.channel && m.ts);
+    const seen = new Set(), out = [];
+    for (const m of msgs) {                    // newest first: the first message per conversation is its latest
+      const key = m.channel + ':' + (m.thread || '');
+      if (seen.has(key)) continue; seen.add(key);
+      if (m.fromId === ME_SLACK || m.bot || m.fromId === PEPPER) continue;   // already answered, or a bot / Pepper
+      out.push({ ...m, id: m.channel + '-' + m.ts.replace('.', '') });
+    }
+    return out;
+  }
+  const HANDLED_KEY = 'cc-slack-handled';
+  const handled = (() => { try { const o = JSON.parse(localStorage.getItem(HANDLED_KEY) || '{}'); const cut = Date.now() - 4 * 864e5; return Object.fromEntries(Object.entries(o).filter(([, t]) => t > cut)); } catch (_) { return {}; } })();
+  function markHandled(id) { handled[id] = Date.now(); try { localStorage.setItem(HANDLED_KEY, JSON.stringify(handled)); } catch (_) {} touch(id); st.ideas = st.ideas.filter((i) => String(i.ref) !== id); renderIdeas(); renderSlack(); }
+  function renderSlack() {
+    if (!st.slack) return;
+    const list = st.slack.filter((m) => !handled[m.id]);
+    if (!list.length) { $('slack').replaceChildren(h('div', { class: 'empty' }, 'No DM waiting on you from the last 2 days.')); return; }
+    $('slack').replaceChildren(h('div', { class: 'list' }, list.map((m) => {
+      const row = h('div', { class: 'row', id: 'slack-' + m.id },
+        h('div', { class: 'rh' },
+          h('span', { class: 'mark acc' }),
+          h('span', { class: 't', dir: 'auto' }, h('a', { href: m.permalink, target: '_blank', rel: 'noopener' }, m.from || 'Someone'), m.channelName && !/^DM$/i.test(m.channelName) && h('span', { class: 'pill idle' }, m.channelName), m.thread && h('span', { class: 'pill idle' }, 'thread')),
+          h('span', { class: 'r' }, (m.time.match(/\d\d:\d\d/) || [''])[0]),
+          h('span', { class: 'd', dir: 'auto' }, m.text.slice(0, 280))),
+        h('div', { class: 'acts' },
+          h('button', { class: 'sm spark', onclick: () => openDrawer(row, 'slackreply', m) }, '✦ Suggest reply'),
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'slacktask', m) }, '→ Make it a task'),
+          h('button', { class: 'sm ghost', onclick: () => markHandled(m.id) }, '✓ Handled')));
       return row;
     })));
   }
@@ -657,6 +716,59 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
       if (sample) ai.click();
     },
 
+    slackreply(d, m, { say, busy, close, out, preset }) {
+      // Replies go out only on an explicit click (principle 1). A 1:1 DM goes to the person's user id, never the DM channel id.
+      const target = m.others.length === 1 && !m.thread ? m.others[0] : m.channel;
+      const how = h('input', { type: 'text', placeholder: 'Optional direction for the reply', style: 'width:100%', dir: 'auto', value: preset.how || '' });
+      const ta = h('textarea', { dir: 'auto', placeholder: 'Claude drafts here. Edit freely.' });
+      const ai = h('button', { class: 'spark sm' }, '✦ Draft reply');
+      const draft = h('button', {}, 'Save as Slack draft');
+      const send = h('button', { class: 'pri' }, 'Send');
+      let armed = false;
+      ai.onclick = async () => {
+        say('Reading the conversation…');
+        let ctx = '';
+        try {
+          const p = m.thread ? await call(S.SL, 'slack_read_thread', { channel_id: m.channel, message_ts: m.thread, limit: 30, response_format: 'concise' })
+                             : await call(S.SL, 'slack_read_channel', { channel_id: m.channel, limit: 15, response_format: 'concise' });
+          ctx = (typeof p === 'string' ? p : JSON.stringify(p)).slice(-7000);
+        } catch (e) { ctx = 'Latest message only: ' + m.text; }
+        say('');
+        await draftWithClaude(
+          'You draft Slack replies for Ilan Manassen, Senior Communications Manager at monday.com. Read the conversation and write ONLY the reply text to the latest message from ' + (m.from || 'the other person') + '. ' +
+          'Same language as the conversation (usually Hebrew), short and natural like a Slack message, no greeting line, no sign-off. Answer what was asked. ' +
+          'Never commit to a budget, approval or decision: write [Ilan to decide: …]. Never invent facts; put unknowns in [brackets]. ' +
+          (how.value.trim() ? 'Ilan\'s direction: "' + how.value.trim() + '". ' : '') + '\n\nCONVERSATION:\n' + ctx, ta, ai, say);
+      };
+      draft.onclick = async () => {
+        const msg = ta.value.trim(); if (!msg) { say('The reply is empty.', false); return; }
+        busy(draft, true, 'Saving…');
+        try { await call(S.SL, 'slack_send_message_draft', m.thread ? { channel_id: m.channel, message: msg, thread_ts: m.thread } : { channel_id: target, message: msg }); say('Saved as a draft in Slack. Nothing was sent.', true); draft.remove(); send.remove(); markHandled(m.id); }
+        catch (e) { say(errText(e, 'Slack'), false); busy(draft, false, 'Save as Slack draft'); }
+      };
+      send.onclick = async () => {
+        const msg = ta.value.trim(); if (!msg) { say('The reply is empty.', false); return; }
+        if (!armed) { armed = true; send.textContent = 'Confirm send'; say('This sends now, as you. Click “Confirm send” to send it.'); return; }
+        busy(send, true, 'Sending…');
+        try { await call(S.SL, 'slack_send_message', m.thread ? { channel_id: m.channel, message: msg, thread_ts: m.thread } : { channel_id: target, message: msg }); say('Sent.', true); draft.remove(); send.remove(); markHandled(m.id); }
+        catch (e) { say(errText(e, 'Slack'), false); busy(send, false, 'Send'); armed = false; }
+      };
+      d.append(how, ta, h('div', { class: 'line' }, ai, draft, send, close), out);
+      if (sample) ai.click();
+    },
+
+    slacktask(d, m, { say, busy, close, out }) {
+      const ta = h('textarea', { dir: 'auto' });
+      ta.value = '📌 Please add a task from this Slack message from ' + m.from + ': «' + m.text.slice(0, 200) + '»\n' + m.permalink + '\nR-25: name it as the next action (verb first), set priority and effort, and end the first update with ✅ Done when.';
+      const go = h('button', { class: 'pri' }, 'Send to Pepper');
+      go.onclick = async () => {
+        busy(go, true, 'Sending…');
+        try { await dmPepper(ta.value.trim()); say('Sent. Pepper files it on the board.', true); go.remove(); markHandled(m.id); }
+        catch (e) { say(errText(e, 'Slack'), false); busy(go, false, 'Retry'); }
+      };
+      d.append(ta, h('div', { class: 'line' }, go, close), out);
+    },
+
     mailtask(d, m, { say, busy, close, out }) {
       const ta = h('textarea', { dir: 'auto' });
       ta.value = `📌 Please add a task from this email: «${m.subject}» from ${nameOf(m.from)}\n${m.url || ''}\nR-25: name it as the next action (verb first), set priority and effort, and end the first update with ✅ Done when.`;
@@ -710,7 +822,8 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
     const cal = (ev) => (ev || []).map((e) => ({ title: e.summary, start: e.start && e.start.dateTime ? hm(new Date(e.start.dateTime)) : 'all day', end: e.end && e.end.dateTime ? hm(new Date(e.end.dateTime)) : '' }));
     const agents = (st.agents || []).map((a) => ({ ref: a.id, name: a.name, last: a.last_run && a.last_run.status }));
     const gapsFor = (off) => st.events[off] ? gapText(freeGaps(dayStr(off), st.events[off], 15)) || 'none' : 'unknown';
-    return { now: `${today()} ${hm(new Date())} (${TZ}), work week Sun-Thu`, tasks, inbox, today: cal(st.events[0]), tomorrow: cal(st.events[1]), free_today: gapsFor(0), free_tomorrow: gapsFor(1), agents };
+    const slack = (st.slack || []).filter((m) => !isTouched(m.id) && !handled[m.id]).slice(0, 15).map((m) => ({ ref: m.id, from: m.from, text: m.text.slice(0, 220), time: m.time }));
+    return { now: `${today()} ${hm(new Date())} (${TZ}), work week Sun-Thu`, tasks, inbox, slack, today: cal(st.events[0]), tomorrow: cal(st.events[1]), free_today: gapsFor(0), free_tomorrow: gapsFor(1), agents };
   }
 
   async function getIdeas(more) {
@@ -726,7 +839,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
       'Decisions on budget or approvals are Ilan\'s: suggest a reply or time to decide, never decide. Prefer moves he can do in one click, and be specific: name the person, the item and the slot. ' +
       (more ? 'Do NOT repeat these earlier suggestions: ' + JSON.stringify(st.ideas.map((i) => i.title)) + '. ' : '') +
       'Reply with ONLY a JSON array of up to ' + (more ? 4 : 6) + ' objects, best first: ' +
-      '{"title": short imperative, max 12 words; "why": one sentence with the evidence; "kind": one of "done","update","block","delegate","reply","mailtask","agent"; "ref": the ref of the task (done, update, block, delegate), the email (reply, mailtask) or the agent (agent); ' +
+      '{"title": short imperative, max 12 words; "why": one sentence with the evidence; "kind": one of "done","update","block","delegate","reply","mailtask","slackreply","agent"; "ref": the ref of the task (done, update, block, delegate), the email (reply, mailtask), the Slack message (slackreply) or the agent (agent); ' +
       '"time": "HH:MM" start (block only, and it MUST be inside one of the free_today or free_tomorrow gaps with room for mins; never over a meeting, never outside the gaps);  "mins": minutes (block only; 30 by default, longer only when the task clearly needs it); "day": "today" or "tomorrow" (block only); "text": optional draft text (update, delegate); "how": optional one-line direction (reply)}. ' +
       'Use only refs from the data. Write in English but keep item names in their original language.\n\nDATA:\n' + JSON.stringify(context());
     try {
@@ -749,9 +862,10 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
     if (TASK_KINDS.includes(i.kind)) return (st.tasks || []).find((t) => t.id === r && !st.doneIds.has(t.id));
     if (i.kind === 'reply' || i.kind === 'mailtask') return (st.inbox || []).find((m) => m.id === r);
     if (i.kind === 'agent') return (st.agents || []).find((a) => String(a.id) === r);
+    if (i.kind === 'slackreply') return (st.slack || []).find((m) => m.id === r && !handled[m.id]);
     return null;
   }
-  const KIND = { done: ['Close it', '✓ Mark Done'], update: ['Update', '✎ Write update'], block: ['Schedule', '◷ Block it'], delegate: ['Hand off', '→ Hand off'], reply: ['Reply', '✦ Draft reply'], mailtask: ['Track', '→ Make it a task'], agent: ['Agents', '▶ Run'] };
+  const KIND = { done: ['Close it', '✓ Mark Done'], update: ['Update', '✎ Write update'], block: ['Schedule', '◷ Block it'], delegate: ['Hand off', '→ Hand off'], reply: ['Reply', '✦ Draft reply'], mailtask: ['Track', '→ Make it a task'], slackreply: ['Slack', '✦ Draft reply'], agent: ['Agents', '▶ Run'] };
 
   function act(i) {
     const obj = findRef(i); if (!obj) { toast('That item is no longer open.'); i.dismissed = true; renderIdeas(); return; }
@@ -766,6 +880,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
       }
       else preset = { text: i.text };
     } else if (kind === 'agent') { rowId = 'agent-' + obj.id; kind = 'run'; preset = { text: i.text }; }
+    else if (kind === 'slackreply') { rowId = 'slack-' + obj.id; preset = { how: i.how }; }
     else { rowId = 'mail-' + obj.id; preset = { how: i.how }; }
     const row = $(rowId); if (!row) return;
     row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 1600);
@@ -792,7 +907,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
 
   (async () => {
     const cl = window.claude;
-    const offline = (msg) => { for (const id of ['tasks', 'inbox', 'day', 'agents']) $(id).replaceChildren(h('div', { class: 'empty' }, msg)); $('ideas').replaceChildren(h('div', { class: 'thinking' }, msg)); ['mon', 'gm', 'cal', 'ag'].forEach((k) => setSrc(k, 'idle', msg)); };
+    const offline = (msg) => { for (const id of ['tasks', 'inbox', 'slack', 'day', 'agents']) $(id).replaceChildren(h('div', { class: 'empty' }, msg)); $('ideas').replaceChildren(h('div', { class: 'thinking' }, msg)); ['mon', 'gm', 'sl', 'cal', 'ag'].forEach((k) => setSrc(k, 'idle', msg)); };
     if (!cl || !cl.use) { offline('Open this page in Claude to load your live data.'); return; }
     [mcp, sample] = await Promise.all([cl.use('mcp'), cl.use('sample')]);
     if (!mcp) { offline('Live connectors are not available in this view. Open it in claude.ai while signed in.'); return; }
