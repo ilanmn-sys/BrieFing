@@ -14,7 +14,7 @@
   --task:#0E7C86; --task-soft:#DDF0F1; --mail:#C2610C; --mail-soft:#FBEBDD; --slack:#6D4AE0; --slack-soft:#ECE6FC; --agent:#2E8B57; --agent-soft:#E0F2E7; --day:#2F6FD0; --day-soft:#E2ECFB;
   --spark:#7B4BE0; --spark-2:#E0458B; --spark-soft:#F1EAFD;
   --crit:#C23A28; --crit-soft:#FBE7E3; --warn:#A2650C; --warn-soft:#FBF0DC; --ok:#2E8B57; --ok-soft:#E0F2E7; --idle:#6B7280; --idle-soft:#EEEDE9;
-  --busy:#CBC7BE; --focus:#0E7C86; --free:#2E8B57;
+  --busy:#CBC7BE; --focus:#0E7C86; --free:#2E8B57; --req:#B4366E; --req-soft:#FAE3EE;
   --f-display:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
   --f-body:"Public Sans","Heebo",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
@@ -29,7 +29,7 @@
   --task:#3CC4CF; --task-soft:#11303A; --mail:#F2A35B; --mail-soft:#3A2614; --slack:#A68BFF; --slack-soft:#251E44; --agent:#62D296; --agent-soft:#15301F; --day:#73A7FF; --day-soft:#16253F;
   --spark:#A98BFF; --spark-2:#FF6FAE; --spark-soft:#231C3D;
   --crit:#FF7D6B; --crit-soft:#3B1C17; --warn:#F0BC5E; --warn-soft:#382A12; --ok:#62D296; --ok-soft:#15301F; --idle:#9AA1B2; --idle-soft:#202432;
-  --busy:#3A4052; --focus:#3CC4CF; --free:#62D296;
+  --busy:#3A4052; --focus:#3CC4CF; --free:#62D296; --req:#FF7FB5; --req-soft:#3A1828;
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0D0F14; --bg-glow1:rgba(43,182,194,.16); --bg-glow2:rgba(140,108,255,.16);
@@ -40,10 +40,11 @@
   --task:#3CC4CF; --task-soft:#11303A; --mail:#F2A35B; --mail-soft:#3A2614; --slack:#A68BFF; --slack-soft:#251E44; --agent:#62D296; --agent-soft:#15301F; --day:#73A7FF; --day-soft:#16253F;
   --spark:#A98BFF; --spark-2:#FF6FAE; --spark-soft:#231C3D;
   --crit:#FF7D6B; --crit-soft:#3B1C17; --warn:#F0BC5E; --warn-soft:#382A12; --ok:#62D296; --ok-soft:#15301F; --idle:#9AA1B2; --idle-soft:#202432;
-  --busy:#3A4052; --focus:#3CC4CF; --free:#62D296;
+  --busy:#3A4052; --focus:#3CC4CF; --free:#62D296; --req:#FF7FB5; --req-soft:#3A1828;
   color-scheme:dark}
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{background:var(--bg);background-image:radial-gradient(900px 500px at 8% -10%,var(--bg-glow1),transparent 60%),radial-gradient(800px 480px at 100% 0%,var(--bg-glow2),transparent 55%);background-attachment:fixed;color:var(--ink);font:14px/1.5 var(--f-body);padding-block:24px 56px;padding-inline:16px;margin:0}
 .wrap{max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
 a{color:var(--accent)}
@@ -63,7 +64,7 @@ a{color:var(--accent)}
 @keyframes pulse{50%{opacity:.3}}
 
 /* Live counters */
-.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
 .stat{appearance:none;text-align:left;border:1px solid var(--line);background:var(--panel);border-radius:var(--r);padding:14px 16px 12px;box-shadow:var(--shadow);cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;position:relative;overflow:hidden;color:var(--ink);font:inherit;transition:transform .18s ease,box-shadow .18s ease}
 .stat:hover{transform:translateY(-2px);box-shadow:var(--shadow-hi)}
 .stat::after{content:"";position:absolute;right:-30px;top:-30px;width:90px;height:90px;border-radius:50%;background:var(--c-soft);opacity:.9}
@@ -114,6 +115,7 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:60
 .ph h2 .ic{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-size:14px;background:var(--c-soft,var(--sunk));color:var(--c,var(--ink))}
 .ph .meta{color:var(--faint);font-size:12px;margin-left:auto}
 .panel.c-task{--c:var(--task);--c-soft:var(--task-soft)}.panel.c-mail{--c:var(--mail);--c-soft:var(--mail-soft)}.panel.c-slack{--c:var(--slack);--c-soft:var(--slack-soft)}
+.panel.c-req{--c:var(--req);--c-soft:var(--req-soft)}.stat.c-req{--c:var(--req);--c-soft:var(--req-soft)}
 .panel.c-agent{--c:var(--agent);--c-soft:var(--agent-soft)}.panel.c-day{--c:var(--day);--c-soft:var(--day-soft)}.panel.c-learn{--c:var(--spark);--c-soft:var(--spark-soft)}
 .empty{padding:18px 16px;color:var(--muted);font-size:13.5px}
 .err{color:var(--crit);background:var(--crit-soft);margin:12px 16px;border-radius:12px;padding:10px 12px;font-size:13px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -211,9 +213,9 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
 .foot{color:var(--faint);font-size:12.5px;text-align:center;max-width:72ch;margin:6px auto 0;text-wrap:balance}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:13px;font-weight:500;max-width:calc(100% - 32px);box-shadow:var(--shadow-hi);z-index:9;animation:drop .2s ease}
 
-@media (max-width:1000px) and (min-width:621px){.stats{grid-template-columns:repeat(6,minmax(0,1fr))}.stat{grid-column:span 2}.stat.c-agent,.stat.c-spark{grid-column:span 3}}
+@media (max-width:1000px) and (min-width:621px){.stats{grid-template-columns:repeat(6,minmax(0,1fr))}.stat{grid-column:span 2}}
 @media (max-width:900px){main{grid-template-columns:minmax(0,1fr)}.col.work{order:-1}.hero{grid-template-columns:minmax(0,1fr)}.chips{justify-content:flex-start}}
-@media (max-width:620px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat.c-spark{grid-column:span 2}.chip{padding:3px 8px;font-size:11.5px}.stat b{font-size:28px}.rh{grid-template-columns:auto minmax(0,1fr)}.rh .r{grid-column:2;justify-self:start}.acts{padding-left:0}.drawer{margin-left:0}.ev{grid-template-columns:82px minmax(0,1fr)}.ticks span:nth-child(even){visibility:hidden}.dayline .legend{display:none}}
+@media (max-width:620px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.chip{padding:3px 8px;font-size:11.5px}.stat b{font-size:28px}.rh{grid-template-columns:auto minmax(0,1fr)}.rh .r{grid-column:2;justify-self:start}.acts{padding-left:0}.drawer{margin-left:0}.ev{grid-template-columns:82px minmax(0,1fr)}.ticks span:nth-child(even){visibility:hidden}.dayline .legend{display:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -278,6 +280,12 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
         <div id="tasks"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
       </section>
 
+      <section class="panel c-req" aria-labelledby="rq-h" id="sec-requests">
+        <div class="ph"><h2 id="rq-h"><span class="ic">⇄</span>Requests</h2><span class="meta" id="rq-meta"></span></div>
+        <div class="tabs" role="tablist" id="rq-tabs"></div>
+        <div id="requests"><div class="skel"></div><div class="skel"></div></div>
+      </section>
+
       <section class="panel c-mail" aria-labelledby="in-h" id="sec-inbox">
         <div class="ph"><h2 id="in-h"><span class="ic">✉</span>Inbox</h2><span class="meta" id="in-meta"></span></div>
         <div id="inbox"><div class="skel"></div><div class="skel"></div></div>
@@ -328,11 +336,17 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     { id: 'group_title', key: 'waiting', label: 'Waiting' },
     { id: 'group_mm4rym7v', key: 'pepper', label: 'Pepper' },
   ];
+  // Comms Requests (Switchboard): config.requests. Brie Fing is the request desk agent on that board.
+  const RQ = { board: 18431118484, owner: 'multiple_person_mm77ct8p', status: 'color_mm77yyq9', deadline: 'date_mm77dyk5', tier: 'color_mm773zjg', region: 'dropdown_mm7775sx', requester: 'multiple_person_mm77t7hn', domain: 'color_mm77pzed', agent: 'text_mm7f4fmq',
+    closed: 'group_mm77qrtv', inbox: 'group_mm77x4r1', terminal: ['Done', 'Cancelled', 'Deflected', 'Duplicate'],
+    statuses: ['Triaged', 'In progress', 'With requester', 'With 3rd party', 'In review', 'Approved - pending publication', 'Blocked', 'Done', 'Deflected', 'Cancelled'] };
+  const BRIE = '117447635';   // config.requests.briefingAgentUserId
+  const ME_NAME = 'Ilan Manassen';
   const S = { MON: 'monday.com', GM: 'Gmail', CAL: 'Google Calendar', SL: 'Slack', CCR: 'Claude Code Remote' };
   const TASK_KINDS = ['done', 'update', 'block', 'delegate'];
 
   // ---- State ----
-  const st = { tasks: null, inbox: null, slack: null, mentions: null, chan: null, mine: null, slTab: 'dm', events: { 0: null, 1: null }, agents: null, src: {}, tab: 'today', day: 0, ideas: [], openDrawer: null, doneIds: new Set() };
+  const st = { requests: null, rqTab: 'mine', tasks: null, inbox: null, slack: null, mentions: null, chan: null, mine: null, slTab: 'dm', events: { 0: null, 1: null }, agents: null, src: {}, tab: 'today', day: 0, ideas: [], openDrawer: null, doneIds: new Set() };
   let mcp = null, sample = null;
 
   // ---- Small helpers ----
@@ -427,6 +441,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       tile('c-task', '☰', 'Today', st.tasks ? todayTasks.length : '–', st.tasks ? overdue + ' overdue on the board' : 'loading…', 'sec-tasks'),
       tile('c-mail', '✉', 'Unread', st.inbox ? mail.length : '–', st.inbox ? (vip ? vip + ' from VIPs' : 'most important first') : 'loading…', 'sec-inbox'),
       tile('c-slack', '#', 'Slack', st.slack ? slack.length : '–', st.slack ? dmList().length + ' DMs · ' + mentionList().length + ' mentions' : 'loading…', 'sec-slack'),
+      tile('c-req', '⇄', 'Requests', st.requests ? myRequests().length : '–', st.requests ? (inboxRequests().length ? inboxRequests().length + ' untriaged' : 'on you, open') : 'loading…', 'sec-requests'),
       tile('c-agent', '⚙', 'Agents', st.agents ? ag.length : '–', st.agents ? (bad ? bad + ' failed last run' : 'all ran fine') : 'loading…', 'sec-agents'),
       tile('c-spark', '✦', 'Moves today', moves, moves ? 'nice momentum' : 'pick one below', 'ideas'));
   }
@@ -496,6 +511,19 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       $('tk-meta').textContent = 'Updated ' + ago(at);
       renderTasks(); renderCheckins(); if (st.ideas.length) renderIdeas(); maybeIdeas();
     }, (e, drop) => { if (drop || !st.tasks) { st.tasks = drop ? null : st.tasks; $('tk-tabs').replaceChildren(); $('tasks').replaceChildren(errBox(errText(e, 'monday'), refreshAll)); } });
+
+    watch(S.MON, 'get_board_items_page', {
+      boardId: RQ.board, limit: 300, includeColumns: true, includeGroup: true,
+      columnIds: [RQ.owner, RQ.status, RQ.deadline, RQ.tier, RQ.region, RQ.requester, RQ.domain, RQ.agent],
+      filters: [{ columnId: 'group', operator: 'not_any_of', compareValue: [RQ.closed] }],
+    }, 'mon', (p, at) => {
+      st.requests = (p.items || []).map((it) => {
+        const cv = it.column_values || {};
+        return { id: String(it.id), name: it.name, url: it.url, group: it.group && it.group.id, groupTitle: it.group && it.group.title, owner: cv[RQ.owner] || '', status: cv[RQ.status] || '', deadline: cv[RQ.deadline], tier: cv[RQ.tier] || '', region: cv[RQ.region] || '', requester: cv[RQ.requester] || '', domain: cv[RQ.domain] || '', updated: it.updated_at, created: it.created_at };
+      }).filter((r) => !RQ.terminal.includes(r.status));
+      $('rq-meta').textContent = 'Switchboard · ' + ago(at);
+      renderRequests(); maybeIdeas();
+    }, (e, drop) => { if (drop || !st.requests) { st.requests = drop ? null : st.requests; $('rq-tabs').replaceChildren(); $('requests').replaceChildren(errBox(errText(e, 'monday'), refreshAll)); } });
 
     watch(S.GM, 'search_threads', { query: INBOX_Q, pageSize: 30 }, 'gm', (p, at) => {
       st.inbox = (p.threads || []).map((t) => {
@@ -577,6 +605,37 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'block', t) }, '◷ Block time'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'delegate', t) }, '→ Hand off'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'followup', { kind: 'task', ...t }) }, '🔁 Pepper follow-up')));
+      return row;
+    })));
+  }
+
+  // ---- Requests (Switchboard) ----
+  const TIER_RANK = (t) => { const m = String(t || '').match(/T(\d)/); return m ? Number(m[1]) : 9; };
+  const myRequests = () => (st.requests || []).filter((r) => r.owner.includes(ME_NAME) && !st.doneIds.has(r.id));
+  const inboxRequests = () => (st.requests || []).filter((r) => r.group === RQ.inbox && !r.owner && !st.doneIds.has(r.id));
+  function renderRequests() {
+    if (!st.requests) return;
+    const lists = { mine: myRequests(), inbox: inboxRequests() };
+    $('rq-tabs').replaceChildren(...[['mine', 'Mine'], ['inbox', '📥 Untriaged']].map(([k, l]) => h('button', { class: 'tab', role: 'tab', 'aria-selected': String(st.rqTab === k), onclick: () => { st.rqTab = k; renderRequests(); } }, l, h('span', { class: 'n' }, lists[k].length))));
+    const t0 = today();
+    const rows = lists[st.rqTab].slice().sort((a, b) => TIER_RANK(a.tier) - TIER_RANK(b.tier) || (a.deadline || '9999').localeCompare(b.deadline || '9999'));
+    queueMicrotask(renderStats);
+    if (!rows.length) { $('requests').replaceChildren(h('div', { class: 'empty' }, st.rqTab === 'mine' ? 'No open request on you.' : 'Nothing waiting for triage.')); return; }
+    $('requests').replaceChildren(h('div', { class: 'list' }, rows.map((r) => {
+      const overdue = r.deadline && r.deadline < t0, tr = TIER_RANK(r.tier);
+      const waiting = /with requester|with 3rd party/i.test(r.status);
+      const row = h('div', { class: 'row' + (st.doneIds.has(r.id) ? ' gone' : ''), id: 'req-' + r.id },
+        h('div', { class: 'rh' },
+          h('span', { class: 'mark ' + (overdue || tr <= 1 ? 'crit' : tr === 2 ? 'warn' : 'acc') }),
+          h('span', { class: 't', dir: 'auto' }, h('a', { href: r.url, target: '_blank', rel: 'noopener' }, r.name),
+            r.tier && h('span', { class: 'pill ' + (tr <= 1 ? 'crit' : 'idle') }, r.tier.replace(/ .*/, '')), r.status && h('span', { class: 'pill idle' }, r.status), overdue && h('span', { class: 'pill crit' }, 'overdue')),
+          h('span', { class: 'r' }, r.deadline ? ddmm(r.deadline) : '—'),
+          h('span', { class: 'd', dir: 'auto' }, [r.requester && 'from ' + r.requester, r.domain, r.region, st.rqTab === 'inbox' ? r.groupTitle : (r.owner !== ME_NAME ? r.owner : '')].filter(Boolean).join(' · '))),
+        h('div', { class: 'acts' },
+          h('button', { class: 'sm spark', onclick: () => openDrawer(row, 'brie', r) }, '🤖 Ask Brie Fing'),
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'reqstatus', r) }, waiting ? '⇄ Status' : '✓ Status / Done'),
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'update', { ...r, board: RQ.board }) }, '✎ Update'),
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'followup', { kind: 'request', ...r }) }, '🔁 Pepper follow-up')));
       return row;
     })));
   }
@@ -763,6 +822,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   }
 
   function describeRef(o) {
+    if (o.kind === 'request') return { title: `הבקשה «${o.name}»`, who: o.requester || '', link: o.url || '' };
     if (o.kind === 'task') return { title: `«${o.name}»`, who: '', link: o.url || '' };
     if (o.kind === 'mail') return { title: `המייל «${o.subject}»`, who: nameOf(o.from), link: o.url || '' };
     return { title: `ההודעה בסלאק «${(o.text || '').slice(0, 80)}»`, who: o.from || '', link: o.permalink || '' };
@@ -986,6 +1046,50 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
 
     // What the item is, in one line Pepper can act on: title, who, link.
     // (shared by "My update" and "Pepper follow-up" on tasks, emails and Slack messages)
+    brie(d, r, { say, busy, close, out, preset }) {
+      // Brie Fing works from a mention in an item update (type User with the agent's user id).
+      const ASKS = {
+        reply: 'Draft a reply to the requester with where this stands and the next step. Post it as a draft for Ilan to approve; do not send anything external.',
+        triage: 'Triage this request: confirm domain, tier, region and owner per the routing table, and set the SLA date.',
+        chase: 'Chase the requester for whatever is missing to move this forward, and note what you asked.',
+        brief: 'Prepare a short brief on this request: the ask, the context from the thread, open questions and a proposed plan.',
+        close: 'If this is complete, close it out: confirm with the requester and move it to Done.',
+        custom: '',
+      };
+      const pick = h('select', {}, [['reply', 'Draft a reply to the requester'], ['triage', 'Triage and route'], ['chase', 'Chase for missing info'], ['brief', 'Prepare a brief'], ['close', 'Close it out'], ['custom', 'Something else…']].map(([v, l]) => h('option', { value: v }, l)));
+      const ta = h('textarea', { dir: 'auto' }); ta.value = preset.text || ASKS.reply;
+      pick.onchange = () => { ta.value = ASKS[pick.value]; ta.focus(); };
+      const go = h('button', { class: 'pri' }, 'Send to Brie Fing');
+      go.onclick = async () => {
+        const txt = ta.value.trim(); if (!txt) { say('Write what Brie Fing should do.', false); return; }
+        busy(go, true, 'Sending…');
+        try {
+          await call(S.MON, 'create_update', { itemId: Number(r.id), body: escHtml(txt).replace(/\n/g, '<br>') + '<br><br>— Ilan, via the Command Center', mentionsList: JSON.stringify([{ id: BRIE, type: 'User' }]) });
+          say('Brie Fing was tagged on the request with your ask.', true); go.remove(); markActed(r.id); mcp.invalidate(S.MON).catch(() => {});
+        } catch (e) { say(errText(e, 'monday'), false); busy(go, false, 'Retry'); }
+      };
+      d.append(h('div', { class: 'hint' }, 'Posts an update on the request that tags Brie Fing, the request desk agent. Anything external comes back as a draft.'),
+        h('label', { class: 'f' }, 'Ask', pick), ta, h('div', { class: 'line' }, go, close), out);
+    },
+
+    reqstatus(d, r, { say, busy, close, out }) {
+      const sel = h('select', {}, RQ.statuses.map((x) => h('option', { value: x, selected: x === (r.status === 'New' ? 'Triaged' : r.status) }, x)));
+      const go = h('button', { class: 'pri' }, 'Set status');
+      go.onclick = async () => {
+        busy(go, true, 'Saving…');
+        try { await call(S.MON, 'change_item_column_values', { boardId: RQ.board, itemId: Number(r.id), columnValues: JSON.stringify({ [RQ.status]: { label: sel.value } }) }); }
+        catch (e) { say(errText(e, 'monday'), false); busy(go, false, 'Retry'); return; }
+        let msg = 'Status set to ' + sel.value + '.';
+        if (sel.value === 'Done') {
+          st.doneIds.add(r.id); d.closest('.row').classList.add('gone');
+          try { await dmPepper(`✅ בקשה נסגרה: «${r.name.slice(0, 200)}»${r.requester ? ' (' + r.requester + ')' : ''}\n🔗 ${r.url}`); msg += ' Pepper was told.'; }
+          catch (e) { msg += ' Telling Pepper failed: ' + errText(e, 'Slack'); }
+        }
+        say(msg, true); go.remove(); markActed(r.id); mcp.invalidate(S.MON).catch(() => {});
+      };
+      d.append(h('label', { class: 'f' }, 'Status', sel), h('div', { class: 'line' }, go, close), out);
+    },
+
     followup(d, o, { say, busy, close, out }) {
       const ref = describeRef(o);
       const when = h('select', {}, [['today', 'היום'], ['tomorrow', 'מחר'], ['2d', 'בעוד יומיים'], ['week', 'בעוד שבוע']].map(([v, l]) => h('option', { value: v }, l)));
@@ -1082,12 +1186,13 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
 
   function context() {
     const tasks = (st.tasks || []).filter((t) => !isTouched(t.id)).slice(0, 60).map((t) => ({ ref: t.id, name: t.name, group: (GROUPS.find((g) => g.id === t.group) || {}).label, deadline: t.deadline, priority: t.priority, status: t.status }));
+    const requests = myRequests().filter((r) => !isTouched(r.id)).slice(0, 20).map((r) => ({ ref: r.id, name: r.name, tier: r.tier, status: r.status, deadline: r.deadline, requester: r.requester }));
     const inbox = (st.inbox || []).filter((m) => !isTouched(m.id) && !readHere[m.id]).slice(0, 20).map((m) => ({ ref: m.id, from: nameOf(m.from), subject: m.subject, snippet: (m.snippet || '').slice(0, 220), date: m.date, unread: m.unread }));
     const cal = (ev) => (ev || []).map((e) => ({ title: e.summary, start: e.start && e.start.dateTime ? hm(new Date(e.start.dateTime)) : 'all day', end: e.end && e.end.dateTime ? hm(new Date(e.end.dateTime)) : '' }));
     const agents = (st.agents || []).map((a) => ({ ref: a.id, name: a.name, last: a.last_run && a.last_run.status }));
     const gapsFor = (off) => st.events[off] ? gapText(freeGaps(dayStr(off), st.events[off], 15)) || 'none' : 'unknown';
     const slack = [...dmList(), ...mentionList()].filter((m) => !isTouched(m.id)).slice(0, 15).map((m) => ({ ref: m.id, from: m.from, where: m.src === 'dm' ? 'DM' : m.channelName + ' (mentions Ilan)', text: m.text.slice(0, 220), time: m.time }));
-    return { now: `${today()} ${hm(new Date())} (${TZ}), work week Sun-Thu`, tasks, inbox, slack, today: cal(st.events[0]), tomorrow: cal(st.events[1]), free_today: gapsFor(0), free_tomorrow: gapsFor(1), agents };
+    return { now: `${today()} ${hm(new Date())} (${TZ}), work week Sun-Thu`, tasks, requests, inbox, slack, today: cal(st.events[0]), tomorrow: cal(st.events[1]), free_today: gapsFor(0), free_tomorrow: gapsFor(1), agents };
   }
 
   async function getIdeas(more) {
@@ -1104,7 +1209,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       (more ? 'Do NOT repeat these earlier suggestions: ' + JSON.stringify(st.ideas.map((i) => i.title)) + '. ' : '') +
       (rejected.length ? 'Ilan marked these past suggestions NOT RELEVANT, with his reasons. Learn from them: never suggest the same thing again, and avoid suggestions like them for the same reason: ' + JSON.stringify(rejected.slice(-20).map((r) => ({ suggestion: r.title, about: r.about, why: r.why }))) + '. ' : '') +
       'Reply with ONLY a JSON array of up to ' + (more ? 4 : 6) + ' objects, best first: ' +
-      '{"title": short imperative, max 12 words; "why": one sentence with the evidence; "kind": one of "done","update","block","delegate","reply","mailtask","slackreply","agent"; "ref": the ref of the task (done, update, block, delegate), the email (reply, mailtask), the Slack message (slackreply) or the agent (agent); ' +
+      '{"title": short imperative, max 12 words; "why": one sentence with the evidence; "kind": one of "done","update","block","delegate","reply","mailtask","slackreply","brie","agent"; "ref": the ref of the task (done, update, block, delegate), the email (reply, mailtask), the Slack message (slackreply), the comms request (brie: hand it to Brie Fing, the request desk agent, with "text" saying exactly what to do) or the agent (agent); ' +
       '"time": "HH:MM" start (block only, and it MUST be inside one of the free_today or free_tomorrow gaps with room for mins; never over a meeting, never outside the gaps);  "mins": minutes (block only; 30 by default, longer only when the task clearly needs it); "day": "today" or "tomorrow" (block only); "text": optional draft text (update, delegate); "how": optional one-line direction (reply)}. ' +
       'Use only refs from the data. Write in English but keep item names in their original language.\n\nDATA:\n' + JSON.stringify(context());
     try {
@@ -1128,9 +1233,10 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     if (i.kind === 'reply' || i.kind === 'mailtask') return (st.inbox || []).find((m) => m.id === r);
     if (i.kind === 'agent') return (st.agents || []).find((a) => String(a.id) === r);
     if (i.kind === 'slackreply') return slackAll().find((m) => m.id === r);
+    if (i.kind === 'brie') return myRequests().find((x) => x.id === r);
     return null;
   }
-  const KIND = { done: ['Close it', '✓ Mark Done'], update: ['Update', '✎ Write update'], block: ['Schedule', '◷ Block it'], delegate: ['Hand off', '→ Hand off'], reply: ['Reply', '✦ Draft reply'], mailtask: ['Track', '→ Make it a task'], slackreply: ['Slack', '✦ Draft reply'], agent: ['Agents', '▶ Run'] };
+  const KIND = { done: ['Close it', '✓ Mark Done'], update: ['Update', '✎ Write update'], block: ['Schedule', '◷ Block it'], delegate: ['Hand off', '→ Hand off'], reply: ['Reply', '✦ Draft reply'], mailtask: ['Track', '→ Make it a task'], slackreply: ['Slack', '✦ Draft reply'], brie: ['Request', '🤖 Ask Brie Fing'], agent: ['Agents', '▶ Run'] };
 
   // ---- Check-ins: when a focus block linked to a task has ended, ask whether it is done ----
   // A block is linked by the task URL in its description (the dashboard writes it) or by the task's Calendar Block ID.
@@ -1185,6 +1291,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       }
       else preset = { text: i.text };
     } else if (kind === 'agent') { rowId = 'agent-' + obj.id; kind = 'run'; preset = { text: i.text }; }
+    else if (kind === 'brie') { if (st.rqTab !== 'mine') { st.rqTab = 'mine'; renderRequests(); } rowId = 'req-' + obj.id; preset = { text: i.text }; }
     else if (kind === 'slackreply') { if (st.slTab !== obj.src) { st.slTab = obj.src; renderSlack(); } rowId = 'slack-' + obj.id; preset = { how: i.how }; }
     else { rowId = 'mail-' + obj.id; preset = { how: i.how }; }
     const row = $(rowId); if (!row) return;
