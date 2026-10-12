@@ -246,7 +246,13 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
   const DAY_START = 8 * 60, DAY_END = 19 * 60;
   const toMin = (t) => { const [H, M] = t.split(':').map(Number); return H * 60 + M; };
   const toHM = (m) => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
-  const isBusy = (e) => e.start && e.start.dateTime && e.availability !== 'AVAILABILITY_FREE' && e.transparency !== 'transparent' && !(e.attendees || []).some((a) => a.self && a.responseStatus === 'declined');
+  const isBusy = (e) => {
+    if (!(e.start && e.start.dateTime) || e.availability === 'AVAILABILITY_FREE' || e.transparency === 'transparent') return false;
+    const att = e.attendees || [];
+    if (att.some((a) => a.self && a.responseStatus === 'declined')) return false;
+    const others = att.filter((a) => !a.self && !a.resource);   // rooms are not people
+    return !(others.length && others.every((a) => a.responseStatus === 'declined'));   // everyone else declined: the slot is free
+  };
   // Busy [start,end) minutes on `day` (YYYY-MM-DD, local), clamped to that day.
   function busyOn(day, events) {
     return (events || []).filter(isBusy).map((e) => {
