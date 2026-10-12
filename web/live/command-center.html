@@ -511,7 +511,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
     block(d, t, { say, busy, close, out, preset }) {
       const date = h('input', { type: 'date', value: preset.date || today() });
       const time = h('input', { type: 'time', value: preset.time || '', step: 900 });
-      const dur = h('select', {}, [30, 45, 60, 90, 120].map((m) => h('option', { value: m, selected: m === (preset.mins || 60) }, m + ' min')));
+      const dur = h('select', {}, [30, 45, 60, 90, 120].map((m) => h('option', { value: m, selected: m === (preset.mins || 30) }, m + ' min')));
       const title = h('input', { type: 'text', value: 'Focus: ' + t.name.slice(0, 80), style: 'flex:1;min-width:180px', dir: 'auto' });
       const free = h('div', { class: 'hint' });
       const go = h('button', { class: 'pri' }, 'Add to calendar');
@@ -685,7 +685,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
       (more ? 'Do NOT repeat these earlier suggestions: ' + JSON.stringify(st.ideas.map((i) => i.title)) + '. ' : '') +
       'Reply with ONLY a JSON array of up to ' + (more ? 4 : 6) + ' objects, best first: ' +
       '{"title": short imperative, max 12 words; "why": one sentence with the evidence; "kind": one of "done","update","block","delegate","reply","mailtask","agent"; "ref": the ref of the task (done, update, block, delegate), the email (reply, mailtask) or the agent (agent); ' +
-      '"time": "HH:MM" start (block only, and it MUST be inside one of the free_today or free_tomorrow gaps with room for mins; never over a meeting, never outside the gaps);  "mins": minutes (block only); "day": "today" or "tomorrow" (block only); "text": optional draft text (update, delegate); "how": optional one-line direction (reply)}. ' +
+      '"time": "HH:MM" start (block only, and it MUST be inside one of the free_today or free_tomorrow gaps with room for mins; never over a meeting, never outside the gaps);  "mins": minutes (block only; 30 by default, longer only when the task clearly needs it); "day": "today" or "tomorrow" (block only); "text": optional draft text (update, delegate); "how": optional one-line direction (reply)}. ' +
       'Use only refs from the data. Write in English but keep item names in their original language.\n\nDATA:\n' + JSON.stringify(context());
     try {
       const arr = await sample.json(prompt, more ? { cache: false } : {});
@@ -718,7 +718,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
       const g = GROUPS.find((x) => x.id === obj.group); if (g && st.tab !== g.key) { st.tab = g.key; renderTasks(); }
       rowId = 'task-' + obj.id;
       if (kind === 'block') {
-        const mins = [30, 45, 60, 90, 120].includes(Number(i.mins)) ? Number(i.mins) : 60, date = i.day === 'tomorrow' ? dayStr(1) : today();
+        const mins = [30, 45, 60, 90, 120].includes(Number(i.mins)) ? Number(i.mins) : 30, date = i.day === 'tomorrow' ? dayStr(1) : today();
         const evs = eventsFor(date), ok = /^\d\d:\d\d$/.test(i.time || '') && (!evs || fits(freeGaps(date, evs, 15), toMin(i.time), mins));
         preset = { time: ok ? i.time : undefined, mins, date }; // a suggested time over a meeting is dropped; the drawer picks the first free slot
       }
