@@ -545,7 +545,15 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
       const date = h('input', { type: 'date', value: preset.date || today() });
       const time = h('input', { type: 'time', value: preset.time || '', step: 900 });
       const dur = h('select', {}, [30, 45, 60, 90, 120].map((m) => h('option', { value: m, selected: m === (preset.mins || 30) }, m + ' min')));
-      const title = h('input', { type: 'text', value: 'Focus: ' + t.name.slice(0, 80), style: 'flex:1;min-width:180px', dir: 'auto' });
+      // R-27: calendar titles are always English. A non-English task name is translated by Claude, and can be edited.
+      const NON_EN = /[\u0590-\u05FF\u0600-\u06FF]/;
+      const title = h('input', { type: 'text', value: NON_EN.test(t.name) ? '' : 'Focus: ' + t.name.slice(0, 80), placeholder: 'English title', style: 'flex:1;min-width:180px' });
+      if (NON_EN.test(t.name) && sample) {
+        title.placeholder = 'Translating the title to English…';
+        sample('Translate this task name into a short English calendar title, at most 8 words, keeping any leading emoji. Reply with the title only, no quotes:\n' + t.name, { modelTier: 'quick' })
+          .then(({ text }) => { if (!title.value) title.value = 'Focus: ' + text.trim().replace(/^["']|["']$/g, ''); })
+          .catch(() => { title.placeholder = 'English title (write it in English)'; });
+      }
       const free = h('div', { class: 'hint' });
       const go = h('button', { class: 'pri' }, 'Add to calendar');
       let gaps = null, confirmClash = false;
@@ -572,6 +580,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
       refreshFree(!!preset.time);
       go.onclick = async () => {
         if (!date.value || !time.value) { say('Pick a day and a start time.', false); return; }
+        if (!title.value.trim() || NON_EN.test(title.value)) { say('Calendar titles are always in English. Write the title in English.', false); return; }
         if (gaps && !fits(gaps, toMin(time.value), Number(dur.value)) && !confirmClash) {
           confirmClash = true; go.textContent = 'Add anyway';
           say('That time overlaps a meeting or falls outside 08:00–19:00. Pick a free slot above, or click “Add anyway”.', false); return;
