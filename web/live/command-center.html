@@ -317,15 +317,15 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
     unsubs.splice(0).forEach((u) => u());
     watch(S.MON, 'get_board_items_page', {
       boardId: BOARD, limit: 300, includeColumns: true, includeGroup: true,
-      columnIds: [COL.status, COL.deadline, COL.priority, COL.person],
+      columnIds: [COL.status, COL.deadline, COL.priority, COL.person, COL.calBlock],
       filters: [{ columnId: 'group', operator: 'any_of', compareValue: GROUPS.map((g) => g.id) }],
     }, 'mon', (p, at) => {
       st.tasks = (p.items || []).filter((it) => (it.column_values || {})[COL.status] !== 'Done').map((it) => {
         const cv = it.column_values || {};
-        return { id: String(it.id), name: it.name, url: it.url, group: it.group && it.group.id, status: cv[COL.status], deadline: cv[COL.deadline], priority: cv[COL.priority], owner: cv[COL.person] };
+        return { id: String(it.id), name: it.name, url: it.url, group: it.group && it.group.id, status: cv[COL.status], deadline: cv[COL.deadline], priority: cv[COL.priority], owner: cv[COL.person], calBlock: cv[COL.calBlock], created: it.created_at, updated: it.updated_at };
       });
       $('tk-meta').textContent = 'Updated ' + ago(at);
-      renderTasks(); maybeIdeas();
+      renderTasks(); if (st.ideas.length) renderIdeas(); maybeIdeas();
     }, (e, drop) => { if (drop || !st.tasks) { st.tasks = drop ? null : st.tasks; $('tk-tabs').replaceChildren(); $('tasks').replaceChildren(errBox(errText(e, 'monday'), refreshAll)); } });
 
     watch(S.GM, 'search_threads', { query: 'in:inbox category:primary newer_than:3d -from:me', pageSize: 20 }, 'gm', (p, at) => {
@@ -341,6 +341,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
       watch(S.CAL, 'list_events', { startTime: dayStr(off) + 'T00:00:00', endTime: dayStr(off + 1) + 'T00:00:00', orderBy: 'startTime', pageSize: 60 }, 'cal', (p) => {
         st.events[off] = (p.events || []).filter((e) => e.status !== 'cancelled' && !(e.attendees || []).some((a) => a.self && a.responseStatus === 'declined'));
         if (st.day === off) renderDay();
+        if (st.ideas.length) renderIdeas();
         maybeIdeas();
       }, (e, drop) => { if (drop) st.events[off] = null; if (st.day === off && (drop || !st.events[off])) $('day').replaceChildren(errBox(errText(e, 'Google Calendar'), refreshAll)); });
     }
@@ -473,7 +474,23 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
     btn.disabled = false; btn.textContent = was;
   }
 
-  function markActed(ref) { st.ideas.forEach((i) => { if (String(i.ref) === String(ref)) i.done = true; }); renderIdeas(); maybeMoreAfterAction(); }
+  // ---- "Already touched" items never appear in Claude's next moves ----
+  // Touched = acted on from this page today, updated today after its creation, or already blocked on the calendar today or tomorrow.
+  const TOUCH_KEY = 'cc-touched-' + today();
+  const touchedHere = new Set((() => { try { return JSON.parse(localStorage.getItem(TOUCH_KEY) || '[]'); } catch (_) { return []; } })());
+  function touch(ref) { touchedHere.add(String(ref)); try { localStorage.setItem(TOUCH_KEY, JSON.stringify([...touchedHere])); } catch (_) {} }
+  function isTouched(ref) {
+    ref = String(ref);
+    if (touchedHere.has(ref) || st.doneIds.has(ref)) return true;
+    const t = (st.tasks || []).find((x) => x.id === ref);
+    if (t) {
+      if (t.updated && ymd(new Date(t.updated)) === today() && Date.parse(t.updated) - Date.parse(t.created || t.updated) > 120000) return true;
+      const blocks = [...(st.events[0] || []), ...(st.events[1] || [])];
+      if (blocks.some((e) => (t.calBlock && e.id === t.calBlock) || String(e.description || '').includes('/pulses/' + ref))) return true;
+    }
+    return false;
+  }
+  function markActed(ref) { touch(ref); st.ideas = st.ideas.filter((i) => String(i.ref) !== String(ref)); renderIdeas(); maybeMoreAfterAction(); }
 
   const DRAWERS = {
     done(d, t, { out, say, busy, close }) {
@@ -660,11 +677,11 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
     const ready = st.tasks && st.inbox && st.events[0];
     ideaTimer = setTimeout(() => { if (!ideasRan && (st.tasks || st.inbox)) { ideasRan = true; getIdeas(false); } }, ready ? 300 : 9000);
   }
-  function maybeMoreAfterAction() { if (ideasRan && !ideasBusy && st.ideas.filter((i) => !i.done && !i.dismissed).length < 2) getIdeas(true); }
+  function maybeMoreAfterAction() { if (ideasRan && !ideasBusy && st.ideas.filter((i) => !i.dismissed && !isTouched(i.ref)).length < 2) getIdeas(true); }
 
   function context() {
-    const tasks = (st.tasks || []).filter((t) => !st.doneIds.has(t.id)).slice(0, 60).map((t) => ({ ref: t.id, name: t.name, group: (GROUPS.find((g) => g.id === t.group) || {}).label, deadline: t.deadline, priority: t.priority, status: t.status }));
-    const inbox = (st.inbox || []).slice(0, 20).map((m) => ({ ref: m.id, from: nameOf(m.from), subject: m.subject, snippet: (m.snippet || '').slice(0, 220), date: m.date, unread: m.unread }));
+    const tasks = (st.tasks || []).filter((t) => !isTouched(t.id)).slice(0, 60).map((t) => ({ ref: t.id, name: t.name, group: (GROUPS.find((g) => g.id === t.group) || {}).label, deadline: t.deadline, priority: t.priority, status: t.status }));
+    const inbox = (st.inbox || []).filter((m) => !isTouched(m.id)).slice(0, 20).map((m) => ({ ref: m.id, from: nameOf(m.from), subject: m.subject, snippet: (m.snippet || '').slice(0, 220), date: m.date, unread: m.unread }));
     const cal = (ev) => (ev || []).map((e) => ({ title: e.summary, start: e.start && e.start.dateTime ? hm(new Date(e.start.dateTime)) : 'all day', end: e.end && e.end.dateTime ? hm(new Date(e.end.dateTime)) : '' }));
     const agents = (st.agents || []).map((a) => ({ ref: a.id, name: a.name, last: a.last_run && a.last_run.status }));
     const gapsFor = (off) => st.events[off] ? gapText(freeGaps(dayStr(off), st.events[off], 15)) || 'none' : 'unknown';
@@ -675,7 +692,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
     if (!sample) { $('ideas').replaceChildren(h('div', { class: 'thinking' }, 'Claude suggestions are not available in this view. Everything else works.')); return; }
     if (ideasBusy) return; ideasBusy = true;
     $('more-ideas').hidden = true;
-    const keep = st.ideas.filter((i) => !i.dismissed);
+    const keep = st.ideas.filter((i) => !i.dismissed && !isTouched(i.ref));
     if (!keep.length) $('ideas').replaceChildren(h('div', { class: 'thinking' }, '✦ Reading your board, inbox and calendar…'));
     $('ideas-meta').textContent = 'Thinking…';
     const prompt =
@@ -690,7 +707,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
     try {
       const arr = await sample.json(prompt, more ? { cache: false } : {});
       const known = new Set(st.ideas.map((i) => i.kind + ':' + i.ref));
-      const fresh = (Array.isArray(arr) ? arr : []).filter((i) => i && i.title && KIND[i.kind] && i.ref != null && findRef(i) && !known.has(i.kind + ':' + i.ref));
+      const fresh = (Array.isArray(arr) ? arr : []).filter((i) => i && i.title && KIND[i.kind] && i.ref != null && findRef(i) && !isTouched(i.ref) && !known.has(i.kind + ':' + i.ref));
       st.ideas = keep.concat(fresh);
       $('ideas-meta').textContent = fresh.length ? 'Updated ' + hm(new Date()) : 'Nothing new right now';
     } catch (e) {
@@ -731,7 +748,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
   }
 
   function renderIdeas() {
-    const list = st.ideas.filter((i) => !i.dismissed);
+    const list = st.ideas.filter((i) => !i.dismissed && !isTouched(i.ref));
     if (!list.length) { $('ideas').replaceChildren(h('div', { class: 'thinking' }, 'All caught up. Ask for more ideas any time.')); return; }
     $('ideas').replaceChildren(h('div', { class: 'cards' }, list.map((i) => {
       const [k, btn] = KIND[i.kind];
