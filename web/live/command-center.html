@@ -420,7 +420,8 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'done', t) }, '✓ Done'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'update', t) }, '✎ Update'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'block', t) }, '◷ Block time'),
-          h('button', { class: 'sm', onclick: () => openDrawer(row, 'delegate', t) }, '→ Hand off')));
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'delegate', t) }, '→ Hand off'),
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'followup', { kind: 'task', ...t }) }, '🔁 Pepper follow-up')));
       return row;
     })));
   }
@@ -455,6 +456,8 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
         h('div', { class: 'acts' },
           h('button', { class: 'sm spark', onclick: () => openDrawer(row, 'reply', m) }, '✦ Suggest reply'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'mailtask', m) }, '→ Make it a task'),
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'note', { kind: 'mail', ...m }) }, '✎ My update'),
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'followup', { kind: 'mail', ...m }) }, '🔁 Pepper follow-up'),
           h('button', { class: 'sm ghost', onclick: (ev) => markRead(m, row, ev.currentTarget) }, '✓ Mark read')));
       return row;
     })));
@@ -501,6 +504,8 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
         h('div', { class: 'acts' },
           h('button', { class: 'sm spark', onclick: () => openDrawer(row, 'slackreply', m) }, '✦ Suggest reply'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'slacktask', m) }, '→ Make it a task'),
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'note', { kind: 'slack', ...m }) }, '✎ My update'),
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'followup', { kind: 'slack', ...m }) }, '🔁 Pepper follow-up'),
           h('button', { class: 'sm ghost', onclick: () => markHandled(m.id) }, '✓ Handled')));
       return row;
     })));
@@ -563,6 +568,12 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
     row.append(d); st.openDrawer = d;
     d.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     const f = d.querySelector('textarea,input'); if (f) f.focus({ preventScroll: true });
+  }
+
+  function describeRef(o) {
+    if (o.kind === 'task') return { title: `«${o.name}»`, who: '', link: o.url || '' };
+    if (o.kind === 'mail') return { title: `המייל «${o.subject}»`, who: nameOf(o.from), link: o.url || '' };
+    return { title: `ההודעה בסלאק «${(o.text || '').slice(0, 80)}»`, who: o.from || '', link: o.permalink || '' };
   }
 
   async function draftWithClaude(prompt, ta, btn, say) {
@@ -779,6 +790,43 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
       };
       d.append(how, ta, h('div', { class: 'line' }, ai, draft, send, close), out);
       if (sample) ai.click();
+    },
+
+    // What the item is, in one line Pepper can act on: title, who, link.
+    // (shared by "My update" and "Pepper follow-up" on tasks, emails and Slack messages)
+    followup(d, o, { say, busy, close, out }) {
+      const ref = describeRef(o);
+      const when = h('select', {}, [['today', 'היום'], ['tomorrow', 'מחר'], ['2d', 'בעוד יומיים'], ['week', 'בעוד שבוע']].map(([v, l]) => h('option', { value: v }, l)));
+      const ta = h('textarea', { dir: 'auto', placeholder: 'מה לבקש? למשל: לשאול מתי ה-SOW יוצא לחתימה' });
+      const go = h('button', { class: 'pri' }, 'Send to Pepper');
+      go.onclick = async () => {
+        const due = { today: today(), tomorrow: dayStr(1), '2d': dayStr(2), week: dayStr(7) }[when.value];
+        busy(go, true, 'Sending…');
+        try {
+          await dmPepper(`🔁 פפר, תעשי פולו-אפ על ${ref.title}${ref.who ? ' מול ' + ref.who : ''} — עד ${ddmm(due)}.\n${ta.value.trim() ? 'מה לבקש: ' + ta.value.trim() + '\n' : ''}🔗 ${ref.link}\nמה שאי אפשר לשלוח בלי אישור, תביאי אליי כטיוטה.`);
+          let msg = 'Sent to Pepper.';
+          if (o.kind === 'task') {
+            try { await call(S.MON, 'create_update', { itemId: Number(o.id), body: escHtml(`🔁 Pepper asked to follow up by ${due}.` + (ta.value.trim() ? ' Ask: ' + ta.value.trim() : '')) }); msg += ' Noted on the task.'; }
+            catch (_) { msg += ' (Could not note it on the task.)'; }
+          }
+          say(msg, true); go.remove(); markActed(o.id);
+        } catch (e) { say(errText(e, 'Slack'), false); busy(go, false, 'Retry'); }
+      };
+      d.append(h('div', { class: 'hint' }, 'Pepper follows up for you. Anything that needs your approval comes back to you as a draft.'),
+        h('label', { class: 'f' }, 'By when', when), ta, h('div', { class: 'line' }, go, close), out);
+    },
+
+    note(d, o, { say, busy, close, out }) {
+      const ref = describeRef(o);
+      const ta = h('textarea', { dir: 'auto', placeholder: 'העדכון שלך: מה קרה, מה סגרת, מה הלאה' });
+      const go = h('button', { class: 'pri' }, 'Send update to Pepper');
+      go.onclick = async () => {
+        const txt = ta.value.trim(); if (!txt) { say('Write the update first.', false); return; }
+        busy(go, true, 'Sending…');
+        try { await dmPepper(`📝 עדכון מאילן על ${ref.title}${ref.who ? ' (' + ref.who + ')' : ''}:\n${txt}\n🔗 ${ref.link}`); say('Sent. Pepper has the context.', true); go.remove(); markActed(o.id); }
+        catch (e) { say(errText(e, 'Slack'), false); busy(go, false, 'Retry'); }
+      };
+      d.append(h('div', { class: 'hint' }, 'Your own update, so Pepper and the agents know where this stands.'), ta, h('div', { class: 'line' }, go, close), out);
     },
 
     slacktask(d, m, { say, busy, close, out }) {
