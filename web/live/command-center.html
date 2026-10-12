@@ -139,6 +139,10 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:60
 .card p{margin:0;color:var(--muted);font-size:13px;overflow-wrap:anywhere}
 .card .acts{display:flex;gap:6px;margin-top:auto;flex-wrap:wrap;padding:4px 0 0}
 .card.done{opacity:.55}
+.why{display:flex;flex-direction:column;gap:8px;border-top:1px dashed var(--line);padding-top:10px;margin-top:4px}
+.why .chips2{display:flex;flex-wrap:wrap;gap:6px}
+.why .chips2 button[aria-pressed="true"]{background:var(--spark-soft);color:var(--spark);border-color:color-mix(in srgb,var(--spark) 40%,transparent)}
+.why input{width:100%}
 .thinking{padding:16px;color:var(--muted);font-size:13.5px;display:flex;align-items:center;gap:10px}
 .thinking::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid var(--spark-soft);border-top-color:var(--spark);animation:spin .9s linear infinite;flex:none}
 @keyframes spin{to{transform:rotate(1turn)}}
@@ -1098,6 +1102,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       'Look for: overdue or due-today tasks that may already be done; emails that need a reply; tasks that need a status update; deep-work tasks that need calendar time in a free gap today or tomorrow; work Pepper (his Slack chief-of-staff agent) or one of the agents could take; agent runs that failed. ' +
       'Decisions on budget or approvals are Ilan\'s: suggest a reply or time to decide, never decide. Prefer moves he can do in one click, and be specific: name the person, the item and the slot. ' +
       (more ? 'Do NOT repeat these earlier suggestions: ' + JSON.stringify(st.ideas.map((i) => i.title)) + '. ' : '') +
+      (rejected.length ? 'Ilan marked these past suggestions NOT RELEVANT, with his reasons. Learn from them: never suggest the same thing again, and avoid suggestions like them for the same reason: ' + JSON.stringify(rejected.slice(-20).map((r) => ({ suggestion: r.title, about: r.about, why: r.why }))) + '. ' : '') +
       'Reply with ONLY a JSON array of up to ' + (more ? 4 : 6) + ' objects, best first: ' +
       '{"title": short imperative, max 12 words; "why": one sentence with the evidence; "kind": one of "done","update","block","delegate","reply","mailtask","slackreply","agent"; "ref": the ref of the task (done, update, block, delegate), the email (reply, mailtask), the Slack message (slackreply) or the agent (agent); ' +
       '"time": "HH:MM" start (block only, and it MUST be inside one of the free_today or free_tomorrow gaps with room for mins; never over a meeting, never outside the gaps);  "mins": minutes (block only; 30 by default, longer only when the task clearly needs it); "day": "today" or "tomorrow" (block only); "text": optional draft text (update, delegate); "how": optional one-line direction (reply)}. ' +
@@ -1187,6 +1192,39 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     openDrawer(row, kind, obj, preset);
   }
 
+  // ---- "Not relevant": a rejected suggestion teaches Claude now (sent with every later prompt)
+  //      and the agents later (a 📝 note to Pepper that the weekly learning review turns into a signal).
+  const REJ_KEY = 'cc-rejected';
+  const rejected = (() => { try { const v = JSON.parse(localStorage.getItem(REJ_KEY) || '[]'); return Array.isArray(v) ? v.slice(-40) : []; } catch (_) { return []; } })();
+  const REASONS = ['Already done', 'Not mine / someone else owns it', 'Wrong timing', 'Not important', 'Wrong or old info', 'Never suggest this kind of thing'];
+  function askWhy(i, card) {
+    if (!card || card.querySelector('.why')) return;
+    let picked = '';
+    const free = h('input', { type: 'text', dir: 'auto', placeholder: 'Optional: what should Claude learn? e.g. "Narrative proposals are Yuval\'s now"' });
+    const chips = h('div', { class: 'chips2' }, REASONS.map((r) => h('button', { class: 'sm', type: 'button', 'aria-pressed': 'false', onclick: (ev) => {
+      picked = r; chips.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === ev.currentTarget)));
+    } }, r)));
+    const save = h('button', { class: 'sm pri' }, 'Save and teach');
+    const out = h('span', { class: 'hint' });
+    save.onclick = async () => {
+      const why = [picked, free.value.trim()].filter(Boolean).join(' — ');
+      if (!why) { out.textContent = 'Pick a reason or write one.'; return; }
+      const ref = findRef(i);
+      const what = ref ? (ref.name || ref.subject || (ref.text || '').slice(0, 80) || ref.title || '') : '';
+      rejected.push({ at: today(), kind: i.kind, title: i.title, about: what, why });
+      try { localStorage.setItem(REJ_KEY, JSON.stringify(rejected.slice(-40))); } catch (_) {}
+      i.dismissed = true; renderIdeas();
+      if (picked === 'Already done' && ref && TASK_KINDS.includes(i.kind)) toast('If it is done, mark it ✓ Done in Tasks so the board and Pepper know.');
+      try {
+        if (mcp) await dmPepper(`📝 למידה (correction): הצעה של Claude בדשבורד לא רלוונטית.\nההצעה: «${i.title}»${what ? '\nעל: «' + what + '»' : ''}\nלמה: ${why}`);
+        toast('Got it. Claude will avoid this, and the lesson went to Pepper.');
+      } catch (e) { toast('Saved here. Could not send the lesson to Pepper: ' + errText(e, 'Slack')); }
+      maybeMoreAfterAction();
+    };
+    card.append(h('div', { class: 'why' }, h('span', { class: 'hint' }, 'Why is it not relevant?'), chips, free, h('div', { class: 'line', style: 'display:flex;gap:8px;align-items:center;flex-wrap:wrap' }, save, out)));
+    free.focus({ preventScroll: true });
+  }
+
   function renderIdeas() {
     const list = st.ideas.filter((i) => !i.dismissed && !isTouched(i.ref));
     if (!list.length) { $('ideas').replaceChildren(h('div', { class: 'thinking' }, 'All caught up. Ask for more ideas any time.')); return; }
@@ -1195,7 +1233,8 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       return h('div', { class: 'card' + (i.done ? ' done' : '') },
         h('span', { class: 'k' }, i.done ? 'Done ✓' : k), h('b', { dir: 'auto' }, i.title), i.why && h('p', { dir: 'auto' }, i.why),
         !i.done && h('div', { class: 'acts' }, h('button', { class: 'sm pri', onclick: () => act(i) }, btn),
-          h('button', { class: 'sm ghost', onclick: () => { i.dismissed = true; renderIdeas(); maybeMoreAfterAction(); } }, 'Not now')));
+          h('button', { class: 'sm ghost', onclick: () => { i.dismissed = true; renderIdeas(); maybeMoreAfterAction(); } }, 'Not now'),
+          h('button', { class: 'sm ghost', onclick: (ev) => askWhy(i, ev.currentTarget.closest('.card')) }, '✕ Not relevant')));
     })));
   }
 
