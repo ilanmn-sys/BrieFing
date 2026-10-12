@@ -389,10 +389,25 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
   }
 
   // ---- Inbox ----
+  // Threads marked read here leave the list (kept 4 days, the inbox window is 3).
+  const READ_KEY = 'cc-read';
+  const readHere = (() => { try { const o = JSON.parse(localStorage.getItem(READ_KEY) || '{}'); const cut = Date.now() - 4 * 864e5; return Object.fromEntries(Object.entries(o).filter(([, t]) => t > cut)); } catch (_) { return {}; } })();
+  function rememberRead(id) { readHere[id] = Date.now(); try { localStorage.setItem(READ_KEY, JSON.stringify(readHere)); } catch (_) {} }
+  async function markRead(m, row, btn) {
+    btn.disabled = true; btn.textContent = 'Marking…';
+    try {
+      await call(S.GM, 'unlabel_thread', { threadId: m.id, labelIds: ['UNREAD'] });
+      rememberRead(m.id); touch(m.id);
+      st.ideas = st.ideas.filter((i) => String(i.ref) !== m.id); renderIdeas();
+      row.remove(); if (!document.querySelector('#inbox .row')) renderInbox();
+      mcp.invalidate(S.GM, 'search_threads').catch(() => {});
+    } catch (e) { btn.disabled = false; btn.textContent = '✓ Mark read'; toast(errText(e, 'Gmail')); }
+  }
   function renderInbox() {
     if (!st.inbox) return;
-    if (!st.inbox.length) { $('inbox').replaceChildren(h('div', { class: 'empty' }, 'Nothing new in Primary for the last 3 days.')); return; }
-    $('inbox').replaceChildren(h('div', { class: 'list' }, st.inbox.map((m) => {
+    const list = st.inbox.filter((m) => !readHere[m.id]);
+    if (!list.length) { $('inbox').replaceChildren(h('div', { class: 'empty' }, 'Nothing left in Primary for the last 3 days.')); return; }
+    $('inbox').replaceChildren(h('div', { class: 'list' }, list.map((m) => {
       const d = m.date ? new Date(m.date) : null;
       const row = h('div', { class: 'row', id: 'mail-' + m.id },
         h('div', { class: 'rh' },
@@ -402,7 +417,8 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
           h('span', { class: 'd', dir: 'auto' }, h('b', {}, nameOf(m.from)), ' — ', m.snippet)),
         h('div', { class: 'acts' },
           h('button', { class: 'sm spark', onclick: () => openDrawer(row, 'reply', m) }, '✦ Suggest reply'),
-          h('button', { class: 'sm', onclick: () => openDrawer(row, 'mailtask', m) }, '→ Make it a task')));
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'mailtask', m) }, '→ Make it a task'),
+          h('button', { class: 'sm ghost', onclick: (ev) => markRead(m, row, ev.currentTarget) }, '✓ Mark read')));
       return row;
     })));
   }
@@ -681,7 +697,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;ali
 
   function context() {
     const tasks = (st.tasks || []).filter((t) => !isTouched(t.id)).slice(0, 60).map((t) => ({ ref: t.id, name: t.name, group: (GROUPS.find((g) => g.id === t.group) || {}).label, deadline: t.deadline, priority: t.priority, status: t.status }));
-    const inbox = (st.inbox || []).filter((m) => !isTouched(m.id)).slice(0, 20).map((m) => ({ ref: m.id, from: nameOf(m.from), subject: m.subject, snippet: (m.snippet || '').slice(0, 220), date: m.date, unread: m.unread }));
+    const inbox = (st.inbox || []).filter((m) => !isTouched(m.id) && !readHere[m.id]).slice(0, 20).map((m) => ({ ref: m.id, from: nameOf(m.from), subject: m.subject, snippet: (m.snippet || '').slice(0, 220), date: m.date, unread: m.unread }));
     const cal = (ev) => (ev || []).map((e) => ({ title: e.summary, start: e.start && e.start.dateTime ? hm(new Date(e.start.dateTime)) : 'all day', end: e.end && e.end.dateTime ? hm(new Date(e.end.dateTime)) : '' }));
     const agents = (st.agents || []).map((a) => ({ ref: a.id, name: a.name, last: a.last_run && a.last_run.status }));
     const gapsFor = (off) => st.events[off] ? gapText(freeGaps(dayStr(off), st.events[off], 15)) || 'none' : 'unknown';
