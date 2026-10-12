@@ -120,6 +120,12 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:60
 .skel{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--sunk),var(--panel-2),var(--sunk));background-size:200% 100%;animation:shimmer 1.4s linear infinite;margin:16px}
 @keyframes shimmer{to{background-position:-200% 0}}
 
+/* ---------- Check-ins after a focus block ---------- */
+.checkin{--c:var(--day);--c-soft:var(--day-soft);border-color:color-mix(in srgb,var(--day) 45%,var(--line));animation:drop .3s ease}
+.checkin .card{counter-increment:none;border-color:color-mix(in srgb,var(--day) 30%,var(--line))}
+.checkin .card::before{content:none}
+.checkin .card .k{color:var(--day)}
+
 /* ---------- Claude's next moves ---------- */
 .ideas{position:relative;border:1px solid transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,linear-gradient(120deg,var(--spark),var(--spark-2),var(--accent)) border-box}
 .ideas .ph{border-bottom-color:color-mix(in srgb,var(--spark) 18%,var(--line))}
@@ -223,6 +229,11 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       <div class="legend"><span><i style="background:var(--busy)"></i>Meetings</span><span><i style="background:var(--focus)"></i>Focus blocks</span><span><i style="border:1.5px dashed var(--free)"></i>Free</span></div></div>
     <div class="track" id="track"></div>
     <div class="ticks"><span>08</span><span>09</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span></div>
+  </section>
+
+  <section class="panel checkin" aria-labelledby="ci-h" id="checkins" hidden>
+    <div class="ph"><h2 id="ci-h"><span class="ic">⏱</span>How did it go?</h2><span class="meta">Focus blocks that just ended</span></div>
+    <div class="cards" id="ci-cards"></div>
   </section>
 
   <section class="panel ideas" aria-labelledby="ideas-h">
@@ -479,7 +490,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
         return { id: String(it.id), name: it.name, url: it.url, group: it.group && it.group.id, status: cv[COL.status], deadline: cv[COL.deadline], priority: cv[COL.priority], owner: cv[COL.person], calBlock: cv[COL.calBlock], created: it.created_at, updated: it.updated_at };
       });
       $('tk-meta').textContent = 'Updated ' + ago(at);
-      renderTasks(); if (st.ideas.length) renderIdeas(); maybeIdeas();
+      renderTasks(); renderCheckins(); if (st.ideas.length) renderIdeas(); maybeIdeas();
     }, (e, drop) => { if (drop || !st.tasks) { st.tasks = drop ? null : st.tasks; $('tk-tabs').replaceChildren(); $('tasks').replaceChildren(errBox(errText(e, 'monday'), refreshAll)); } });
 
     watch(S.GM, 'search_threads', { query: INBOX_Q, pageSize: 30 }, 'gm', (p, at) => {
@@ -498,7 +509,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       watch(S.CAL, 'list_events', { startTime: dayStr(off) + 'T00:00:00', endTime: dayStr(off + 1) + 'T00:00:00', orderBy: 'startTime', pageSize: 60 }, 'cal', (p) => {
         st.events[off] = (p.events || []).filter((e) => e.status !== 'cancelled' && !(e.attendees || []).some((a) => a.self && a.responseStatus === 'declined'));
         if (st.day === off) renderDay();
-        if (off === 0) renderDayline();
+        if (off === 0) { renderDayline(); renderCheckins(); }
         if (st.ideas.length) renderIdeas();
         maybeIdeas();
       }, (e, drop) => { if (drop) st.events[off] = null; if (st.day === off && (drop || !st.events[off])) $('day').replaceChildren(errBox(errText(e, 'Google Calendar'), refreshAll)); });
@@ -1116,6 +1127,46 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   }
   const KIND = { done: ['Close it', '✓ Mark Done'], update: ['Update', '✎ Write update'], block: ['Schedule', '◷ Block it'], delegate: ['Hand off', '→ Hand off'], reply: ['Reply', '✦ Draft reply'], mailtask: ['Track', '→ Make it a task'], slackreply: ['Slack', '✦ Draft reply'], agent: ['Agents', '▶ Run'] };
 
+  // ---- Check-ins: when a focus block linked to a task has ended, ask whether it is done ----
+  // A block is linked by the task URL in its description (the dashboard writes it) or by the task's Calendar Block ID.
+  // It needs a check-in until the task is Done, gets an update after the block, or the check-in is answered here.
+  const CI_KEY = 'cc-checkins-' + today();
+  const ciDone = new Set((() => { try { return JSON.parse(localStorage.getItem(CI_KEY) || '[]'); } catch (_) { return []; } })());
+  function ciClose(id) { ciDone.add(id); try { localStorage.setItem(CI_KEY, JSON.stringify([...ciDone])); } catch (_) {} renderCheckins(); }
+  function checkIns() {
+    const now = Date.now(), out = [];
+    for (const e of st.events[0] || []) {
+      if (!/^focus:/i.test(e.summary || '') || !(e.end && e.end.dateTime)) continue;
+      const end = Date.parse(e.end.dateTime);
+      if (end > now || ciDone.has(e.id)) continue;
+      const tid = (String(e.description || '').match(/\/pulses\/(\d+)/) || [])[1];
+      const t = (st.tasks || []).find((x) => (tid && x.id === tid) || (x.calBlock && x.calBlock === e.id));
+      if (!t || st.doneIds.has(t.id)) continue;
+      if (t.updated && Date.parse(t.updated) > end + 60000) continue;   // already updated after the block
+      out.push({ ev: e, task: t, end });
+    }
+    return out.sort((a, b) => b.end - a.end);
+  }
+  function renderCheckins() {
+    const list = checkIns(), box = $('checkins'); if (!box) return;
+    box.hidden = !list.length; if (!list.length) return;
+    const go = (c, kind, preset) => {
+      const g = GROUPS.find((x) => x.id === c.task.group); if (g && st.tab !== g.key) { st.tab = g.key; renderTasks(); }
+      const row = $('task-' + c.task.id); if (!row) return;
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' }); row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 1600);
+      openDrawer(row, kind, c.task, preset || {}); ciClose(c.ev.id);
+    };
+    $('ci-cards').replaceChildren(...list.map((c) => h('div', { class: 'card' },
+      h('span', { class: 'k' }, 'Block ended ' + hm(new Date(c.end))),
+      h('b', { dir: 'auto' }, c.task.name),
+      h('p', {}, 'Can it be marked Done? If not, where does it stand?'),
+      h('div', { class: 'acts' },
+        h('button', { class: 'sm pri', onclick: () => go(c, 'done') }, '✓ Done'),
+        h('button', { class: 'sm', onclick: () => go(c, 'update') }, '✎ Progress'),
+        h('button', { class: 'sm', onclick: () => go(c, 'block', { mins: 30 }) }, '◷ More time'),
+        h('button', { class: 'sm ghost', onclick: () => ciClose(c.ev.id) }, 'Later')))));
+  }
+
   function act(i) {
     const obj = findRef(i); if (!obj) { toast('That item is no longer open.'); i.dismissed = true; renderIdeas(); return; }
     let rowId, kind = i.kind, preset = {};
@@ -1156,7 +1207,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     const g = H < 5 ? 'Late night' : H < 12 ? 'Good morning' : H < 17 ? 'Good afternoon' : 'Good evening';
     $('hello').replaceChildren(g + ', ', h('em', {}, 'Ilan'));
     $('sub').textContent = fmt(new Date(), { weekday: 'long', day: 'numeric', month: 'long' }) + ' · ' + hm(new Date()) + ' Tel Aviv';
-    renderDayline();
+    renderDayline(); renderCheckins();
   };
   tick(); setInterval(tick, 30000);
 
