@@ -7,6 +7,6 @@
   "enabled": false,
   "schedule": "Hourly 07–12 Sun–Thu; first run does the pass, later runs handle approvals",
   "cloud": {
-    "mode": "dry-run"
+    "mode": "live"
   }
 }
