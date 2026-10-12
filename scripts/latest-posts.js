@@ -5,8 +5,9 @@
 // Uses curl so the environment's HTTPS proxy applies. LinkedIn, Instagram, X and TikTok have no public feed: they are skipped here.
 const { execFileSync } = require('child_process');
 
+const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36';
 const get = (url) => {
-  try { return execFileSync('curl', ['-sSL', '--max-time', '15', '-A', 'Mozilla/5.0', url], { encoding: 'utf8', maxBuffer: 20e6, stdio: ['ignore', 'pipe', 'ignore'] }); }
+  try { return execFileSync('curl', ['-sSL', '--max-time', '15', '-A', UA, '-H', 'Accept-Language: en-US', url], { encoding: 'utf8', maxBuffer: 20e6, stdio: ['ignore', 'pipe', 'ignore'] }); }
   catch (_) { return ''; }
 };
 const decode = (s) => String(s || '').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").trim();
@@ -31,6 +32,24 @@ function youtubeChannelId(url, html) {
   const m = (html || '').match(/channel_id=(UC[\w-]+)/) || (html || '').match(/"channelId":"(UC[\w-]+)"/);
   return m ? m[1] : null;
 }
+// YouTube's channel feed sometimes 404s (seen 2026-10-12). Fallback: the channel's /videos page, first video tile.
+const AGO = { hour: 36e5, day: 864e5, week: 6048e5, month: 2592e6, year: 31536e6 };
+function youtubeFromVideosPage(html, now = Date.now()) {
+  const t = (html || '').match(/"lockupMetadataViewModel":\{"title":\{"content":"((?:[^"\\]|\\.)*)"/);
+  if (!t) return null;
+  const before = html.slice(0, t.index), after = html.slice(t.index, t.index + 4000);
+  const ids = [...before.matchAll(/"\/watch\?v=([\w-]{11})/g)];
+  const ago = after.match(/"accessibilityLabel":"(\d+) (hour|day|week|month|year)s? ago"/);
+  let title; try { title = JSON.parse('"' + t[1] + '"'); } catch (_) { title = t[1]; }
+  return {
+    title: decode(title),
+    date: ago ? new Date(now - Number(ago[1]) * AGO[ago[2]]).toISOString().slice(0, 10) : '',
+    approxDate: true,
+    link: ids.length ? 'https://www.youtube.com/watch?v=' + ids[ids.length - 1][1] : '',
+  };
+}
+const channelBase = (u) => u.replace(/[?#].*$/, '').replace(/\/(featured|videos|shorts|streams|about|playlists)\/?$/, '').replace(/\/+$/, '');
+
 const feedCandidates = (u) => { const base = u.replace(/\/+$/, ''); return [base + '/feed', base + '/rss', base + '/feed.xml', base + '/rss.xml', base]; };
 
 function latestFor(urls, fetcher = get) {
@@ -44,6 +63,10 @@ function latestFor(urls, fetcher = get) {
       if (!id) continue;
       const e = firstEntry(fetcher(`https://www.youtube.com/feeds/videos.xml?channel_id=${id}`));
       if (e) return { found: true, ...e, source: 'youtube' };
+      const page = channelBase(url) + '/videos';
+      tried.push(page);
+      const v = youtubeFromVideosPage(fetcher(page));
+      if (v) return { found: true, ...v, source: 'youtube-page' };
       continue;
     }
     const page = fetcher(url);
@@ -61,7 +84,7 @@ function latestFor(urls, fetcher = get) {
   return { found: false, tried };
 }
 
-module.exports = { firstEntry, youtubeChannelId, latestFor, isSkipped };
+module.exports = { firstEntry, youtubeChannelId, youtubeFromVideosPage, latestFor, isSkipped };
 
 if (require.main === module) {
   let list;

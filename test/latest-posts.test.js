@@ -30,3 +30,15 @@ test('latestFor uses the YouTube feed, discovers newsletter feeds, and skips wal
   assert.deepEqual(none, { found: false, tried: [] });
   assert.ok(isSkipped('https://x.com/a') && isSkipped('https://twitter.com/a') && !isSkipped('https://box.com/a'));
 });
+
+test('YouTube fallback: the /videos page gives the first tile when the channel feed 404s', () => {
+  const { youtubeFromVideosPage, latestFor } = require('../scripts/latest-posts');
+  const page = 'x"/watch?v=AAAAAAAAAAA"y"lockupMetadataViewModel":{"title":{"content":"How to \\u0026 why"},"metadata":{"a":[{"text":{"content":"2d ago"},"accessibilityLabel":"2 days ago"}]}}';
+  const now = Date.parse('2026-10-12T05:00:00Z');
+  const v = youtubeFromVideosPage(page, now);
+  assert.equal(v.title, 'How to & why'); assert.equal(v.date, '2026-10-10'); assert.equal(v.link, 'https://www.youtube.com/watch?v=AAAAAAAAAAA'); assert.equal(v.approxDate, true);
+  assert.equal(youtubeFromVideosPage('<html>nothing</html>'), null);
+  const fetcher = (u) => u.endsWith('/videos') ? page : u.includes('feeds/videos.xml') ? '<html>404</html>' : 'channel_id=UCabcdefghijklmnopqrstuv';
+  const r = latestFor(['https://www.youtube.com/@someone/featured'], fetcher);
+  assert.equal(r.found, true); assert.equal(r.source, 'youtube-page');
+});
