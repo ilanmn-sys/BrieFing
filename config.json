@@ -230,7 +230,16 @@
     },
     "briefingAgentUserId": 117447635,
     "briefingAgentNote": "Brie Fing, the comms request desk agent on this board (external agent). Hand it work privately in its Slack DM (briefingAgentSlackId, DM by user id), never as an update on the request board: requesters and the team can read board updates (Ilan, 2026-10-12). 117447635 is its monday user, the one that posts on the board.",
-    "briefingAgentSlackId": "U0C3YP1J77D"
+    "briefingAgentSlackId": "U0C3YP1J77D",
+    "collector": {
+      "reactionEmoji": "inbox_tray",
+      "doneEmoji": "white_check_mark",
+      "lookbackDays": 3,
+      "intakeChannelLabel": "Emoji reaction",
+      "inboxGroup": "group_mm77x4r1",
+      "submittedLine": "Submitted via 📥 by Ilan Manassen",
+      "note": "Ilan's personal comms-request collector (2026-10-13). Files Slack messages Ilan reacted to with :inbox_tray: into the Switchboard inbox; Brie Fing takes it from there. slack-flag-to-task also adds :inbox_tray: (as Ilan) to every 📌 message it processes, so a message that also carries Ilan's :pushpin: is a 📌 task, not a request, and is skipped."
+    }
   },
   "decisionSeeds": [
     {

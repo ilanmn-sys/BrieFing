@@ -1,0 +1,12 @@
+{
+  "id": "comms-request-collector",
+  "name": "📥 Comms request collector",
+  "group": "Requests",
+  "cron": "0 8-19 * * 0-5",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "Hourly 08–19 Sun–Fri",
+  "cloud": {
+    "mode": "dry-run"
+  }
+}
