@@ -141,6 +141,12 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:60
 .card p{margin:0;color:var(--muted);font-size:13px;overflow-wrap:anywhere}
 .card .acts{display:flex;gap:6px;margin-top:auto;flex-wrap:wrap;padding:4px 0 0}
 .card.done{opacity:.55}
+.coll{display:flex;flex-direction:column;gap:6px;border:1px dashed var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.coll .ch{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.coll .ch b{font-weight:600}
+.coll .ch .sp{flex:1}
+.coll ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:2px}
+.coll li{min-width:0;overflow-wrap:anywhere}
 .why{display:flex;flex-direction:column;gap:8px;border-top:1px dashed var(--line);padding-top:10px;margin-top:4px}
 .why .chips2{display:flex;flex-wrap:wrap;gap:6px}
 .why .chips2 button[aria-pressed="true"]{background:var(--spark-soft);color:var(--spark);border-color:color-mix(in srgb,var(--spark) 40%,transparent)}
@@ -282,6 +288,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
 
       <section class="panel c-req" aria-labelledby="rq-h" id="sec-requests">
         <div class="ph"><h2 id="rq-h"><span class="ic">⇄</span>Requests</h2><span class="meta" id="rq-meta"></span></div>
+        <div class="coll" id="rq-coll" hidden></div>
         <div class="tabs" role="tablist" id="rq-tabs"></div>
         <div id="requests"><div class="skel"></div><div class="skel"></div></div>
       </section>
@@ -340,13 +347,16 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   const RQ = { board: 18431118484, owner: 'multiple_person_mm77ct8p', status: 'color_mm77yyq9', deadline: 'date_mm77dyk5', tier: 'color_mm773zjg', region: 'dropdown_mm7775sx', requester: 'multiple_person_mm77t7hn', domain: 'color_mm77pzed', agent: 'text_mm7f4fmq',
     closed: 'group_mm77qrtv', inbox: 'group_mm77x4r1', terminal: ['Done', 'Cancelled', 'Deflected', 'Duplicate'],
     statuses: ['Triaged', 'In progress', 'With requester', 'With 3rd party', 'In review', 'Approved - pending publication', 'Blocked', 'Done', 'Deflected', 'Cancelled'] };
+  // 📥 Comms request collector (agents/comms-request-collector): files Ilan's :inbox_tray: reactions into the 📥 Inbox.
+  // slack-flag-to-task also leaves :inbox_tray: on 📌 messages, so those are excluded here as they are in the agent.
+  const COLLECTOR = { trigger: 'trig_01CiYhTrBWsxdbmc1BkV3Gfi', mode: 'dry run' };
   const BRIE_SLACK = 'U0C3YP1J77D';   // config.requests.briefingAgentSlackId: instructions go to Brie Fing's DM, never onto the request board
   const ME_NAME = 'Ilan Manassen';
   const S = { MON: 'monday.com', GM: 'Gmail', CAL: 'Google Calendar', SL: 'Slack', CCR: 'Claude Code Remote' };
   const TASK_KINDS = ['done', 'update', 'block', 'delegate'];
 
   // ---- State ----
-  const st = { requests: null, rqTab: 'mine', tasks: null, inbox: null, slack: null, mentions: null, chan: null, mine: null, slTab: 'dm', events: { 0: null, 1: null }, agents: null, src: {}, tab: 'today', day: 0, ideas: [], openDrawer: null, doneIds: new Set() };
+  const st = { collect: null, requests: null, rqTab: 'mine', tasks: null, inbox: null, slack: null, mentions: null, chan: null, mine: null, slTab: 'dm', events: { 0: null, 1: null }, agents: null, src: {}, tab: 'today', day: 0, ideas: [], openDrawer: null, doneIds: new Set() };
   let mcp = null, sample = null;
 
   // ---- Small helpers ----
@@ -566,6 +576,13 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     }, () => {});
     startChannelWatch();
 
+    // Messages Ilan reacted 📥 to that the collector has not filed yet (no ✅, not a 📌 task).
+    watch(S.SL, 'slack_search_public_and_private', { sort: 'timestamp', sort_dir: 'desc', limit: 20, include_context: false, response_format: 'detailed', include_bots: true,
+      channel_types: 'public_channel,private_channel,mpim,im', filters: 'hasmy::inbox_tray: -hasmy::pushpin: -hasmy::white_check_mark: after:' + dayStr(-3) }, 'sl', (p) => {
+      st.collect = parseSlackRaw(typeof p === 'string' ? p : (p.results || ''));
+      renderCollector();
+    }, () => { st.collect = null; renderCollector(); });
+
     watch(S.CCR, 'list_triggers', { enabled: true, limit: 60 }, 'ag', (p, at) => {
       st.agents = (p.data || []).filter((t) => /^Agent:/i.test(t.name || '')).sort((a, b) => String(a.next_run_at).localeCompare(String(b.next_run_at)));
       $('ag-meta').textContent = st.agents.length + ' on schedule · ' + ago(at);
@@ -613,6 +630,24 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   const TIER_RANK = (t) => { const m = String(t || '').match(/T(\d)/); return m ? Number(m[1]) : 9; };
   const myRequests = () => (st.requests || []).filter((r) => r.owner.includes(ME_NAME) && !st.doneIds.has(r.id));
   const inboxRequests = () => (st.requests || []).filter((r) => r.group === RQ.inbox && !r.owner && !st.doneIds.has(r.id));
+  function renderCollector() {
+    const box = $('rq-coll'), list = st.collect;
+    if (!list) { box.hidden = true; return; }
+    box.hidden = false;
+    const run = h('button', { class: 'sm' + (list.length ? ' spark' : '') }, '▶ Run collector now');
+    run.onclick = async () => {
+      run.disabled = true;
+      try { await call(S.CCR, 'fire_trigger', { trigger_id: COLLECTOR.trigger }); toast(COLLECTOR.mode === 'live' ? 'Collector started. New items land in 📥 Untriaged in a few minutes.' : 'Collector started (dry run): it reports what it would file, and files nothing yet.'); }
+      catch (e) { toast('Could not start the collector: ' + errText(e, 'Claude Code Remote')); run.disabled = false; }
+    };
+    box.replaceChildren(
+      h('div', { class: 'ch' }, h('b', {}, '📥 Collector'),
+        h('span', { class: 'hint' }, list.length ? list.length + ' message' + (list.length > 1 ? 's' : '') + ' you reacted 📥 to, not filed yet' : 'Nothing waiting. React 📥 in Slack to file a request.'),
+        COLLECTOR.mode !== 'live' && h('span', { class: 'pill idle' }, COLLECTOR.mode), h('span', { class: 'sp' }), run),
+      list.length ? h('ul', {}, list.slice(0, 5).map((m) => h('li', { dir: 'auto' },
+        h('a', { href: m.permalink, target: '_blank', rel: 'noopener' }, (m.from || 'Someone').trim()),
+        h('span', { class: 'hint' }, ' · ' + (m.channelName || 'DM') + ' · '), ((t) => t.length > 110 ? t.slice(0, 108) + '…' : t)((m.text || '').replace(/\s+/g, ' '))))) : null);
+  }
   function renderRequests() {
     if (!st.requests) return;
     const lists = { mine: myRequests(), inbox: inboxRequests() };
