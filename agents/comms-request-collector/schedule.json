@@ -7,6 +7,6 @@
   "enabled": false,
   "schedule": "Hourly 08–19 Sun–Fri",
   "cloud": {
-    "mode": "dry-run"
+    "mode": "live"
   }
 }

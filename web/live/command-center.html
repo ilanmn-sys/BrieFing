@@ -349,7 +349,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     statuses: ['Triaged', 'In progress', 'With requester', 'With 3rd party', 'In review', 'Approved - pending publication', 'Blocked', 'Done', 'Deflected', 'Cancelled'] };
   // 📥 Comms request collector (agents/comms-request-collector): files Ilan's :inbox_tray: reactions into the 📥 Inbox.
   // slack-flag-to-task also leaves :inbox_tray: on 📌 messages, so those are excluded here as they are in the agent.
-  const COLLECTOR = { trigger: 'trig_01CiYhTrBWsxdbmc1BkV3Gfi', mode: 'dry run' };
+  const COLLECTOR = { trigger: 'trig_01CiYhTrBWsxdbmc1BkV3Gfi', mode: 'live' };
   const BRIE_SLACK = 'U0C3YP1J77D';   // config.requests.briefingAgentSlackId: instructions go to Brie Fing's DM, never onto the request board
   const ME_NAME = 'Ilan Manassen';
   const S = { MON: 'monday.com', GM: 'Gmail', CAL: 'Google Calendar', SL: 'Slack', CCR: 'Claude Code Remote' };

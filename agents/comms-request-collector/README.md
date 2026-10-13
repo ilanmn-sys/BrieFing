@@ -1,6 +1,6 @@
 # comms-request-collector
 
-Hourly 08–19 Sun–Fri (`0 8-19 * * 0-5`, Asia/Jerusalem). Disabled until a clean dry-run exists. Cloud routine: `trig_01CiYhTrBWsxdbmc1BkV3Gfi` ("Agent: comms-request-collector (dry run)", minute :53, disabled). The Command Center shows the 📥 messages not filed yet (no ✅, no 📌) above the Requests tabs, with a Run now button.
+Hourly 08–19 Sun–Fri (`0 8-19 * * 0-5`, Asia/Jerusalem). Cloud routine: `trig_01CiYhTrBWsxdbmc1BkV3Gfi` ("Agent: comms-request-collector", minute :53, live since 2026-10-13). The Command Center shows the 📥 messages not filed yet (no ✅, no 📌) above the Requests tabs, with a Run now button.
 
 ## What it does
 Files Slack messages Ilan reacted to with :inbox_tray: (last 3 days, all channel types) into the Comms Requests board (Switchboard) inbox, then marks them :white_check_mark:. Dedupes on the Slack permalink in the Slack thread column (an existing item gets an update instead). Brie Fing, the request desk agent, takes over from the inbox.
