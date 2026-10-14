@@ -302,7 +302,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       </section>
 
       <section class="panel c-slack" aria-labelledby="sl-h" id="sec-slack">
-        <div class="ph"><h2 id="sl-h"><span class="ic">#</span>Slack</h2><span class="meta" id="sl-meta"></span></div>
+        <div class="ph"><h2 id="sl-h"><span class="ic">#</span>Slack</h2><span class="meta" id="sl-meta"></span><button class="sm ghost" id="sl-tri" hidden>✦ Re-prioritize</button></div>
         <div class="tabs" role="tablist" id="sl-tabs"></div>
         <div class="chanpick" id="sl-chans" hidden></div>
         <div id="slack"><div class="skel"></div><div class="skel"></div></div>
@@ -738,9 +738,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       const byId = Object.fromEntries(todo.map((m) => [m.id, m]));
       (Array.isArray(arr) ? arr : []).forEach((r) => {
         const m = r && byId[String(r.ref)]; if (!m || !URG[r.urgency]) return;
-        st.triage[triKey(m)] = { at: Date.now(), urgency: r.urgency, why: String(r.why || ''), reply: !!r.reply, how: String(r.how || ''),
-          related: (r.related || []).map(String).filter((x) => (st.tasks || []).some((t) => t.id === x) || (st.requests || []).some((q) => q.id === x)),
-          tasks: (r.tasks || []).filter((t) => t && t.title).slice(0, 4).map((t) => ({ title: String(t.title), priority: ['High', 'Medium', 'Low'].includes(t.priority) ? t.priority : 'Medium', due: /^\d{4}-\d{2}-\d{2}$/.test(t.due || '') ? t.due : null })) };
+        st.triage[triKey(m)] = cleanTri(r);
       });
       try { localStorage.setItem(TRI_KEY, JSON.stringify(st.triage)); } catch (_) {}
       $('in-meta').textContent = 'Unread · by urgency · ' + hm(new Date());
@@ -768,9 +766,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
           h('span', { class: 't', dir: 'auto' }, tr && h('span', { class: 'pill ' + URG[tr.urgency][2], style: 'margin:0 6px 0 0' }, URG[tr.urgency][1]), h('a', { href: m.url, target: '_blank', rel: 'noopener' }, m.subject || '(no subject)'), m.count > 1 && h('span', { class: 'pill idle' }, m.count), (m.imp ? m.imp.why : []).filter((w) => w !== 'Ask').map((w) => h('span', { class: 'pill ' + (w === 'VIP' ? 'crit' : 'idle') }, w))),
           h('span', { class: 'r' }, d ? (ymd(d) === today() ? hm(d) : ddmm(ymd(d))) : ''),
           h('span', { class: 'd', dir: 'auto' }, h('b', {}, nameOf(m.from)), ' — ', m.snippet)),
-        tr && !!(tr.why || tr.tasks.length || tr.related.length) && h('div', { class: 'tri' },
-          tr.why && h('div', { class: 'w', dir: 'auto' }, h('b', {}, '✦ '), tr.why, relatedText(tr).length ? ' · Linked: ' + relatedText(tr).map((x) => x.replace(/ \(.*$/, '')).join(', ') : ''),
-          tr.tasks.length > 0 && h('div', { class: 'dtasks' }, tr.tasks.map((t) => h('button', { class: 'sm', dir: 'auto', title: 'Send to Pepper as a task', onclick: () => openDrawer(row, 'mailtask', m, { task: t }) }, '+ ' + t.title + (t.due ? ' · ' + ddmm(t.due) : ''))))),
+        triBlock(tr, () => row, 'mailtask', m),
         h('div', { class: 'acts' },
           h('button', { class: 'sm ' + (tr && !tr.reply ? '' : 'spark'), onclick: () => openDrawer(row, 'reply', m, { how: tr && tr.how || '' }) }, tr && tr.reply ? '✦ Suggested reply' : '✦ Suggest reply'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'mailtask', m) }, '→ Make it a task'),
@@ -832,6 +828,57 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   const HANDLED_KEY = 'cc-slack-handled';
   const handled = (() => { try { const o = JSON.parse(localStorage.getItem(HANDLED_KEY) || '{}'); const cut = Date.now() - 4 * 864e5; return Object.fromEntries(Object.entries(o).filter(([, t]) => t > cut)); } catch (_) { return {}; } })();
   function markHandled(id) { handled[id] = Date.now(); try { localStorage.setItem(HANDLED_KEY, JSON.stringify(handled)); } catch (_) {} touch(id); st.ideas = st.ideas.filter((i) => String(i.ref) !== id); renderIdeas(); renderSlack(); }
+
+  // ---- Slack triage: same pass as the inbox, over DMs, mentions and followed channels ----
+  const SLTRI_KEY = 'cc-sltriage';
+  st.sltriage = (() => { try { const o = JSON.parse(localStorage.getItem(SLTRI_KEY) || '{}'); const cut = Date.now() - 2 * 864e5; return Object.fromEntries(Object.entries(o).filter(([, v]) => v && v.at > cut)); } catch (_) { return {}; } })();
+  let slTriBusy = false, slTriTimer = null, slTriNote = '';
+  function maybeSlTriage() { clearTimeout(slTriTimer); slTriTimer = setTimeout(() => slTriage(false), st.tasks && st.requests ? 1200 : 6000); }
+  const slText = (m) => m.text.replace(/<@U[A-Z0-9]+\|([^>]+)>/g, '@$1').replace(/<@U[A-Z0-9]+>/g, (x) => x.includes(ME_SLACK) ? '@Ilan' : '@someone').replace(/&amp;/g, '&');
+  async function slTriage(force) {
+    if (!sample || slTriBusy) return;
+    const all = [...dmList(), ...mentionList(), ...chanList()];
+    const todo = all.filter((m) => force || !st.sltriage[m.id]).slice(0, 30);
+    if (!todo.length) { $('sl-tri').hidden = false; return; }
+    slTriBusy = true; $('sl-tri').hidden = true; slTriNote = '✦ Prioritizing ' + todo.length + ' messages against your board…'; $('sl-meta').textContent = slTriNote;
+    const msgs = todo.map((m) => ({ ref: m.id, from: m.from, where: m.src === 'dm' ? 'DM to Ilan' : m.src === 'mention' ? '#' + m.channelName + ', mentions Ilan' : '#' + m.channelName + ' (channel he follows, not addressed to him)', in_thread: !!m.thread, text: slText(m).slice(0, 500), time: m.time }));
+    const prompt =
+      'You triage the Slack messages of Ilan Manassen, Senior Communications Manager at monday.com (media relations, exec comms, Elevate 2026 event, influencer program). Messages are usually Hebrew. ' +
+      'For each message decide how urgent it is FOR ILAN, using his open tasks, comms requests and calendar below. ' +
+      'urgency: "now" = an exec or journalist-related ask waiting on him, a deadline today or tomorrow, or he is blocking someone; "today" = a direct ask or question to him that should be answered today; "week" = needs action but can wait; "fyi" = chatter, thanks, updates that need nothing from him, or channel messages not addressed to him. ' +
+      'VIPs (Roy Segev, Eran Zinman, Or Elmaliah) rank high. A direct question in a DM is at least "today". ' +
+      'Link each message to the open task or comms request it is about, by ref, when there is one. ' +
+      'Derive the concrete tasks the message creates for Ilan (verb first, max 10 words, in the message\'s language); skip tasks that already exist in open_tasks (put that ref in related instead). A budget or approval decision is a task for Ilan to decide, never decided for him. ' +
+      'Reply with ONLY a JSON array, one object per message: {"ref": message ref; "urgency": "now"|"today"|"week"|"fyi"; "why": one short sentence with the evidence; "reply": true if Ilan should answer; "how": one-line direction for the reply that uses what the board says (status, dates, owners), empty if no reply; "related": [refs of related open_tasks or comms_requests]; "tasks": [{"title": string, "priority": "High"|"Medium"|"Low", "due": "YYYY-MM-DD" or null}]}. ' +
+      'Use only refs from the data. Write "why" and "how" in English.\n\nMESSAGES:\n' + JSON.stringify(msgs) + '\n\nWORK:\n' + JSON.stringify(workContext(80));
+    try {
+      const arr = await sample.json(prompt, { cache: false, modelTier: 'default' });
+      const ids = new Set(todo.map((m) => m.id));
+      (Array.isArray(arr) ? arr : []).forEach((r) => { if (r && ids.has(String(r.ref))) { const v = cleanTri(r); if (v) st.sltriage[String(r.ref)] = v; } });
+      try { localStorage.setItem(SLTRI_KEY, JSON.stringify(st.sltriage)); } catch (_) {}
+      slTriNote = '';
+    } catch (e) {
+      slTriNote = e.code === 'not_granted' ? 'Claude access not allowed' : e.code === 'rate_limited' ? 'Claude is busy, try ✦ Re-prioritize in a minute' : 'Could not prioritize (' + (e.code || 'error') + ')';
+    }
+    slTriBusy = false; $('sl-tri').hidden = false;
+    renderSlack();
+  }
+  $('sl-tri').addEventListener('click', () => slTriage(true));
+  // One shape for inbox and Slack results.
+  function cleanTri(r) {
+    if (!r || !URG[r.urgency]) return null;
+    return { at: Date.now(), urgency: r.urgency, why: String(r.why || ''), reply: !!r.reply, how: String(r.how || ''),
+      related: (r.related || []).map(String).filter((x) => (st.tasks || []).some((t) => t.id === x) || (st.requests || []).some((q) => q.id === x)),
+      tasks: (r.tasks || []).filter((t) => t && t.title).slice(0, 4).map((t) => ({ title: String(t.title), priority: ['High', 'Medium', 'Low'].includes(t.priority) ? t.priority : 'Medium', due: /^\d{4}-\d{2}-\d{2}$/.test(t.due || '') ? t.due : null })) };
+  }
+  // The ✦ line and the derived-task buttons under a row (inbox and Slack).
+  function triBlock(tr, rowOf, kind, obj) {
+    if (!tr || !(tr.why || tr.tasks.length || tr.related.length)) return null;
+    const rel = relatedText(tr).map((x) => x.replace(/ \(.*$/, ''));
+    return h('div', { class: 'tri' },
+      h('div', { class: 'w', dir: 'auto' }, h('b', {}, '✦ '), tr.why, rel.length ? ' · Linked: ' + rel.join(', ') : ''),
+      tr.tasks.length > 0 && h('div', { class: 'dtasks' }, tr.tasks.map((t) => h('button', { class: 'sm', dir: 'auto', title: 'Send to Pepper as a task', onclick: () => openDrawer(rowOf(), kind, obj, { task: t }) }, '+ ' + t.title + (t.due ? ' · ' + ddmm(t.due) : '')))));
+  }
   function renderSlack() {
     const lists = { dm: dmList(), mention: mentionList(), chan: chanList() };
     const loaded = { dm: !!st.slack, mention: !!st.mentions, chan: !!st.chan };
@@ -845,19 +892,23 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     } }, '#' + c)));
     queueMicrotask(renderStats);
     if (!loaded[st.slTab]) { $('slack').replaceChildren(h('div', { class: 'skel' })); return; }
-    const list = lists[st.slTab];
+    const slRank = (m) => { const t = st.sltriage[m.id]; return t ? URG[t.urgency][0] : 1.5; };
+    const list = lists[st.slTab].slice().sort((a, b) => slRank(a) - slRank(b));
     const emptyText = { dm: 'No DM waiting on you from the last 2 days.', mention: 'No unanswered mention from the last 2 days.', chan: chosenChans.length ? 'Nothing new in these channels in the last day.' : 'Pick channels to follow above.' }[st.slTab];
-    $('sl-meta').textContent = { dm: 'Waiting on you, last 2 days', mention: 'Mentions you have not answered', chan: 'Latest in your channels' }[st.slTab];
+    $('sl-meta').textContent = slTriNote || ({ dm: 'Waiting on you, last 2 days', mention: 'Mentions you have not answered', chan: 'Latest in your channels' }[st.slTab] + (list.some((m) => st.sltriage[m.id]) ? ' · by urgency' : ''));
+    maybeSlTriage();
     if (!list.length) { $('slack').replaceChildren(h('div', { class: 'empty' }, emptyText)); return; }
     $('slack').replaceChildren(h('div', { class: 'list' }, list.map((m) => {
+      const tr = st.sltriage[m.id] || null;
       const row = h('div', { class: 'row', id: 'slack-' + m.id },
         h('div', { class: 'rh' },
-          h('span', { class: 'mark ' + (m.src === 'chan' && !m.text.includes('<@' + ME_SLACK) ? 'idle' : 'acc') }),
-          h('span', { class: 't', dir: 'auto' }, h('a', { href: m.permalink, target: '_blank', rel: 'noopener' }, m.from || 'Someone'), m.channelName && !/^DM$/i.test(m.channelName) && h('span', { class: 'pill idle' }, m.channelName), m.src === 'chan' && m.text.includes('<@' + ME_SLACK) && h('span', { class: 'pill crit' }, '@you'), m.src === 'dm' && m.thread && h('span', { class: 'pill idle' }, 'thread')),
+          h('span', { class: 'mark ' + (tr ? { now: 'crit', today: 'warn', week: 'acc', fyi: 'idle' }[tr.urgency] : m.src === 'chan' && !m.text.includes('<@' + ME_SLACK) ? 'idle' : 'acc') }),
+          h('span', { class: 't', dir: 'auto' }, tr && h('span', { class: 'pill ' + URG[tr.urgency][2], style: 'margin:0 6px 0 0' }, URG[tr.urgency][1]), h('a', { href: m.permalink, target: '_blank', rel: 'noopener' }, m.from || 'Someone'), m.channelName && !/^DM$/i.test(m.channelName) && h('span', { class: 'pill idle' }, m.channelName), m.src === 'chan' && m.text.includes('<@' + ME_SLACK) && h('span', { class: 'pill crit' }, '@you'), m.src === 'dm' && m.thread && h('span', { class: 'pill idle' }, 'thread')),
           h('span', { class: 'r' }, (m.time.match(/\d\d:\d\d/) || [''])[0]),
           h('span', { class: 'd', dir: 'auto' }, m.text.replace(/<@U[A-Z0-9]+\|([^>]+)>/g, '@$1').replace(/&amp;/g, '&').slice(0, 280))),
+        triBlock(tr, () => row, 'slacktask', m),
         h('div', { class: 'acts' },
-          h('button', { class: 'sm spark', onclick: () => openDrawer(row, 'slackreply', m) }, '✦ Suggest reply'),
+          h('button', { class: 'sm ' + (tr && !tr.reply ? '' : 'spark'), onclick: () => openDrawer(row, 'slackreply', m, { how: tr && tr.how || '' }) }, tr && tr.reply ? '✦ Suggested reply' : '✦ Suggest reply'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'slacktask', m) }, '→ Make it a task'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'note', { kind: 'slack', ...m }) }, '✎ My update'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'followup', { kind: 'slack', ...m }) }, '🔁 Pepper follow-up'),
@@ -1132,7 +1183,10 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
           'You draft Slack replies for Ilan Manassen, Senior Communications Manager at monday.com. Read the conversation and write ONLY the reply text to the latest message from ' + (m.from || 'the other person') + '. ' +
           'Same language as the conversation (usually Hebrew), short and natural like a Slack message, no greeting line, no sign-off. Answer what was asked. ' +
           'Never commit to a budget, approval or decision: write [Ilan to decide: …]. Never invent facts; put unknowns in [brackets]. ' +
-          (how.value.trim() ? 'Ilan\'s direction: "' + how.value.trim() + '". ' : '') + '\n\nCONVERSATION:\n' + ctx, ta, ai, say);
+          'Use what Ilan\'s work board says (WORK below) to make the reply concrete: the real status, owners and dates of the related task or request, and free calendar slots when someone asks to meet. Do not mention the board itself. ' +
+          (how.value.trim() ? 'Ilan\'s direction: "' + how.value.trim() + '". ' : '') +
+          (relatedText(st.sltriage[m.id]).length ? '\n\nRELATED WORK:\n' + relatedText(st.sltriage[m.id]).join('\n') : '') +
+          '\n\nWORK:\n' + JSON.stringify(workContext(40)) + '\n\nCONVERSATION:\n' + ctx, ta, ai, say);
       };
       draft.onclick = async () => {
         const msg = ta.value.trim(); if (!msg) { say('The reply is empty.', false); return; }
@@ -1233,16 +1287,17 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       d.append(h('div', { class: 'hint' }, 'Your own update, so Pepper and the agents know where this stands.'), ta, h('div', { class: 'line' }, go, close), out);
     },
 
-    slacktask(d, m, { say, busy, close, out }) {
+    slacktask(d, m, { say, busy, close, out, preset }) {
       const ta = h('textarea', { dir: 'auto' });
-      ta.value = '📌 Please add a task from this Slack message from ' + m.from + ': «' + m.text.slice(0, 200) + '»\n' + m.permalink + '\nR-25: name it as the next action (verb first), set priority and effort, and end the first update with ✅ Done when.';
+      if (preset.task) ta.value = `📌 Please add a task: «${preset.task.title}»\nPriority: ${preset.task.priority}${preset.task.due ? '\nDeadline: ' + preset.task.due : ''}\nFrom ${m.from}'s Slack message: ${m.permalink}\nR-25: end the first update with ✅ Done when.`;
+      else ta.value = '📌 Please add a task from this Slack message from ' + m.from + ': «' + m.text.slice(0, 200) + '»\n' + m.permalink + '\nR-25: name it as the next action (verb first), set priority and effort, and end the first update with ✅ Done when.';
       const go = h('button', { class: 'pri' }, 'Send to Pepper');
       go.onclick = async () => {
         busy(go, true, 'Sending…');
-        try { await dmPepper(ta.value.trim()); say('Sent. Pepper files it on the board.', true); go.remove(); markHandled(m.id); }
+        try { await dmPepper(ta.value.trim()); say('Sent. Pepper files it on the board.', true); go.remove(); if (!preset.task) markHandled(m.id); }
         catch (e) { say(errText(e, 'Slack'), false); busy(go, false, 'Retry'); }
       };
-      d.append(ta, h('div', { class: 'line' }, go, close), out);
+      d.append(preset.task ? h('div', { class: 'hint' }, 'Claude suggested this task from the message. Edit it, then Pepper files it in the right group.') : '', ta, h('div', { class: 'line' }, go, close), out);
     },
 
     mailtask(d, m, { say, busy, close, out, preset }) {
