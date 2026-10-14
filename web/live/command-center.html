@@ -177,7 +177,10 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
 .acts button.sm:not(.pri):not(.spark){background:transparent}
 .acts button.sm:not(.pri):not(.spark):hover{background:var(--c-soft,var(--sunk));border-color:color-mix(in srgb,var(--c,var(--accent)) 40%,var(--line));color:var(--ink)}
 .pill{display:inline-block;font:700 10.5px/1.7 var(--f-body);letter-spacing:.05em;border-radius:999px;padding:0 8px;text-transform:uppercase;margin-left:6px;vertical-align:1px}
-.pill.crit{background:var(--crit-soft);color:var(--crit)}.pill.idle{background:var(--idle-soft);color:var(--idle)}
+.pill.crit{background:var(--crit-soft);color:var(--crit)}.pill.warn{background:var(--warn-soft);color:var(--warn)}.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.tri{padding-left:22px;display:flex;flex-direction:column;gap:6px;font-size:13px}.tri .w{color:var(--muted)}.tri .w b{color:var(--spark);font-weight:600}
+.dtasks{display:flex;flex-wrap:wrap;gap:6px}.dtasks button{background:var(--spark-soft);color:var(--spark);border-color:color-mix(in srgb,var(--spark) 30%,transparent)}
+@media (max-width:620px){.tri{padding-left:0}}.pill.idle{background:var(--idle-soft);color:var(--idle)}
 .row.flash{background:var(--spark-soft);box-shadow:inset 3px 0 0 var(--spark)}
 .row.gone .t{text-decoration:line-through;text-decoration-color:var(--ok)}
 .row.gone{opacity:.5}
@@ -294,7 +297,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       </section>
 
       <section class="panel c-mail" aria-labelledby="in-h" id="sec-inbox">
-        <div class="ph"><h2 id="in-h"><span class="ic">✉</span>Inbox</h2><span class="meta" id="in-meta"></span></div>
+        <div class="ph"><h2 id="in-h"><span class="ic">✉</span>Inbox</h2><span class="meta" id="in-meta"></span><button class="sm ghost" id="in-tri" hidden>✦ Re-prioritize</button></div>
         <div id="inbox"><div class="skel"></div><div class="skel"></div></div>
       </section>
 
@@ -519,7 +522,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
         return { id: String(it.id), name: it.name, url: it.url, group: it.group && it.group.id, status: cv[COL.status], deadline: cv[COL.deadline], priority: cv[COL.priority], owner: cv[COL.person], calBlock: cv[COL.calBlock], created: it.created_at, updated: it.updated_at };
       });
       $('tk-meta').textContent = 'Updated ' + ago(at);
-      renderTasks(); renderCheckins(); if (st.ideas.length) renderIdeas(); maybeIdeas();
+      renderTasks(); renderCheckins(); if (st.ideas.length) renderIdeas(); maybeIdeas(); maybeTriage();
     }, (e, drop) => { if (drop || !st.tasks) { st.tasks = drop ? null : st.tasks; $('tk-tabs').replaceChildren(); $('tasks').replaceChildren(errBox(errText(e, 'monday'), refreshAll)); } });
 
     watch(S.MON, 'get_board_items_page', {
@@ -543,8 +546,8 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       }).filter((m) => !INVITE_RE.test(m.subject || '') && !/calendar-notification@google\.com/.test(m.from || ''))
         .map((m) => ({ ...m, imp: importance(m) }))
         .sort((a, b) => b.imp.score - a.imp.score || String(b.date).localeCompare(String(a.date)));
-      $('in-meta').textContent = 'Unread · most important first · ' + ago(at);
-      renderInbox(); maybeIdeas();
+      $('in-meta').textContent = 'Unread · ' + ago(at);
+      renderInbox(); maybeIdeas(); maybeTriage();
     }, (e, drop) => { if (drop || !st.inbox) { st.inbox = drop ? null : st.inbox; $('inbox').replaceChildren(errBox(errText(e, 'Gmail'), refreshAll)); } });
 
     for (const off of [0, 1]) {
@@ -690,20 +693,86 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       mcp.invalidate(S.GM, 'search_threads').catch(() => {});
     } catch (e) { btn.disabled = false; btn.textContent = '✓ Mark read'; toast(errText(e, 'Gmail')); }
   }
+
+  // ---- Inbox triage: Claude reads each unread email against the board, requests and calendar ----
+  // Urgency now / today / week / fyi, why, whether it needs a reply and how, the related work, and the tasks it creates.
+  const TRI_KEY = 'cc-triage';
+  const URG = { now: [0, 'Urgent', 'crit'], today: [1, 'Today', 'warn'], week: [2, 'This week', 'idle'], fyi: [3, 'FYI', 'ok'] };
+  st.triage = (() => { try { const o = JSON.parse(localStorage.getItem(TRI_KEY) || '{}'); const cut = Date.now() - 2 * 864e5; return Object.fromEntries(Object.entries(o).filter(([, v]) => v && v.at > cut)); } catch (_) { return {}; } })();
+  let triBusy = false, triTimer = null;
+  const triKey = (m) => m.id + ':' + m.count;
+  function maybeTriage() {
+    clearTimeout(triTimer);
+    if (!st.inbox) return;
+    triTimer = setTimeout(() => triage(false), st.tasks && st.requests ? 200 : 6000);
+  }
+  function workContext(limit) {
+    return {
+      now: `${today()} ${hm(new Date())} (${TZ}), work week Sun-Thu`,
+      open_tasks: (st.tasks || []).slice(0, limit).map((t) => ({ ref: t.id, name: t.name, group: (GROUPS.find((g) => g.id === t.group) || {}).label, deadline: t.deadline, priority: t.priority, status: t.status })),
+      comms_requests: (st.requests || []).slice(0, 40).map((r) => ({ ref: r.id, name: r.name, status: r.status, deadline: r.deadline, tier: r.tier, requester: r.requester, owner: r.owner })),
+      today: (st.events[0] || []).map((e) => e.summary + ' ' + (e.start && e.start.dateTime ? hm(new Date(e.start.dateTime)) : 'all day')),
+      free_today: st.events[0] ? gapText(freeGaps(dayStr(0), st.events[0], 15)) || 'none' : 'unknown',
+      free_tomorrow: st.events[1] ? gapText(freeGaps(dayStr(1), st.events[1], 15)) || 'none' : 'unknown',
+    };
+  }
+  async function triage(force) {
+    if (!sample || triBusy || !st.inbox) return;
+    const list = st.inbox.filter((m) => m.unread && !readHere[m.id]);
+    const todo = list.filter((m) => force || !st.triage[triKey(m)]);
+    if (!todo.length) { $('in-tri').hidden = !sample; return; }
+    triBusy = true; $('in-tri').hidden = true;
+    $('in-meta').textContent = '✦ Prioritizing ' + todo.length + ' emails against your board…';
+    const mails = todo.slice(0, 25).map((m) => ({ ref: m.id, from: m.from, subject: m.subject, snippet: (m.snippet || '').slice(0, 400), date: m.date, messages: m.count, gmail_important: (m.labels || []).includes('IMPORTANT'), vip: !!(m.imp && m.imp.why.includes('VIP')) }));
+    const prompt =
+      'You triage the inbox of Ilan Manassen, Senior Communications Manager at monday.com (media relations, exec comms, Elevate 2026 event, influencer program). ' +
+      'For each email decide how urgent it is FOR ILAN, using his open tasks, comms requests and calendar below. ' +
+      'urgency: "now" = a journalist or exec waiting, a deadline today or tomorrow, or something blocking others; "today" = needs his answer or action today; "week" = needs action but can wait; "fyi" = newsletters, notifications, cc, nothing to do. ' +
+      'VIPs (Roy Segev, Eran Zinman, Or Elmaliah) and journalists rank high. Automated mail is fyi unless it reports a failure he must fix. ' +
+      'Link each email to the open task or comms request it is about, by ref, when there is one. ' +
+      'Derive the concrete tasks the email creates for Ilan (verb first, max 10 words, in the email\'s language); skip tasks that already exist in open_tasks (put that ref in related instead). A budget or approval decision is a task for Ilan to decide, never decided for him. ' +
+      'Reply with ONLY a JSON array, one object per email: {"ref": email ref; "urgency": "now"|"today"|"week"|"fyi"; "why": one short sentence with the evidence; "reply": true if Ilan should answer; "how": one-line direction for the reply that uses what the board says (status, dates, owners), empty if no reply; "related": [refs of related open_tasks or comms_requests]; "tasks": [{"title": string, "priority": "High"|"Medium"|"Low", "due": "YYYY-MM-DD" or null}]}. ' +
+      'Use only refs from the data. Write "why" and "how" in English.\n\nEMAILS:\n' + JSON.stringify(mails) + '\n\nWORK:\n' + JSON.stringify(workContext(80));
+    try {
+      const arr = await sample.json(prompt, { cache: false, modelTier: 'default' });
+      const byId = Object.fromEntries(todo.map((m) => [m.id, m]));
+      (Array.isArray(arr) ? arr : []).forEach((r) => {
+        const m = r && byId[String(r.ref)]; if (!m || !URG[r.urgency]) return;
+        st.triage[triKey(m)] = { at: Date.now(), urgency: r.urgency, why: String(r.why || ''), reply: !!r.reply, how: String(r.how || ''),
+          related: (r.related || []).map(String).filter((x) => (st.tasks || []).some((t) => t.id === x) || (st.requests || []).some((q) => q.id === x)),
+          tasks: (r.tasks || []).filter((t) => t && t.title).slice(0, 4).map((t) => ({ title: String(t.title), priority: ['High', 'Medium', 'Low'].includes(t.priority) ? t.priority : 'Medium', due: /^\d{4}-\d{2}-\d{2}$/.test(t.due || '') ? t.due : null })) };
+      });
+      try { localStorage.setItem(TRI_KEY, JSON.stringify(st.triage)); } catch (_) {}
+      $('in-meta').textContent = 'Unread · by urgency · ' + hm(new Date());
+    } catch (e) {
+      $('in-meta').textContent = e.code === 'not_granted' ? 'Unread · Claude access not allowed, sorted by sender' : e.code === 'rate_limited' ? 'Unread · Claude is busy, try ✦ Re-prioritize in a minute' : 'Unread · could not prioritize (' + (e.code || 'error') + ')';
+    }
+    triBusy = false; $('in-tri').hidden = false;
+    renderInbox();
+  }
+  $('in-tri').addEventListener('click', () => triage(true));
+  const triOf = (m) => st.triage[triKey(m)] || null;
+  function relatedText(t) {
+    return (t && t.related || []).map((r) => { const k = (st.tasks || []).find((x) => x.id === r); if (k) return `Task «${k.name}» (${k.status || 'no status'}, due ${k.deadline || 'none'}, ${(GROUPS.find((g) => g.id === k.group) || {}).label || ''})`; const q = (st.requests || []).find((x) => x.id === r); return q ? `Comms request «${q.name}» (${q.status || ''}, due ${q.deadline || 'none'}, owner ${q.owner || 'none'})` : ''; }).filter(Boolean);
+  }
   function renderInbox() {
     if (!st.inbox) return;
-    const list = st.inbox.filter((m) => !readHere[m.id] && m.unread);
+    const rank = (m) => { const t = triOf(m); return t ? URG[t.urgency][0] : 1.5; };
+    const list = st.inbox.filter((m) => !readHere[m.id] && m.unread).sort((a, b) => rank(a) - rank(b) || b.imp.score - a.imp.score || String(b.date).localeCompare(String(a.date)));
     if (!list.length) { $('inbox').replaceChildren(h('div', { class: 'empty' }, 'No unread mail in Primary from the last 3 days.')); return; }
     $('inbox').replaceChildren(h('div', { class: 'list' }, list.map((m) => {
-      const d = m.date ? new Date(m.date) : null;
+      const d = m.date ? new Date(m.date) : null; const tr = triOf(m);
       const row = h('div', { class: 'row', id: 'mail-' + m.id },
         h('div', { class: 'rh' },
-          h('span', { class: 'mark ' + (m.imp && m.imp.score >= 5 ? 'crit' : m.imp && m.imp.score >= 3 ? 'warn' : 'acc') }),
-          h('span', { class: 't', dir: 'auto' }, h('a', { href: m.url, target: '_blank', rel: 'noopener' }, m.subject || '(no subject)'), m.count > 1 && h('span', { class: 'pill idle' }, m.count), (m.imp ? m.imp.why : []).filter((w) => w !== 'Ask').map((w) => h('span', { class: 'pill ' + (w === 'VIP' ? 'crit' : 'idle') }, w))),
+          h('span', { class: 'mark ' + (tr ? { now: 'crit', today: 'warn', week: 'acc', fyi: 'acc' }[tr.urgency] : m.imp && m.imp.score >= 5 ? 'crit' : m.imp && m.imp.score >= 3 ? 'warn' : 'acc') }),
+          h('span', { class: 't', dir: 'auto' }, tr && h('span', { class: 'pill ' + URG[tr.urgency][2], style: 'margin:0 6px 0 0' }, URG[tr.urgency][1]), h('a', { href: m.url, target: '_blank', rel: 'noopener' }, m.subject || '(no subject)'), m.count > 1 && h('span', { class: 'pill idle' }, m.count), (m.imp ? m.imp.why : []).filter((w) => w !== 'Ask').map((w) => h('span', { class: 'pill ' + (w === 'VIP' ? 'crit' : 'idle') }, w))),
           h('span', { class: 'r' }, d ? (ymd(d) === today() ? hm(d) : ddmm(ymd(d))) : ''),
           h('span', { class: 'd', dir: 'auto' }, h('b', {}, nameOf(m.from)), ' — ', m.snippet)),
+        tr && !!(tr.why || tr.tasks.length || tr.related.length) && h('div', { class: 'tri' },
+          tr.why && h('div', { class: 'w', dir: 'auto' }, h('b', {}, '✦ '), tr.why, relatedText(tr).length ? ' · Linked: ' + relatedText(tr).map((x) => x.replace(/ \(.*$/, '')).join(', ') : ''),
+          tr.tasks.length > 0 && h('div', { class: 'dtasks' }, tr.tasks.map((t) => h('button', { class: 'sm', dir: 'auto', title: 'Send to Pepper as a task', onclick: () => openDrawer(row, 'mailtask', m, { task: t }) }, '+ ' + t.title + (t.due ? ' · ' + ddmm(t.due) : ''))))),
         h('div', { class: 'acts' },
-          h('button', { class: 'sm spark', onclick: () => openDrawer(row, 'reply', m) }, '✦ Suggest reply'),
+          h('button', { class: 'sm ' + (tr && !tr.reply ? '' : 'spark'), onclick: () => openDrawer(row, 'reply', m, { how: tr && tr.how || '' }) }, tr && tr.reply ? '✦ Suggested reply' : '✦ Suggest reply'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'mailtask', m) }, '→ Make it a task'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'note', { kind: 'mail', ...m }) }, '✎ My update'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'followup', { kind: 'mail', ...m }) }, '🔁 Pepper follow-up'),
@@ -1019,7 +1088,10 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
           'You draft email replies for Ilan Manassen, Senior Communications Manager at monday.com. Read the whole thread, then write ONLY the reply body: plain text, no subject line, no markdown. ' +
           'Use the language of the latest message. Be concise, warm and specific, and answer every question asked. ' +
           'Never commit to a budget, approval, price or decision: write [Ilan to decide: …] where one is needed. Never invent facts, dates or numbers: put anything unknown in [brackets]. Sign off as "Ilan". ' +
-          (how.value.trim() ? `Ilan's direction for this reply: """${how.value.trim()}""". ` : '') + '\n\nTHREAD (oldest first):\n' + text, ta, ai, say);
+          'Use what Ilan\'s work board says (WORK below) to make the reply concrete: the real status, owners and dates of the related task or request, and free calendar slots when the email asks to meet. Do not mention the board or internal notes to the sender. ' +
+          (how.value.trim() ? `Ilan's direction for this reply: """${how.value.trim()}""". ` : '') +
+          (relatedText(triOf(m)).length ? '\n\nRELATED WORK:\n' + relatedText(triOf(m)).join('\n') : '') +
+          '\n\nWORK:\n' + JSON.stringify(workContext(40)) + '\n\nTHREAD (oldest first):\n' + text, ta, ai, say);
       };
       go.onclick = async () => {
         const body = ta.value.trim(); if (!body) { say('The draft is empty.', false); return; }
@@ -1173,16 +1245,17 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       d.append(ta, h('div', { class: 'line' }, go, close), out);
     },
 
-    mailtask(d, m, { say, busy, close, out }) {
+    mailtask(d, m, { say, busy, close, out, preset }) {
       const ta = h('textarea', { dir: 'auto' });
-      ta.value = `📌 Please add a task from this email: «${m.subject}» from ${nameOf(m.from)}\n${m.url || ''}\nR-25: name it as the next action (verb first), set priority and effort, and end the first update with ✅ Done when.`;
+      if (preset.task) ta.value = `📌 Please add a task: «${preset.task.title}»\nPriority: ${preset.task.priority}${preset.task.due ? '\nDeadline: ' + preset.task.due : ''}\nFrom the email «${m.subject}» from ${nameOf(m.from)}\n${m.url || ''}\nR-25: end the first update with ✅ Done when.`;
+      else ta.value = `📌 Please add a task from this email: «${m.subject}» from ${nameOf(m.from)}\n${m.url || ''}\nR-25: name it as the next action (verb first), set priority and effort, and end the first update with ✅ Done when.`;
       const go = h('button', { class: 'pri' }, 'Send to Pepper');
       go.onclick = async () => {
         busy(go, true, 'Sending…');
         try { await dmPepper(ta.value.trim()); say('Sent. Pepper files it on the board.', true); go.remove(); markActed(m.id); }
         catch (e) { say(errText(e, 'Slack'), false); busy(go, false, 'Retry'); }
       };
-      d.append(h('div', { class: 'hint' }, 'Pepper runs the board, so she files it in the right group with the right owner.'), ta, h('div', { class: 'line' }, go, close), out);
+      d.append(h('div', { class: 'hint' }, preset.task ? 'Claude suggested this task from the email. Edit it, then Pepper files it in the right group.' : 'Pepper runs the board, so she files it in the right group with the right owner.'), ta, h('div', { class: 'line' }, go, close), out);
     },
 
     run(d, a, { say, busy, close, out, preset }) {
