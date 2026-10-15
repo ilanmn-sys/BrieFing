@@ -110,6 +110,8 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:60
 
 /* ---------- Panels ---------- */
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);min-width:0;box-shadow:var(--shadow);overflow:hidden}
+.panel.collapsed>:not(.ph){display:none!important}.panel.collapsed .ph{border-bottom:0}
+.ph .fold{margin-left:auto;background:transparent;border:0;padding:4px 8px;color:var(--muted);font-size:14px;line-height:1;cursor:pointer;border-radius:6px}.ph .fold:hover{background:var(--sunk);color:var(--ink)}.ph .fold span{display:inline-block;transition:transform .15s}.panel.collapsed .ph .fold span{transform:rotate(-90deg)}
 .ph{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:14px 16px;border-bottom:1px solid var(--line)}
 .ph h2{font:700 17px/1.2 var(--f-display);letter-spacing:-.01em;margin:0;display:flex;align-items:center;gap:10px}
 .ph h2 .ic{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-size:14px;background:var(--c-soft,var(--sunk));color:var(--c,var(--ink))}
@@ -182,6 +184,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
 .dtasks{display:flex;flex-wrap:wrap;gap:6px}.dtasks button{background:var(--spark-soft);color:var(--spark);border-color:color-mix(in srgb,var(--spark) 30%,transparent)}
 @media (max-width:620px){.tri{padding-left:0}}.pill.idle{background:var(--idle-soft);color:var(--idle)}
 .row.flash{background:var(--spark-soft);box-shadow:inset 3px 0 0 var(--spark)}
+.row.acted{opacity:.62}.row.acted:hover,.row.acted:focus-within{opacity:1}
 .row.gone .t{text-decoration:line-through;text-decoration-color:var(--ok)}
 .row.gone{opacity:.5}
 .row.gone .mark{background:var(--ok);animation:pop .5s ease}
@@ -607,15 +610,15 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       class: 'tab', role: 'tab', 'aria-selected': String(st.tab === g.key),
       onclick: () => { st.tab = g.key; try { localStorage.setItem('cc-tab', g.key); } catch (_) {} renderTasks(); },
     }, g.label, h('span', { class: 'n' }, by[g.key].length))));
-    const rows = (by[st.tab] || []).slice().sort((a, b) => (a.deadline || '9999').localeCompare(b.deadline || '9999'));
+    const rows = actedLast((by[st.tab] || []).slice().sort((a, b) => (a.deadline || '9999').localeCompare(b.deadline || '9999')), (t) => t.id);
     if (!rows.length) { $('tasks').replaceChildren(h('div', { class: 'empty' }, 'Nothing open here.')); return; }
     const t0 = today();
     $('tasks').replaceChildren(h('div', { class: 'list' }, rows.map((t) => {
       const overdue = t.deadline && t.deadline < t0;
-      const row = h('div', { class: 'row' + (st.doneIds.has(t.id) ? ' gone' : ''), id: 'task-' + t.id },
+      const row = h('div', { class: 'row' + (st.doneIds.has(t.id) ? ' gone' : isTouched(t.id) ? ' acted' : ''), id: 'task-' + t.id },
         h('div', { class: 'rh' },
           h('span', { class: 'mark ' + (overdue ? 'crit' : prioMark(t.priority)) }),
-          h('span', { class: 't', dir: 'auto' }, h('a', { href: t.url, target: '_blank', rel: 'noopener' }, t.name),
+          h('span', { class: 't', dir: 'auto' }, h('a', { href: t.url, target: '_blank', rel: 'noopener' }, t.name), actedPill(t.id),
             overdue && h('span', { class: 'pill crit' }, 'overdue'), t.status && h('span', { class: 'pill idle' }, t.status)),
           h('span', { class: 'r' }, t.deadline ? ddmm(t.deadline) : '—'),
           (t.priority || t.owner) && h('span', { class: 'd' }, [t.priority, t.owner].filter(Boolean).join(' · '))),
@@ -656,16 +659,16 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     const lists = { mine: myRequests(), inbox: inboxRequests() };
     $('rq-tabs').replaceChildren(...[['mine', 'Mine'], ['inbox', '📥 Untriaged']].map(([k, l]) => h('button', { class: 'tab', role: 'tab', 'aria-selected': String(st.rqTab === k), onclick: () => { st.rqTab = k; renderRequests(); } }, l, h('span', { class: 'n' }, lists[k].length))));
     const t0 = today();
-    const rows = lists[st.rqTab].slice().sort((a, b) => TIER_RANK(a.tier) - TIER_RANK(b.tier) || (a.deadline || '9999').localeCompare(b.deadline || '9999'));
+    const rows = actedLast(lists[st.rqTab].slice().sort((a, b) => TIER_RANK(a.tier) - TIER_RANK(b.tier) || (a.deadline || '9999').localeCompare(b.deadline || '9999')), (r) => r.id);
     queueMicrotask(renderStats);
     if (!rows.length) { $('requests').replaceChildren(h('div', { class: 'empty' }, st.rqTab === 'mine' ? 'No open request on you.' : 'Nothing waiting for triage.')); return; }
     $('requests').replaceChildren(h('div', { class: 'list' }, rows.map((r) => {
       const overdue = r.deadline && r.deadline < t0, tr = TIER_RANK(r.tier);
       const waiting = /with requester|with 3rd party/i.test(r.status);
-      const row = h('div', { class: 'row' + (st.doneIds.has(r.id) ? ' gone' : ''), id: 'req-' + r.id },
+      const row = h('div', { class: 'row' + (st.doneIds.has(r.id) ? ' gone' : isTouched(r.id) ? ' acted' : ''), id: 'req-' + r.id },
         h('div', { class: 'rh' },
           h('span', { class: 'mark ' + (overdue || tr <= 1 ? 'crit' : tr === 2 ? 'warn' : 'acc') }),
-          h('span', { class: 't', dir: 'auto' }, h('a', { href: r.url, target: '_blank', rel: 'noopener' }, r.name),
+          h('span', { class: 't', dir: 'auto' }, h('a', { href: r.url, target: '_blank', rel: 'noopener' }, r.name), actedPill(r.id),
             r.tier && h('span', { class: 'pill ' + (tr <= 1 ? 'crit' : 'idle') }, r.tier.replace(/ .*/, '')), r.status && h('span', { class: 'pill idle' }, r.status), overdue && h('span', { class: 'pill crit' }, 'overdue')),
           h('span', { class: 'r' }, r.deadline ? ddmm(r.deadline) : '—'),
           h('span', { class: 'd', dir: 'auto' }, [r.requester && 'from ' + r.requester, r.domain, r.region, st.rqTab === 'inbox' ? r.groupTitle : (r.owner !== ME_NAME ? r.owner : '')].filter(Boolean).join(' · '))),
@@ -757,13 +760,14 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     if (!st.inbox) return;
     const rank = (m) => { const t = triOf(m); return t ? URG[t.urgency][0] : 1.5; };
     const list = st.inbox.filter((m) => !readHere[m.id] && m.unread).sort((a, b) => rank(a) - rank(b) || b.imp.score - a.imp.score || String(b.date).localeCompare(String(a.date)));
+    const listA = actedLast(list, (m) => m.id);
     if (!list.length) { $('inbox').replaceChildren(h('div', { class: 'empty' }, 'No unread mail in Primary from the last 3 days.')); return; }
-    $('inbox').replaceChildren(h('div', { class: 'list' }, list.map((m) => {
+    $('inbox').replaceChildren(h('div', { class: 'list' }, listA.map((m) => {
       const d = m.date ? new Date(m.date) : null; const tr = triOf(m);
-      const row = h('div', { class: 'row', id: 'mail-' + m.id },
+      const row = h('div', { class: 'row' + (isTouched(m.id) ? ' acted' : ''), id: 'mail-' + m.id },
         h('div', { class: 'rh' },
           h('span', { class: 'mark ' + (tr ? { now: 'crit', today: 'warn', week: 'acc', fyi: 'acc' }[tr.urgency] : m.imp && m.imp.score >= 5 ? 'crit' : m.imp && m.imp.score >= 3 ? 'warn' : 'acc') }),
-          h('span', { class: 't', dir: 'auto' }, tr && h('span', { class: 'pill ' + URG[tr.urgency][2], style: 'margin:0 6px 0 0' }, URG[tr.urgency][1]), h('a', { href: m.url, target: '_blank', rel: 'noopener' }, m.subject || '(no subject)'), m.count > 1 && h('span', { class: 'pill idle' }, m.count), (m.imp ? m.imp.why : []).filter((w) => w !== 'Ask').map((w) => h('span', { class: 'pill ' + (w === 'VIP' ? 'crit' : 'idle') }, w))),
+          h('span', { class: 't', dir: 'auto' }, tr && h('span', { class: 'pill ' + URG[tr.urgency][2], style: 'margin:0 6px 0 0' }, URG[tr.urgency][1]), h('a', { href: m.url, target: '_blank', rel: 'noopener' }, m.subject || '(no subject)'), actedPill(m.id), m.count > 1 && h('span', { class: 'pill idle' }, m.count), (m.imp ? m.imp.why : []).filter((w) => w !== 'Ask').map((w) => h('span', { class: 'pill ' + (w === 'VIP' ? 'crit' : 'idle') }, w))),
           h('span', { class: 'r' }, d ? (ymd(d) === today() ? hm(d) : ddmm(ymd(d))) : ''),
           h('span', { class: 'd', dir: 'auto' }, h('b', {}, nameOf(m.from)), ' — ', m.snippet)),
         triBlock(tr, () => row, 'mailtask', m),
@@ -893,17 +897,17 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     queueMicrotask(renderStats);
     if (!loaded[st.slTab]) { $('slack').replaceChildren(h('div', { class: 'skel' })); return; }
     const slRank = (m) => { const t = st.sltriage[m.id]; return t ? URG[t.urgency][0] : 1.5; };
-    const list = lists[st.slTab].slice().sort((a, b) => slRank(a) - slRank(b));
+    const list = actedLast(lists[st.slTab].slice().sort((a, b) => slRank(a) - slRank(b)), (m) => m.id);
     const emptyText = { dm: 'No DM waiting on you from the last 2 days.', mention: 'No unanswered mention from the last 2 days.', chan: chosenChans.length ? 'Nothing new in these channels in the last day.' : 'Pick channels to follow above.' }[st.slTab];
     $('sl-meta').textContent = slTriNote || ({ dm: 'Waiting on you, last 2 days', mention: 'Mentions you have not answered', chan: 'Latest in your channels' }[st.slTab] + (list.some((m) => st.sltriage[m.id]) ? ' · by urgency' : ''));
     maybeSlTriage();
     if (!list.length) { $('slack').replaceChildren(h('div', { class: 'empty' }, emptyText)); return; }
     $('slack').replaceChildren(h('div', { class: 'list' }, list.map((m) => {
       const tr = st.sltriage[m.id] || null;
-      const row = h('div', { class: 'row', id: 'slack-' + m.id },
+      const row = h('div', { class: 'row' + (isTouched(m.id) ? ' acted' : ''), id: 'slack-' + m.id },
         h('div', { class: 'rh' },
           h('span', { class: 'mark ' + (tr ? { now: 'crit', today: 'warn', week: 'acc', fyi: 'idle' }[tr.urgency] : m.src === 'chan' && !m.text.includes('<@' + ME_SLACK) ? 'idle' : 'acc') }),
-          h('span', { class: 't', dir: 'auto' }, tr && h('span', { class: 'pill ' + URG[tr.urgency][2], style: 'margin:0 6px 0 0' }, URG[tr.urgency][1]), h('a', { href: m.permalink, target: '_blank', rel: 'noopener' }, m.from || 'Someone'), m.channelName && !/^DM$/i.test(m.channelName) && h('span', { class: 'pill idle' }, m.channelName), m.src === 'chan' && m.text.includes('<@' + ME_SLACK) && h('span', { class: 'pill crit' }, '@you'), m.src === 'dm' && m.thread && h('span', { class: 'pill idle' }, 'thread')),
+          h('span', { class: 't', dir: 'auto' }, tr && h('span', { class: 'pill ' + URG[tr.urgency][2], style: 'margin:0 6px 0 0' }, URG[tr.urgency][1]), h('a', { href: m.permalink, target: '_blank', rel: 'noopener' }, m.from || 'Someone'), actedPill(m.id), m.channelName && !/^DM$/i.test(m.channelName) && h('span', { class: 'pill idle' }, m.channelName), m.src === 'chan' && m.text.includes('<@' + ME_SLACK) && h('span', { class: 'pill crit' }, '@you'), m.src === 'dm' && m.thread && h('span', { class: 'pill idle' }, 'thread')),
           h('span', { class: 'r' }, (m.time.match(/\d\d:\d\d/) || [''])[0]),
           h('span', { class: 'd', dir: 'auto' }, m.text.replace(/<@U[A-Z0-9]+\|([^>]+)>/g, '@$1').replace(/&amp;/g, '&').slice(0, 280))),
         triBlock(tr, () => row, 'slacktask', m),
@@ -967,7 +971,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     if (st.openDrawer) st.openDrawer.remove();
     const d = h('div', { class: 'drawer' });
     const out = h('div', { class: 'out', role: 'status' });
-    const close = h('button', { class: 'ghost sm', onclick: () => { d.remove(); st.openDrawer = null; } }, 'Close');
+    const close = h('button', { class: 'ghost sm', onclick: () => { d.remove(); st.openDrawer = null; if (st.resortPending) resortLists(); } }, 'Close');
     const say = (msg, ok) => { out.className = 'out ' + (ok === true ? 'ok' : ok === false ? 'bad' : ''); out.textContent = msg; };
     const busy = (btn, on, label) => { btn.disabled = on; if (label) btn.textContent = label; };
     DRAWERS[kind](d, obj, { out, say, busy, close, preset: preset || {} });
@@ -995,7 +999,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   // Touched = acted on from this page today, updated today after its creation, or already blocked on the calendar today or tomorrow.
   const TOUCH_KEY = 'cc-touched-' + today();
   const touchedHere = new Set((() => { try { return JSON.parse(localStorage.getItem(TOUCH_KEY) || '[]'); } catch (_) { return []; } })());
-  function touch(ref) { touchedHere.add(String(ref)); queueMicrotask(renderStats); try { localStorage.setItem(TOUCH_KEY, JSON.stringify([...touchedHere])); } catch (_) {} }
+  function touch(ref) { touchedHere.add(String(ref)); st.resortPending = true; queueMicrotask(renderStats); try { localStorage.setItem(TOUCH_KEY, JSON.stringify([...touchedHere])); } catch (_) {} }
   function isTouched(ref) {
     ref = String(ref);
     if (touchedHere.has(ref) || st.doneIds.has(ref)) return true;
@@ -1007,6 +1011,10 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     }
     return false;
   }
+  // Items Ilan already acted on from this page drop to the bottom of their list (re-sorted when the drawer closes).
+  const actedLast = (rows, idOf) => rows.filter((x) => !isTouched(idOf(x))).concat(rows.filter((x) => isTouched(idOf(x))));
+  const actedPill = (id) => isTouched(id) && h('span', { class: 'pill ok' }, '✓ acted');
+  function resortLists() { st.resortPending = false; if (st.openDrawer) return; renderTasks(); renderRequests(); renderInbox(); renderSlack(); }
   function markActed(ref) { touch(ref); queueMicrotask(renderStats); st.ideas = st.ideas.filter((i) => String(i.ref) !== String(ref)); renderIdeas(); maybeMoreAfterAction(); }
 
   const DRAWERS = {
@@ -1520,6 +1528,19 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     renderDayline(); renderCheckins();
   };
   tick(); setInterval(tick, 30000);
+
+  // Collapsible sections: a chevron on every panel header, remembered per viewer.
+  const FOLD_KEY = 'cc-folded';
+  const folded = new Set((() => { try { return JSON.parse(localStorage.getItem(FOLD_KEY) || '[]'); } catch (_) { return []; } })());
+  document.querySelectorAll('section.panel').forEach((sec) => {
+    const ph = sec.querySelector(':scope > .ph'); const key = sec.getAttribute('aria-labelledby'); if (!ph || !key) return;
+    const title = (document.getElementById(key) || {}).textContent || 'section';
+    const btn = h('button', { class: 'fold', type: 'button', title: 'Collapse or expand', 'aria-label': 'Collapse ' + title.trim() }, h('span', {}, '▾'));
+    const set = (on) => { sec.classList.toggle('collapsed', on); btn.setAttribute('aria-expanded', String(!on)); };
+    set(folded.has(key));
+    btn.addEventListener('click', () => { const on = !sec.classList.contains('collapsed'); set(on); on ? folded.add(key) : folded.delete(key); try { localStorage.setItem(FOLD_KEY, JSON.stringify([...folded])); } catch (_) {} });
+    ph.append(btn);
+  });
 
   (async () => {
     const cl = window.claude;
