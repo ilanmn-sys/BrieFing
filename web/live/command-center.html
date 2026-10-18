@@ -90,6 +90,24 @@ a{color:var(--accent)}
 .nowline::before{content:"";position:absolute;top:-3px;left:-4px;width:10px;height:10px;border-radius:50%;background:var(--spark-2)}
 .ticks{display:flex;justify-content:space-between;font:11px var(--f-mono);color:var(--faint);margin-top:5px}
 .ticks span:nth-child(odd){visibility:visible}
+/* calendar picker inside the booking drawers */
+.calv{display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--panel)}
+.calv .track{cursor:crosshair}
+.seg.pick{background:color-mix(in srgb,var(--spark) 35%,transparent);border:2px solid var(--spark);top:2px;bottom:2px;z-index:2}
+.seg.pick.bad{background:color-mix(in srgb,var(--crit) 30%,transparent);border-color:var(--crit)}
+.agenda{display:flex;flex-direction:column;gap:2px;max-height:220px;overflow:auto;font-size:13px}
+.agenda .ag{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:8px;align-items:center;padding:3px 6px;border-radius:7px}
+.agenda .ag .w{font:500 12px var(--f-mono);font-variant-numeric:tabular-nums;color:var(--muted)}
+.agenda .ag.busy{background:color-mix(in srgb,var(--busy) 14%,transparent)}
+.agenda .ag.focus{background:color-mix(in srgb,var(--focus) 16%,transparent)}
+.agenda .ag.free{border:1px dashed color-mix(in srgb,var(--free) 60%,transparent);color:var(--muted)}
+.agenda .ag.mine{outline:2px solid var(--spark)}
+.agenda .ag span{min-width:0;overflow-wrap:anywhere}
+.pickl{display:flex;flex-direction:column;gap:4px;max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:8px}
+.pickl label{display:flex;gap:8px;align-items:flex-start;font-size:13px}
+.pickl label span{min-width:0;overflow-wrap:anywhere}
+.blk-tasks{display:flex;flex-direction:column;gap:2px;margin:4px 0 0 0;padding-left:16px;font-size:12.5px;color:var(--muted)}
+.blk-tasks a{color:inherit}
 
 /* ---------- Buttons & fields ---------- */
 button{font:600 13px/1.2 var(--f-body);color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:background-color .15s,border-color .15s,transform .12s,box-shadow .15s}
@@ -143,6 +161,31 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:60
 .card p{margin:0;color:var(--muted);font-size:13px;overflow-wrap:anywhere}
 .card .acts{display:flex;gap:6px;margin-top:auto;flex-wrap:wrap;padding:4px 0 0}
 .card.done{opacity:.55}
+.card .acts2{display:flex;gap:4px;flex-wrap:wrap;border-top:1px dashed var(--line);padding-top:7px}
+.card .acts2 button,.plan .acts2 button{font-size:12px;padding:3px 8px}
+.card.reminded{border-color:color-mix(in srgb,var(--warn) 55%,var(--line))}
+.ctx{display:flex;flex-direction:column;gap:8px;border-top:1px dashed var(--line);padding-top:10px;margin-top:4px;font-size:13px}
+.ctx dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;margin:0}
+.ctx dt{color:var(--muted);font-size:12px}.ctx dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.ctx .brief{white-space:pre-wrap;line-height:1.5;background:var(--sunk);border-radius:10px;padding:10px 12px;min-height:2.5em;overflow-wrap:anywhere}
+.rem{display:flex;flex-direction:column;gap:8px;border-top:1px dashed var(--line);padding-top:10px;margin-top:4px}
+.rem .opts{display:flex;flex-wrap:wrap;gap:6px}
+.rem label{display:flex;gap:6px;align-items:center;font-size:13px}
+/* ---------- Today's game plan ---------- */
+.plan .steps{display:flex;flex-direction:column;padding:6px 0}
+.plan .step{display:grid;grid-template-columns:34px minmax(0,1fr);gap:4px 12px;padding:12px 16px;border-top:1px solid var(--line)}
+.plan .step:first-child{border-top:0}
+.plan .step .n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font:800 13px var(--f-display);background:var(--sunk);color:var(--muted)}
+.plan .step.must .n{background:var(--crit-soft);color:var(--crit)}
+.plan .step.should .n{background:var(--warn-soft);color:var(--warn)}
+.plan .step .body{display:flex;flex-direction:column;gap:5px;min-width:0}
+.plan .step .top{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.plan .step .slot{font:600 12.5px var(--f-mono);font-variant-numeric:tabular-nums;color:var(--muted);background:var(--sunk);border-radius:999px;padding:1px 8px;white-space:nowrap}
+.plan .step b{font-weight:600;overflow-wrap:anywhere}
+.plan .step p{margin:0;color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.plan .step .acts{display:flex;gap:6px;flex-wrap:wrap}
+.plan .step.acted{opacity:.5}.plan .step.acted b{text-decoration:line-through}
+.plan .tiers{display:flex;gap:10px;flex-wrap:wrap;padding:10px 16px 0;color:var(--muted);font-size:12.5px}
 .coll{display:flex;flex-direction:column;gap:6px;border:1px dashed var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px}
 .coll .ch{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .coll .ch b{font-weight:600}
@@ -254,6 +297,12 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     <div class="cards" id="ci-cards"></div>
   </section>
 
+  <section class="panel plan" aria-labelledby="plan-h" id="sec-plan">
+    <div class="ph"><h2 id="plan-h"><span class="ic">①</span>Today's game plan</h2><span class="meta" id="plan-meta"></span>
+      <button class="sm ghost" id="re-plan" hidden>↻ Re-plan</button></div>
+    <div id="plan"><div class="thinking">Ranking your day: deadlines, who is waiting, and where it fits in your calendar…</div></div>
+  </section>
+
   <section class="panel ideas" aria-labelledby="ideas-h">
     <div class="ph"><h2 id="ideas-h"><span class="ic">✦</span>Claude's next moves</h2><span class="meta" id="ideas-meta"></span>
       <button class="spark sm" id="more-ideas" hidden>✦ More ideas</button></div>
@@ -265,7 +314,8 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       <section class="panel c-day" aria-labelledby="day-h" id="sec-day">
         <div class="ph"><h2><span class="ic">◷</span><span id="day-h">Today</span></h2>
           <div class="daysw" role="tablist" aria-label="Day"><button class="tab" role="tab" data-day="0" aria-selected="true">Today</button><button class="tab" role="tab" data-day="1" aria-selected="false">Tomorrow</button></div>
-          <span class="meta" id="day-meta"></span></div>
+          <span class="meta" id="day-meta"></span><button class="sm" id="new-block" type="button">＋ Task block</button></div>
+        <div class="row" id="blk-host" style="border:0;padding:0 16px"></div>
         <div id="day"><div class="skel"></div><div class="skel"></div></div>
       </section>
 
@@ -602,6 +652,12 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   }
 
   // ---- Tasks ----
+  // Within a tab: overdue/due today first, then 🔥 High > 🟡 Medium > 🟢 Low > none, then the earliest deadline.
+  const prioRank = (p) => /high|🔥|critical|urgent/i.test(p || '') ? 0 : /med|🟡/i.test(p || '') ? 1 : /low|🟢/i.test(p || '') ? 2 : 3;
+  const byPriority = (a, b) => {
+    const t0 = today(), due = (t) => t.deadline && t.deadline <= t0 ? 0 : 1;
+    return due(a) - due(b) || prioRank(a.priority) - prioRank(b.priority) || (a.deadline || '9999').localeCompare(b.deadline || '9999');
+  };
   const prioMark = (p) => /high|🔥|critical|urgent/i.test(p || '') ? 'crit' : /med/i.test(p || '') ? 'warn' : 'idle';
   function renderTasks() {
     if (!st.tasks) return;
@@ -610,7 +666,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       class: 'tab', role: 'tab', 'aria-selected': String(st.tab === g.key),
       onclick: () => { st.tab = g.key; try { localStorage.setItem('cc-tab', g.key); } catch (_) {} renderTasks(); },
     }, g.label, h('span', { class: 'n' }, by[g.key].length))));
-    const rows = actedLast((by[st.tab] || []).slice().sort((a, b) => (a.deadline || '9999').localeCompare(b.deadline || '9999')), (t) => t.id);
+    const rows = actedLast((by[st.tab] || []).slice().sort(byPriority), (t) => t.id);
     if (!rows.length) { $('tasks').replaceChildren(h('div', { class: 'empty' }, 'Nothing open here.')); return; }
     const t0 = today();
     $('tasks').replaceChildren(h('div', { class: 'list' }, rows.map((t) => {
@@ -626,6 +682,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'done', t) }, '✓ Done'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'update', t) }, '✎ Update'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'block', t) }, '◷ Block time'),
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'addblock', t) }, '⊕ Add to block'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'delegate', t) }, '→ Hand off'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'followup', { kind: 'task', ...t }) }, '🔁 Pepper follow-up')));
       return row;
@@ -831,7 +888,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   }
   const HANDLED_KEY = 'cc-slack-handled';
   const handled = (() => { try { const o = JSON.parse(localStorage.getItem(HANDLED_KEY) || '{}'); const cut = Date.now() - 4 * 864e5; return Object.fromEntries(Object.entries(o).filter(([, t]) => t > cut)); } catch (_) { return {}; } })();
-  function markHandled(id) { handled[id] = Date.now(); try { localStorage.setItem(HANDLED_KEY, JSON.stringify(handled)); } catch (_) {} touch(id); st.ideas = st.ideas.filter((i) => String(i.ref) !== id); renderIdeas(); renderSlack(); }
+  function markHandled(id) { handled[id] = Date.now(); try { localStorage.setItem(HANDLED_KEY, JSON.stringify(handled)); } catch (_) {} touch(id); st.ideas = st.ideas.filter((i) => String(i.ref) !== id); renderIdeas(); renderPlan(); renderSlack(); }
 
   // ---- Slack triage: same pass as the inbox, over DMs, mentions and followed channels ----
   const SLTRI_KEY = 'cc-sltriage';
@@ -936,11 +993,14 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       const s = new Date(e.start.dateTime), en = new Date((e.end && e.end.dateTime) || e.start.dateTime);
       const cls = 'ev' + (st.day === 0 && s <= now && en > now ? ' now' : st.day === 0 && en <= now ? ' past' : '');
       const title = e.summary || 'Busy';
+      const inBlock = FOCUS_RX.test(title) ? pulseIds(e.description).map((id) => (st.tasks || []).find((t) => t.id === id) || { id, name: 'Task ' + id, url: '' }) : [];
       return h('div', { class: cls }, h('span', { class: 'when' }, hm(s) + '–' + hm(en)),
-        h('span', { class: 'what', dir: 'auto' }, e.htmlLink ? h('a', { href: e.htmlLink, target: '_blank', rel: 'noopener' }, title) : title));
+        h('span', { class: 'what', dir: 'auto' }, e.htmlLink ? h('a', { href: e.htmlLink, target: '_blank', rel: 'noopener' }, title) : title,
+          inBlock.length > 1 || /task block/i.test(title) ? h('span', { class: 'blk-tasks' }, inBlock.length ? inBlock.map((t) => h('span', { dir: 'auto' }, (st.doneIds.has(t.id) ? '✓ ' : '• '), t.url ? h('a', { href: t.url, target: '_blank', rel: 'noopener' }, t.name) : t.name)) : h('span', {}, 'No tasks yet: use ⊕ Add to block on a task.')) : null));
     })));
     $('day').replaceChildren(...kids);
   }
+  $('new-block').addEventListener('click', () => { if (!mcp) return; openDrawer($('blk-host'), 'newblock', {}, { date: dayStr(st.day) }); });
   document.querySelectorAll('[data-day]').forEach((b) => b.addEventListener('click', () => {
     st.day = Number(b.dataset.day);
     document.querySelectorAll('[data-day]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
@@ -1015,7 +1075,69 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   const actedLast = (rows, idOf) => rows.filter((x) => !isTouched(idOf(x))).concat(rows.filter((x) => isTouched(idOf(x))));
   const actedPill = (id) => isTouched(id) && h('span', { class: 'pill ok' }, '✓ acted');
   function resortLists() { st.resortPending = false; if (st.openDrawer) return; renderTasks(); renderRequests(); renderInbox(); renderSlack(); }
-  function markActed(ref) { touch(ref); queueMicrotask(renderStats); st.ideas = st.ideas.filter((i) => String(i.ref) !== String(ref)); renderIdeas(); maybeMoreAfterAction(); }
+  function markActed(ref) { touch(ref); queueMicrotask(renderStats); st.ideas = st.ideas.filter((i) => String(i.ref) !== String(ref)); renderIdeas(); renderPlan(); maybeMoreAfterAction(); }
+
+  // ---- Calendar picker: the day's real calendar inside a booking drawer. Click a free slot (or the timeline) to pick it. ----
+  const FOCUS_RX = /^focus:/i;
+  const pulseIds = (txt) => [...String(txt || '').matchAll(/\/pulses\/(\d+)/g)].map((m) => m[1]);
+  function calPicker(date, time, dur, onChange) {
+    const box = h('div', { class: 'calv' }), hint = h('div', { class: 'hint' });
+    let evs = null, gaps = null, loading = '';
+    function draw() {
+      const day = date.value, mins = Number(dur.value);
+      if (!evs) { box.replaceChildren(hint); return; }
+      const span = DAY_END - DAY_START, pct = (m) => Math.max(0, Math.min(100, (m - DAY_START) / span * 100));
+      const segs = [];
+      for (const e of evs.filter(isBusy)) {
+        const bo = busyOn(day, [e]); if (!bo.length) continue; const [[a, b]] = bo;
+        if (b <= DAY_START || a >= DAY_END) continue;
+        segs.push(h('div', { class: 'seg' + (FOCUS_RX.test(e.summary || '') ? ' focus' : ''), style: `left:${pct(a)}%;width:${pct(b) - pct(a)}%`, title: `${toHM(a)}–${toHM(b)} ${e.summary || 'Busy'}` }));
+      }
+      for (const [a, b] of gaps) segs.push(h('div', { class: 'seg gap', style: `left:${pct(a)}%;width:${pct(b) - pct(a)}%`, title: `Free ${toHM(a)}–${toHM(b)}` }));
+      if (/^\d\d:\d\d$/.test(time.value)) { const a = toMin(time.value); segs.push(h('div', { class: 'seg pick' + (fits(gaps, a, mins) ? '' : ' bad'), style: `left:${pct(a)}%;width:${pct(a + mins) - pct(a)}%`, title: 'Your block ' + time.value + '–' + toHM(a + mins) })); }
+      if (day === today()) { const n = toMin(hm(new Date())); if (n >= DAY_START && n <= DAY_END) segs.push(h('div', { class: 'nowline', style: `left:${pct(n)}%` })); }
+      const track = h('div', { class: 'track', title: 'Click to place the block here' }, segs);
+      track.addEventListener('click', (ev) => { const r = track.getBoundingClientRect(); const m = DAY_START + Math.floor(((ev.clientX - r.left) / r.width) * span / 15) * 15; time.value = toHM(Math.max(DAY_START, Math.min(DAY_END - 15, m))); onChange(); draw(); });
+      // Agenda: meetings and free gaps in order, 08:00–19:00.
+      const rows = [];
+      for (const e of evs.filter((x) => x.start && x.start.dateTime)) {
+        const bo = busyOn(day, [{ ...e, availability: undefined, transparency: undefined, attendees: [] }]); if (!bo.length) continue; const [[a, b]] = bo;
+        if (b <= DAY_START || a >= DAY_END) continue;
+        rows.push([a, h('div', { class: 'ag ' + (!isBusy(e) ? 'free' : FOCUS_RX.test(e.summary || '') ? 'focus' : 'busy') }, h('span', { class: 'w' }, toHM(a) + '–' + toHM(b)), h('span', { dir: 'auto' }, (e.summary || 'Busy') + (isBusy(e) ? '' : ' (not blocking)')), h('span'))]);
+      }
+      for (const [a, b] of gaps) {
+        const ok = b - a >= mins, mine = /^\d\d:\d\d$/.test(time.value) && toMin(time.value) >= a && toMin(time.value) < b;
+        rows.push([a + 0.5, h('div', { class: 'ag free' + (mine ? ' mine' : '') }, h('span', { class: 'w' }, toHM(a) + '–' + toHM(b)), h('span', {}, 'Free · ' + (b - a) + ' min'),
+          ok ? h('button', { class: 'sm', type: 'button', onclick: () => { time.value = toHM(a); onChange(); draw(); } }, 'Book ' + toHM(a)) : h('span', { class: 'hint' }, 'too short'))]);
+      }
+      rows.sort((x, y) => x[0] - y[0]);
+      box.replaceChildren(h('div', { class: 'hint' }, 'Your calendar, ' + (day === today() ? 'today' : day === dayStr(1) ? 'tomorrow' : ddmm(day)) + '. Click a free slot or the timeline.'), track,
+        h('div', { class: 'ticks' }, ['08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'].map((x) => h('span', {}, x))),
+        h('div', { class: 'agenda' }, rows.length ? rows.map((r) => r[1]) : h('div', { class: 'hint' }, 'No meetings.')), hint);
+    }
+    async function refresh(keepTime) {
+      const day = date.value, mins = Number(dur.value);
+      evs = eventsFor(day); hint.textContent = '';
+      if (!evs && day) {
+        evs = null; gaps = null; hint.textContent = 'Checking your calendar…'; draw();
+        try { const p = await call(S.CAL, 'list_events', { startTime: day + 'T00:00:00', endTime: plusMin(day, '00:00', 1440), orderBy: 'startTime', pageSize: 100 }); evs = p.events || []; }
+        catch (e) { gaps = null; hint.textContent = 'Could not read your calendar for that day, so free time is unknown. ' + errText(e, 'Google Calendar'); draw(); return; }
+      }
+      if (day !== date.value) return; // the day changed while loading
+      gaps = freeGaps(day, evs, 15);
+      if (!gaps.some(([a, b]) => b - a >= mins)) hint.textContent = 'No free gap of ' + mins + ' min between 08:00 and 19:00 on this day.';
+      if (!keepTime || !time.value || !fits(gaps, toMin(time.value), mins)) { const f = firstFit(gaps, mins); if (f) time.value = f; }
+      onChange(); draw();
+    }
+    date.addEventListener('change', () => refresh(false));
+    dur.addEventListener('change', () => refresh(true));
+    time.addEventListener('change', () => { onChange(); draw(); });
+    return { box, refresh, gaps: () => gaps };
+  }
+  // Task blocks: one Focus block on the calendar that holds several tasks (their links sit in the event description).
+  const blocksOn = (off) => (st.events[off] || []).filter((e) => FOCUS_RX.test(e.summary || '') && e.start && e.start.dateTime);
+  const blockDesc = (ids) => 'Task block from the Command Center.\nTasks:\n' + ids.map((id, n) => `${n + 1}. ${((st.tasks || []).find((t) => t.id === id) || {}).url || 'https://monday.monday.com/boards/' + BOARD + '/pulses/' + id}`).join('\n');
+  const openTasksForBlocks = () => (st.tasks || []).filter((t) => !st.doneIds.has(t.id)).slice().sort((a, b) => (a.group === GROUPS[0].id ? 0 : 1) - (b.group === GROUPS[0].id ? 0 : 1) || byPriority(a, b));
 
   const DRAWERS = {
     done(d, t, { out, say, busy, close }) {
@@ -1063,34 +1185,14 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
           .then(({ text }) => { if (!title.value) title.value = 'Focus: ' + text.trim().replace(/^["']|["']$/g, ''); })
           .catch(() => { title.placeholder = 'English title (write it in English)'; });
       }
-      const free = h('div', { class: 'hint' });
       const go = h('button', { class: 'pri' }, 'Add to calendar');
-      let gaps = null, confirmClash = false;
-      // Load the chosen day's calendar (today/tomorrow come from the live watch), then show and pick free time.
-      async function refreshFree(keepTime) {
-        const day = date.value, mins = Number(dur.value);
-        confirmClash = false; go.textContent = 'Add to calendar';
-        let evs = eventsFor(day);
-        if (!evs && day) {
-          free.textContent = 'Checking your calendar…';
-          try { const p = await call(S.CAL, 'list_events', { startTime: day + 'T00:00:00', endTime: plusMin(day, '00:00', 1440), orderBy: 'startTime', pageSize: 100 }); evs = p.events || []; }
-          catch (e) { gaps = null; free.textContent = 'Could not read your calendar for that day, so free time is unknown. ' + errText(e, 'Google Calendar'); return; }
-        }
-        if (day !== date.value) return; // the day changed while loading
-        gaps = freeGaps(day, evs, 15);
-        const fitting = gaps.filter(([a, b]) => b - a >= mins);
-        free.replaceChildren(fitting.length ? 'Free for ' + mins + ' min: ' : 'No free gap of ' + mins + ' min between 08:00 and 19:00 on this day.',
-          ...fitting.map(([a, b]) => h('button', { class: 'sm ghost', type: 'button', onclick: () => { time.value = toHM(a); refreshFree(true); } }, toHM(a) + '–' + toHM(b))));
-        if (!keepTime || !time.value || !fits(gaps, toMin(time.value), mins)) { const f = firstFit(gaps, mins); if (f) time.value = f; }
-      }
-      date.addEventListener('change', () => refreshFree(false));
-      dur.addEventListener('change', () => refreshFree(true));
-      time.addEventListener('change', () => { confirmClash = false; go.textContent = 'Add to calendar'; });
-      refreshFree(!!preset.time);
+      let confirmClash = false;
+      const cal = calPicker(date, time, dur, () => { confirmClash = false; go.textContent = 'Add to calendar'; });
+      cal.refresh(!!preset.time);
       go.onclick = async () => {
         if (!date.value || !time.value) { say('Pick a day and a start time.', false); return; }
         if (!title.value.trim() || NON_EN.test(title.value)) { say('Calendar titles are always in English. Write the title in English.', false); return; }
-        if (gaps && !fits(gaps, toMin(time.value), Number(dur.value)) && !confirmClash) {
+        if (cal.gaps() && !fits(cal.gaps(), toMin(time.value), Number(dur.value)) && !confirmClash) {
           confirmClash = true; go.textContent = 'Add anyway';
           say('That time overlaps a meeting or falls outside 08:00–19:00. Pick a free slot above, or click “Add anyway”.', false); return;
         }
@@ -1106,8 +1208,79 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
         } catch (e) { say(errText(e, 'Google Calendar'), false); busy(go, false, 'Retry'); }
       };
       d.append(h('div', { class: 'hint' }, 'On your calendar only. No guests are invited. Suggested times come from your free time in the calendar.'),
-        h('div', { class: 'line' }, h('label', { class: 'f' }, 'Day', date), h('label', { class: 'f' }, 'Start', time), h('label', { class: 'f' }, 'Length', dur)), free,
-        h('label', { class: 'f' }, 'Title', title), h('div', { class: 'line' }, go, close), out);
+        h('div', { class: 'line' }, h('label', { class: 'f' }, 'Day', date), h('label', { class: 'f' }, 'Start', time), h('label', { class: 'f' }, 'Length', dur)), cal.box,
+        h('label', { class: 'f' }, 'Title', title), h('div', { class: 'line' }, go, blocksOn(0).length || blocksOn(1).length ? h('button', { class: 'sm ghost', type: 'button', onclick: () => openDrawer(d.closest('.row'), 'addblock', t) }, '⊕ Add to an existing block instead') : null, close), out);
+    },
+
+    // A new task block: one Focus event, several tasks inside it.
+    newblock(d, o, { say, busy, close, out, preset }) {
+      const date = h('input', { type: 'date', value: preset.date || today() });
+      const time = h('input', { type: 'time', value: '', step: 900 });
+      const dur = h('select', {}, [30, 45, 60, 90, 120].map((m) => h('option', { value: m, selected: m === (preset.mins || 60) }, m + ' min')));
+      const title = h('input', { type: 'text', value: 'Focus: Task block', placeholder: 'English title', style: 'flex:1;min-width:180px' });
+      const go = h('button', { class: 'pri' }, 'Create block');
+      let confirmClash = false;
+      const cal = calPicker(date, time, dur, () => { confirmClash = false; go.textContent = 'Create block'; });
+      const picked = new Set(preset.ids || []);
+      const list = openTasksForBlocks().slice(0, 25);
+      const pick = h('div', { class: 'pickl' }, list.length ? list.map((t) => h('label', {},
+        h('input', { type: 'checkbox', checked: picked.has(t.id), onchange: (ev) => { ev.target.checked ? picked.add(t.id) : picked.delete(t.id); } }),
+        h('span', {}, h('bdi', { dir: 'auto' }, t.name), h('span', { class: 'hint', dir: 'ltr' }, ' · ' + [(GROUPS.find((g) => g.id === t.group) || {}).label, t.priority, t.deadline ? ddmm(t.deadline) : ''].filter(Boolean).join(' · '))))) : h('span', { class: 'hint' }, 'No open tasks.'));
+      cal.refresh(false);
+      go.onclick = async () => {
+        if (!date.value || !time.value) { say('Pick a day and a start time.', false); return; }
+        if (!title.value.trim() || NON_EN_RX.test(title.value)) { say('Calendar titles are always in English (R-27).', false); return; }
+        if (!FOCUS_RX.test(title.value)) title.value = 'Focus: ' + title.value.trim();
+        if (cal.gaps() && !fits(cal.gaps(), toMin(time.value), Number(dur.value)) && !confirmClash) { confirmClash = true; go.textContent = 'Create anyway'; say('That time overlaps a meeting or falls outside 08:00–19:00. Pick a free slot, or click “Create anyway”.', false); return; }
+        const ids = [...picked];
+        busy(go, true, 'Creating…');
+        try {
+          const ev = await call(S.CAL, 'create_event', { summary: title.value.slice(0, 100), startTime: date.value + 'T' + time.value + ':00', endTime: plusMin(date.value, time.value, Number(dur.value)), availability: 'AVAILABILITY_BUSY', description: blockDesc(ids) });
+          let msg = `Task block ${time.value}–${toHM(toMin(time.value) + Number(dur.value))}, ${ddmm(date.value)}` + (ids.length ? ` with ${ids.length} task${ids.length > 1 ? 's' : ''}.` : '. Add tasks to it from any task row (⊕ Add to block).');
+          if (ev && ev.id && ids.length) {
+            const res = await Promise.allSettled(ids.map((id) => call(S.MON, 'change_item_column_values', { boardId: BOARD, itemId: Number(id), columnValues: JSON.stringify({ [COL.calBlock]: String(ev.id) }) })));
+            const bad = res.filter((r) => r.status === 'rejected').length; msg += bad ? ` (${bad} task${bad > 1 ? 's' : ''} not linked on the board.)` : ' Linked on the board.';
+          }
+          ids.forEach((id) => touch(id));
+          say(msg, true); go.remove(); mcp.invalidate(S.CAL).catch(() => {}); queueMicrotask(() => { renderPlan(); renderIdeas(); });
+        } catch (e) { say(errText(e, 'Google Calendar'), false); busy(go, false, 'Retry'); }
+      };
+      d.append(h('div', { class: 'hint' }, 'One focus block for several tasks. On your calendar only, no guests. Each task’s link goes in the event, so the check-in after the block asks about each one.'),
+        h('div', { class: 'line' }, h('label', { class: 'f' }, 'Day', date), h('label', { class: 'f' }, 'Start', time), h('label', { class: 'f' }, 'Length', dur)), cal.box,
+        h('label', { class: 'f' }, 'Title', title), h('span', { class: 'hint' }, 'Tasks in this block'), pick, h('div', { class: 'line' }, go, close), out);
+    },
+
+    // Add one task to a focus block already on the calendar today or tomorrow.
+    addblock(d, t, { say, busy, close, out }) {
+      const blocks = [...blocksOn(0).map((e) => [0, e]), ...blocksOn(1).map((e) => [1, e])].filter(([off, e]) => off === 1 || Date.parse(e.end.dateTime) > Date.now());
+      if (!blocks.length) {
+        d.append(h('div', { class: 'hint' }, 'No upcoming focus blocks today or tomorrow.'), h('div', { class: 'line' },
+          h('button', { class: 'pri', onclick: () => openDrawer(d.closest('.row'), 'newblock', {}, { ids: [t.id] }) }, '＋ New task block with this task'), close), out);
+        return;
+      }
+      const sel = h('select', {}, blocks.map(([off, e], n) => {
+        const ids = pulseIds(e.description);
+        return h('option', { value: n }, `${off ? 'Tomorrow' : 'Today'} ${hm(new Date(e.start.dateTime))}–${hm(new Date(e.end.dateTime))} · ${e.summary.replace(FOCUS_RX, '').trim() || 'Focus'}${ids.length ? ' (' + ids.length + ' task' + (ids.length > 1 ? 's' : '') + ')' : ''}`);
+      }));
+      const go = h('button', { class: 'pri' }, 'Add to block');
+      go.onclick = async () => {
+        const [, e] = blocks[Number(sel.value)], ids = pulseIds(e.description);
+        if (ids.includes(t.id)) { say('It is already in that block.', true); return; }
+        busy(go, true, 'Adding…');
+        const all = ids.concat(t.id);
+        // A single-task block becomes a task block; its old description keeps its task links, re-written in the block format.
+        const patch = { eventId: e.id, description: blockDesc(all), notificationLevel: 'NONE' };
+        if (ids.length <= 1 && !/task block/i.test(e.summary || '')) patch.summary = 'Focus: Task block';
+        try { await call(S.CAL, 'update_event', patch); }
+        catch (err) { say(errText(err, 'Google Calendar'), false); busy(go, false, 'Retry'); return; }
+        let msg = 'Added. The block now holds ' + all.length + ' task' + (all.length > 1 ? 's' : '') + '.';
+        try { await call(S.MON, 'change_item_column_values', { boardId: BOARD, itemId: Number(t.id), columnValues: JSON.stringify({ [COL.calBlock]: String(e.id) }) }); msg += ' Linked on the task.'; }
+        catch (_) { msg += ' (Could not link it on the task.)'; }
+        e.description = patch.description; if (patch.summary) e.summary = patch.summary;
+        say(msg, true); go.remove(); mcp.invalidate(S.CAL).catch(() => {}); markActed(t.id); renderDay();
+      };
+      d.append(h('div', { class: 'hint' }, 'Puts this task inside a focus block that is already on your calendar.'), h('label', { class: 'f' }, 'Block', sel),
+        h('div', { class: 'line' }, go, h('button', { class: 'sm ghost', type: 'button', onclick: () => openDrawer(d.closest('.row'), 'newblock', {}, { ids: [t.id] }) }, '＋ New task block'), close), out);
     },
 
     delegate(d, t, { say, busy, close, out, preset }) {
@@ -1349,12 +1522,13 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   // ---- Claude's next moves: proactive, and it keeps coming back with more ----
   let ideasRan = false, ideasBusy = false, ideaTimer = null;
   function maybeIdeas() {
+    maybePlan(); wakeSnoozed();
     if (ideasRan) return;
     clearTimeout(ideaTimer);
     const ready = st.tasks && st.inbox && st.events[0];
     ideaTimer = setTimeout(() => { if (!ideasRan && (st.tasks || st.inbox)) { ideasRan = true; getIdeas(false); } }, ready ? 300 : 9000);
   }
-  function maybeMoreAfterAction() { if (ideasRan && !ideasBusy && st.ideas.filter((i) => !i.dismissed && !isTouched(i.ref)).length < 2) getIdeas(true); }
+  function maybeMoreAfterAction() { if (ideasRan && !ideasBusy && liveIdeas().length < 2) getIdeas(true); }
 
   function context() {
     const tasks = (st.tasks || []).filter((t) => !isTouched(t.id)).slice(0, 60).map((t) => ({ ref: t.id, name: t.name, group: (GROUPS.find((g) => g.id === t.group) || {}).label, deadline: t.deadline, priority: t.priority, status: t.status }));
@@ -1372,7 +1546,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     if (ideasBusy) return; ideasBusy = true;
     $('more-ideas').hidden = true;
     const keep = st.ideas.filter((i) => !i.dismissed && !isTouched(i.ref));
-    if (!keep.length) $('ideas').replaceChildren(h('div', { class: 'thinking' }, '✦ Reading your board, inbox and calendar…'));
+    if (!liveIdeas().length) $('ideas').replaceChildren(h('div', { class: 'thinking' }, '✦ Reading your board, inbox and calendar…'));
     $('ideas-meta').textContent = 'Thinking…';
     const prompt =
       'You are the proactive chief of staff for Ilan Manassen, Senior Communications Manager at monday.com. Find the next moves that finish or unblock his work. ' +
@@ -1386,7 +1560,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       'Use only refs from the data. Write in English but keep item names in their original language.\n\nDATA:\n' + JSON.stringify(context());
     try {
       const arr = await sample.json(prompt, more ? { cache: false } : {});
-      const known = new Set(st.ideas.map((i) => i.kind + ':' + i.ref));
+      const known = new Set([...st.ideas.map(ideaKey), ...snoozed.map((x) => x.key)]);
       const fresh = (Array.isArray(arr) ? arr : []).filter((i) => i && i.title && KIND[i.kind] && i.ref != null && findRef(i) && !isTouched(i.ref) && !known.has(i.kind + ':' + i.ref));
       st.ideas = keep.concat(fresh);
       $('ideas-meta').textContent = fresh.length ? 'Updated ' + hm(new Date()) : 'Nothing new right now';
@@ -1422,11 +1596,14 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       if (!/^focus:/i.test(e.summary || '') || !(e.end && e.end.dateTime)) continue;
       const end = Date.parse(e.end.dateTime);
       if (end > now || ciDone.has(e.id)) continue;
-      const tid = (String(e.description || '').match(/\/pulses\/(\d+)/) || [])[1];
-      const t = (st.tasks || []).find((x) => (tid && x.id === tid) || (x.calBlock && x.calBlock === e.id));
-      if (!t || st.doneIds.has(t.id)) continue;
-      if (t.updated && Date.parse(t.updated) > end + 60000) continue;   // already updated after the block
-      out.push({ ev: e, task: t, end });
+      // A task block holds several tasks: one check-in per task still open.
+      const tids = pulseIds(e.description);
+      const ts = (st.tasks || []).filter((x) => tids.includes(x.id) || (x.calBlock && x.calBlock === e.id));
+      for (const t of ts) {
+        if (st.doneIds.has(t.id) || ciDone.has(e.id + ':' + t.id)) continue;
+        if (t.updated && Date.parse(t.updated) > end + 60000) continue;   // already updated after the block
+        out.push({ ev: e, task: t, end });
+      }
     }
     return out.sort((a, b) => b.end - a.end);
   }
@@ -1437,7 +1614,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       const g = GROUPS.find((x) => x.id === c.task.group); if (g && st.tab !== g.key) { st.tab = g.key; renderTasks(); }
       const row = $('task-' + c.task.id); if (!row) return;
       row.scrollIntoView({ behavior: 'smooth', block: 'center' }); row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 1600);
-      openDrawer(row, kind, c.task, preset || {}); ciClose(c.ev.id);
+      openDrawer(row, kind, c.task, preset || {}); ciClose(c.ev.id + ':' + c.task.id);
     };
     $('ci-cards').replaceChildren(...list.map((c) => h('div', { class: 'card' },
       h('span', { class: 'k' }, 'Block ended ' + hm(new Date(c.end))),
@@ -1447,12 +1624,12 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
         h('button', { class: 'sm pri', onclick: () => go(c, 'done') }, '✓ Done'),
         h('button', { class: 'sm', onclick: () => go(c, 'update') }, '✎ Progress'),
         h('button', { class: 'sm', onclick: () => go(c, 'block', { mins: 30 }) }, '◷ More time'),
-        h('button', { class: 'sm ghost', onclick: () => ciClose(c.ev.id) }, 'Later')))));
+        h('button', { class: 'sm ghost', onclick: () => ciClose(c.ev.id + ':' + c.task.id) }, 'Later')))));
   }
 
-  function act(i) {
+  function act(i, as, extra) {
     const obj = findRef(i); if (!obj) { toast('That item is no longer open.'); i.dismissed = true; renderIdeas(); return; }
-    let rowId, kind = i.kind, preset = {};
+    let rowId, kind = as || i.kind, preset = {};
     if (TASK_KINDS.includes(kind)) {
       const g = GROUPS.find((x) => x.id === obj.group); if (g && st.tab !== g.key) { st.tab = g.key; renderTasks(); }
       rowId = 'task-' + obj.id;
@@ -1461,14 +1638,17 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
         const evs = eventsFor(date), ok = /^\d\d:\d\d$/.test(i.time || '') && (!evs || fits(freeGaps(date, evs, 15), toMin(i.time), mins));
         preset = { time: ok ? i.time : undefined, mins, date }; // a suggested time over a meeting is dropped; the drawer picks the first free slot
       }
-      else preset = { text: i.text };
+      else preset = { text: as ? undefined : i.text };
     } else if (kind === 'agent') { rowId = 'agent-' + obj.id; kind = 'run'; preset = { text: i.text }; }
-    else if (kind === 'brie') { if (st.rqTab !== 'mine') { st.rqTab = 'mine'; renderRequests(); } rowId = 'req-' + obj.id; preset = { text: i.text }; }
-    else if (kind === 'slackreply') { if (st.slTab !== obj.src) { st.slTab = obj.src; renderSlack(); } rowId = 'slack-' + obj.id; preset = { how: i.how }; }
+    else if (i.kind === 'brie') { if (st.rqTab !== 'mine') { st.rqTab = 'mine'; renderRequests(); } rowId = 'req-' + obj.id; preset = { text: as ? undefined : i.text }; }
+    else if (i.kind === 'slackreply') { if (st.slTab !== obj.src) { st.slTab = obj.src; renderSlack(); } rowId = 'slack-' + obj.id; preset = { how: i.how }; }
     else { rowId = 'mail-' + obj.id; preset = { how: i.how }; }
-    const row = $(rowId); if (!row) return;
+    Object.assign(preset, extra || {});
+    const row = $(rowId); if (!row) { toast('Open its section to see it: the item is in a collapsed or other tab.'); return; }
+    const sec = row.closest('section.panel'); if (sec && sec.classList.contains('collapsed')) sec.querySelector('.fold').click();
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
     row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 1600);
-    openDrawer(row, kind, obj, preset);
+    openDrawer(row, kind, i.kind === 'brie' && (kind === 'note' || kind === 'followup') ? { kind: 'request', ...obj } : obj, preset);
   }
 
   // ---- "Not relevant": a rejected suggestion teaches Claude now (sent with every later prompt)
@@ -1505,16 +1685,254 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   }
 
   function renderIdeas() {
-    const list = st.ideas.filter((i) => !i.dismissed && !isTouched(i.ref));
+    const list = liveIdeas();
     if (!list.length) { $('ideas').replaceChildren(h('div', { class: 'thinking' }, 'All caught up. Ask for more ideas any time.')); return; }
     $('ideas').replaceChildren(h('div', { class: 'cards' }, list.map((i) => {
       const [k, btn] = KIND[i.kind];
-      return h('div', { class: 'card' + (i.done ? ' done' : '') },
-        h('span', { class: 'k' }, i.done ? 'Done ✓' : k), h('b', { dir: 'auto' }, i.title), i.why && h('p', { dir: 'auto' }, i.why),
+      return h('div', { class: 'card' + (i.done ? ' done' : '') + (i.reminded ? ' reminded' : '') },
+        h('span', { class: 'k' }, i.done ? 'Done ✓' : i.reminded ? '⏰ Reminder · ' + k : k), h('b', { dir: 'auto' }, i.title), i.why && h('p', { dir: 'auto' }, i.why),
         !i.done && h('div', { class: 'acts' }, h('button', { class: 'sm pri', onclick: () => act(i) }, btn),
           h('button', { class: 'sm ghost', onclick: () => { i.dismissed = true; renderIdeas(); maybeMoreAfterAction(); } }, 'Not now'),
-          h('button', { class: 'sm ghost', onclick: (ev) => askWhy(i, ev.currentTarget.closest('.card')) }, '✕ Not relevant')));
+          h('button', { class: 'sm ghost', onclick: (ev) => askWhy(i, ev.currentTarget.closest('.card')) }, '✕ Not relevant')),
+        !i.done && moreActs(i, (ev) => ev.currentTarget.closest('.card')));
     })));
+  }
+
+  // ---- More moves on every suggestion: remind me later, already done, share an update, full context ----
+  const ideaKey = (i) => i.kind + ':' + i.ref;
+  const SNZ_KEY = 'cc-snoozed';
+  let snoozed = (() => { try { const v = JSON.parse(localStorage.getItem(SNZ_KEY) || '[]'); return Array.isArray(v) ? v.filter((x) => x && x.at > Date.now() - 2 * 864e5) : []; } catch (_) { return []; } })();
+  const saveSnoozed = () => { try { localStorage.setItem(SNZ_KEY, JSON.stringify(snoozed)); } catch (_) {} };
+  const isSnoozed = (i) => snoozed.some((x) => x.key === ideaKey(i) && x.at > Date.now());
+  const liveIdeas = () => st.ideas.filter((i) => !i.dismissed && !isTouched(i.ref) && !isSnoozed(i));
+  // A snoozed move comes back to the top of Claude's next moves when its time comes (checked every 30 seconds).
+  function wakeSnoozed() {
+    const now = Date.now(), due = snoozed.filter((x) => x.at <= now); if (!due.length) return;
+    const loaded = st.tasks && st.inbox && st.slack && st.requests;
+    let woke = 0;
+    for (const x of due) {
+      if (!findRef(x.idea) && !loaded) continue;           // its source has not loaded yet: try again on the next tick
+      snoozed = snoozed.filter((y) => y !== x);
+      if (!findRef(x.idea) || isTouched(x.idea.ref)) continue;
+      st.ideas = st.ideas.filter((y) => ideaKey(y) !== x.key);
+      st.ideas.unshift({ ...x.idea, dismissed: false, reminded: true }); woke++;
+      toast('⏰ Reminder: ' + x.idea.title);
+    }
+    saveSnoozed(); if (woke) renderIdeas();
+  }
+  // Tel Aviv wall-clock time → epoch ms, whatever the viewer's own time zone is.
+  function tzEpoch(day, t) {
+    const naive = Date.parse(day + 'T' + t + ':00Z');
+    const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: TZ, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).formatToParts(new Date(naive)).map((x) => [x.type, x.value]));
+    return naive - (Date.parse(`${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:00Z`) - naive);
+  }
+  const nextWorkday = () => { for (let k = 1; k < 4; k++) { const w = fmt(new Date(Date.now() + k * 864e5), { weekday: 'short' }); if (w !== 'Fri' && w !== 'Sat') return k; } return 1; };
+  const whenText = (at) => (ymd(new Date(at)) === today() ? 'today ' : fmt(new Date(at), { weekday: 'short', day: '2-digit', month: '2-digit' }) + ' ') + hm(new Date(at));
+  const linkOf = (o) => (o && (o.url || o.permalink)) || '';
+  const NON_EN_RX = /[\u0590-\u05FF\u0600-\u06FF]/;
+
+  function closePanels(card) { card.querySelectorAll('.rem,.ctx,.why').forEach((x) => x.remove()); }
+
+  function askRemind(i, card) {
+    if (!card) return; if (card.querySelector('.rem')) { closePanels(card); return; } closePanels(card);
+    const H = Number(fmt(new Date(), { hour: '2-digit', hour12: false }));
+    const wd = nextWorkday(), wdDay = dayStr(wd), wdName = wd === 1 ? 'Tomorrow' : fmt(new Date(Date.now() + wd * 864e5), { weekday: 'long' });
+    const opts = [['In 1 hour', Date.now() + 3600e3], ['In 3 hours', Date.now() + 3 * 3600e3]];
+    if (H < 16) opts.push(['Today 16:00', tzEpoch(today(), '16:00')]);
+    opts.push([wdName + ' 09:00', tzEpoch(wdDay, '09:00')], [wdName + ' 14:00', tzEpoch(wdDay, '14:00')]);
+    let at = null;
+    const chips = h('div', { class: 'opts' }, opts.map(([l, t]) => h('button', { class: 'sm', type: 'button', 'aria-pressed': 'false', onclick: (ev) => { at = t; custom.value = ''; chips.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === ev.currentTarget))); } }, l)));
+    const custom = h('input', { type: 'datetime-local', 'aria-label': 'Pick a time', onchange: () => { if (custom.value) { const [d, t] = custom.value.split('T'); at = tzEpoch(d, t.slice(0, 5)); chips.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', 'false')); } } });
+    const viaCal = h('input', { type: 'checkbox', checked: true }), viaPep = h('input', { type: 'checkbox' });
+    const go = h('button', { class: 'sm pri' }, 'Set reminder'), out = h('span', { class: 'hint' });
+    go.onclick = async () => {
+      if (!at) { out.textContent = 'Pick when.'; return; }
+      if (at < Date.now() + 120e3) { out.textContent = 'Pick a time at least 2 minutes from now.'; return; }
+      go.disabled = true; out.textContent = 'Setting…';
+      const obj = findRef(i), link = linkOf(obj), notes = [];
+      snoozed = snoozed.filter((x) => x.key !== ideaKey(i)).concat({ key: ideaKey(i), at, idea: { ...i, reminded: false } }); saveSnoozed();
+      if (viaCal.checked) {
+        // R-27: calendar text is English. A 5-minute "free" event, so it only pops up and never blocks time.
+        let title = i.title;
+        if (NON_EN_RX.test(title) && sample) { try { title = (await sample('Translate into a short English reminder title, max 10 words. Reply with the title only:\n' + title, { modelTier: 'quick' })).text.trim().replace(/^["']|["']$/g, ''); } catch (_) {} }
+        if (NON_EN_RX.test(title)) title = 'Command Center move (' + (KIND[i.kind] || ['Item'])[0] + ')';
+        const day = ymd(new Date(at)), t = hm(new Date(at));
+        try {
+          await call(S.CAL, 'create_event', { summary: '⏰ Reminder: ' + title.slice(0, 90), startTime: day + 'T' + t + ':00', endTime: plusMin(day, t, 5), availability: 'AVAILABILITY_FREE', overrideReminders: [{ method: 'popup', minutes: 0 }], description: 'Reminder from the Command Center.' + (NON_EN_RX.test(i.why || '') ? '' : ' ' + (i.why || '')) + (link ? '\n' + link : '') });
+          notes.push('calendar pop-up set');
+        } catch (e) { notes.push('calendar reminder failed: ' + errText(e, 'Google Calendar')); }
+      }
+      if (viaPep.checked) {
+        try { await dmPepper(`⏰ פפר, תזכירי לי ${whenText(at)}: «${i.title}»${link ? '\n🔗 ' + link : ''}`); notes.push('Pepper will ping you'); }
+        catch (e) { notes.push('Pepper not told: ' + errText(e, 'Slack')); }
+      }
+      const failed = notes.some((n) => /fail|not told/.test(n));
+      toast('⏰ Back ' + whenText(at) + (notes.length ? ' · ' + notes.join(' · ') : ''));
+      if (failed) { out.textContent = 'Snoozed here, but ' + notes.filter((n) => /fail|not told/.test(n)).join('; '); out.style.color = 'var(--crit)'; go.remove(); setTimeout(() => { renderIdeas(); renderPlan(); }, 5000); return; }
+      renderIdeas(); renderPlan(); maybeMoreAfterAction();
+    };
+    card.append(h('div', { class: 'rem' }, h('span', { class: 'hint' }, 'Remind me about this. It leaves the list and comes back on top at that time.'), chips,
+      h('label', {}, 'Or exactly:', custom),
+      h('label', {}, viaCal, 'Calendar pop-up (a 5-minute free event, so it reaches your phone)'),
+      h('label', {}, viaPep, 'Pepper pings me in Slack'),
+      h('div', { class: 'line', style: 'display:flex;gap:8px;align-items:center;flex-wrap:wrap' }, go, h('button', { class: 'sm ghost', type: 'button', onclick: () => closePanels(card) }, 'Cancel'), out)));
+  }
+
+  function alreadyDone(i) {
+    const obj = findRef(i); if (!obj) { toast('That item is no longer open.'); return; }
+    if (TASK_KINDS.includes(i.kind)) return act(i, 'done');                   // board + Pepper in one action (principle 3)
+    if (i.kind === 'brie') return act(i, 'reqstatus');
+    if (i.kind === 'slackreply') { markHandled(String(i.ref)); toast('Marked handled. It left your Slack list.'); }
+    else if (i.kind === 'reply' || i.kind === 'mailtask') { rememberRead(String(i.ref)); markActed(i.ref); renderInbox(); toast('Marked handled here. Gmail itself was not changed.'); }
+    else { markActed(i.ref); toast('Marked done here.'); }
+    renderPlan();
+  }
+  const SHARE_HOW = 'Share a short status update: where this stands now and the next step, with owners and dates from the board.';
+  function shareUpdate(i) {
+    if (TASK_KINDS.includes(i.kind)) return act(i, 'update');
+    if (i.kind === 'reply' || i.kind === 'mailtask') return act(i, 'reply', { how: SHARE_HOW });
+    if (i.kind === 'slackreply') return act(i, 'slackreply', { how: SHARE_HOW });
+    if (i.kind === 'brie') return act(i, 'note');
+  }
+
+  async function showContext(i, card) {
+    if (!card) return; if (card.querySelector('.ctx')) { closePanels(card); return; } closePanels(card);
+    const o = findRef(i); if (!o) { toast('That item is no longer open.'); return; }
+    const facts = [];
+    const add = (k, v) => { if (v) facts.push(h('dt', {}, k), h('dd', { dir: 'auto' }, v)); };
+    let srcName = '';
+    if (TASK_KINDS.includes(i.kind)) { srcName = 'Task'; add('Task', o.name); add('Group', (GROUPS.find((g) => g.id === o.group) || {}).label); add('Deadline', o.deadline ? ddmm(o.deadline) + (o.deadline < today() ? ' (overdue)' : '') : 'none'); add('Priority', o.priority || 'not set'); add('Status', o.status || 'not set'); add('Owner', o.owner); }
+    else if (i.kind === 'reply' || i.kind === 'mailtask') { srcName = 'Email'; add('From', nameOf(o.from)); add('Subject', o.subject); add('Date', o.date); add('Preview', (o.snippet || '').slice(0, 300)); }
+    else if (i.kind === 'slackreply') { srcName = 'Slack'; add('From', o.from); add('Where', o.src === 'dm' ? 'Direct message' : o.channelName); add('When', o.time); add('Message', o.text.slice(0, 400)); }
+    else if (i.kind === 'brie') { srcName = 'Comms request'; add('Request', o.name); add('Requester', o.requester); add('Tier', o.tier); add('Status', o.status); add('Deadline', o.deadline ? ddmm(o.deadline) : 'none'); add('Owner', o.owner); }
+    else if (i.kind === 'agent') { srcName = 'Agent'; add('Agent', o.name); add('Last run', (o.last_run || {}).status); add('Next run', o.next_run_at); }
+    const brief = h('div', { class: 'brief', dir: 'auto' }, 'Reading the source…');
+    const link = linkOf(o);
+    card.append(h('div', { class: 'ctx' }, h('dl', {}, facts), brief,
+      h('div', { class: 'line', style: 'display:flex;gap:8px;flex-wrap:wrap' }, link && h('a', { class: 'sm', href: link, target: '_blank', rel: 'noopener' }, 'Open the ' + srcName.toLowerCase() + ' ↗'), h('button', { class: 'sm ghost', type: 'button', onclick: () => closePanels(card) }, 'Close'))));
+    // The source itself: the item's updates, the whole email thread, or the Slack conversation.
+    let source = '';
+    try {
+      if (TASK_KINDS.includes(i.kind) || i.kind === 'brie') {
+        const p = await call(S.MON, 'get_updates', { objectIds: [String(o.id)], objectType: 'Item', limit: 8 });
+        source = (p.updates || []).map((u) => `${(u.created_at || '').slice(0, 10)} ${(u.creator || {}).name || ''}: ${(u.text_body || '').slice(0, 700)}`).join('\n') || '(no updates on the item)';
+      } else if (i.kind === 'reply' || i.kind === 'mailtask') {
+        const p = await call(S.GM, 'get_thread', { threadId: o.id, messageFormat: 'PLAIN_TEXT' });
+        source = (p.messages || []).map((x) => `From: ${x.sender}\nDate: ${x.date}\n${(x.plaintextBody || decode(x.snippet) || '').replace(/\n{3,}/g, '\n\n')}`).join('\n---\n').slice(-8000);
+      } else if (i.kind === 'slackreply') {
+        const p = o.thread ? await call(S.SL, 'slack_read_thread', { channel_id: o.channel, message_ts: o.thread, limit: 30, response_format: 'concise' })
+                           : await call(S.SL, 'slack_read_channel', { channel_id: o.channel, limit: 15, response_format: 'concise' });
+        source = (typeof p === 'string' ? p : JSON.stringify(p)).slice(-7000);
+      }
+    } catch (e) { source = '(could not read the source: ' + errText(e, srcName) + ')'; }
+    if (!sample) { brief.textContent = source || 'Claude is not available in this view.'; return; }
+    brief.textContent = '✦ Putting it together…';
+    try {
+      await sample(
+        'Give Ilan Manassen (Senior Communications Manager, monday.com) the full context on one item so he can act without opening anything else. ' +
+        'Write plain text, no markdown, at most 12 short lines, under these labels: WHAT IT IS / WHERE IT STANDS (latest facts with dates) / WHO IS WAITING OR HOLDS IT / RELATED (other open tasks, requests, emails or meetings in WORK that touch it; say "none" if none) / NEXT STEP (one concrete move; budget or approval decisions are Ilan\'s, so frame them as his decision). ' +
+        'English labels and text, but keep names and quotes in their original language. Never invent facts: say what is unknown.\n\n' +
+        'SUGGESTION: ' + i.title + (i.why ? ' (' + i.why + ')' : '') + '\nITEM: ' + JSON.stringify(Object.fromEntries(Object.entries(o).filter(([k, v]) => typeof v !== 'object' || v === null).slice(0, 25))) +
+        '\n\nSOURCE:\n' + source + '\n\nWORK:\n' + JSON.stringify(workContext(60)),
+        { cache: false, onText: ({ text }) => { brief.textContent = text; } });
+    } catch (e) { brief.textContent = (source ? source.slice(0, 1500) + '\n\n' : '') + '(Claude could not summarize: ' + (e.code || 'error') + ')'; }
+  }
+
+  // The secondary row under every next move (and every game-plan step).
+  function moreActs(i, cardOf) {
+    const b = (label, title, fn) => h('button', { class: 'sm ghost', type: 'button', title, onclick: fn }, label);
+    return h('div', { class: 'acts2' },
+      b('⏰ Remind me', 'Hide it and bring it back later', (ev) => askRemind(i, cardOf(ev))),
+      b('✓ Already done', 'It is done: close it everywhere', () => alreadyDone(i)),
+      i.kind !== 'agent' && b('📣 Share update', 'Post or send where this stands', () => shareUpdate(i)),
+      b('ⓘ Full context', 'Everything about it in one place', (ev) => showContext(i, cardOf(ev))));
+  }
+
+  // ---- Today's game plan: Claude ranks the day, and every step sits in a real free slot (R-26) ----
+  const PLAN_KEY = 'cc-plan';
+  st.plan = (() => { try { const v = JSON.parse(localStorage.getItem(PLAN_KEY) || 'null'); return v && v.date === today() && Array.isArray(v.items) ? v : null; } catch (_) { return null; } })();
+  let planBusy = false, planTimer = null;
+  function maybePlan() {
+    if (st.plan || planBusy) { if (st.plan) renderPlan(); return; }
+    clearTimeout(planTimer);
+    const ready = st.tasks && st.inbox && st.events[0] && st.requests;
+    planTimer = setTimeout(() => { if (!st.plan && st.tasks && st.events[0]) getPlan(false); }, ready ? 400 : 10000);
+  }
+  async function getPlan(force) {
+    if (!sample) { $('plan').replaceChildren(h('div', { class: 'thinking' }, 'Claude ranking is not available in this view. Tasks below are sorted by deadline and priority.')); return; }
+    if (planBusy) return; planBusy = true; $('re-plan').hidden = true;
+    $('plan').replaceChildren(h('div', { class: 'thinking' }, '① Ranking your day against your calendar…')); $('plan-meta').textContent = 'Thinking…';
+    const ctx = context(), gaps = st.events[0] ? freeGaps(today(), st.events[0], 15) : [];
+    const blockOf = (id) => { const e = [...blocksOn(0)].find((x) => pulseIds(x.description).includes(id)); return e ? hm(new Date(e.start.dateTime)) + '–' + hm(new Date(e.end.dateTime)) : null; };
+    ctx.tasks = (st.tasks || []).filter((t) => !st.doneIds.has(t.id) && !touchedHere.has(t.id)).slice(0, 60).map((t) => ({ ref: t.id, name: t.name, group: (GROUPS.find((g) => g.id === t.group) || {}).label, deadline: t.deadline, priority: t.priority, status: t.status, focus_block_today: blockOf(t.id) }));
+    const nowMin = toMin(hm(new Date()));
+    const prompt =
+      'You plan the rest of today for Ilan Manassen, Senior Communications Manager at monday.com (media relations, exec comms, Elevate 2026 on 27.10, influencer program). ' +
+      'Pick the 5 to 7 things that matter most TODAY across his tasks, comms requests, emails and Slack, and put them in the order he should do them. ' +
+      'Rank by: (1) "must": hard deadline today or already slipped, a journalist, exec or VIP (Roy Segev, Eran Zinman, Or Elmaliah) waiting, or something that blocks other people; ' +
+      '(2) "should": due this week, a teammate waiting, prep for a meeting today or tomorrow; (3) "could": valuable but movable. Items in the 🔥 Today group count as today even without a date, and outrank overdue ones of the same weight. ' +
+      'Never include personal items (group 👨‍👩 אישי). A budget or approval decision is a step for Ilan to decide, never decided for him. ' +
+      'Schedule: give each step a start "slot" (HH:MM) INSIDE free_today, after now (' + hm(new Date()) + '), never over a meeting, never overlapping another step. Meeting prep goes before the meeting it serves. Deep work goes in the longest gap, quick replies are batched into short gaps. A task that already has a focus_block_today keeps that block as its slot (kind "update" or "done", never "block"). "mins" is 30 by default, 15 for a quick reply, longer only when clearly needed. If nothing fits, slot is null. ' +
+      'Reply with ONLY a JSON array, in order: {"ref": a ref from the data; "kind": "done"|"update"|"block"|"delegate" for a task, "reply" for an email, "slackreply" for Slack, "brie" for a comms request; "title": the step, imperative, max 12 words, item names in their original language; "why": one sentence with the evidence; "tier": "must"|"should"|"could"; "slot": "HH:MM" or null; "mins": number; "how": optional one-line direction for a reply}.\n\nDATA:\n' + JSON.stringify(ctx);
+    try {
+      const arr = await sample.json(prompt, force ? { cache: false } : {});
+      const used = [];
+      const items = (Array.isArray(arr) ? arr : []).filter((x) => x && x.title && KIND[x.kind] && x.kind !== 'agent' && x.ref != null && findRef(x)).slice(0, 7).map((x) => {
+        let mins = Math.max(15, Math.min(120, Number(x.mins) || 30));
+        let slot = /^\d\d:\d\d$/.test(x.slot || '') ? x.slot : null;
+        const s = slot && toMin(slot);
+        const own = blockOf(String(x.ref)), ownStart = own && own.slice(0, 5);
+        if (slot && slot === ownStart) { /* its own focus block */ }
+        else if (slot && (s < nowMin - 5 || !fits(gaps, s, mins) || used.some(([a, b]) => s < b && s + mins > a))) slot = null;   // a slot over a meeting or another step is dropped
+        if (!slot && ownStart) slot = ownStart;
+        if (slot && slot === ownStart) mins = toMin(own.slice(-5)) - toMin(ownStart);
+        if (slot) used.push([s, s + mins]);
+        return { ref: String(x.ref), kind: x.kind, title: String(x.title), why: x.why || '', tier: ['must', 'should', 'could'].includes(x.tier) ? x.tier : 'should', slot, mins, how: x.how, time: slot, day: 'today' };
+      });
+      st.plan = { date: today(), at: Date.now(), items };
+      try { localStorage.setItem(PLAN_KEY, JSON.stringify(st.plan)); } catch (_) {}
+    } catch (e) {
+      $('plan-meta').textContent = '';
+      $('plan').replaceChildren(h('div', { class: 'thinking' }, e.code === 'not_granted' ? 'Claude access was not allowed for this page.' : e.code === 'rate_limited' ? 'Claude is busy. Try ↻ Re-plan in a minute.' : 'Could not rank the day (' + (e.code || 'error') + ').'));
+    }
+    planBusy = false; $('re-plan').hidden = false;
+    renderPlan();
+  }
+  $('re-plan').addEventListener('click', () => { st.plan = null; getPlan(true); });
+  // A step is done when it was acted on here, closed, or (for a task) updated today. A calendar block only completes a "block" step:
+  // a task with a block today is still on today's plan.
+  function planActed(x) {
+    const r = String(x.ref);
+    if (touchedHere.has(r) || st.doneIds.has(r)) return true;
+    if (x.kind === 'block') return isTouched(r);
+    const t = (st.tasks || []).find((y) => y.id === r);
+    return !!(t && t.updated && ymd(new Date(t.updated)) === today() && Date.parse(t.updated) - Date.parse(t.created || t.updated) > 120000);
+  }
+  function renderPlan() {
+    if (!st.plan) return;
+    $('re-plan').hidden = false;
+    const all = st.plan.items.filter((x) => !isSnoozed(x) && (findRef(x) || planActed(x)));
+    const open = all.filter((x) => !planActed(x)), done = all.filter(planActed);
+    $('plan-meta').textContent = `${done.length}/${all.length} done · ranked ${hm(new Date(st.plan.at))}`;
+    if (!all.length) { $('plan').replaceChildren(h('div', { class: 'thinking' }, 'Nothing ranked for today. Try ↻ Re-plan.')); return; }
+    const n = { must: 0, should: 0, could: 0 }; open.forEach((x) => n[x.tier]++);
+    let k = 0;
+    $('plan').replaceChildren(
+      h('div', { class: 'tiers' }, h('span', {}, h('span', { class: 'pill crit' }, 'must'), ' ' + n.must), h('span', {}, h('span', { class: 'pill warn' }, 'should'), ' ' + n.should), h('span', {}, h('span', { class: 'pill idle' }, 'could'), ' ' + n.could)),
+      h('div', { class: 'steps' }, open.concat(done).map((x) => {
+        const acted = planActed(x), [, btn] = KIND[x.kind];
+        const end = x.slot ? toHM(toMin(x.slot) + x.mins) : '';
+        const canBlock = x.slot && TASK_KINDS.includes(x.kind) && x.kind !== 'block';
+        return h('div', { class: 'step ' + x.tier + (acted ? ' acted' : '') },
+          h('span', { class: 'n' }, acted ? '✓' : String(++k)),
+          h('div', { class: 'body' },
+            h('div', { class: 'top' }, h('span', { class: 'slot' }, x.slot ? x.slot + '–' + end : 'any time'), h('b', { dir: 'auto' }, x.title)),
+            x.why && h('p', { dir: 'auto' }, x.why),
+            !acted && h('div', { class: 'acts' },
+              h('button', { class: 'sm pri', onclick: () => act(x) }, btn),
+              canBlock && h('button', { class: 'sm', onclick: () => act(x, 'block', { time: x.slot, mins: [30, 45, 60, 90, 120].includes(x.mins) ? x.mins : 30, date: today() }) }, '◷ Block ' + x.slot)),
+            !acted && moreActs(x, (ev) => ev.currentTarget.closest('.step').querySelector('.body'))));
+      })));
   }
 
   // ---- Boot ----
@@ -1525,7 +1943,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     const g = H < 5 ? 'Late night' : H < 12 ? 'Good morning' : H < 17 ? 'Good afternoon' : 'Good evening';
     $('hello').replaceChildren(g + ', ', h('em', {}, 'Ilan'));
     $('sub').textContent = fmt(new Date(), { weekday: 'long', day: 'numeric', month: 'long' }) + ' · ' + hm(new Date()) + ' Tel Aviv';
-    renderDayline(); renderCheckins();
+    renderDayline(); renderCheckins(); wakeSnoozed();
   };
   tick(); setInterval(tick, 30000);
 
