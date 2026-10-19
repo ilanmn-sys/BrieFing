@@ -322,6 +322,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       <section class="panel c-agent" aria-labelledby="ag-h" id="sec-agents">
         <div class="ph"><h2 id="ag-h"><span class="ic">⚙</span>Agents</h2><span class="meta" id="ag-meta"></span></div>
         <div id="agents"><div class="skel"></div></div>
+        <details id="ag-diag" class="hint" style="margin-top:8px"><summary>Diagnostics</summary><pre id="ag-diag-out" style="white-space:pre-wrap;font-size:12px;margin:6px 0">Waiting for Claude Code Remote…</pre><button class="sm" id="ag-diag-run" type="button">Run a direct check</button></details>
       </section>
 
       <section class="panel c-learn" aria-labelledby="ln-h">
@@ -646,7 +647,10 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       const txt = String(p || ''), end = txt.lastIndexOf('}');
       try { return JSON.parse(txt.slice(txt.indexOf('{'), end + 1)); } catch (_) { return { data: [] }; }
     };
+    const agDiag = (msg) => { const o = $('ag-diag-out'); if (o) o.textContent = new Date().toLocaleTimeString() + ' · ' + msg; };
+    setTimeout(() => { if (!st.agents) { agDiag('No answer from Claude Code Remote after 20 s. The watch never returned data or an error.'); $('agents').replaceChildren(errBox('No answer from Claude Code Remote yet. Open Diagnostics and run a direct check.', refreshAll)); } }, 20000);
     watch(S.CCR, 'list_triggers', { enabled: true, limit: 20 }, 'ag', async (p, at) => {
+      agDiag('Data received. Payload type: ' + (typeof p) + (typeof p === 'string' ? ' (' + p.length + ' chars): ' + p.slice(0, 160) : ' · keys: ' + Object.keys(p || {}).join(', ')));
       let pg = trigPage(p), all = (pg.data || []).slice(), guard = 0;
       while (pg.has_more && pg.next_cursor && guard++ < 10) {
         try { pg = trigPage(await call(S.CCR, 'list_triggers', { enabled: true, limit: 20, cursor: pg.next_cursor })); } catch (_) { break; }
@@ -655,8 +659,19 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       st.agents = all.filter((t) => /^Agent:/i.test(t.name || '')).sort((a, b) => String(a.next_run_at).localeCompare(String(b.next_run_at)));
       $('ag-meta').textContent = st.agents.length + ' on schedule · ' + ago(at);
       renderAgents(); renderStats && renderStats();
-    }, (e, drop) => { if (drop || !st.agents) { st.agents = drop ? null : st.agents; $('agents').replaceChildren(errBox(errText(e, 'Claude Code Remote'), refreshAll)); } }, 600000);
+      agDiag('OK: ' + all.length + ' routines read, ' + st.agents.length + ' named "Agent:".');
+    }, (e, drop) => { agDiag('Error: ' + ((e && e.code) || '?') + ' · ' + ((e && e.message) || JSON.stringify(e))); if (drop || !st.agents) { st.agents = drop ? null : st.agents; $('agents').replaceChildren(errBox(errText(e, 'Claude Code Remote'), refreshAll)); } }, 600000);
   }
+
+  document.addEventListener('click', async (ev) => {
+    if (!ev.target || ev.target.id !== 'ag-diag-run') return;
+    const o = $('ag-diag-out'); o.textContent = 'Calling list_triggers…';
+    if (!mcp) { o.textContent = 'This view has no connector access (mcp capability unavailable).'; return; }
+    try {
+      const p = await call(S.CCR, 'list_triggers', { enabled: true, limit: 5 });
+      o.textContent = 'Direct call OK. Payload type: ' + typeof p + '\n' + (typeof p === 'string' ? p : JSON.stringify(p)).slice(0, 600);
+    } catch (e) { o.textContent = 'Direct call failed: ' + ((e && e.code) || '?') + ' · ' + ((e && e.message) || String(e)); }
+  });
 
   async function refreshAll() {
     try { await mcp.invalidate(); } catch (_) { /* nothing cached; the watches refetch anyway */ }
