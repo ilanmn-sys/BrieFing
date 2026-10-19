@@ -639,10 +639,22 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       renderCollector();
     }, () => { st.collect = null; renderCollector(); });
 
-    watch(S.CCR, 'list_triggers', { enabled: true, limit: 60 }, 'ag', (p, at) => {
-      st.agents = (p.data || []).filter((t) => /^Agent:/i.test(t.name || '')).sort((a, b) => String(a.next_run_at).localeCompare(String(b.next_run_at)));
+    // list_triggers pages are size-capped: a long page comes back as JSON text followed by a "note: ..." line,
+    // so parse defensively and follow next_cursor until every routine is in.
+    const trigPage = (p) => {
+      if (p && typeof p === 'object' && !Array.isArray(p)) return p;
+      const txt = String(p || ''), end = txt.lastIndexOf('}');
+      try { return JSON.parse(txt.slice(txt.indexOf('{'), end + 1)); } catch (_) { return { data: [] }; }
+    };
+    watch(S.CCR, 'list_triggers', { enabled: true, limit: 20 }, 'ag', async (p, at) => {
+      let pg = trigPage(p), all = (pg.data || []).slice(), guard = 0;
+      while (pg.has_more && pg.next_cursor && guard++ < 10) {
+        try { pg = trigPage(await call(S.CCR, 'list_triggers', { enabled: true, limit: 20, cursor: pg.next_cursor })); } catch (_) { break; }
+        all = all.concat(pg.data || []);
+      }
+      st.agents = all.filter((t) => /^Agent:/i.test(t.name || '')).sort((a, b) => String(a.next_run_at).localeCompare(String(b.next_run_at)));
       $('ag-meta').textContent = st.agents.length + ' on schedule · ' + ago(at);
-      renderAgents();
+      renderAgents(); renderStats && renderStats();
     }, (e, drop) => { if (drop || !st.agents) { st.agents = drop ? null : st.agents; $('agents').replaceChildren(errBox(errText(e, 'Claude Code Remote'), refreshAll)); } }, 600000);
   }
 
