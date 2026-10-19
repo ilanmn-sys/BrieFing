@@ -648,19 +648,31 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       try { return JSON.parse(txt.slice(txt.indexOf('{'), end + 1)); } catch (_) { return { data: [] }; }
     };
     const agDiag = (msg) => { const o = $('ag-diag-out'); if (o) o.textContent = new Date().toLocaleTimeString() + ' · ' + msg; };
-    setTimeout(() => { if (!st.agents) { agDiag('No answer from Claude Code Remote after 20 s. The watch never returned data or an error.'); $('agents').replaceChildren(errBox('No answer from Claude Code Remote yet. Open Diagnostics and run a direct check.', refreshAll)); } }, 20000);
-    watch(S.CCR, 'list_triggers', { enabled: true, limit: 20 }, 'ag', async (p, at) => {
-      agDiag('Data received. Payload type: ' + (typeof p) + (typeof p === 'string' ? ' (' + p.length + ' chars): ' + p.slice(0, 160) : ' · keys: ' + Object.keys(p || {}).join(', ')));
-      let pg = trigPage(p), all = (pg.data || []).slice(), guard = 0;
-      while (pg.has_more && pg.next_cursor && guard++ < 10) {
-        try { pg = trigPage(await call(S.CCR, 'list_triggers', { enabled: true, limit: 20, cursor: pg.next_cursor })); } catch (_) { break; }
-        all = all.concat(pg.data || []);
+    // Claude Code Remote is read with plain calls, not a watch: the watch never answered for this connector.
+    // Each page is small (limit 10) so it stays under the size cap; follow next_cursor; give up after 25 s per call.
+    const withTimeout = (pr, ms) => Promise.race([pr, new Promise((_, rej) => setTimeout(() => rej({ code: 'timeout', message: 'No answer in ' + (ms / 1000) + ' s' }), ms))]);
+    async function loadAgents() {
+      try {
+        agDiag('Calling list_triggers…');
+        let pg = trigPage(await withTimeout(call(S.CCR, 'list_triggers', { enabled: true, limit: 10 }), 25000)), all = (pg.data || []).slice(), guard = 0;
+        while (pg.has_more && pg.next_cursor && guard++ < 15) {
+          pg = trigPage(await withTimeout(call(S.CCR, 'list_triggers', { enabled: true, limit: 10, cursor: pg.next_cursor }), 25000));
+          all = all.concat(pg.data || []);
+        }
+        st.agents = all.filter((t) => /^Agent:/i.test(t.name || '')).sort((x, y) => String(x.next_run_at).localeCompare(String(y.next_run_at)));
+        const at = Date.now();
+        setSrc('ag', 'ok', 'Updated ' + ago(at));
+        $('ag-meta').textContent = st.agents.length + ' on schedule · ' + ago(at);
+        renderAgents(); renderStats();
+        agDiag('OK: ' + all.length + ' routines read, ' + st.agents.length + ' named "Agent:".');
+      } catch (e) {
+        agDiag('Error: ' + ((e && e.code) || '?') + ' · ' + ((e && e.message) || JSON.stringify(e)));
+        setSrc('ag', isDenial(e) ? 'crit' : 'warn', errText(e, S.CCR));
+        if (!st.agents || isDenial(e)) { st.agents = null; $('agents').replaceChildren(errBox(errText(e, S.CCR), loadAgents)); }
       }
-      st.agents = all.filter((t) => /^Agent:/i.test(t.name || '')).sort((a, b) => String(a.next_run_at).localeCompare(String(b.next_run_at)));
-      $('ag-meta').textContent = st.agents.length + ' on schedule · ' + ago(at);
-      renderAgents(); renderStats && renderStats();
-      agDiag('OK: ' + all.length + ' routines read, ' + st.agents.length + ' named "Agent:".');
-    }, (e, drop) => { agDiag('Error: ' + ((e && e.code) || '?') + ' · ' + ((e && e.message) || JSON.stringify(e))); if (drop || !st.agents) { st.agents = drop ? null : st.agents; $('agents').replaceChildren(errBox(errText(e, 'Claude Code Remote'), refreshAll)); } }, 600000);
+    }
+    loadAgents();
+    clearInterval(window.__agTimer); window.__agTimer = setInterval(loadAgents, 600000);
   }
 
   document.addEventListener('click', async (ev) => {
