@@ -26,5 +26,20 @@
     "agentsMd": "AGENTS.md",
     "userMd": "USER.md",
     "memoryKb": "kb"
-  }
+  },
+  "editions": [
+    {
+      "id": "nyc",
+      "name": "Elevate '26 New York",
+      "tz": "America/New_York",
+      "until": "2026-10-29"
+    },
+    {
+      "id": "london",
+      "name": "Elevate EMEA London",
+      "tz": "Europe/London",
+      "until": "2026-11-24"
+    }
+  ],
+  "_editionsNote": "The active edition is the first one whose `until` date has not passed (in its own time zone, from the system clock). It gets its full kb/<id>/ files; the others contribute only kb/<id>/_summary.md. kb/common/ is always included. Override with --edition <id>. Switching needs an `update` run: the agent does not switch by itself."
 }

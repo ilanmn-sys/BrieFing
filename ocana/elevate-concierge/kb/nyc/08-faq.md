@@ -1,4 +1,4 @@
-# FAQ
+# FAQ: New York
 Last reviewed: 2026-10-20 (public FAQ: monday.com/elevate/location/flagship/faq/)
 Owner: TODO
 

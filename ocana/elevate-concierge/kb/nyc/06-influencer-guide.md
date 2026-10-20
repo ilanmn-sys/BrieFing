@@ -1,4 +1,4 @@
-# Influencer & creator guide
+# Influencer & creator guide: New York
 Last reviewed: 2026-10-20 (public site; program details TODO)
 Owner: TODO (influencer program)
 

@@ -1,4 +1,4 @@
-# Agenda
+# Agenda: New York
 Last reviewed: 2026-10-20 (public site, partial)
 Owner: TODO
 Live source: the Elevate calendar. This section is the fallback. It is **incomplete**: there are 200+ sessions and the public page lists only some.
@@ -33,6 +33,3 @@ All times are New York time (ET).
 
 ## Reservations
 Masterclasses (Learning Labs), Roundtables (Collab Labs) and Spark Meetups (Spark Lounge) need a reservation through the agenda. From 15 Oct, reservations are unlimited. Braindate conversations are booked at elevate.braindate.com.
-
-## London (24 Nov)
-08:00–09:00 badge pickup and community lounge · 09:00–10:00 program kicks off with masterclasses and demos · 10:00–11:00 opening keynote · 11:00–17:30 full program. Session list: TODO (not on the public site yet).

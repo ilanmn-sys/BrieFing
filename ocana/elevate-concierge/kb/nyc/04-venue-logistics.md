@@ -1,4 +1,4 @@
-# Venue & logistics
+# Venue & logistics: New York
 Last reviewed: 2026-10-20 (public FAQ and on-site guide)
 Owner: TODO
 
@@ -16,9 +16,6 @@ Owner: TODO
 - Laptop: recommended for hands-on sessions.
 - Neighbourhood guide (shareable): https://monday.com/elevate/your-guide-to-the-neighborhood-what-to-do-around-the-javits-center/
 - Wi-Fi: TODO · Cloakroom: TODO · Prayer/quiet room: TODO
-
-## London: ExCeL London
-- Address, entrances, badge pickup and logistics: TODO
 
 ## Always
 - **Emergency on site** (give this first in any emergency): TODO phone + location of the first-aid and security desk

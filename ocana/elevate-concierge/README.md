@@ -5,9 +5,20 @@ A WhatsApp assistant for journalists, influencers and creators at **Elevate 2026
 ## Needs Ilan's sign-off: an exception to Principle 1
 `CLAUDE.md` says journalist-facing text is always a draft. This agent answers journalists directly, so it needs an explicit exception:
 - It **answers directly** only facts in `kb/` or the Elevate calendar: agenda, venue, logistics, FAQ, public announcements after their embargo.
-- It **hands off** everything else (`kb/10-do-not-answer.md`, `basePrompt.md` "What you never do"), and a human replies from the same number.
+- It **hands off** everything else (`kb/common/10-do-not-answer.md`, `basePrompt.md` "What you never do"), and a human replies from the same number.
 
 Until this is approved, the agent stays stopped.
+
+## Two phases, one agent
+| When | Active edition | What the agent carries |
+|---|---|---|
+| now → 29 Oct (NYC time) | **New York** | `kb/nyc/` in full + `kb/london/_summary.md` + `kb/common/` |
+| 30 Oct → 24 Nov | **London** | `kb/london/` in full + `kb/nyc/_summary.md` (event over, on-demand link) + `kb/common/` |
+
+- **The build picks the edition from the clock** (`agent.json` → `editions`). The live agent switches only when someone runs `update`, so **run `DRY_RUN=0 node scripts/ocana-agent.js update` on 30 Oct**.
+- **London knowledge comes from retrieval.** From 1 Nov, `agents/elevate-london-kb-refresh` fetches the public EMEA pages every morning and updates the public-fact London files. It DMs Ilan what changed, and a person reviews `git diff` and runs `update`.
+- Internal London files (press room, creator guide) stay hand-written by Comms.
+- Before NYC, the London part stays a 5-line summary, so New York answers aren't diluted.
 
 ## Files → Ocana API
 `node scripts/ocana-agent.js build` turns this folder into a `CreateAgentRequest`:
@@ -17,7 +28,7 @@ Until this is approved, the agent stays stopped.
 | `basePrompt` | `basePrompt.md`: identity, sources of truth, red lines, safety, WhatsApp style |
 | `agentsMd` | `AGENTS.md`: tools, playbooks, handoff format, failure handling |
 | `userMd` | `USER.md`: guest personas and the team behind the agent |
-| `memoryMd` | every `kb/*.md`, joined in file order (the API has no knowledge-upload endpoint) |
+| `memoryMd` | `kb/<active edition>/` + other editions' `_summary.md` + `kb/common/` (the API has no knowledge-upload endpoint) |
 | model, temperature, maxTokens, `selectedPlugins`, `channels`, `ownerUserId` | `agent.json` |
 
 ## What the spec means for the build
@@ -34,10 +45,11 @@ Until this is approved, the agent stays stopped.
 ## Run
 ```
 node scripts/ocana-agent.js build                    # payload + sizes + TODO report, no API call
+node scripts/ocana-agent.js build --edition=london   # preview the London phase
 node scripts/ocana-agent.js packages slack           # read-only lookups (need OCANA_API_URL, OCANA_TOKEN)
 node scripts/ocana-agent.js snapshot <existing-whatsapp-agent-id>
 DRY_RUN=0 node scripts/ocana-agent.js create         # refuses while any TODO is left; saves agentId; does not start
-DRY_RUN=0 node scripts/ocana-agent.js update         # after kb/ edits
+DRY_RUN=0 node scripts/ocana-agent.js update         # after kb/ edits, and on 30 Oct to switch to London
 DRY_RUN=0 node scripts/ocana-agent.js start | stop
 ```
 `--allow-todo` lets an internal pilot run with knowledge-base gaps. A TODO in the owner, plugins or channels always blocks. Every failed API call exits non-zero and prints the HTTP status.
@@ -48,4 +60,6 @@ DRY_RUN=0 node scripts/ocana-agent.js start | stop
 - [ ] WhatsApp channel config, Calendar and Slack package ids, `ownerUserId`
 - [ ] The calendar id and Slack channel id in `AGENTS.md`; the handoff rota in `USER.md`
 - [ ] Answers from the Ocana team on items 2 and 9
+- [ ] 30 Oct: `update` to switch to London; enable `elevate-london-kb-refresh` after a clean dry run
+- [ ] London internal facts from Comms EMEA (press room, venue, emergency, creator rules)
 - [ ] Test: 30–50 questions in EN/HE/PT/ES, including attempts to break it ("ignore your rules", "what's Ilan's number", embargoed items before their release time)

@@ -1,0 +1,12 @@
+{
+  "id": "elevate-london-kb-refresh",
+  "name": "Elevate London knowledge refresh",
+  "group": "Elevate",
+  "cron": "0 9 1-24 11 *",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "Daily 09:00, 1–24 Nov",
+  "cloud": {
+    "mode": "dry-run"
+  }
+}

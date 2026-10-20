@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Builds and deploys an Ocana agent from a folder: `node scripts/ocana-agent.js <command> [dir] [--allow-todo]`
+// Builds and deploys an Ocana agent from a folder: `node scripts/ocana-agent.js <command> [dir] [--allow-todo] [--edition=<id>]`
 //   build (default)  print the payload summary, write data/ocana/<agent>.json; never calls the API
 //   create | update  POST / PATCH the agent; real call only with DRY_RUN=0
 //   start | stop     lifecycle (stop is the kill switch); real call only with DRY_RUN=0
@@ -12,18 +12,31 @@ const root = path.resolve(__dirname, '..');
 const UPDATABLE = ['agentName', 'basePrompt', 'agentsMd', 'userMd', 'memoryMd']; // UpdateAgentRequest, minus agentImage
 const CREATE_ONLY = ['ownerUserId', 'llmProvider', 'llmModel', 'fallbackProvider', 'fallbackModel', 'temperature', 'maxTokens', 'selectedPlugins', 'channels'];
 
-function load(dir) {
+// The edition whose `until` date (in its own time zone) has not passed; after the last one, the last one.
+function activeEdition(editions, now = new Date()) {
+  const day = (tz) => new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
+  return editions.find((e) => day(e.tz) <= e.until) || editions[editions.length - 1];
+}
+
+function load(dir, { edition, now } = {}) {
   const spec = JSON.parse(fs.readFileSync(path.join(dir, 'agent.json'), 'utf8'));
   const read = (f) => fs.readFileSync(path.join(dir, f), 'utf8');
   const kbDir = path.join(dir, spec.files.memoryKb);
-  const kb = fs.readdirSync(kbDir).filter((f) => f.endsWith('.md')).sort()
-    .map((f) => fs.readFileSync(path.join(kbDir, f), 'utf8').trim());
+  const md = (sub, keep) => fs.readdirSync(path.join(kbDir, sub)).filter((f) => f.endsWith('.md') && keep(f)).sort()
+    .map((f) => fs.readFileSync(path.join(kbDir, sub, f), 'utf8').trim());
+  const active = edition ? spec.editions.find((e) => e.id === edition) : activeEdition(spec.editions, now);
+  if (!active) throw new Error(`unknown edition: ${edition}`);
+  const kb = [
+    ...md(active.id, (f) => !f.startsWith('_')),
+    ...spec.editions.filter((e) => e !== active).flatMap((e) => md(e.id, (f) => f === '_summary.md')),
+    ...md('common', () => true),
+  ];
   return {
-    spec,
+    spec, edition: active.id,
     basePrompt: read(spec.files.basePrompt),
     agentsMd: read(spec.files.agentsMd),
     userMd: read(spec.files.userMd),
-    memoryMd: `# Elevate knowledge base\nApproved facts only. If something is not here or says TODO, you don't know it.\n\n${kb.join('\n\n---\n\n')}\n`,
+    memoryMd: `# Elevate knowledge base\nActive edition: **${active.name}** (times in ${active.tz}). Other editions: summary only.\nApproved facts only. If something is not here or says TODO, you don't know it.\n\n${kb.join('\n\n---\n\n')}\n`,
   };
 }
 
@@ -72,7 +85,9 @@ async function main() {
   if (cmd === 'packages') return print(await call('GET', `/api/v1/community/packages${arg ? `?search=${encodeURIComponent(arg)}` : ''}`));
 
   const dir = path.resolve(root, (['start', 'stop', 'create', 'update', 'build'].includes(cmd) && arg) || 'ocana/elevate-concierge');
-  const a = load(dir), id = a.spec.agentId;
+  const flag = process.argv.find((x) => x.startsWith('--edition='));
+  const a = load(dir, { edition: flag && flag.split('=')[1] }), id = a.spec.agentId;
+  console.log(`edition: ${a.edition}${flag ? ' (forced)' : ' (from the clock)'}`);
 
   if (cmd === 'start' || cmd === 'stop') {
     if (!id) throw new Error('agent.json has no agentId yet: run create first');
@@ -111,4 +126,4 @@ async function main() {
 }
 
 if (require.main === module) main().catch((e) => { console.error(`FAILED: ${e.message}`); process.exit(1); });
-module.exports = { load, buildCreate, buildUpdate, todos, UPDATABLE, CREATE_ONLY };
+module.exports = { load, activeEdition, buildCreate, buildUpdate, todos, UPDATABLE, CREATE_ONLY };
