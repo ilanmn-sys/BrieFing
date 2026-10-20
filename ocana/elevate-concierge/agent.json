@@ -1,0 +1,30 @@
+{
+  "_note": "Create-time settings for the Ocana agent. UpdateAgent (PATCH) cannot change llm*, temperature, maxTokens, selectedPlugins or channels: get them right before create, or change them in the Ocana portal. Every TODO must be resolved before `create` (the script refuses otherwise).",
+  "agentId": "",
+  "agentName": "Elevate Concierge",
+  "ownerUserId": "TODO: Ocana user id of the owning account (a team/service owner, not a personal one)",
+  "llmProvider": "anthropic",
+  "llmModel": "claude-sonnet-5-5",
+  "fallbackProvider": "anthropic",
+  "fallbackModel": "claude-haiku-5-5",
+  "temperature": 0.2,
+  "maxTokens": 700,
+  "selectedPlugins": [
+    "TODO: Google Calendar package id (GET /api/v1/community/packages?search=calendar), read-only, Elevate calendar only",
+    "TODO: Slack package id for the handoff channel (GET /api/v1/community/packages?search=slack)"
+  ],
+  "channels": [
+    {
+      "channelType": "whatsapp",
+      "config": {
+        "TODO": "copy the shape from an existing WhatsApp-connected agent: node scripts/ocana-agent.js snapshot <agentId>"
+      }
+    }
+  ],
+  "files": {
+    "basePrompt": "basePrompt.md",
+    "agentsMd": "AGENTS.md",
+    "userMd": "USER.md",
+    "memoryKb": "kb"
+  }
+}
