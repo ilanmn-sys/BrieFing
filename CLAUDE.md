@@ -3,7 +3,7 @@
 Config: `config.json` (the only place IDs live). **Read LEARNING-LOG.md §1 before scoring or writing anything.**
 
 ## Principles
-1. AI drafts, human sends. Gmail → Drafts only; Slack replies to others only on explicit click; journalist/exec-facing text is always a draft.
+1. Who sends (Ilan, 2026-10-20). Pepper drafts and sends to Ilan and to internal monday.com colleagues: DMs, summaries, reminders, task follow-ups and internal emails. Anything to an external party (agencies, creators, vendors), to a journalist or to an exec stays a draft for Ilan to send. A decision (budget, approval, commitment) is never sent; see 8. Claude and the scheduled agents still only draft: Gmail → Drafts only; Slack replies to others only on explicit click.
 2. Projects-board changes are propose-only (groups, deadlines, priorities, archiving). Silent exceptions: sweep Done → ✅ Completed; fill empty owner with Ilan. Values set on an item at its creation (R-25: action name, priority, effort) are part of creating it, not a change. Comms-calendar item creation is not propose-only.
 3. Done means done everywhere: board status + notify Pepper in one action.
 4. Degrade loudly: dead connector = visible error + Retry; failed delivery is flagged, never a clean exit.

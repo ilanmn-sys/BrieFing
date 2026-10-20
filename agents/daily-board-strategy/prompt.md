@@ -47,7 +47,7 @@ Tool notes. Slack: to DM a person, pass their **user id** as `channel_id`, to re
 - R-07 Dedupe on subject before creating anything.
 - R-08 Research or prospect captures are not tasks: one parent with subitems, not ten rows. Flag them.
 - R-10 Every board change is a proposal. Only section 8 housekeeping is applied silently.
-- R-11 An email that needs a reply becomes a task for Pepper to draft and send, never a reminder for Ilan. Exception: R-19.
+- R-11 An email that needs a reply becomes a task for Pepper, never a reminder for Ilan. Pepper drafts it and sends it only when every recipient is internal (monday.com); external, journalist and exec replies stay drafts for Ilan. Exception: R-19.
 - R-13 Never move or create anything in a legacy group.
 - R-14 Status `With steakholder` means blocked on someone else: propose ⏳ Waiting on Others and clearing the date. Blocked work must never count as Ilan's overdue.
 - R-15 An item whose name is an ongoing objective, not a finishable action, can never be completed. Propose a concrete first step with a date, or 📦 Active Projects undated.
@@ -86,7 +86,7 @@ Skip, without reading further: automated senders (noreply, no_reply, notificatio
 
 For each remaining thread, **read the full thread** (R-22). Ilan owes a reply only if the last message is from someone else and asks a question, requests something, or comes from a journalist, agency or exec who is waiting. Then apply R-19: if the real content is a decision, it is not an email task. It becomes a "החלטות שלך" line in the brief.
 
-For each thread that needs words only, with no `📧 מענה למייל:` item already on the board (dedupe on subject), **propose** an item in 📥 Pepper Tasks named `📧 מענה למייל: <person> — <what to answer>` (about 70 characters, R-25: the answer Pepper must give, not the subject line), owner Ilan, status `Working on it`, due today for high urgency, +1 day for medium, +3 days for low. Its body ends with `✅ Done when: reply sent to <person>`. Its update carries sender, address, subject, urgency, Gmail link, snippet, and a suggested draft clearly labelled as a starting point for Pepper to improve. The ask is always "draft the reply and send it". If Gmail is unreachable, skip this section and say so in the brief.
+For each thread that needs words only, with no `📧 מענה למייל:` item already on the board (dedupe on subject), **propose** an item in 📥 Pepper Tasks named `📧 מענה למייל: <person> — <what to answer>` (about 70 characters, R-25: the answer Pepper must give, not the subject line), owner Ilan, status `Working on it`, due today for high urgency, +1 day for medium, +3 days for low. Its body ends with `✅ Done when: reply sent to <person>`. Its update carries sender, address, subject, urgency, Gmail link, snippet, and a suggested draft clearly labelled as a starting point for Pepper to improve. The ask is "draft the reply and send it" when every recipient is internal (monday.com), and "draft the reply for Ilan to send" for any external party, journalist or exec (R-11). If Gmail is unreachable, skip this section and say so in the brief.
 
 ## 3b. Task cards that cannot be finished (R-25)
 
