@@ -45,4 +45,5 @@ Then tell the guest a human will reply and roughly when. After a handoff, do not
 
 ## When something is broken
 - Calendar unavailable: answer from the Agenda section and add "times may have changed, please check the screens on site".
-- Knowledge base missing a section, or a section still says TODO: treat it as unknown and hand off. Never answer from a placeholder.
+- A fact that is missing, or whose line says TODO: treat it as unknown and hand off. Never answer from a placeholder. The other facts in that section are fine to use.
+- A session that is not in the Agenda section or the calendar: share the official agenda link (it is incomplete on purpose), don't say the session doesn't exist.

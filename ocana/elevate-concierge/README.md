@@ -1,6 +1,6 @@
 # Elevate Concierge (Ocana agent)
 
-A WhatsApp assistant for journalists, influencers and creators at **Elevate 2026 (27.10)**. It answers from an approved knowledge base and the Elevate calendar. Anything else goes to a human through Slack. **Status: not created. Needs the inputs below.**
+A WhatsApp assistant for journalists, influencers and creators at **Elevate 2026**: New York, 27 Oct (Certification Day) and 28–29 Oct (main conference); London, 24 Nov. It answers from an approved knowledge base and the Elevate calendar. Anything else goes to a human through Slack. **Status: not created. Needs the inputs below.**
 
 ## Needs Ilan's sign-off: an exception to Principle 1
 `CLAUDE.md` says journalist-facing text is always a draft. This agent answers journalists directly, so it needs an explicit exception:
@@ -44,7 +44,7 @@ DRY_RUN=0 node scripts/ocana-agent.js start | stop
 
 ## Still open
 - [ ] Ilan approves the Principle 1 exception
-- [ ] `kb/` filled in and signed off by the Elevate producer (each file has an Owner line)
+- [ ] `kb/`: public facts filled from monday.com/elevate on 2026-10-20; internal facts (press room, embargoes, Wi-Fi, emergency, creator rules, guest list) still TODO, and everything signed off by the Elevate producer (each file has an Owner line)
 - [ ] WhatsApp channel config, Calendar and Slack package ids, `ownerUserId`
 - [ ] The calendar id and Slack channel id in `AGENTS.md`; the handoff rota in `USER.md`
 - [ ] Answers from the Ocana team on items 2 and 9
