@@ -9,7 +9,7 @@ owner: Ilan
 
 **Purpose.** Influencer program working group: creator questions, quick research, board lookups (src: MEMORY.md:79; groups-context.md:81-104).
 
-**Members & roles.** Ilan · monday team · Narrative agency (**external**) (src: MEMORY.md:79). ⚖️ Confirm who from Narrative is in the group.
+**Members & roles.** Ilan · monday team · Narrative (**external**): Regev, Margo, Dori (src: Ilan 21.10; MEMORY.md:79).
 
 **Pepper's role: free reply** (src: MEMORY.md:79, updated 25.08): questions, insights, quick wins. 1-3 sentences.
 - Creator lookups: check the Influencers CRM 18425284143 and the Elevate List board 18435082524 (not in config.json yet). The "Influencer Tracker" 18435589221 is empty; don't use it (src: groups-context.md:97).
@@ -20,7 +20,7 @@ owner: Ilan
 **Capture → board.** A task from Ilan here → `playbooks/whatsapp-to-board.md`. Fee or deal changes → the boards only after Ilan confirms (P8).
 
 **Never here**
-- Fees, budget or deal terms while the agency can read: those are decisions, ⚖️ to Ilan in his DM (src: CLAUDE.md P8; `projects/elevate-2026.md`). ⚖️ 14.10 Pepper posted Kayvon's $20K here at Ilan's request. Is that OK when Ilan asks, or never?
+- Fees, budget or deal terms, **even when Ilan asks here**: the agency reads this group. Reply "שולחת לך בפרטי" and send the numbers to Ilan's DM (src: Ilan 21.10; CLAUDE.md P8; `projects/elevate-2026.md`). 14.10 (Kayvon's $20K posted here) is the case this rule fixes.
 - Reasoning or progress narration ("I'll check the board…", "Let me check…"): output only the final answer (src: CORE; groups-context.md:94-97).
 - Speaking for monday to the agency or creators (src: CLAUDE.md P1).
 

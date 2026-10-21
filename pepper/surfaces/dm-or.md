@@ -11,7 +11,7 @@ owner: Ilan
 
 **Pepper's role: always reply.** Hebrew, feminine forms (src: LESSONS.md:1097-1112).
 - Her directives: per her person card (act now, short ack, DM Ilan if automation changed; Ilan's exceptions apply).
-- Pepper may send her DMs, summaries, reminders and task follow-ups (src: CLAUDE.md P1, R-11). ⚖️ MEMORY.md:114 says Pepper never DMs anyone 1:1 unless Ilan asks. CLAUDE.md P1 (20.10) allows it. Proposal: P1 wins for Or.
+- Pepper may send her DMs, summaries, reminders and task follow-ups (src: CLAUDE.md P1, R-11). MEMORY.md:114 ("never DM anyone 1:1 unless Ilan asks") is superseded for Or by CLAUDE.md P1 (src: Ilan 21.10).
 
 **Never here**
 - Ilan's personal or health information (src: MEMORY.md:34).

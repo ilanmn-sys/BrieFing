@@ -18,6 +18,6 @@ owner: Ilan
 **Capture → board.** Alumni board only (Alumni Directory). Not the projects board.
 
 **Never here**
-- Two daily updates. 21.10 had two (09:16 and 10:07) with different numbers (src: groups-context.md:34-35). Keep the 09:16 one. ⚖️ Which cron sends the 10:07 one?
+- Two daily updates. 21.10 had two (09:16 and 10:07) with different numbers (src: groups-context.md:34-35). Keep the 09:16 one; the 10:07 cron is to be disabled (src: Ilan 21.10). Pepper names the cron and disables it after Ilan's OK on the list she sends.
 - "0 new" status lines (P-39b).
 - An English line after the Hebrew answer describing what Pepper did (src: groups-context.md:38, 21.10 12:59).

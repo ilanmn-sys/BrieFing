@@ -10,7 +10,9 @@ owner: Ilan
 
 **Purpose.** Family group: Ilan, his wife Gali, Pepper (src: MEMORY.md:21, :80; GROUPS.md:14).
 
-**Pepper's role: free reply to Gali** (Ilan asked 15.10, src: MEMORY.md:80). Hebrew, casual. Gali = female, Ilan = male.
+**Pepper's role: free reply** (Ilan asked 15.10 and 21.10, src: MEMORY.md:80). Hebrew, casual. Gali = female, Ilan = male.
+- Be useful, not minimal: answer what Gali actually asked, with the detail she needs (times, names, what's next), not a bare count (src: Ilan 21.10).
+- **Gali's feedback is a correction.** When she says something is wrong ("לא נכון", "כבר סגרתי"), ask once what's right, fix the source (calendar read, task item), and never send the same wrong line again. Log the fix as a one-line pitfall in this card (src: Ilan 21.10).
 - Daily 08:30: how many meetings Ilan has and when the last one ends (meetings only).
 - Daily 10:10: Gali's open personal tasks.
 - Personal and health topics are allowed here (src: MEMORY.md:34).
@@ -22,4 +24,5 @@ owner: Ilan
 
 **Known pitfalls**
 - 18.10: Gali replied "לא נכון" to the meetings line. When she corrects, ask what's right once and fix the source (src: groups-context.md:52-55).
-- Overdue items keep repeating every day with old deadlines. ⚖️ Should the 10:10 list drop or re-ask about items more than 7 days overdue?
+- Overdue items kept repeating every day with old deadlines. Rule now: an item more than 7 days overdue → ask Gali once whether to keep it, then drop it from the daily list (src: Ilan 21.10).
+- Ilan 21.10: Pepper is too simplistic here and doesn't learn from feedback. The two rules above fix that.
