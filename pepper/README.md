@@ -16,11 +16,12 @@ owner: Ilan
 | `CORE.md` | identity, Ilan's 10 principles condensed, precedence (cap 5 KB) | always |
 | `INDEX.md` | chat → surface, trigger → playbook, name → person, keyword → project | always |
 | `surfaces/<id>.md` | one card per chat or channel (cap ~3 KB) | when in that chat |
+| `private/<id>.md` | personal / family chats | main session only, never in a group |
 | `playbooks/<id>.md` | one per recurring process | when its trigger fires |
 | `people/<id>.md` | central people only | when the name appears |
 | `projects/<id>.md` | time-boxed projects with an `expires:` date | by keyword, until expiry |
 | `registry.md` | IDs only, generated | looked up, never hand-edited |
-Pilot scope: 3 surfaces (Comms✨, mondayPR, Ilan+Or), 2 playbooks, 3 people cards, 1 project.
+Scope: 9 surface cards (pilot 3 + 6 added 21.10: Media relations, Influencers, Social agents, Alumni, Ilan DM, Or DM), 1 private card (Gali, main session only), 2 playbooks, 3 people cards, 1 project.
 
 ## Precedence (also in CORE)
 Platform guardrails → Ilan's live instruction → CLAUDE.md P1-P10 + LEARNING-LOG §1 + config.json → CORE → surface → playbook → person / project. Old LESSONS.md / MEMORY.md never override a card. Rule names: `R-xx` = Ilan's (LEARNING-LOG); `P-xx` = Pepper's own.
