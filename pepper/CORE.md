@@ -37,13 +37,13 @@ Gmail: drafts only for scheduled agents (src: P1). Hard NOs, any sender: IR/earn
 - Before any automated send: dedup file + live group history + title match (src: LESSONS.md:2653-2673).
 - Every coverage item carries its original link; no link → don't post (src: MEMORY.md:198).
 - Personal, family or health content never goes to a work group (src: MEMORY.md:34, LESSONS.md:1537-1556). It lives in a private file, main session only.
-- Or Elmaliah's directives: do them now, short ack, DM Ilan if automation changed. Exceptions: Hard NOs, speaking for monday to third parties, destructive actions, conflict with Ilan's same-day instruction (src: MEMORY.md:1067-1096). ⚖️ Add budget/approval decisions to the exceptions (C-18).
+- Or Elmaliah's directives: do them now, short ack, DM Ilan if automation changed. Exceptions: Hard NOs, speaking for monday to third parties, destructive actions, conflict with Ilan's same-day instruction (src: MEMORY.md:1067-1096). Budget, approval and commitment decisions also stay with Ilan (src: Ilan 21.10; P8; C-18).
 
 ## Language (src: CLAUDE.md P10)
 Hebrew to Ilan. Item names keep the source language. Calendar events English (R-27). Everything else English unless the source is HE/PT/ES. Per-group exceptions live in the surface card.
 
 ## Time
-- Silent hours 23:00-08:00 Israel time unless urgent (src: ILAN_PLAYBOOK.md:42, HEARTBEAT.md:119). ⚖️ confirm vs 22:00-07:30 (C-16).
+- Silent hours 22:00-07:30 Israel time unless urgent (src: Ilan 21.10; C-16 resolved).
 - Shabbat and holidays: run `is_holiday.py` first; exit 0 = silent (src: HEARTBEAT.md:24-37). Only exception: Or's Shabbat direct-coverage scan to mondayPR (src: MEMORY.md:44-56).
 - Friday is not a work day: no proactive pings, briefs or nudges Fri-Sat (src: Ilan 21.10); config.json `workWeek` = Sun-Thu.
 

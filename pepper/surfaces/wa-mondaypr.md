@@ -10,7 +10,7 @@ owner: Ilan
 **Purpose.** Israeli PR group: Ilan, Or and the Scherf agency. Pepper posts Israeli coverage alerts here (src: MEMORY.md:166-201; LESSONS.md:455, :1594).
 **Not this chat:** Media relations ✨ (`120363046265574722@g.us`). R-40 names mondayPR, but the summary it corrected went there (src: LESSONS.md:2727; groups-context.md:148-158; C-08).
 
-**Members & roles.** Ilan · [Or Elmaliah](../people/or-elmaliah.md) (authority) · [Scherf: Eden + others](../people/scherf-agency.md) (**external**) · Eitan (unverified) (src: groups-context.md:12; LESSONS.md:455).
+**Members & roles.** Ilan · [Or Elmaliah](../people/or-elmaliah.md) (authority) · [Scherf: Anat, Eden, Zohar](../people/scherf-agency.md) (**external**, src: Ilan 21.10) · Eitan (unverified) (src: groups-context.md:12; LESSONS.md:455).
 
 **Pepper's role: mention-only + automated alerts.**
 - Reply when @mentioned, called "Pepper", quoted, asked by Ilan, or for a factual correction (src: MEMORY.md:86).
@@ -42,5 +42,7 @@ owner: Ilan
 
 **Open questions for Ilan (⚖️)**
 1. R-40 ("English in the PR group") now applies only to Media relations ✨, not here. Confirm when that group gets its card.
-2. Is Pepper's capture of Scherf messages to your board wanted, given they are external?
-3. Scherf members here: confirm the list.
+
+**Resolved 21.10 (Ilan)**
+- Scherf members here: Anat, Eden, Zohar.
+- Capture a Scherf message to the board only when it asks Ilan or Or for something. No "נרשם" ack in this chat.

@@ -7,7 +7,7 @@ owner: Ilan
 ---
 # אילן אור ו-Pepper (WhatsApp)
 
-**Purpose.** Ilan + Or working group: tasks they discuss or Or gives Pepper, and the 07:30 media brief (src: MEMORY.md:408-412, :58-71).
+**Purpose.** Ilan + Or working group: tasks they discuss or Or gives Pepper, and the 07:30 brief: coverage, important company events, prep for the day, social mentions (src: MEMORY.md:408-412, :58-71; Ilan 21.10).
 
 **Members & roles.** Ilan (owner) · [Or Elmaliah](../people/or-elmaliah.md), equal partner, authority · Pepper (src: MEMORY.md:81, :397; groups-context.md:106).
 
@@ -36,6 +36,6 @@ owner: Ilan
 - 14.10: Ilan "זאת הודעה לפרטי לא לקבוצה הזאת" (src: groups-context.md:112).
 - 11.10: "שלחי לקבוצה" read as the last-mentioned group. Check pending skills and drafts first, then ask (src: LESSONS.md:732-742).
 
-**Open questions for Ilan (⚖️)**
-1. The 07:30 brief here overlaps your 07:00 strategy brief. Keep both?
-2. Is the "Elevate+Or group" (LESSONS.md:734) this chat or another?
+**Resolved 21.10 (Ilan)**
+- The 07:30 brief stays here, separate from Ilan's DM brief. Content: `playbooks/morning-brief.md` B.
+- The "Elevate+Or group" in LESSONS.md:734 is not a chat Ilan knows. Ignore that reference.

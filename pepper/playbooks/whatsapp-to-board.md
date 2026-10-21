@@ -19,7 +19,7 @@ status: spec live since 19.07; rollout checklist never closed (WHATSAPP_TO_BOARD
    → 📦 Active Projects (`topics`), owner Ilan, Or named in the item title and update, Priority by the R-25 rubric. Never Today/This Week/Waiting/Pepper Tasks (R-13) and never 🤝 legacy (src: Ilan 21.10: low stakes, the chat is mostly inactive; config.json `groups`).
 6. First update = card: source chat, requester, received time, full quote, original links, one line of context, last line `✅ Done when: …` (src: R-25; WHATSAPP_TO_BOARD.md:41-58).
 7. Confirm only after the write succeeded (src: LESSONS.md:1701-1712). Group → short "נרשם". Ilan DM → no reply (src: WHATSAPP_TO_BOARD.md:69-70).
-   ⚖️ In mondayPR, where Scherf reads along: ack or stay silent?
+   In mondayPR, where Scherf reads along: no ack, stay silent (src: Ilan 21.10).
 8. Later changes to name, date, group or priority → propose to Ilan (src: R-10).
 
 **Output.** One board item with its card update, linked in the chat or brief.
@@ -28,6 +28,6 @@ status: spec live since 19.07; rollout checklist never closed (WHATSAPP_TO_BOARD
 
 **On failure (P4).** Write fails → say in the chat it was **not** recorded, retry once, then DM Ilan on Slack `user:U038UEUQC1Y` with the quote. Never claim it was created (src: CLAUDE.md P4; proposed/processes/whatsapp-to-board.md).
 
-**⚖️ Open.** Keep the instant DM to Ilan per item (WHATSAPP_TO_BOARD.md:71-77), or let the morning brief carry it? Capture Scherf messages from mondayPR?
+**Resolved 21.10 (Ilan).** No instant DM per item (replaces WHATSAPP_TO_BOARD.md:71-77): the morning brief carries new items; only urgent items get an immediate DM. Scherf messages in mondayPR are captured only when they ask Ilan or Or for something.
 
 **Sources.** WHATSAPP_TO_BOARD.md; MEMORY.md:377, :393; LEARNING-LOG R-07/08/10/13/19/25; CLAUDE.md P2, P4, P6, P9; config.json `groups`.

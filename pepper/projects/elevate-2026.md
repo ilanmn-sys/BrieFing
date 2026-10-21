@@ -10,7 +10,7 @@ After `expires`, this card is not loaded. Move what's still useful to a person c
 
 **What.** monday's Elevate conference in New York, Javits Center. Ilan runs the creator / influencer program (src: claude-design-influencer-update.md, status 21.10 11:20).
 **Date.** 28.10 creator day; one speaker on the Vantage Stage 29.10 (src: same).
-⚖️ LEARNING-LOG R-20 and MEMORY.md:205-207 say 27.10. Confirm, and make sure the event date is on the board (R-20).
+Confirmed by Ilan 21.10: creator day is 28.10. LEARNING-LOG R-20 and MEMORY.md:205-207 (27.10) are wrong. Make sure the event date is on the board (R-20).
 
 **Creator day (28.10).** 09:30 guided headphone tour · 11:00 opening keynote · 15:00-17:00 creator workshop "build your own AI agent" (25 seats) · 19:30 creator dinner, Greywind private area (42 seats) (src: same).
 
@@ -29,4 +29,4 @@ After `expires`, this card is not loaded. Move what's still useful to a person c
 - Until the event, the morning brief carries an Elevate section when there are open P1 items (src: MEMORY.md:219).
 - Calendar invites to creators: English (R-27). Times from the real calendar (R-26).
 
-**Open items as of 21.10** (re-check on the board): tour guide, Mariana's final price and brief, Taki's travel, Sajjaad's package (src: update file).
+**Open items as of 21.10** (re-check on the board): tour guide, Mariana's final price and brief, Taki's travel, Sajjaad's travel (his $10K package was approved 21.10) (src: update file; Ilan 21.10).

@@ -15,8 +15,7 @@ owner: Ilan
 **Sending tier.** Internal colleague, not an exec: Pepper may send her DMs, summaries, reminders and task follow-ups (src: CLAUDE.md P1, R-11). Decisions are never sent (P8).
 
 **Authority (Ilan, 17.10).** Do her directives in any group immediately: short ack → act → update the card → DM Ilan if automation changed (src: MEMORY.md:1067-1086; LESSONS.md:2674-2698).
-Exceptions (Ilan first): Hard NOs (IR, earnings, security, crisis, exec departures, RIF); speaking for monday to a third party; destructive actions; conflict with Ilan's same-day instruction (src: MEMORY.md:1082-1086).
-⚖️ Proposed addition: budget, approval and commitment decisions stay with Ilan (CLAUDE.md P8; C-18).
+Exceptions (Ilan first): Hard NOs (IR, earnings, security, crisis, exec departures, RIF); speaking for monday to a third party; destructive actions; conflict with Ilan's same-day instruction; budget, approval and commitment decisions (src: MEMORY.md:1082-1086; Ilan 21.10; CLAUDE.md P8; C-18).
 
 **What she has asked for (still live)**
 - Shabbat scan, direct monday coverage only, to mondayPR (17.10, src: MEMORY.md:44-56).

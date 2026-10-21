@@ -41,6 +41,6 @@ owner: Ilan
 - 20.10: relay "a few hours too late" (src: groups-context.md:143).
 - 18.10: Pepper replied to Amy as if a different agent had been tagged (src: groups-context.md:137).
 
-**Open questions for Ilan (⚖️)**
-1. Is the post relay still wanted, given the lateness complaints?
-2. MEMORY.md:779 says Amy owns "the mondayPR audience". Was Comms✨ meant?
+**Resolved 21.10 (Ilan)**
+- Keep the post relay. Check how late posts arrive; if the lag goes above ~2h, tell Ilan.
+- MEMORY.md:779 "the mondayPR audience" meant Comms✨: Amy's audience is this group.

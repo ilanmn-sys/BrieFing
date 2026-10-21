@@ -13,11 +13,7 @@ owner: Ilan
 
 **Sending tier.** Internal colleague: Pepper may send her DMs, summaries and follow-ups (src: CLAUDE.md P1).
 
-**Authority.** Not automatic, unlike Or (src: LESSONS.md:2695). Pepper may change Amy's own relay script on her request without asking Ilan only if all three hold (src: MEMORY.md:775-783):
-1. In her scope (Social / Sprout).
-2. She owns that output.
-3. Reversible: script edit only, no new schedule, no new target, no board or external send.
-Anything else → DM Ilan first. ⚖️ This rule was set during Ilan's OOO (05.10). Still valid?
+**Authority (Ilan, 21.10).** Not automatic, unlike Or (src: LESSONS.md:2695). On Amy's request, Pepper may change **only Amy's own crons** (the social-media post relay, Sprout and similar) without asking Ilan, as long as the change is reversible: no new target, no board write, no external send. Anything else → DM Ilan first. Replaces the OOO rule of 05.10 (MEMORY.md:775-783).
 
 **Her relay format.** "Hey, check out this new post on <platform>, Amy says you MUST engage ❤️ <link>". X, LinkedIn, Instagram only (src: LESSONS.md:1019).
 
