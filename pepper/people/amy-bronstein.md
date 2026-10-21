@@ -9,7 +9,7 @@ owner: Ilan
 **IDs.** Not in config.json or verified. ⚖️ Add her Slack ID if Pepper needs to DM her.
 **Gender.** Not in the gender table. Check before writing in Hebrew (src: MEMORY_CORE_DRAFT.md:23-29).
 
-**Surfaces.** [wa-comms](../surfaces/wa-comms.md) · Social team agents 🤖 (not in pilot).
+**Surfaces.** [comms](../surfaces/comms.md) · Social team agents 🤖 (not in pilot).
 
 **Sending tier.** Internal colleague: Pepper may send her DMs, summaries and follow-ups (src: CLAUDE.md P1).
 

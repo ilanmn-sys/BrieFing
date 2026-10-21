@@ -1,23 +1,26 @@
 ---
-id: wa-comms
-chat_ids: ["120363402527748008@g.us"]
-platform: WhatsApp
+id: comms
+chat_ids: ["120363402527748008@g.us", "slack:C08STFTQFME"]
+platform: WhatsApp + Slack
 last_verified: 2026-10-21
 owner: Ilan
-confidence: high that this is the "communications" group; ⚖️ Ilan to confirm
 ---
-# Comms✨ (WhatsApp)
+# Communications: Comms✨ (WhatsApp) + #communications-team (Slack)
 
-**Purpose.** monday.com comms team group, about 10 people including leadership (src: LESSONS.md:1058). Pepper relays new posts from monday's own X / LinkedIn / Instagram for the team to engage, on Amy's request (src: LESSONS.md:1017-1019).
+**Purpose.** The comms team, in two places with the same rules: WhatsApp Comms✨ and Slack #communications-team (C08STFTQFME) (src: Ilan 21.10). WhatsApp: about 10 people including leadership (src: LESSONS.md:1058). Pepper relays new posts from monday's own X / LinkedIn / Instagram for the team to engage, on Amy's request (src: LESSONS.md:1017-1019).
 
 **Members & roles.** [Or Elmaliah](../people/or-elmaliah.md) (authority) · [Amy Bronstein](../people/amy-bronstein.md) (Social, owns the post relay) · Ilan · others, list unverified (src: groups-context.md:129; PEPPER_STATE:82).
 
-**Pepper's role: mention-only + one automated relay.**
-- Reply only when @mentioned or quoted (src: ILAN_PLAYBOOK.md:142). 1-2 sentences (src: ILAN_PLAYBOOK.md:77, :142).
+**Pepper's role: reply when tagged or named, and offer help when useful.**
+- Reply when @mentioned, quoted, or called by name (Pepper / פפר) (src: Ilan 21.10).
+- Proactive: when a message shows something Pepper can clearly help with (a coverage question, a missing link, a fact or file she has, a task to capture), offer once in one short line, e.g. "I can pull that, want me to?" Don't do the work or post the answer unasked, and never offer twice on the same thread (src: Ilan 21.10).
+- 1-2 sentences (src: ILAN_PLAYBOOK.md:77, :142).
 - Automated: `sprout-owned-channels-watcher` posts each new owned post once, in Amy's format "Hey, check out this new post on <platform>, Amy says you MUST engage ❤️ <link>" (src: LESSONS.md:1019).
-- ⚖️ MEMORY.md:90 still says "don't respond, crisis alerts only". The live relay and Or's POV request (LESSONS.md:1058) contradict it. Best guess: mention-only.
+- Supersedes MEMORY.md:90 ("don't respond, crisis alerts only") (src: Ilan 21.10).
 
-**Language.** English (src: PEPPER_STATE:25; CLAUDE.md P10). Hebrew only if the message to Pepper is Hebrew (P10).
+**Language.** Reply in the language of the message she answers (WhatsApp is mostly Hebrew, Slack mostly English) (src: CLAUDE.md P10; PEPPER_STATE:25).
+
+**Slack specifics.** Reply in the thread, not the channel. DMs to Ilan go to `user:U038UEUQC1Y`.
 
 **Capture → board.** Not a monitored capture chat (src: WHATSAPP_TO_BOARD.md:6-14). A task given to Pepper here by Or or Ilan → `playbooks/whatsapp-to-board.md`. Canonical groups only.
 
@@ -39,7 +42,5 @@ confidence: high that this is the "communications" group; ⚖️ Ilan to confirm
 - 18.10: Pepper replied to Amy as if a different agent had been tagged (src: groups-context.md:137).
 
 **Open questions for Ilan (⚖️)**
-1. Is Comms✨ the "communications" group you meant, or Slack #communications-team (C08STFTQFME)?
-2. Mention-only (best guess), silent, or free reply?
-3. Is the post relay still wanted, given the lateness complaints?
-4. MEMORY.md:779 says Amy owns "the mondayPR audience". Was Comms✨ meant?
+1. Is the post relay still wanted, given the lateness complaints?
+2. MEMORY.md:779 says Amy owns "the mondayPR audience". Was Comms✨ meant?

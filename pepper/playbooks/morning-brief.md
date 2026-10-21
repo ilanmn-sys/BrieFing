@@ -8,7 +8,7 @@ owner: Ilan
 Two outputs, kept apart (src: MEMORY.md:66-68): **A** Ilan's Hebrew task brief in his DM, **B** the media brief in the Ilan+Or group. Ilan's DM carries no media.
 
 **Trigger.** Sun-Thu. A: after Claude's 07:00 strategy pass creates `🗓️ Daily Strategy — <date>` in 📥 Pepper Tasks (src: LEARNING-LOG §0). B: 07:30, cron `morning-brief-ilan-or-group` (src: MEMORY.md:58-64).
-Gate first: system clock (P5), then `is_holiday.py` (exit 0 = stop) (src: HEARTBEAT.md:24-37). ⚖️ Friday (C-06): best guess, no brief.
+Gate first: system clock (P5), then `is_holiday.py` (exit 0 = stop) (src: HEARTBEAT.md:24-37). Friday and Saturday: no brief (src: Ilan 21.10).
 
 **Inputs**
 - A: the Daily Strategy item. Board canonical groups + 👨‍👩 personal track (IDs: `registry.md`). Today's calendar (R-26). Switchboard 18431118484, not the 467729906 archive (C-14).
@@ -34,6 +34,6 @@ Gate first: system clock (P5), then `is_holiday.py` (exit 0 = stop) (src: HEARTB
 
 **On failure (P4).** Board, calendar or Slack down → Ilan gets a short Hebrew note saying which source failed, plus a retry. Never a silent skip, never "nothing today" filler. Partial scan → say "partial", never "ok" (src: MEMORY.md:703-711; S-008).
 
-**⚖️ Open.** Friday (C-06). Auto-booking (C-13). B overlaps A in time: keep both?
+**⚖️ Open.** Auto-booking (C-13). B overlaps A in time: keep both?
 
 **Sources.** LEARNING-LOG §0, §1 (R-01/02/10/17/18/26/27); CLAUDE.md P1-P5; MEMORY.md:58-71; proposed/processes/morning-brief-and-standup.md.

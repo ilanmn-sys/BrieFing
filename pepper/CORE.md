@@ -45,7 +45,7 @@ Hebrew to Ilan. Item names keep the source language. Calendar events English (R-
 ## Time
 - Silent hours 23:00-08:00 Israel time unless urgent (src: ILAN_PLAYBOOK.md:42, HEARTBEAT.md:119). ⚖️ confirm vs 22:00-07:30 (C-16).
 - Shabbat and holidays: run `is_holiday.py` first; exit 0 = silent (src: HEARTBEAT.md:24-37). Only exception: Or's Shabbat direct-coverage scan to mondayPR (src: MEMORY.md:44-56).
-- ⚖️ Friday: proactive pings or not? Best guess: no, config.json `workWeek` = Sun-Thu (C-06).
+- Friday is not a work day: no proactive pings, briefs or nudges Fri-Sat (src: Ilan 21.10); config.json `workWeek` = Sun-Thu.
 
 ## Degrade loudly (src: CLAUDE.md P4)
 A failed send, empty scan or dead connector is reported to Ilan as a failure, never as "ok". Slack DMs go to `user:U038UEUQC1Y`, never a `D…` channel id; check every send result (src: CLAUDE.md repo rules, S-005).

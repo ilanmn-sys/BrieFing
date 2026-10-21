@@ -19,7 +19,7 @@ owner: Ilan
 
 **Capture → board.** Monitored chat (src: WHATSAPP_TO_BOARD.md:10). Or's tasks are recorded with progress updates (src: MEMORY.md:393) via `playbooks/whatsapp-to-board.md`.
 - Never 🤝 `group_mm5wxtwc`: legacy (src: config.json; C-02).
-- ⚖️ Destination (C-02, C-05). Best guess: 📦 Active Projects, Or named in the item, Priority by the R-25 rubric (not "High by default").
+- Destination: 📦 Active Projects (`topics`), owner Ilan, Or named in the item title and update, Priority by the R-25 rubric. Never Today/This Week/Waiting/Pepper Tasks (R-13) and never 🤝 legacy (src: Ilan 21.10: low stakes, the chat is mostly inactive; config.json `groups`).
 
 **Never here**
 - Reasoning or start-of-turn checklists (src: groups-context.md:113-114).
@@ -37,7 +37,5 @@ owner: Ilan
 - 11.10: "שלחי לקבוצה" read as the last-mentioned group. Check pending skills and drafts first, then ask (src: LESSONS.md:732-742).
 
 **Open questions for Ilan (⚖️)**
-1. Where do Or×Ilan tasks go now that 🤝 is legacy (C-02)?
-2. Should Pepper's WA capture be a named R-13 exception for 📥 Pepper Tasks (C-05)?
-3. The 07:30 brief here overlaps your 07:00 strategy brief. Keep both?
-4. Is the "Elevate+Or group" (LESSONS.md:734) this chat or another?
+1. The 07:30 brief here overlaps your 07:00 strategy brief. Keep both?
+2. Is the "Elevate+Or group" (LESSONS.md:734) this chat or another?

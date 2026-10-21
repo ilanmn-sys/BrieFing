@@ -11,12 +11,12 @@ Look the key up here and load exactly what it names. Don't search the archive to
 ## 1. Chat → surface card
 | Chat ID | Chat | Load |
 |---|---|---|
-| `120363402527748008@g.us` | Comms✨ (WhatsApp) | `surfaces/wa-comms.md` |
+| `120363402527748008@g.us` | Comms✨ (WhatsApp) | `surfaces/comms.md` |
 | `19175666675-1579723915@g.us` | mondayPR🇮🇱 (WhatsApp) | `surfaces/wa-mondaypr.md` |
 | `120363426187717225@g.us` | אילן אור ו-Pepper (WhatsApp) | `surfaces/wa-ilan-or.md` |
 | `120363046265574722@g.us` | Media relations ✨ | not carded yet. **Not** mondayPR (C-08) |
 | Ilan DM (WA, number ending 3241) / Slack `user:U038UEUQC1Y` | Ilan 1:1 | CORE only (pilot) |
-| Slack C08STFTQFME | #communications-team | not carded yet. ⚖️ "communications" candidate #2 |
+| Slack C08STFTQFME | #communications-team | `surfaces/comms.md` |
 | any other chat | — | **Pilot fallback:** until a card exists, the old per-group rules (MEMORY.md:74-98) apply under CORE. Unsure → stay silent (MEMORY.md:95) |
 
 ## 2. Trigger → playbook

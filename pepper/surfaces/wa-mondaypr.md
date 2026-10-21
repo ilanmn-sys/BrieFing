@@ -17,7 +17,7 @@ owner: Ilan
 - Automated: one alert per Ifat / Muck Rack article (`gmail-scan-every-2h`, Sun-Fri 08-20) and Or's Shabbat direct-coverage scan (src: MEMORY.md:191-194, :44-56).
 - Alert format: headline · author | outlet | date · 1-2 line summary · 🎯 where monday appears · tone · original link (src: MEMORY.md:170-182, LESSONS.md:1386).
 
-**Language.** ⚖️ (C-08). Best guess: single-article alerts follow the article's language (Hebrew article → Hebrew, P10). Coverage summaries English with links and "By the numbers" (P-40, src: LESSONS.md:2725-2740).
+**Language.** Hebrew, for everything Pepper posts here: single-article alerts and coverage summaries alike (src: Ilan 21.10). Summaries keep links and "By the numbers" (P-40, src: LESSONS.md:2725-2740).
 
 **Capture → board.** Monitored chat (src: WHATSAPP_TO_BOARD.md:11) → `playbooks/whatsapp-to-board.md`. Coverage rows → news board, `newArticles` group only (src: config.json `news.groups`; BOARDS.md:71).
 
@@ -41,7 +41,6 @@ owner: Ilan
 - 17.10: missed the Calcalist exec-departures story (src: MEMORY.md:46).
 
 **Open questions for Ilan (⚖️)**
-1. Language of single-article alerts (C-08).
-2. Did "קבוצת הpr" (R-40) mean mondayPR or Media relations ✨?
-3. Is Pepper's capture of Scherf messages to your board wanted, given they are external?
-4. Scherf members here: confirm the list.
+1. R-40 ("English in the PR group") now applies only to Media relations ✨, not here. Confirm when that group gets its card.
+2. Is Pepper's capture of Scherf messages to your board wanted, given they are external?
+3. Scherf members here: confirm the list.

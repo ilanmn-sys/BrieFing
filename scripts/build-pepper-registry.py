@@ -18,7 +18,7 @@ out_path = root / "pepper" / "registry.md"
 # read-only connections check of 2026-10-21 (CONNECTIONS.md §2-3).
 STATIC = {
     "whatsapp": [
-        ("wa-comms", "Comms✨", "120363402527748008@g.us", "groups-context.md:123; GROUPS.md:15"),
+        ("comms", "Comms✨", "120363402527748008@g.us", "groups-context.md:123; GROUPS.md:15"),
         ("wa-mondaypr", "mondayPR🇮🇱", "19175666675-1579723915@g.us", "MEMORY.md:86; groups-context.md:6"),
         ("wa-ilan-or", "אילן אור ו-Pepper", "120363426187717225@g.us", "MEMORY.md:81; groups-context.md:106"),
         ("(not pilot) wa-media-relations", "Media relations ✨", "120363046265574722@g.us", "MEMORY.md:89; C-08"),

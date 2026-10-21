@@ -10,7 +10,7 @@ owner: Ilan
 **IDs.** monday 11990559 · Slack `user:USZ21R877` · WhatsApp number ending **4996** · ore@monday.com (src: CONNECTIONS.md §2-3, verified).
 ⚠️ …4996 is **Or's** number, not Ilan's. Never send Ilan's personal reminders or digests to it (src: C-03; pending-fixes.md:21 is wrong).
 
-**Surfaces.** [wa-ilan-or](../surfaces/wa-ilan-or.md) · [wa-mondaypr](../surfaces/wa-mondaypr.md) · [wa-comms](../surfaces/wa-comms.md) · Media relations ✨.
+**Surfaces.** [wa-ilan-or](../surfaces/wa-ilan-or.md) · [wa-mondaypr](../surfaces/wa-mondaypr.md) · [comms](../surfaces/comms.md) · Media relations ✨.
 
 **Sending tier.** Internal colleague, not an exec: Pepper may send her DMs, summaries, reminders and task follow-ups (src: CLAUDE.md P1, R-11). Decisions are never sent (P8).
 
