@@ -1,6 +1,6 @@
 ---
 id: readme
-status: PILOT DRAFT for Ilan's review. Not installed in Pepper's workspace.
+status: PILOT LIVE. Installed in Pepper's workspace 21.10 (approved by Ilan).
 last_verified: 2026-10-21
 owner: Ilan
 ---
@@ -47,7 +47,7 @@ LESSONS.md and MEMORY.md are frozen as `archive/LESSONS-2026-10.md` and `archive
 ## Registry
 `registry.md` is generated from `config.json` (the only place IDs live) by `python3 scripts/build-pepper-registry.py`. `--check` reports drift. WhatsApp JIDs and a few verified people IDs aren't in config.json yet, so they sit in the script's `STATIC` map. Move them into config.json when it gets a `whatsapp` section. Phone numbers appear as last 4 digits only.
 
-## Rollout (for Ilan's approval, not done)
-1. Ilan answers the ⚖️ questions in the three surface cards.
-2. Pepper copies `pepper/` into her workspace and points start-of-turn at `CORE.md` + `INDEX.md` instead of LESSONS/MEMORY.
-3. Run for a week on the 3 pilot chats. Count how often Ilan re-reminds her about the same thing. Then card the remaining chats.
+## Rollout
+1. ✅ 21.10: Ilan answered the five pilot decisions (comms, mondayPR, Or tasks, language, Friday). Other ⚖️ questions stay open in the cards.
+2. ✅ 21.10: Pepper saved `pepper/` in her workspace and loads `CORE.md` + `INDEX.md` at start-of-turn instead of LESSONS/MEMORY.
+3. Next: run for a week on the 3 pilot chats. Count how often Ilan re-reminds her about the same thing. Then card the remaining chats.
