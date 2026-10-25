@@ -21,7 +21,7 @@ owner: Ilan
 | `people/<id>.md` | central people only | when the name appears |
 | `projects/<id>.md` | time-boxed projects with an `expires:` date | by keyword, until expiry |
 | `registry.md` | IDs only, generated | looked up, never hand-edited |
-Scope: 9 surface cards (pilot 3 + 6 added 21.10: Media relations, Influencers, Social agents, Alumni, Ilan DM, Or DM), 1 private card (Gali, main session only), 2 playbooks, 3 people cards, 1 project.
+Scope: 9 surface cards (pilot 3 + 6 added 21.10: Media relations, Influencers, Social agents, Alumni, Ilan DM, Or DM), 1 private card (Gali, main session only), 3 playbooks (wa-digest drafted 25.10), 3 people cards, 1 project.
 
 ## Precedence (also in CORE)
 Platform guardrails → Ilan's live instruction → CLAUDE.md P1-P10 + LEARNING-LOG §1 + config.json → CORE → surface → playbook → person / project. Old LESSONS.md / MEMORY.md never override a card. Rule names: `R-xx` = Ilan's (LEARNING-LOG); `P-xx` = Pepper's own.
