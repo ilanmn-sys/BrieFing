@@ -1,0 +1,12 @@
+{
+  "id": "meeting-action-items-to-tasks",
+  "name": "Meeting action items to tasks",
+  "group": "Board & Pepper",
+  "cron": "0 9-19 * * 0-4",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "Hourly 09–19 Sun–Thu",
+  "cloud": {
+    "mode": "dry-run"
+  }
+}

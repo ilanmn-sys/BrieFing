@@ -58,7 +58,7 @@ Tool notes. Slack: to DM a person, pass their **user id** as `channel_id`, to re
 - R-21 An item in 🔥 Today past its date moves to 📅 This Week. 🔥 Today holds only work that is genuinely today.
 - R-22 Before routing or delegating an email thread, read the whole thread. "Unreplied" from a search is a guess.
 
-R-13 names this agent as one of three exceptions (Ilan, 2026-10-07): it may create the `🗓️ Daily Strategy` item and approved `📧 מענה למייל:` tasks in 📥 Pepper Tasks, and nothing else in any triage group.
+R-13 names this agent as one of four exceptions (Ilan, 2026-10-07; the fourth, meeting-action-items-to-tasks, added 2026-10-25): it may create the `🗓️ Daily Strategy` item and approved `📧 מענה למייל:` tasks in 📥 Pepper Tasks, and nothing else in any triage group.
 
 ## 1. Decide which mode this run is in
 

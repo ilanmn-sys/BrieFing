@@ -18,7 +18,7 @@ Work top to bottom. Send me the output or answer after each part and I fix what 
 
 ## C. Decisions (all made 2026-10-07)
 
-1. R-13 amended: strategy, 📌 flags and log-claude-work may create in 📥 Pepper Tasks.
+1. R-13 amended: strategy, 📌 flags, log-claude-work and (2026-10-25) meeting-action-items-to-tasks may create in 📥 Pepper Tasks.
 2. Routing board = Comms Routing (18432388543).
 3. Intake sweeps `:comms:` only.
 4. Cross-post posts automatically.

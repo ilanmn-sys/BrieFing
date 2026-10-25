@@ -49,6 +49,7 @@ their head stops being applied. md.page caps a page at 500KB, but readability wi
 **Ways work enters the system.**
 
 - 📌 reaction on any Slack message → becomes a task, Pepper asks Ilan for the due date.
+- An action item Ilan owns in a recorded meeting (monday Notetaker) → becomes a task in Pepper Tasks within the hour; other people's action items are noted on the matching project item, never made tasks.
 - An email needing a reply → becomes a Pepper task: she drafts it, and sends it only if every recipient is internal (monday.com) and it is not a decision; otherwise it stays a draft for Ilan (R-11). Never a bare reminder for Ilan.
 - Pepper creates a `🤖`-prefixed item in Pepper Tasks → Claude picks it up hourly, does the work, replies on the item.
 - Ilan ticks a task done in the Command Center → board status updates and Pepper is notified, in one action.
@@ -79,7 +80,7 @@ the evidence behind it. Remove a rule the moment it stops being true.
 - **`R-10`** Board changes are propose-only. Only two exceptions apply without asking: sweeping already-`Done` items to ✅ Completed, and filling an empty `person` with Ilan. *(2026-08-26, Ilan)*
 - **`R-11`** An email needing a reply becomes a Pepper task, never a bare reminder for Ilan. Pepper drafts the reply. She sends it herself only when every recipient is internal (monday.com) and it is not a decision (R-19, Principle 8). Replies to external parties (agencies, creators, vendors), journalists or execs stay drafts for Ilan to send. *(2026-09-02, Ilan; scope set 2026-10-20, Ilan)*
 - **`R-12`** A rule added to §1 only binds agents that read this log. When adding one, check every other automation that writes to the board and fix it at the source — otherwise it keeps violating the rule silently, daily. *(2026-09-14 — see `S-004`)*
-- **`R-13`** No automation may create items in 🔥 Today, 📅 This Week, ⏳ Waiting on Others, or 📥 Pepper Tasks. Those are the human triage groups. Automations write to 🔁 Recurring or 📦 Active Projects only. *(2026-09-14)* **Exceptions (2026-10-07, Ilan):** three agents may create in 📥 Pepper Tasks, and only these items: `daily-board-strategy` (the `🗓️ Daily Strategy` item and approved `📧 מענה למייל:` tasks), `slack-flag-to-task` (`📌` items), and `log-claude-work-to-board` (clear action items, at most 3 a run, 🔥 Today only when due today and under the cap). No other automation creates in the triage groups.
+- **`R-13`** No automation may create items in 🔥 Today, 📅 This Week, ⏳ Waiting on Others, or 📥 Pepper Tasks. Those are the human triage groups. Automations write to 🔁 Recurring or 📦 Active Projects only. *(2026-09-14)* **Exceptions (2026-10-07, Ilan; 4th added 2026-10-25, Ilan):** four agents may create in 📥 Pepper Tasks, and only these items: `daily-board-strategy` (the `🗓️ Daily Strategy` item and approved `📧 מענה למייל:` tasks), `slack-flag-to-task` (`📌` items), `log-claude-work-to-board` (clear action items, at most 3 a run, 🔥 Today only when due today and under the cap), and `meeting-action-items-to-tasks` (action items owned by Ilan in his monday Notetaker meetings, in R-25 format with a `MEETING_ACTION` marker, at most 8 a run, 🔥 Today only when due today and under the cap; others' action items never become tasks). No other automation creates in the triage groups.
 - **`R-14`** Status `With steakholder` means the item is blocked on someone else → route to **⏳ Waiting on Others** and clear its date. Blocked work must never inflate Ilan's overdue count. *(2026-09-14, Ilan — 3 items found this way)*
 - **`R-15`** An item whose name states an ongoing objective rather than a finishable action ("ensure at least one big story in the upcoming months") can never be completed and will rot forever. Either rewrite it as a concrete first step with a date, or move it to 📦 Active Projects undated. *(2026-09-14)*
 - **`R-16`** When a task is blocked, say **who** holds it, on the item. "Waiting on approval" with no name is how something sits for 8 weeks — nobody can chase an unnamed person. *(2026-09-14 — see the ערן רוזן item)*
@@ -307,6 +308,7 @@ call would have prevented it.
 
 | Date | Change | Trigger |
 |---|---|---|
+| 2026-10-25 | Amended `R-13`: added `meeting-action-items-to-tasks` as the 4th agent allowed to create in 📥 Pepper Tasks (Ilan's own meeting action items only, max 8 a run) | Ilan: "an agent that takes action items from meetings and puts them into tasks, permanently" |
 | 2026-10-20 | Amended `R-11` and Principle 1: Pepper sends to Ilan and internal colleagues; external, journalist and exec replies and decisions stay drafts | Ilan's decision after the Pepper knowledge audit (CLAUDE.md said "drafts only", the log said "draft and send") |
 | 2026-10-07 | Amended `R-13`: named the three agents allowed to create in 📥 Pepper Tasks (strategy, 📌 flags, log-claude-work action items) | Ilan's decision while porting the agents to Claude Code |
 | 2026-09-06 | Added `R-09` (verify date from system clock) | `S-001` |
