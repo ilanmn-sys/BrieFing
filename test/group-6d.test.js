@@ -73,8 +73,8 @@ test('inbox digest: drafts only, decisions never drafted, thread read first, no 
   assert.ok(tools.includes('mcp__Gmail__create_draft') && tools.includes('mcp__Gmail__get_thread') && !tools.some((t) => t.startsWith('mcp__Google_Calendar')) && !tools.some((t) => /monday_com/.test(t)));
 });
 
-test('linkedin proposal: one draft to Ilan, no emoji, published sources only, nothing posted', () => {
+test('linkedin proposal: one Slack DM to Ilan with a design idea, optimized to what works, nothing posted', () => {
   const { prompt, tools } = load('weekly-linkedin-post-proposal');
-  for (const s of ['no emoji', 'Three hook options', 'one clear call to action', 'already published', 'not configured', 'AI drafts, human sends', 'nothing is posted to LinkedIn', 'Principle 8', 'at most 3 hashtags']) assert.ok(prompt.includes(s), s);
-  assert.ok(tools.includes('mcp__Gmail__create_draft') && !tools.some((t) => t.startsWith('mcp__Slack')) && !tools.some((t) => /monday_com__(create|change|update_)/.test(t)));
+  for (const s of ['no emoji', 'Three hook options', 'one clear call to action', 'already published', 'not configured', 'AI drafts, human sends', 'nothing is posted to LinkedIn', 'Principle 8', 'at most 3 hashtags', 'Design idea', 'performance doc', 'Check the send result', 'never invent engagement figures']) assert.ok(prompt.includes(s), s);
+  assert.ok(tools.includes('mcp__Slack__slack_send_message') && !tools.some((t) => t.startsWith('mcp__Gmail')) && !tools.some((t) => /monday_com__(create|change|update_)/.test(t)));
 });

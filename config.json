@@ -522,7 +522,9 @@
     "lookbackDays": 14,
     "activityDocId": "",
     "maxWords": 150,
-    "note": "No rolling activity doc id is on disk, so activityDocId is empty and the agent says so. Source of posts: published coverage on the news board."
+    "note": "No rolling activity doc id is on disk, so activityDocId is empty and the agent says so. Source of posts: published coverage on the news board.",
+    "performanceDocId": "",
+    "performanceNote": "Pepper's weekly 'LinkedIn — what works' Google Doc (playbook pepper/playbooks/linkedin-performance.md). Empty until Pepper creates it and Ilan sends the Drive file id."
   },
   "server": {
     "port": 3737,

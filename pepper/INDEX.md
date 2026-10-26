@@ -32,6 +32,7 @@ Look the key up here and load exactly what it names. Don't search the archive to
 | Sun-Thu morning: the 07:00 strategy item exists, or 07:30 cron `morning-brief-ilan-or-group` | `playbooks/morning-brief.md` |
 | An actionable message in `dm-ilan`, `wa-ilan-or` or `wa-mondaypr`, or a task given to Pepper in any chat | `playbooks/whatsapp-to-board.md` |
 | Every 2h 09:00–19:00 Sun–Thu (cron `wa-digest-ilan`) | `playbooks/wa-digest.md` |
+| Tuesday 17:00 (cron `linkedin-performance-ilan`), or Ilan asks how his LinkedIn posts perform | `playbooks/linkedin-performance.md` |
 | Anything else | not migrated yet: use `proposed/processes/*` from the audit, under CORE |
 
 ## 3. Person → card
