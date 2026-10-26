@@ -11,7 +11,7 @@ status: DRAFT 26.10 (Ilan asked for it); not loaded by Pepper until Ilan copies 
 **Trigger.** Weekly, Tuesday 17:00 Asia/Jerusalem (cron `linkedin-performance-ilan`), so the doc is fresh before Wednesday's proposal. Also when Ilan asks.
 
 **Inputs**
-- Ilan's own LinkedIn posts from the last 90 days: text, date and time, format (text, image, carousel, video, link), and the numbers LinkedIn shows (impressions, reactions, comments, reposts). Source: Bright Data LinkedIn posts scraper on Ilan's profile URL, or a LinkedIn analytics export Ilan drops in Drive.
+- Ilan's own LinkedIn posts from the last 90 days: text, date and time, format (text, image, carousel, video, link), and the numbers LinkedIn shows (impressions, reactions, comments, reposts). Source: Bright Data LinkedIn posts scraper on Ilan's profile (https://www.linkedin.com/in/ilan-manassen-94072198/, `config.linkedin.profileUrl`), or a LinkedIn analytics export Ilan drops in Drive.
 - The previous version of the doc, to compare week over week.
 
 **Steps**
@@ -45,7 +45,6 @@ status: DRAFT 26.10 (Ilan asked for it); not loaded by Pepper until Ilan copies 
 - Doc write failed → retry once, then DM Ilan.
 
 **Open (needs Ilan).**
-- Ilan's LinkedIn profile URL.
 - Which source: Bright Data scraper or a monthly analytics export.
 - Create the doc and send its Drive id, for `config.linkedin.performanceDocId`.
 
