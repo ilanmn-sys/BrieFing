@@ -1,6 +1,6 @@
 ---
 id: morning-brief
-last_verified: 2026-10-21
+last_verified: 2026-10-26
 owner: Ilan
 ---
 # Playbook: morning brief
@@ -16,12 +16,14 @@ Gate first: system clock (P5), then `is_holiday.py` (exit 0 = stop) (src: HEARTB
 
 **Steps: A, Ilan's brief**
 1. Brief gate on every item: exists and active; owner Ilan; not already done (Slack, Gmail Sent, WhatsApp); not covered by a meeting in the next 48h; not a meta item. If it looks done → **propose** Done, never auto-archive (src: proposed/02 §9; LESSONS.md:244-450; R-10; C-11).
-2. Hebrew, at most 7 items, 🔥 Today before 🔴 Overdue, each with a concrete reason (src: LEARNING-LOG §0; R-01, R-02).
-3. Suggested block per item: a 30-min gap 08:00-19:00 from the real calendar. Calendar unreadable → say so, suggest no times (src: R-26).
-4. Personal track: separate section, at most 3 items, health first. Main-session DM only, never a group (src: R-17, R-18; MEMORY.md:34).
-5. Overdue > 10 → propose specific cuts or reschedules. Proposals only (src: LESSONS.md:2711-2712; R-10).
-6. Send to Slack `user:U038UEUQC1Y` and check the result (src: CLAUDE.md repo rules).
-7. Ilan replies `apply all` / `apply 1,3` / `skip`. Claude applies. Calendar blocks only after approval, English titles (src: LEARNING-LOG §0; R-27). `morning-dynamic-blocks` does not auto-book (src: Ilan 21.10; C-13).
+2. **Open with the reply queue (R-30).** List everyone waiting on a reply from Ilan: Slack, Gmail, and WhatsApp from the `wa-digest` window. For each: who, channel and link, what they asked, waiting since, and the draft link if one exists. Externals and near-deadline items come first.
+   Suggest one reply block sized to the queue: about 5 minutes per reply, at least 15 and at most 90 minutes, in the **first** free gap of the day. If no gap is long enough, split it. Empty queue → no block. It is never a fixed or recurring block (src: Ilan 26.10).
+3. Then the tasks: Hebrew, at most 7 items, 🔥 Today before 🔴 Overdue, each with a concrete reason (src: LEARNING-LOG §0; R-01, R-02).
+4. Suggested block per item: a 30-min gap 08:00-19:00 from the real calendar, after the reply block. Calendar unreadable → say so, suggest no times (src: R-26).
+5. Personal track: separate section, at most 3 items, health first. Main-session DM only, never a group (src: R-17, R-18; MEMORY.md:34).
+6. Overdue > 10 → propose specific cuts or reschedules. Proposals only (src: LESSONS.md:2711-2712; R-10).
+7. Send to Slack `user:U038UEUQC1Y` and check the result (src: CLAUDE.md repo rules).
+8. Ilan replies `apply all` / `apply 1,3` / `skip`. Claude applies. Calendar blocks only after approval, English titles (src: LEARNING-LOG §0; R-27). `morning-dynamic-blocks` does not auto-book (src: Ilan 21.10; C-13).
 
 **Steps: B, Ilan+Or brief**
 1. Every item has its original link (src: MEMORY.md:39, :198).
@@ -36,4 +38,4 @@ Gate first: system clock (P5), then `is_holiday.py` (exit 0 = stop) (src: HEARTB
 
 **Resolved 21.10 (Ilan).** No auto-booking (C-13). Keep both briefs: A = Ilan's tasks and calendar; B = coverage, company events, day prep, social mentions.
 
-**Sources.** LEARNING-LOG §0, §1 (R-01/02/10/17/18/26/27); CLAUDE.md P1-P5; MEMORY.md:58-71; proposed/processes/morning-brief-and-standup.md.
+**Sources.** LEARNING-LOG §0, §1 (R-01/02/10/17/18/26/27/30); CLAUDE.md P1-P5; MEMORY.md:58-71; proposed/processes/morning-brief-and-standup.md.

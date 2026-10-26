@@ -137,6 +137,12 @@ Report these at the bottom of the brief as done: items already `Done` or `Comple
 
 **Read the calendar first.** Today's events for Ilan, {{me.tz}}. Ignore events Ilan has declined. An all-day or multi-day Out of Office is context, not a meeting; if Ilan is out today, say so at the top and keep the day light. Find real open gaps 08:00-19:00; for today, only gaps that start after the current time (a gap that is already over is not free time). A suggested time block that collides with a meeting destroys trust in the whole brief. (R-26) Every time block you suggest must sit inside a real free gap with room for its length. A meeting counts as busy unless Ilan declined it, it is marked free, or every other person invited declined it (rooms don't count). A block is 30 minutes unless the task clearly needs more. Put deep work in the longest gap, calls and approvals in short gaps, quick wins in 15-30 minute fragments. If the calendar is unreachable, still send the brief, omit time blocks, and say why.
 
+**Replies come first (R-30).** The brief opens with a reply queue: everyone waiting on a reply from Ilan (the `📧 מענה למייל` tasks, plus Slack and Gmail threads where the last message is to him), with who, channel and link, what they asked, and waiting since. Propose exactly one reply block before every other block:
+- Size: about 5 minutes per reply in the queue, at least 15 and at most 90 minutes.
+- Placement: the first real free gap of the day. If no single gap fits, split it across the first gaps.
+- If the queue is empty, propose no reply block.
+- Never a fixed or recurring block: size and place it from today's queue and calendar only.
+
 Create `🗓️ Daily Strategy — <YYYY-MM-DD>` in 📥 Pepper Tasks (status `Working on it`, owner Ilan). Post an update with the full numbered proposal list: every group move, date, priority and email task, one numbered line each. **In the same update, add exactly one more line, on a single line with no line breaks, that the dashboard's Apply all button reads:**
 
 ```
