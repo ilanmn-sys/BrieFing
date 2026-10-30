@@ -15,7 +15,7 @@ Bringing creators to @monday.com Elevate NYC this year was a different kind of c
 
 The day started with coffee and a guided headphone tour of the event, continued with the opening keynote, and then the part I was most excited about: a hands-on workshop where every creator built their own AI agent with our product team. We closed it with a community dinner, sitting together with our ambassadors and team.
 
-A huge thank you to everyone who joined us: @Taki Wong, @Mor Nissim, @Eilon Gruper, @Sajjaad Khader, @Kayvon Jafarzadeh, @Mariana Antaya, @Nyaradzo Bere, @Lauren Vriens, @Jean Kang, @Jade Bonacolta, @Hilary Gridley, @Aria Kim, @Audrey [surname], @Max Talks Tech, @Natasha Badger, @Maitri Mangal, @Danielle Farage, @Alexis Barber, @Fiona [surname], @Soojin [surname] and @Kierra Mcmillian.
+A huge thank you to everyone who joined us: @Taki Wong, @Mor Nissim, @Eilon Gruper, @Sajjaad Khader, @Kayvon Jafarzadeh, @Mariana Antaya, @Nyaradzo Bere, @Lauren Vriens, @Jean Kang, @Jade Bonacolta, @Hilary Gridley, @Aria Kim, @Audrey (softgirlnocode), @Max Talks Tech, @Natasha Badger, @Maitri Mangal, @Danielle Farage, @Alexis Barber, @Fiona Lin, @Soojin Lee and @Kierra Mcmillian.
 
 Thank you to @Aviya Sela and @Shanee Radzewsky for running the workshop, to @Or Elmaliah and @Yuval Apeloig for building this with me, and to our partners at @Creator Buzz and @Narrative.
 
@@ -29,7 +29,7 @@ Can't wait to see what they create. Next stop: Elevate London.
 ## Open items before posting
 
 - **Who actually came.** The tag list comes from the attendance board ("Attending" status). It doesn't confirm who was there on the day. Lauren skipped the dinner. Remove anyone who didn't show up.
-- **Missing surnames and handles:** Audrey, Fiona (@fifbuilds), Soojin. Also check that "Max Talks Tech" matches their LinkedIn page name.
+- **Surnames and handles:** Fiona Lin and Soojin Lee come from Creator Buzz's list. Audrey still has no surname (handle @softgirlnocode). Also check that "Max Talks Tech" matches their LinkedIn page name.
 - **Eilon Gruper.** The roster spells it Ayalon in one place. Check the spelling of his LinkedIn name.
 - **Tagging people.** That's 21 creators, plus 4 people from monday and 2 agencies. LinkedIn may not notify everyone in one post. One option is to tag the creators in a first comment.
-- **Pepper benchmark (step 7).** Skipped. You asked not to update Pepper without your approval.
+- **Pepper benchmark (step 7).** Sent to Pepper 30.10 with Ilan's approval. Waiting on feedback.
