@@ -1,0 +1,26 @@
+{
+  "note": "Elevate NYC (28-29.10.2026) creators to watch until 30.11.2026. Handles marked null are unresolved: resolve on the first run (bio links, Creator Buzz list, SERP) and write them back here. crmItemId = Influencers CRM item (board in config.json influencers.boardId).",
+  "creators": [
+    {"name": "Taki Wong", "source": "Narrative", "crmItemId": 13143426668, "instagram": "https://www.instagram.com/taki.gpt/", "tiktok": null, "youtube": null, "x": null, "linkedin": null},
+    {"name": "Mor Nissim", "source": "Direct (IL)", "crmItemId": 12993720069, "instagram": "https://www.instagram.com/mornissim_", "tiktok": null, "youtube": null, "x": null, "linkedin": null},
+    {"name": "Eilon (Ayalon) Gruper", "source": "Direct (Scherf)", "crmItemId": 13285487559, "instagram": "https://www.instagram.com/eilon.gruper/", "tiktok": null, "youtube": null, "x": null, "linkedin": null},
+    {"name": "Sajjaad Khader", "source": "Narrative", "crmItemId": 13275338333, "instagram": "https://www.instagram.com/sajjaad.khader/", "tiktok": null, "youtube": "https://www.youtube.com/@SajjaadKhader", "x": null, "linkedin": null},
+    {"name": "Kayvon Jafarzadeh", "source": "Narrative", "crmItemId": 13200890527, "instagram": "https://www.instagram.com/kayvon.ai/", "tiktok": null, "youtube": null, "x": null, "linkedin": null},
+    {"name": "Mariana Antaya", "source": "Narrative", "crmItemId": 13200879080, "instagram": "https://www.instagram.com/mar_antaya", "tiktok": null, "youtube": null, "x": null, "linkedin": null},
+    {"name": "Nyaradzo Bere (Naya)", "source": "Narrative", "crmItemId": 13200879116, "instagram": "https://www.instagram.com/theblackfemaleengineer", "tiktok": null, "youtube": null, "x": null, "linkedin": null},
+    {"name": "Lauren Vriens", "source": "Elevate speaker", "crmItemId": 12984716516, "instagram": null, "tiktok": null, "youtube": null, "x": null, "linkedin": "https://www.linkedin.com/in/laurenvriens"},
+    {"name": "Jean Kang", "source": "Elevate speaker", "crmItemId": 12984714651, "instagram": null, "tiktok": null, "youtube": null, "x": null, "linkedin": "https://www.linkedin.com/in/advicewithjean"},
+    {"name": "Jade Bonacolta", "source": "Elevate speaker", "crmItemId": 12984716804, "instagram": null, "tiktok": null, "youtube": null, "x": null, "linkedin": "https://www.linkedin.com/in/jadebonacolta"},
+    {"name": "Hilary Gridley", "source": "Elevate speaker", "crmItemId": 12984713934, "instagram": null, "tiktok": null, "youtube": null, "x": null, "linkedin": "https://www.linkedin.com/in/hilarygridley"},
+    {"name": "Aria Kim", "source": "Creator Buzz", "crmItemId": null, "instagram": "https://www.instagram.com/techwitharia", "tiktok": null, "youtube": null, "x": null, "linkedin": null},
+    {"name": "Audrey (softgirlnocode)", "source": "Creator Buzz", "crmItemId": null, "instagram": "https://www.instagram.com/softgirlnocode", "tiktok": null, "youtube": null, "x": null, "linkedin": null},
+    {"name": "Max Talks Tech", "source": "Creator Buzz", "crmItemId": 13016325387, "instagram": "https://www.instagram.com/maxtalkstech_", "tiktok": null, "youtube": null, "x": null, "linkedin": null},
+    {"name": "Natasha Badger", "source": "Creator Buzz", "crmItemId": null, "instagram": null, "tiktok": null, "youtube": null, "x": null, "linkedin": null},
+    {"name": "Maitri Mangal", "source": "Creator Buzz", "crmItemId": null, "instagram": null, "tiktok": null, "youtube": null, "x": null, "linkedin": null},
+    {"name": "Danielle Farage", "source": "Creator Buzz", "crmItemId": null, "instagram": null, "tiktok": null, "youtube": null, "x": null, "linkedin": null},
+    {"name": "Alexis Barber", "source": "Creator Buzz", "crmItemId": null, "instagram": null, "tiktok": null, "youtube": null, "x": null, "linkedin": null},
+    {"name": "Fiona Lin (fifbuilds)", "source": "Creator Buzz", "crmItemId": null, "instagram": "https://www.instagram.com/fifbuilds", "tiktok": null, "youtube": null, "x": null, "linkedin": null},
+    {"name": "Soojin Lee (soojintech)", "source": "Creator Buzz", "crmItemId": null, "instagram": "https://www.instagram.com/soojintech", "tiktok": null, "youtube": null, "x": null, "linkedin": null},
+    {"name": "Kierra Mcmillian", "source": "Dinner guest", "crmItemId": null, "instagram": null, "tiktok": null, "youtube": null, "x": null, "linkedin": null}
+  ]
+}
