@@ -1,1 +1,56 @@
-{"note":"Dedup log: one entry per post already reported. Key = post URL.","found":[]}
+{
+  "note": "Dedup log: one entry per post already reported. Key = post URL.",
+  "found": [
+    {
+      "url": "https://www.instagram.com/reel/DfFCSOCRUrx/",
+      "creator": "Maitri Mangal",
+      "platform": "Instagram",
+      "type": "Reel",
+      "date": "2026-10-29",
+      "summary": "Announces monday.com's AI Workspace for human and agent teammates, tags @mondaydotcom, 'comment Monday for the link'.",
+      "likes": 832,
+      "comments": 84,
+      "views": null,
+      "viewsNote": "dataset n/a; Creator Buzz reported 26k",
+      "adLabel": "#MondayPartner in caption; IG paid-partnership flag not returned",
+      "crossPosts": [
+        "https://www.facebook.com/maitri.mangal/videos/mondaycom-just-announced-an-ai-workspace-for-you-your-human-teammates-and-your-a/1602375794399501/",
+        "https://www.threads.com/@maitrimangal/video/DfFCizagZWq/"
+      ],
+      "source": "Creator Buzz + Bright Data IG",
+      "reportedOn": "2026-10-31",
+      "dryRun": true
+    },
+    {
+      "url": "https://www.linkedin.com/posts/techwitharia_mondayelevate-ai-tech-activity-7521988514222260224-gjr9",
+      "creator": "Aria Kim",
+      "platform": "LinkedIn",
+      "type": "post",
+      "date": "2026-10-30",
+      "summary": "Recap of her day at Elevate by monday.com in NYC (#mondayelevate).",
+      "likes": "40+ reactions (Google snippet)",
+      "comments": null,
+      "views": null,
+      "adLabel": "none seen (Creator Buzz calls it a freebie)",
+      "source": "Google SERP; Creator Buzz lnkd.in/p/eRyFyj8n likely the same post",
+      "reportedOn": "2026-10-31",
+      "dryRun": true
+    },
+    {
+      "url": "https://www.linkedin.com/posts/laurenvriens_elevate2026-activity-7521564384205148162-UDz7",
+      "creator": "Lauren Vriens",
+      "platform": "LinkedIn",
+      "type": "post",
+      "date": "2026-10-29",
+      "summary": "Her takeaway from speaking at monday.com's Elevate (#elevate2026).",
+      "likes": "20+ reactions (Google snippet)",
+      "comments": null,
+      "views": null,
+      "adLabel": "none seen",
+      "source": "Google SERP",
+      "reportedOn": "2026-10-31",
+      "dryRun": true
+    }
+  ],
+  "lastRun": "2026-10-31T13:20Z (dry run, window since 2026-10-27)"
+}
