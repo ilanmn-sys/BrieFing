@@ -38,6 +38,12 @@ For each match keep: creator, platform, post URL, date, type (Reel, video, post,
 
 Drop anything already in `found.json`.
 
+## 3b. Stories (no live story data)
+
+Bright Data can't read live 24-hour stories, so Ilan documents them by hand.
+- **Highlights:** once a week (Sunday), run the "Instagram accounts highlights" dataset (`gd_ln0751ruyga74vnhk`) for the creators' Instagram profiles. Stories they saved to a highlight that mention monday.com or Elevate count as finds (platform "IG story (highlight)").
+- **Daily reminder in the DM:** add a short "📸 לבדוק סטוריז" line with direct story links (`https://www.instagram.com/stories/<handle>/`) for creators who are still inside their posting window or who posted a monday/Elevate find in the last 48 hours (a story often goes with a post). Ilan opens them and screenshots. Send this line even on days with no other finds, but only for those creators, and stop once the list is empty.
+
 ## 4. Write and report
 
 1. Append new finds to `found.json`.
@@ -46,7 +52,7 @@ Drop anything already in `found.json`.
    - Heading: `📣 תוכן מאלבייט ניו יורק | DD.MM`
    - One line per find: creator, platform, link, one line on the content, numbers.
    - At the end: count found so far this month, and which creators haven't posted anything about monday yet.
-   - If nothing new: send nothing, except on Sundays, when you send one short line with the running count.
+   - If nothing new: send only the stories reminder (if any); on Sundays also one short line with the running count.
 4. On the last run (30.11) send a final summary: all finds by creator, totals, and who never posted.
 
 ## Never

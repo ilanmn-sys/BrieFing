@@ -13,4 +13,4 @@ Watches the 21 creators who came to Elevate NYC (28–29.10.2026) across Instagr
 ## Limits
 - Read-only except: `found.json`, `roster.json`, the CRM Latest post column, one Slack DM to Ilan.
 - LinkedIn is checked through Google search only, so LinkedIn posts can be missed.
-- Stories disappear after 24h and mostly aren't returned by the datasets, so story mentions will be missed unless Creator Buzz posts them.
+- Live stories can't be read. The agent checks Instagram highlights weekly and puts direct story links in the DM so Ilan can screenshot them by hand.
