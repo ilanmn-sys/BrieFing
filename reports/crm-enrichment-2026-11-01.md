@@ -300,3 +300,47 @@ Format: **filled** column = value (source) · **left empty** column: reason.
 - **Tina Huang** (13015681101) — filled: YouTube = https://www.youtube.com/c/TinaHuang1 (existing Handle/Profile URL on the item). Left empty: Instagram: not found in own bios / research / SERP; TikTok: not found in own bios / research / SERP; X: not found in own bios / research / SERP; LinkedIn: no confident LinkedIn match in SERP; Website: not found in own bios / research / SERP; Newsletter: not found in own bios / research / SERP.
 - **Marina Mogilko (Silicon Valley Girl) (@siliconvalleygirl)** (13016325395) — filled: LinkedIn = https://www.linkedin.com/in/marinamogilko (Google SERP via Bright Data (marko_serp_json): name + niche match in result title/snippet); Avg ER = 0.56 (IG, 9 latest posts (Bright Data Instagram Posts)). Left empty: TikTok: not found in own bios / research / SERP; YouTube: not found in own bios / research / SERP; X: not found in own bios / research / SERP; Website: not found in own bios / research / SERP; Newsletter: not found in own bios / research / SERP.
 - **Khalid Al Ameri** (13103001018) — filled: Avg ER = 0.35 (TikTok, 12 latest videos (Bright Data TikTok Profiles)). Left empty: X: not found in own bios / research / SERP; Newsletter: not found in own bios / research / SERP.
+
+## Fixes (01.11, approved)
+
+Approved by Ilan on 01.11.2026. Each cell was re-read right before writing (none had changed since the enrichment run), each "dead" link was re-checked once (Bright Data Instagram/X Profiles `dead_page`, or the YouTube page returning 404 / "This channel does not exist"), and one update ("Data fix 01.11.2026 (approved by Ilan): ...") was posted on every changed item with old → new, reason and source. Email, Phone, Agent/Manager, Stage, Priority, Notes, Deal Value, Deliverables, dates, Email Log and Duplicates were not touched. 21 items changed, 30 cells.
+
+### Changed
+
+| Item | Column | Old → New | Evidence |
+|---|---|---|---|
+| Ryan Carson (13200883493) | Followers | 187 → 187218 | X Profiles re-pull 01.11 (x.com/ryancarson) |
+| Jordan Singer (13200883494) | Followers | 180 → 181042 | X Profiles re-pull (x.com/jsngr) |
+| Nick St. Pierre (13200890524) | Followers | 175 → 175028 | X Profiles re-pull (x.com/nickfloats) |
+| Kris Kashtanova (13200890525) | Followers | 119 → 120187 | X Profiles re-pull (x.com/icreatelife) |
+| Vas (@vasuman) (13200890526) | Followers | 103 → 109255 | X Profiles re-pull (x.com/vasuman) |
+| Brett Dash (13436462626) | Instagram | in/brettdash → instagram.com/brettdash_ | IG = Brett Dashevsky, founder Creator Economy NYC (3,985); LinkedIn column already held in/brettdash |
+| Sara Uy (13436462651) | Instagram | in/saraplowman → instagram.com/sellingsaraa | IG = Sara Uy, SellingSara NYC (127.1K), links linktr.ee/saraplowmannn |
+| Piper Phillips (13436462652) | Instagram | in/piper-phillips → instagram.com/piperphillips | IG = Piper Phillips, links piperphillips.com (84.7K); @pipercassidyphillips is a 1-follower redirect account |
+| Brandon Smithwrick (13436462656) | Instagram | in/brandonsmithwrick → instagram.com/brandonsmithwrick | IG bio: content marketer, hello@brandonsmithwrick.com (9,459) |
+| Dom Odoguardi (13436461413) | Instagram | in/odoguardi → (empty) | no Instagram could be confirmed on SERP |
+| Jake Abrams (13016312244) | Handle/Profile URL | bit.ly/4sEjieG → linkedin.com/in/abramsjake/ | bit.ly resolves to monday.com/w/agents?…utm_campaign=ww-en-brand-other-jake (posted in the item update); Primary Platform is LinkedIn and the item's LinkedIn column (Elevate List sync, odysseyagency.com email) is his |
+| Davidson Daniel (13016325007) | Handle/Profile URL | bit.ly/3NTNUux → youtube.com/@Davidson-Daniel | bit.ly resolves to monday.com/crm?…utm_campaign=ww-en-brand-work_mgmt-davidson (posted in the item update); channel About: "collab@davidsondaniel.biz" = the item's email; ~239K subs |
+| Ayalon Gruper (13285487559) | Handle/Profile URL; Instagram | instagram.com/eilon.gruper and instagram.com/ayalon.gruper → instagram.com/eilon.grouper (both) | both old handles dead_page; eilon.grouper live (167,154) |
+| #01 Ruben Hassid (12759623703) | LinkedIn; X; Handle/Profile URL | in/rubenhassid → in/ruben-hassid; x.com/RubenHssd → x.com/rubenhassid (X and Profile URL) | @RubenHssd dead_page; @rubenhassid = Ruben Hassid, 97,043, links how-to-ai.guide; SERP shows in/ruben-hassid |
+| Riley Brown (12766238324) | Instagram; X; YouTube | IG rileybrownai → realrileybrown; X rileybrownai → rileybrown; YouTube channel/UCgvjjVlWgGJ0-KnP19z1xRQ → @rileybrownai | old IG/X dead_page, old channel "does not exist"; YouTube @rileybrownai (308K) links twitter.com/rileybrown; X @rileybrown (260,946) and IG @realrileybrown (331,930) carry the same riley@rakugomedia.com / Agent Native |
+| Rourke Sefton-Minns (12774803923) | Handle/Profile URL | instagram.com/rourkeheath → instagram.com/rourke/ | @rourkeheath dead_page; @rourke = Rourke Sefton-Minns (bio email rourkeheath@…), same as the Instagram column |
+| Tiago Forte (12726862105) | Instagram | instagram.com/fortelabs → (empty) | dead_page; @tiagoforte is an unrelated 516-follower account, so no replacement |
+| Paul Couvert (12726850348) | Instagram | instagram.com/paulcouvert → instagram.com/itspaulai | @paulcouvert dead_page; @itspaulai bio "200k+ Readers on Twitter/X, AI Educator", links paulcouvert.com (423) |
+| Lillian Chiu (12929980785) | YouTube | @LillianChiu101 → @Lillian__Chiu | old handle 404; @Lillian__Chiu = ex-Spotify, 344K, matches her LinkedIn |
+| #07 Francesco D'Alessio (12759609291) | YouTube; Handle/Profile URL | @keepproductive → @toolfinderhq (both) | @keepproductive 404; Keep Productive was renamed Tool Finder: same channel ID UCYyaQsm2HyneP9CsIOdihBw as his Keep Productive videos, 453K |
+| Jeff Su (13015683224) | LinkedIn | in/jefftsu → in/jsu05 | his YouTube About and video descriptions link linkedin.com/in/jsu05 ("Googler-turned-Educator + YouTuber") |
+
+### Left alone, and why
+
+- Primary Platform on the five X creators: already `X`, nothing to set.
+- Creator Buzz rows: the LinkedIn column already held the same LinkedIn URL, so nothing moved there. Handle/Profile URL on those five rows also holds the LinkedIn URL; left as is, since Primary Platform is LinkedIn and that is the right profile.
+- Jeff Su item 13200890531: already had in/jsu05; no change.
+- Uri Eliabayev 12993723124: no change. @urieli17 is his own account (bio: AI advisor, founder of the "Machine & Deep Learning Israel" community; 863 followers), so the Instagram link stays. No Avg ER was computed from it (the cell is empty). The item's Notes attribute 73K to Instagram (alongside LinkedIn 12K and Facebook group 50K), and no Instagram account of his with ~73K was found. This suggests the 73K is wrong or belongs to another channel, but it is not proof, so Followers stays 73000. Worth a manual check.
+- Riley Brown: Primary Platform and Followers are still empty. Only the dead links were in scope. The live accounts are YouTube 308K, IG 331,930 and X 260,946.
+- Ayalon Gruper: Followers shows 135000 while eilon.grouper has 167,154 today. Not in scope, not changed.
+- Riley Brown LinkedIn (in/rileybrownai), Tiago Forte X (@fortelabs), Ruben's Narrative item 13050333049 (already in/ruben-hassid): not flagged dead, not touched. LinkedIn was never scraped.
+- Davidson Daniel: the YouTube column is still empty. Only the Profile URL was in scope.
+- Artur (Winer Media), Danielle Farage, the high/low ER flags: not part of this approval.
+
+Bright Data used for the fixes: 2 Instagram Profiles runs (16 inputs, 6 dead_page), 2 X Profiles runs (9 inputs, 2 dead_page), about 25 SERP requests, and a few direct YouTube page checks.
