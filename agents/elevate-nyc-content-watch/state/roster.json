@@ -49,7 +49,7 @@
    "tiktok": null,
    "youtube": null,
    "x": null,
-   "linkedin": null
+   "linkedin": "https://www.linkedin.com/in/kayvon-jafarzadeh"
   },
   {
    "name": "Mariana Antaya",
@@ -69,7 +69,7 @@
    "tiktok": null,
    "youtube": "https://www.youtube.com/c/TheBlackFemaleEngineer",
    "x": null,
-   "linkedin": null
+   "linkedin": "https://www.linkedin.com/in/theblackfemaleengineer"
   },
   {
    "name": "Lauren Vriens",
@@ -129,7 +129,7 @@
    "tiktok": "https://www.tiktok.com/@softgirlnocode",
    "youtube": null,
    "x": null,
-   "linkedin": null
+   "linkedin": "https://www.linkedin.com/in/audrey-bai-056158127"
   },
   {
    "name": "Max Talks Tech",
@@ -149,7 +149,7 @@
    "tiktok": null,
    "youtube": null,
    "x": null,
-   "linkedin": null
+   "linkedin": "https://www.linkedin.com/in/natasha-badger"
   },
   {
    "name": "Maitri Mangal",
@@ -159,7 +159,7 @@
    "tiktok": null,
    "youtube": null,
    "x": null,
-   "linkedin": null
+   "linkedin": "https://www.linkedin.com/in/maitrimangal"
   },
   {
    "name": "Danielle Farage",
@@ -179,7 +179,7 @@
    "tiktok": "https://www.tiktok.com/@alexisbarber_",
    "youtube": null,
    "x": null,
-   "linkedin": null
+   "linkedin": "https://www.linkedin.com/in/alexis-barber-57a732129"
   },
   {
    "name": "Fiona Lin (fifbuilds)",
@@ -199,7 +199,7 @@
    "tiktok": "https://www.tiktok.com/@soojintech",
    "youtube": null,
    "x": null,
-   "linkedin": null
+   "linkedin": "https://www.linkedin.com/in/soojin-lee1"
   },
   {
    "name": "Kierra Mcmillian",
@@ -209,8 +209,13 @@
    "tiktok": null,
    "youtube": null,
    "x": null,
-   "linkedin": null
+   "linkedin": "https://www.linkedin.com/in/kierra-mcmillian-3777b51ab"
   }
  ],
- "resolvedOn": "2026-10-31 (first run, dry run): Creator Buzz channel + Google SERP + IG profile bios. Eilon IG corrected eilon.gruper (unavailable) -> eilon.grouper. Kierra Mcmillian unresolved."
+ "resolvedOn": "2026-10-31 (first run, dry run): Creator Buzz channel + Google SERP + IG profile bios. Eilon IG corrected eilon.gruper (unavailable) -> eilon.grouper. Kierra Mcmillian unresolved.",
+ "ilanPost": {
+  "url": "https://www.linkedin.com/feed/update/urn:li:activity:7522572319110823936/",
+  "date": "2026-11-01",
+  "note": "Ilan's LinkedIn recap of the NYC creator program. Report creators who reshare or comment on it as finds (platform LinkedIn, type reshare/comment) when Google search surfaces them."
+ }
 }

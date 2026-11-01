@@ -1,5 +1,7 @@
 # LinkedIn post: Elevate NYC creators program (PUBLISHED by Ilan, 01.11.2026)
 
+Live post: https://www.linkedin.com/feed/update/urn:li:activity:7522572319110823936/
+
 ## Hook options (recommended first)
 
 1. We didn't invite creators to Elevate to film the keynote. We invited them to build.
