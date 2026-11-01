@@ -1,4 +1,4 @@
-# LinkedIn post: Elevate NYC creators program (draft v3, 01.11.2026)
+# LinkedIn post: Elevate NYC creators program (draft v4, 01.11.2026)
 
 ## Hook options (recommended first)
 
@@ -11,7 +11,7 @@
 
 [Hook]
 
-Bringing creators to @monday.com Elevate NYC this year was a different kind of comms project. No press release, no briefing pack. Just a day built for them to use the product with the people who make it, then talk about it however they wanted.
+This year I came to @monday.com Elevate NYC wearing a different hat. Not media relations this time, but our creator program: a day built for creators to use the product with the people who make it, then talk about it however they wanted.
 
 The day started with coffee and a guided headphone tour of the event, then the opening keynote, and then the part I was most excited about: a hands-on workshop where the creators built their own AI agents with our product team. We closed it with a community dinner together with our ambassadors and team.
 
@@ -58,3 +58,7 @@ Pepper didn't answer, so I ran the check. Bright Data Google search worked. Pull
 - **Cut a stock phrase:** "experience the product and the people behind it, then tell the story in their own voice" read like a press release. It's now plainer.
 - **Added a proof point:** "The first videos were live within a day." This is true: Maitri's Reel went up on 29.10, the day after the creator day. Vin reported 26K views, but that's his number, so it isn't in the post.
 - **Left alone:** length (about 170 words), the creator tags in the first comment, and the closing question.
+
+## Changelog (v3 → v4, 01.11, Ilan)
+
+- **Opening paragraph fixed.** v3 said "No press release, no briefing pack", which wasn't true: there was a press release and there were interviews at Elevate. Ilan's own angle is that this time he came under the influencer hat, not media relations. The paragraph now says that, and it no longer implies there was no press work.
