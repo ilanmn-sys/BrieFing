@@ -50,7 +50,37 @@
       "source": "Google SERP",
       "reportedOn": "2026-10-31",
       "dryRun": true
+    },
+    {
+      "url": "https://www.instagram.com/p/DfL7UKblidw/",
+      "creator": "Mor Nissim",
+      "platform": "Instagram",
+      "type": "Carousel",
+      "date": "2026-11-01",
+      "summary": "Hebrew photo recap: back from monday's Elevate conference that flew her to New York; tags @eilon.grouper and @kayvon.ai.",
+      "likes": 121,
+      "comments": 25,
+      "views": null,
+      "adLabel": "none seen; IG paid-partnership flag not returned",
+      "source": "Bright Data IG posts + Google SERP",
+      "reportedOn": "2026-11-01",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.linkedin.com/posts/sajjaad-khader_mondaycom-invited-me-out-to-new-york-this-activity-7522367201740414978-q_-I",
+      "creator": "Sajjaad Khader",
+      "platform": "LinkedIn",
+      "type": "post",
+      "date": "2026-10-31",
+      "summary": "\"monday.com invited me out to New York this week for Elevate '26\" (date from LinkedIn activity id, 31.10 18:41 UTC).",
+      "likes": null,
+      "comments": null,
+      "views": null,
+      "adLabel": "n/a (search snippet only)",
+      "source": "Google SERP",
+      "reportedOn": "2026-11-01",
+      "dryRun": false
     }
   ],
-  "lastRun": "2026-10-31T13:20Z (dry run, window since 2026-10-27)"
+  "lastRun": "2026-11-01T16:58Z (live, window since 2026-10-30; 2 new finds)"
 }
