@@ -19,7 +19,7 @@ My biggest takeaway: when the topic is AI, people need to get their hands on it.
 
 The first videos were live within a day.
 
-Thank you to @Aviya Sela and @Shanee Radzewsky for running the workshop, to @Or Elmaliah and @Yuval Apeloig for building this with me, and to our partners at @Creator Buzz and @Narrative. All the creators who joined us are tagged in the first comment.
+Thank you to @Aviya Sela and @Shanee Radzewsky for running the workshop, to @Or Elmaliah and @Yuval Apeloig for building this with me, and to our partners @Margo Aronovic at @Narrative and @Elophia Mengestu at @Creator Buzz. All the creators who joined us are tagged in the first comment.
 
 Next stop: Elevate London.
 
@@ -66,3 +66,5 @@ Pepper didn't answer, so I ran the check. Bright Data Google search worked. Pull
 ## Changelog (v4 → v5, 01.11)
 - Added Ilan's takeaway (hands-on, meet the builders, apply it to your own use case; the workshop was the highlight and got the best creator feedback).
 - Removed "the part I was most excited about" from the workshop line, so it doesn't repeat the takeaway.
+
+- 01.11: thanks now name Margo Aronovic (Narrative) and Elophia Mengestu (Creator Buzz), at Ilan's request.
