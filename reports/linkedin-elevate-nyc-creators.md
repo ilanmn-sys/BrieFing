@@ -68,4 +68,4 @@ Pepper didn't answer, so I ran the check. Bright Data Google search worked. Pull
 - Removed "the part I was most excited about" from the workshop line, so it doesn't repeat the takeaway.
 
 - 01.11: thanks now name Margo Aronovic (Narrative) and Elophia Mengestu (Creator Buzz), at Ilan's request.
-- 01.11: thanks now include Daniel Lereya, Daria Jona, Nora Wallenius and the whole Elevate team (Ilan). Nora's surname comes from Slack (Event Marketing Lead, Elevate); Ilan said "Nora Jones", to confirm.
+- 01.11: thanks now include Daniel Lereya, Daria Jona, Nora Wallenius and the whole Elevate team (Ilan). Nora's surname comes from Slack (Event Marketing Lead, Elevate); Confirmed by Ilan: Nora Wallenius.
