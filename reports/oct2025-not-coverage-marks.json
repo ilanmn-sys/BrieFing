@@ -1,0 +1,853 @@
+{
+ "date": "2026-11-01",
+ "by": "Claude for Ilan",
+ "rule": "Same rule as Oct 2026 cleanup: stock/analyst blurbs and items not about monday -> Website? = Not coverage. prev = status before change (for undo).",
+ "items": [
+  {
+   "id": "10509195146",
+   "name": "Fin-Link Launches a Manchester & Liverpool Program to Help Teams Choose the Best Online Project Management Tools, Then Implement Them Fast",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10509140403",
+   "name": "New analysis reveals why leading B2B companies dominate ChatGPT search results",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18319108780",
+   "name": "Monday.com downgraded to Neutral at BofA due to self-service risks – TipRanks",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18319126834",
+   "name": "Monday.com downgraded to Neutral at BofA due to self-service risks – TipRanks",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18319095523",
+   "name": "Monday.com downgraded to Neutral at BofA due to self-service risks",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18314985658",
+   "name": "Why Workflows Are Critical for Successful Content Marketing",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18196737548",
+   "name": "4 tools that help measure your productivity and professional evolution",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18101177662",
+   "name": "Akilesh Bapu Joins Hightouch to Lead Generative AI Product Development",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10509185170",
+   "name": "Top 6 Marketing Calendar Tools for 2025 (Based on G2 Data)",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10509139868",
+   "name": "The Essential Role of Digital Tools in Modern Business Success",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10508527422",
+   "name": "STREAMWORK UNVEILS ITS MOST POWERFUL UPDATE YET: 20+ NEW ENTERPRISE FEATURES REDEFINING CREATIVE COLLABORATION",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10508456872",
+   "name": "What is SaaS? A Complete Guide to Software as a Service in 2025",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10589734402",
+   "name": "Monday.com (MNDY) Slipped Following the Reduction in Revenue Guidance",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18319063598",
+   "name": "Monday.com downgraded to Neutral at BofA due to self-service risks",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "10574923786",
+   "name": "Asana Dashboard: Key Features, Pros and Cons",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10589873923",
+   "name": "monday.com Ltd. $MNDY Position Boosted by Sumitomo Mitsui Trust Group Inc.",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18304520728",
+   "name": "Navigating Growth: Smart Strategies for Managing Expansion at Every Stage",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18304520137",
+   "name": "Grammarly Rebrands as Superhuman, Intros Productivity Agents",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18304519609",
+   "name": "Modern CRM Platforms - Review",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18293839367",
+   "name": "Four Key Pieces Of Financial Infrastructure You Need In Place For Your Healthcare Company",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18293839235",
+   "name": "Top Tools That May Be the Best CRM for Sales Teams in 2025",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18293838281",
+   "name": "Top 5 Platforms That May Be the Best CRM for E-commerce Brands Contributor content by Wyles Daniel 3 min to read",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18286076826",
+   "name": "Best Sales CRMs for 2025 That Actually Help You Sell",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18283218158",
+   "name": "Top Tools That May Be the Best CRM Software for Growing Teams",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18283218068",
+   "name": "The Top Sales CRMs for 2025: Making Sales Teams' Lives Easier",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18283217960",
+   "name": "The Platforms That Lead the CRM Software Industry",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18283217880",
+   "name": "Why Teams Are Looking for the Best CRM Companies",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18283217789",
+   "name": "Top Tools to Make or Break the Best CRM for E-commerce Brands Connie Etemadi",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18283217688",
+   "name": "Top Platforms Supporting Some of the Best AI CRM Solutions Today",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18283217583",
+   "name": "Top Platforms That May Be the Best CRM for Sales in 2025",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18283217474",
+   "name": "Platforms That Businesses Might Place Among 2025's Top CRM Tools",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18283217193",
+   "name": "Build Brand Awareness: Strategies to Boost Visibility",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10574923805",
+   "name": "Asana Gantt Chart: A How-to Guide With Pros, Cons & Alternatives",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18283216761",
+   "name": "Qodo Earns Spot on TechCrunch AI Disruptors 60 List",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18283216247",
+   "name": "Hands-On Microsoft 365 Pulse - Weekly Updates (Week 43)",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18283215857",
+   "name": "Business Automation: How to Streamline Operations for Maximum Efficiency",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10589846053",
+   "name": "Peregrine Capital Management LLC Purchases Shares of 102,388 monday.com Ltd. $MNDY",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18272963670",
+   "name": "William Lee's Insightful Post on Becoming a Successful Content Writer on LinkedIn",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18271570051",
+   "name": "Craft Strategic Content, Not Virtual Assistance: Mastering the Art of Timely Article Creation",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18268075002",
+   "name": "The Ultimate Profit Machine: 10 Unstoppable All-in-One PM Tools to Dominate Business Efficiency and ROI",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18262340292",
+   "name": "Trend Analysis: Middle East B2B Customer Experience",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18262339705",
+   "name": "We Reviewed AI-Powered Free Collaboration Tools. These 15 Are Actually Worth Using",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10589747376",
+   "name": "Monday.Com: A Great Dip To Buy Ahead Of Earnings",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18259319243",
+   "name": "What Is Asana? Uses, Features and Pricing",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18259318810",
+   "name": "How Digital Tools Are Transforming Modern Consulting Practices",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18259318687",
+   "name": "7 Business Bottlenecks and How to Turn Them into Breakthroughs",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18259318556",
+   "name": "How Airbyte built a warm outbound motion to 2x its year-over-year pipeline growth rate",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18252595972",
+   "name": "SaveMyCent Celebrates Milestone In Helping Shoppers Save Over $130 Million Since 2019",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10589879120",
+   "name": "Peering Into Monday.Com Ltd's Recent Short Interest",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18249720383",
+   "name": "Ten Takeaways from the 2025 Gold 100 Educational Summit",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18249720313",
+   "name": "Essential Business Infrastructure for Modern Companies",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18249720182",
+   "name": "Introducing CX 2028: A New Perspective on the AI-Powered Future of Digital Customer Experiences from Quack AI",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18249720022",
+   "name": "5 Best AI Meeting Assistants I've Tried and Liked",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18249719773",
+   "name": "Cintas Corporation to Participate in Upcoming Investor Conference",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18249718577",
+   "name": "Buyer Journey vs. Customer Journey",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18242644968",
+   "name": "How Small Businesses Can Leverage AI Without a Big Budget",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18242642474",
+   "name": "AI-Driven Enhancements to Project Risk Management in the PMO",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18240085512",
+   "name": "ClearBridge Select Strategy buys REGN, VRTX & VST; exits ICLR, PCTY & ADBE",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10589844904",
+   "name": "monday.com Ltd. $MNDY Shares Purchased by Nordea Investment Management AB",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18240085363",
+   "name": "I Tested 11 Free Collaboration Tools Online: My Review",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18240085194",
+   "name": "AvePoint Boosts Data Protection Solutions and Agentic AI Support",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18232383324",
+   "name": "Does Strong ARR Growth at monday.com (MNDY) Reinforce Its Long-Term Growth Narrative?",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18232383095",
+   "name": "Beware of sharks and grandmothers: A Brief History of Internet Blackouts",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18232381865",
+   "name": "When It Comes to Content, the Choice Isn't Human vs. AI. It's Generic vs. Genuine",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18232381722",
+   "name": "AWS outage exposes AI's single point of failure",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18228985581",
+   "name": "Is Asana Down Today? Update on the Tool Amid AWS Outage",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18228985208",
+   "name": "AWS Outage: A Major Risk For The Financial Sector?",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18221478549",
+   "name": "How Does AvePoint Secure Cloud Data and AI Integration?",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18217864439",
+   "name": "10 Best Low-Code/No-Code Platforms for Small Businesses in 2025",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18216935522",
+   "name": "Content Writer Roles: Focus on Content Creation, not Virtual Assistance tasks",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18215585719",
+   "name": "The Two-Path Trap in Competitor Analysis",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18214321667",
+   "name": "21 best nonprofit CRM solutions to manage supporters in 2026",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18214321475",
+   "name": "Managing Distributed Engineering Teams: How Nearshore Models Improve Delivery and Reduce Risk",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18214321202",
+   "name": "10 Best Free Project Management Software I Tried and Liked",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18208593389",
+   "name": "20 Best Business Ideas to Start Your Own Business in 2026",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18208592771",
+   "name": "AvePoint Confidence Platform Enhances Data Protection and AI Support",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18206154393",
+   "name": "These platforms and tools are helping HR pros do their jobs",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18206154155",
+   "name": "AI-Driven Acceleration in Enterprise Software: Strategic Adaptation and Competitive Advantage in 2025",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18206153736",
+   "name": "Professional Services Project Management Software: Top Choices for 2025",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10589877171",
+   "name": "monday.com Ltd. (MNDY): A Bull Case Theory",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18196739228",
+   "name": "AvePoint Expands Data Security, Agentic AI Governance in 'Confidence Platform'",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18196739032",
+   "name": "10 Best Kantata Alternatives to Boost Project Management",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18196738362",
+   "name": "How to Scale Your Small Business with Technology and Operational Efficiency",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18189789733",
+   "name": "2025 Fred Case Award Finalist: Paid Community Service Days and Custom Project Management System",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18189789487",
+   "name": "AvePoint Expands Data Protection Solutions and Agentic AI Support within the AvePoint Confidence Platform",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18186701829",
+   "name": "AvePoint expands data protection solutions, AI support in Confidence Platform",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18186701336",
+   "name": "Ralph Lauren elevates AI to the C-suite",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18179451370",
+   "name": "From Scripts to Strategy: AI's Real Impact on Customer Service Careers",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18179451134",
+   "name": "Will AI mean the end of the road for my customer service career?",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18176456127",
+   "name": "Devpost Engineer Swaps Kanban for Gemini AI in Project Management",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18176455900",
+   "name": "Salesforce's AI-Powered Resurgence: A Deep Dive into Strategic Growth and Market Potential",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18176455711",
+   "name": "Salesforce's AI-Powered Resurgence: A Deep Dive into Strategic Growth and Market Potential",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18169568521",
+   "name": "The Best Notion Alternatives for Smarter, Simpler Workflows",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10589734415",
+   "name": "Down 40% In 3 Months, monday.com Is A Buy Once Again (Rating Upgrade)",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18163429746",
+   "name": "Best Tools for Managing Projects with Global Contractors Efficiently",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18162428924",
+   "name": "SGS Korea Medical Device Licensing Consultant Recruitment",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18162428876",
+   "name": "Tech stocks tumble after Trump mulls 'massive increase' in tariffs on Chinese imports",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18162428708",
+   "name": "SentinelOne, monday.com, Manhattan Associates, Pegasystems, and Strategy Stocks Trade Down, What You Need To Know",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18162428618",
+   "name": "Best CRM Software Platforms",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18162428380",
+   "name": "Six tips to help your team be more productive",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18162428182",
+   "name": "These 20 shares have little investor attention, but they can shoot in the US balance sheet season",
+   "prev": "No",
+   "reason": "ticker"
+  },
+  {
+   "id": "18162428096",
+   "name": "From Hustle to Harmony: How Creators Turn Personal Brands into Agencies",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18173996976",
+   "name": "monday.com And 2 More Stocks Estimated To Be Trading Below Their Intrinsic Value",
+   "prev": "No",
+   "reason": "ticker"
+  },
+  {
+   "id": "18154029844",
+   "name": "Lin Zakwiec Transforms Bullion into a Content Writing Hub: Optimizing Virtual Assistant Tasks and Strategies for Content Writer Success",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18147244582",
+   "name": "10 Best CRM Software: Perfect CRM Tools for Consultants and Firms",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18147244193",
+   "name": "10 Best Project Budgeting Software for 2025",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18147243210",
+   "name": "Best Engineering Project Management Software in 2025: A Complete Ranking",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18147243762",
+   "name": "A Guide to Quickbooks Time Tracker: Best Time Tracking Software that Integrates with Quickbooks",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18147242335",
+   "name": "Mastering Project Scheduling Techniques for Effective Project Management",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10589696951",
+   "name": "Will Earnings Optimism Outweigh Analyst Caution in monday.com’s (MNDY) Investment Narrative?",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "10589708505",
+   "name": "monday.com (MNDY): Evaluating Valuation as AI Optimism and Financial Strength Drive Share Price Recovery",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18144409358",
+   "name": "10 Best AI Project Management Tools: Rated by Real Users on G2",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18144408733",
+   "name": "Agile Project Management Software Market to Hit USD 14,711 Million in 2032 Amid Rising Adoption of Agile Methodologies GlobeNewswire | CMI Today at 3:31pm GMT+2",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18144408585",
+   "name": "Projected Growth for Agile Project Management Software Market",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18144408340",
+   "name": "Top 5 Customer Relationship Management (CRM) software's for Small Business.",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18137125904",
+   "name": "Exploring the Main Categories of SaaS in Cloud Computing for 2025",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18137124905",
+   "name": "Building Recurring Revenue With an Affiliate Blog: My 2025 SEO-Driven Strategy Explained",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10589773014",
+   "name": "Monday.com (MNDY) Beats Stock Market Upswing: What Investors Need to Know",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "10589881750",
+   "name": "Monday.com Ltd. (MNDY) Fell Despite Reporting Strong Results",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18134187219",
+   "name": "Why Choosing The Right Tools Enhances Business Communication",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18126802181",
+   "name": "Don't Worry, We'll Get to Solving Your Problem on Slide 87",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18123942545",
+   "name": "RPD Opportunity Fund Posts +3.79% Net Return In September 2025",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18123942356",
+   "name": "Smartsheet Names Rajeev Singh CEO After $8.4B Privatization Deal",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18123942172",
+   "name": "Raj Singh named Smartsheet CEO, returning to enterprise tech roots in the Seattle area",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18116647537",
+   "name": "“I'm incapable of doing my job without AI”: How this top PM uses Claude + ChatGPT as his second brain",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10589728025",
+   "name": "Monday.com (MNDY) Beats Stock Market Upswing: What Investors Need to Know",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18114139264",
+   "name": "Streamlining Collaboration and Asset Longevity",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18112689395",
+   "name": "Fulda Lawyer and Doctor Recommend Provision: Best Practices for Content Writers to Stop Acting as Virtual Assistants",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18109136065",
+   "name": "How to Streamline Your Content Operations with Optimizely CMP",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18109135918",
+   "name": "Is Your CRM Working? CRM Audit & Optimization",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18109135626",
+   "name": "Unveiling Universal Insights: Beyond Being a Virtual Assistant to a Content Creator",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18103494620",
+   "name": "Top Resource Tracker Platforms to Manage Time, Budgets, and Teams",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18103493055",
+   "name": "Ocado Retail enlists Salesforce, Devoteam and Multiverse for its first ever AI Day event",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10589740973",
+   "name": "Wells Fargo & Company Begins Coverage on monday.com (NASDAQ:MNDY)",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "18092304173",
+   "name": "Best Project Portfolio Management Software: PPM Tools Ranked (2025)",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18092303641",
+   "name": "Rewind Enterprise Engine: Enterprise SaaS Data Resilience Gets Even Smarter",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18092302380",
+   "name": "18 Top Content Marketing Agencies 2026 (With Case Studies)",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18084718131",
+   "name": "Managing Your Workload While Setting Up New Home Facilities",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "18084717616",
+   "name": "Which Email Marketing Software Boosts Your Campaigns Best?",
+   "prev": null,
+   "reason": "not-about-monday"
+  },
+  {
+   "id": "10589713531",
+   "name": "Investors Heavily Search monday.com Ltd. (MNDY): Here is What You Need to Know",
+   "prev": null,
+   "reason": "ticker"
+  },
+  {
+   "id": "10589837482",
+   "name": "monday.com (NASDAQ:MNDY) Stock Price Down 5.5% - What's Next?",
+   "prev": null,
+   "reason": "ticker"
+  }
+ ]
+}
