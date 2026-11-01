@@ -1,4 +1,4 @@
-# LinkedIn post: Elevate NYC creators program (draft v4, 01.11.2026)
+# LinkedIn post: Elevate NYC creators program (final v5, 01.11.2026)
 
 ## Hook options (recommended first)
 
@@ -13,11 +13,11 @@
 
 This year I came to @monday.com Elevate NYC wearing a different hat. Not media relations this time, but our creator program: a day built for creators to use the product with the people who make it, then talk about it however they wanted.
 
-The day started with coffee and a guided headphone tour of the event, then the opening keynote, and then the part I was most excited about: a hands-on workshop where the creators built their own AI agents with our product team. We closed it with a community dinner together with our ambassadors and team.
+The day started with coffee and a guided headphone tour of the event, then the opening keynote, and then a hands-on workshop where the creators built their own AI agents with our product team. We closed it with a community dinner together with our ambassadors and team.
 
-[One real takeaway, in your words: what surprised you in the workshop, or what you'll change for London.]
+My biggest takeaway: when the topic is AI, people need to get their hands on it. Meet the people who build the product face to face, and take it straight into their own use case. That's when the value really lands. It's why the workshop was the part I enjoyed most, and the one that got the best feedback from the creators.
 
-The first videos were live within a day. [Optional: link or name one, e.g. Maitri's Reel, if you want a concrete proof point.]
+The first videos were live within a day.
 
 Thank you to @Aviya Sela and @Shanee Radzewsky for running the workshop, to @Or Elmaliah and @Yuval Apeloig for building this with me, and to our partners at @Creator Buzz and @Narrative. All the creators who joined us are tagged in the first comment.
 
@@ -62,3 +62,7 @@ Pepper didn't answer, so I ran the check. Bright Data Google search worked. Pull
 ## Changelog (v3 → v4, 01.11, Ilan)
 
 - **Opening paragraph fixed.** v3 said "No press release, no briefing pack", which wasn't true: there was a press release and there were interviews at Elevate. Ilan's own angle is that this time he came under the influencer hat, not media relations. The paragraph now says that, and it no longer implies there was no press work.
+
+## Changelog (v4 → v5, 01.11)
+- Added Ilan's takeaway (hands-on, meet the builders, apply it to your own use case; the workshop was the highlight and got the best creator feedback).
+- Removed "the part I was most excited about" from the workshop line, so it doesn't repeat the takeaway.
