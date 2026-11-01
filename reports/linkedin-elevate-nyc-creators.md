@@ -1,4 +1,4 @@
-# LinkedIn post: Elevate NYC creators program (draft v2, 30.10.2026)
+# LinkedIn post: Elevate NYC creators program (draft v3, 01.11.2026)
 
 ## Hook options (recommended first)
 
@@ -11,11 +11,13 @@
 
 [Hook]
 
-Bringing creators to @monday.com Elevate NYC this year was a different kind of comms project. No press release, no briefing pack. Just a day designed so they could experience the product and the people behind it, then tell the story in their own voice.
+Bringing creators to @monday.com Elevate NYC this year was a different kind of comms project. No press release, no briefing pack. Just a day built for them to use the product with the people who make it, then talk about it however they wanted.
 
-The day started with coffee and a guided headphone tour of the event, then the opening keynote, and then the part I was most excited about: a hands-on workshop where every creator built their own AI agent with our product team. We closed it with a community dinner together with our ambassadors and team.
+The day started with coffee and a guided headphone tour of the event, then the opening keynote, and then the part I was most excited about: a hands-on workshop where the creators built their own AI agents with our product team. We closed it with a community dinner together with our ambassadors and team.
 
-[One real takeaway from the day, in your words. For example, what surprised you in the workshop, or what you'll do differently in London. Leave it out if nothing comes to mind; don't invent one.]
+[One real takeaway, in your words: what surprised you in the workshop, or what you'll change for London.]
+
+The first videos were live within a day. [Optional: link or name one, e.g. Maitri's Reel, if you want a concrete proof point.]
 
 Thank you to @Aviya Sela and @Shanee Radzewsky for running the workshop, to @Or Elmaliah and @Yuval Apeloig for building this with me, and to our partners at @Creator Buzz and @Narrative. All the creators who joined us are tagged in the first comment.
 
@@ -46,3 +48,13 @@ Pepper isn't working and this session has no Bright Data access, so this round w
 - **Added a placeholder for one real takeaway.** A recap that adds your own point of view gets more engagement than a list of thank-yous. The takeaway is left for you to write so nothing gets invented. ([Writio](https://writio.ai/blog/how-to-write-linkedin-post-after-attending-conference))
 - **Cut "Can't wait to see what they create."** It's generic. The closing question now does that work.
 - **Length unchanged.** About 170 words without the comment, inside the 150 to 300 range the guides recommend. ([The Shield Index](https://theshieldindex.beehiiv.com/p/does-linkedin-post-length-actually-matter))
+
+## Changelog (v2 → v3, 01.11, benchmark run by Claude instead of Pepper)
+
+Pepper didn't answer, so I ran the check. Bright Data Google search worked. Pulling engagement data for LinkedIn posts was blocked by this session's permissions, so the benchmark rests on search snippets of recent LinkedIn posts (creator programs, event recaps, Elevate's own posts), not on reaction counts.
+
+- **Hook:** kept "We didn't invite creators to Elevate to film the keynote. We invited them to build." The strongest recent posts in the scan open with a contrast or a quote, not with the event name.
+- **Removed an unverified claim:** "every creator built their own AI agent" became "the creators built their own AI agents". We don't know that all of them finished one.
+- **Cut a stock phrase:** "experience the product and the people behind it, then tell the story in their own voice" read like a press release. It's now plainer.
+- **Added a proof point:** "The first videos were live within a day." This is true: Maitri's Reel went up on 29.10, the day after the creator day. Vin reported 26K views, but that's his number, so it isn't in the post.
+- **Left alone:** length (about 170 words), the creator tags in the first comment, and the closing question.
