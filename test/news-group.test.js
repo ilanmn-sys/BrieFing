@@ -77,10 +77,11 @@ test('refresh-news-screens: writes one plan doc, never the live deck, never a bo
   assert.ok(tools.includes('mcp__Google_Drive__create_file') && !tools.includes('mcp__Google_Drive__update_file') && !tools.some((t) => /monday_com__(create|change|update)/.test(t)) && !tools.some((t) => t === 'mcp__Slack__slack_send_message'));
 });
 
-test('monthly-media-newsletter: Gmail draft to Ilan only, numbers counted not estimated', () => {
+test('monthly-media-newsletter: draft doc + DM to Ilan only, numbers counted not estimated', () => {
   const { prompt, tools } = load('monthly-media-newsletter');
-  for (const s of ['Gmail drafts only', 'never send', 'to = Ilan\'s own address only', 'Every number is counted from the board', 'no reach, no impressions, no AVE', 'Notes for the editor', 'already drafted']) assert.ok(prompt.includes(s), s);
-  assert.ok(tools.includes('mcp__Gmail__create_draft') && !tools.includes('mcp__Gmail__send_message') && !tools.some((t) => /monday_com__(create|change|update)/.test(t)));
+  for (const s of ['You only draft', 'the only message you send is the DM to Ilan', 'never post in a channel', 'user:{{me.slackUserId}}', 'Every number is counted from the board', 'no reach, no impressions, no AVE', 'Notes for the editor', 'already drafted', 'Do not ask Pepper']) assert.ok(prompt.includes(s), s);
+  assert.ok(tools.includes('mcp__monday_com__create_doc') && tools.includes('mcp__Slack__slack_send_message'));
+  assert.ok(!tools.some((t) => /Gmail__send|monday_com__(change|update|create_(item|update|group))|all_api_write|all_monday_api/.test(t)));
 });
 
 test('quarterly-pr-template-refresh: official sources only, draft to Ilan, never edits the template', () => {

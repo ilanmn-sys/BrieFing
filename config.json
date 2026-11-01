@@ -436,6 +436,28 @@
         "ir.monday.com"
       ],
       "note": "Item 'Global Partnership Press Release Template' on Official PR materials; its updates show how past refreshes were written. The live Google Doc id is not on disk."
+    },
+    "newsletter": {
+      "docWorkspaceId": 15474362,
+      "docWorkspaceName": "Communications-Team",
+      "reviewChannel": "media-relations",
+      "sourceChannel": "monday_in_the_news",
+      "pressReleasesUrl": "https://monday.com/p/press-releases",
+      "signature": "Your media relations team (Alice, Ilan and Or)",
+      "exampleDoc": "https://monday.monday.com/docs/18437978833",
+      "competitors": [
+        "Asana",
+        "ClickUp",
+        "Smartsheet",
+        "Atlassian",
+        "Notion",
+        "Airtable",
+        "Wrike",
+        "Salesforce",
+        "HubSpot",
+        "ServiceNow"
+      ],
+      "note": "Moved 01.11.2026 from Ilan's Cowork desktop task (the October 2026 draft is exampleDoc) into the cloud agent monthly-media-newsletter."
     }
   },
   "agencies": {
