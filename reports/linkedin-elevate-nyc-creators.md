@@ -19,7 +19,7 @@ My biggest takeaway: when the topic is AI, people need to get their hands on it.
 
 The first videos were live within a day.
 
-Thank you to @Aviya Sela and @Shanee Radzewsky for running the workshop, to @Or Elmaliah and @Yuval Apeloig for building this with me, and to our partners @Margo Aronovic at @Narrative and @Elophia Mengestu at @Creator Buzz. All the creators who joined us are tagged in the first comment.
+A big thank you to @Daniel Lereya, to @Aviya Sela and @Shanee Radzewsky for running the workshop, to @Daria Jona for setting every creator up in the product, to @Or Elmaliah and @Yuval Apeloig for building this with me, to @Nora Wallenius and the whole Elevate team, and to our partners @Margo Aronovic at @Narrative and @Elophia Mengestu at @Creator Buzz. All the creators who joined us are tagged in the first comment.
 
 Next stop: Elevate London.
 
@@ -68,3 +68,4 @@ Pepper didn't answer, so I ran the check. Bright Data Google search worked. Pull
 - Removed "the part I was most excited about" from the workshop line, so it doesn't repeat the takeaway.
 
 - 01.11: thanks now name Margo Aronovic (Narrative) and Elophia Mengestu (Creator Buzz), at Ilan's request.
+- 01.11: thanks now include Daniel Lereya, Daria Jona, Nora Wallenius and the whole Elevate team (Ilan). Nora's surname comes from Slack (Event Marketing Lead, Elevate); Ilan said "Nora Jones", to confirm.
