@@ -462,7 +462,8 @@
         "ServiceNow"
       ],
       "note": "Moved 01.11.2026 from Ilan's Cowork desktop task (the October 2026 draft is exampleDoc) into the cloud agent monthly-media-newsletter."
-    }
+    },
+    "coverageRule": "Ilan, 01.11.2026. Assume every item on the board mentions monday.com. COVERAGE: any article in a real media outlet (news, trade, business, tech, local paper editorial, major newsletters), even a short mention. Copies of monday.com's OWN press releases on wires, aggregators and local-paper wire pages are coverage with Type = Syndication. NOT COVERAGE: (1) automated stock/analyst blurbs (MarketBeat, Zacks on Yahoo/Nasdaq, TipRanks, Insider Monkey, Simply Wall St, StockStory, fund letters, market wraps); (2) sponsored 'Contributor content' listicles in local papers; (3) non-outlets: vendor/company blogs, SEO and content farms, Medium/dev.to/Vocal-type platforms, scrapers, and wire copies of OTHER companies' press releases; (4) event calendars and items where 'Monday' is only the weekday or 'Cyber Monday'."
   },
   "agencies": {
     "names": [
