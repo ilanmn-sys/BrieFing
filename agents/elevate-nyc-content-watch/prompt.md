@@ -47,10 +47,12 @@ Bright Data can't read live 24-hour stories, so Ilan documents them by hand.
 ## 4. Write and report
 
 1. Append new finds to `found.json`.
-2. **CRM:** if the creator has a `crmItemId`, write the newest find into the Latest post column (`influencers.columns.latestPost`): date, platform, URL, one line. That is the only board write allowed. Never change any other column, group or item.
+2. **CRM** (every creator has a `crmItemId` in the roster). Two columns only, never any other column, group or item:
+   - **Deliverables** (`long_text_mm5y6bjc`): read the current text first and keep all of it. Append each new find under a line `PUBLISHED (content watch):` (add that line once if it isn't there): `- DD.MM <platform> <type>: <URL> (<one line>; <numbers>)`. Never remove or rewrite the agreed-deliverables text above it.
+   - **Latest Post** (`long_text_mm70dpn`): replace with the newest find: `[DD.MM.YYYY] <platform>: <one line> - <URL>`.
 3. **Slack DM to Ilan** (`user:<me.slackUserId>`, never a channel id; check the send result), in Hebrew, only when there are new finds:
    - Heading: `📣 תוכן מאלבייט ניו יורק | DD.MM`
-   - One line per find: creator, platform, link, one line on the content, numbers.
+   - One line per find: creator, platform, the post link, one line on the content, numbers, and a link to the creator's CRM item (`https://monday.monday.com/boards/<influencers.boardId>/pulses/<crmItemId>`) where it was documented.
    - At the end: count found so far this month, and which creators haven't posted anything about monday yet.
    - If nothing new: send only the stories reminder (if any); on Sundays also one short line with the running count.
 4. On the last run (30.11) send a final summary: all finds by creator, totals, and who never posted.
