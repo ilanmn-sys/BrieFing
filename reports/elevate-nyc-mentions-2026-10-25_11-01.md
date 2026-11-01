@@ -335,3 +335,9 @@ Two LinkedIn posts have engagements far above their likes: the Opening Keynote T
 - Engagement totals add up only what each source returned. They are not comparable across platforms (Sprout engagements include clicks; BD likes don't).
 
 Raw data: reports/elevate-nyc-mentions-2026-10-25_11-01.json (every counted item with source, metrics, `why`, plus dropped candidates and Sprout daily profile data).
+
+## 7. Board follow-up (01.11.2026, approved by Ilan)
+
+The 8 missing articles were added to news board 446791074, group new_group52193, each with an update explaining the source:
+- Pending Review (coverage): 13437229940 Noticias Venevision, 13437229941 Noticias24hrs.com.ve, 13437229942 UC Today preview (28.10). Tier left blank for review.
+- Not coverage under the coverage rule (logged, not counted): 13437184635 MarketBeat, 13437184636 Yahoo Finance copy, 13437184637 TradingView copy, 13437184638 Welcome.AI, 13437184639 Seeking Alpha transcript (publish date blank: page returned 403).
