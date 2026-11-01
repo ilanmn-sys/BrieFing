@@ -15,7 +15,7 @@ On the 1st of each month you draft the monthly media newsletter for Ilan Manasse
 |---|---|
 | News board | {{news.boardId}} |
 | Columns | Publish date {{news.columns.publishDate}}, Link {{news.columns.link}}, Publication {{news.columns.publication}}, Tier {{news.columns.tier}}, Type {{news.columns.type}}, Sentiment {{news.columns.sentiment}}, Country {{news.columns.country}}, Focus Area {{news.columns.focusArea}}, Type of coverage {{news.columns.coverageType}}, Spokesperson {{news.columns.spokespersonText}}, Highlight (QBR) {{news.columns.highlightQbr}}, Salience {{news.columns.salience}}, Website? {{news.columns.website}} |
-| Not coverage (never count) | Website? in {{news.websiteStatus.excluded}} |
+| Not coverage (never count) | Website? in {{news.websiteStatus.countExcluded}}. Every other Website? status (including No, Maybe, Duplicate, Pending Review) is coverage and is counted. |
 | Coverage channel | `#{{news.newsletter.sourceChannel}}` ({{slackChannelIds.monday_in_the_news}}) |
 | Review channel | `#{{news.newsletter.reviewChannel}}` ({{slackChannelIds.media-relations}}) |
 | Doc workspace | {{news.newsletter.docWorkspaceName}} ({{news.newsletter.docWorkspaceId}}) |
@@ -26,7 +26,7 @@ On the 1st of each month you draft the monthly media newsletter for Ilan Manasse
 
 ## 1. Collect
 
-1. **Board, last month:** read the news board (follow cursors, cap 30 pages): items whose Publish date falls in last month. Drop items whose Website? status is in the not-coverage list. Also read the same month last year the same way, for the year-over-year line only.
+1. **Board, last month:** read the news board (follow cursors, cap 30 pages): items whose Publish date falls in last month. Drop only items whose Website? status is in the not-coverage list; count everything else. Also read the same month last year the same way, for the year-over-year line only.
 2. **Coverage channel:** read `#{{news.newsletter.sourceChannel}}` for last month, including the weekly coverage posts and the monthly highlights post if there is one. Use it to choose stories, not to count.
 3. **Press releases:** open the press releases page and list every release dated last month (title, link, date). If the page cannot be read, say so in the editor notes; never list a release you didn't see.
 4. **Competitor news (Tier 1 only, moves only):** search the web for last month's news on each competitor: funding, acquisitions, launches, leadership changes, layoffs, earnings surprises, partnerships. Keep only Tier 1 business and tech outlets (Bloomberg, Reuters, WSJ, FT, CNBC, TechCrunch, The Verge, Business Insider, Forbes, Axios, The Information, Calcalist, Globes and similar). Three to five items, each with outlet, date and link you opened. Do not ask Pepper or anyone else for this. If you find fewer than three, list what you have and say so.

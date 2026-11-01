@@ -374,7 +374,11 @@
         "Rejected correction ask",
         "Fix link",
         "No"
-      ]
+      ],
+      "countExcluded": [
+        "Not coverage"
+      ],
+      "countExcludedNote": "Ilan, 01.11.2026: for coverage counts (newsletter, reports) the Website? column only matters for 'Not coverage'. 'No', 'Duplicate' etc. mean 'not for the website/screens' and still count as coverage. 'excluded' above stays for website/screens/LinkedIn picks."
     },
     "outletTriggerLabel": "Connect media outlet",
     "muckrack": {
