@@ -1,4 +1,4 @@
-# LinkedIn post: Elevate NYC creators program (final v5, 01.11.2026)
+# LinkedIn post: Elevate NYC creators program (PUBLISHED by Ilan, 01.11.2026)
 
 ## Hook options (recommended first)
 
