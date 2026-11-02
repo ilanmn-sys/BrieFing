@@ -28,13 +28,14 @@
       "type": "post",
       "date": "2026-10-30",
       "summary": "Recap of her day at Elevate by monday.com in NYC (#mondayelevate).",
-      "likes": "40+ reactions (Google snippet)",
-      "comments": null,
+      "likes": 127,
+      "comments": 9,
       "views": null,
       "adLabel": "none seen (Creator Buzz calls it a freebie)",
       "source": "Google SERP; Creator Buzz lnkd.in/p/eRyFyj8n likely the same post",
       "reportedOn": "2026-10-31",
-      "dryRun": true
+      "dryRun": true,
+      "metricsAsOf": "2026-11-02 (Bright Data LinkedIn posts dataset)"
     },
     {
       "url": "https://www.linkedin.com/posts/laurenvriens_elevate2026-activity-7521564384205148162-UDz7",
@@ -43,13 +44,14 @@
       "type": "post",
       "date": "2026-10-29",
       "summary": "Her takeaway from speaking at monday.com's Elevate (#elevate2026).",
-      "likes": "20+ reactions (Google snippet)",
-      "comments": null,
+      "likes": 30,
+      "comments": 3,
       "views": null,
       "adLabel": "none seen",
       "source": "Google SERP",
       "reportedOn": "2026-10-31",
-      "dryRun": true
+      "dryRun": true,
+      "metricsAsOf": "2026-11-02 (Bright Data LinkedIn posts dataset)"
     },
     {
       "url": "https://www.instagram.com/p/DfL7UKblidw/",
@@ -73,14 +75,81 @@
       "type": "post",
       "date": "2026-10-31",
       "summary": "\"monday.com invited me out to New York this week for Elevate '26\" (date from LinkedIn activity id, 31.10 18:41 UTC).",
-      "likes": null,
-      "comments": null,
+      "likes": 91,
+      "comments": 7,
       "views": null,
       "adLabel": "n/a (search snippet only)",
       "source": "Google SERP",
       "reportedOn": "2026-11-01",
+      "dryRun": false,
+      "metricsAsOf": "2026-11-02 (Bright Data LinkedIn posts dataset)"
+    },
+    {
+      "url": "https://www.instagram.com/reel/DfPfGjVuf0w/",
+      "creator": "Aria Kim",
+      "platform": "Instagram",
+      "type": "Reel",
+      "date": "2026-11-02",
+      "summary": "First time attending monday.com Elevate, 'had the best time ever'; tags @mondaydotcom.",
+      "likes": 71,
+      "comments": 2,
+      "viewsNote": "views n/a from posts and reels datasets",
+      "adLabel": "#mondaypartner in caption; is_paid_partnership false",
+      "crossPosts": [
+        "https://www.linkedin.com/posts/techwitharia_mondaypartner-activity-7523024274186686465-d_pf"
+      ],
+      "source": "Bright Data IG posts + Creator Buzz (Elophia)",
+      "views": null,
+      "reportedOn": "2026-11-02",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.linkedin.com/posts/techwitharia_mondaypartner-activity-7523024274186686465-d_pf",
+      "creator": "Aria Kim",
+      "platform": "LinkedIn",
+      "type": "post",
+      "date": "2026-11-02",
+      "summary": "Same video as her IG reel: first time attending monday.com Elevate.",
+      "likes": 19,
+      "comments": 1,
+      "adLabel": "#Mondaypartner in text",
+      "source": "Creator Buzz lnkd.in/p/eQchZ24F -> Bright Data LinkedIn posts gd_lyy3tktm25m4avu764",
+      "views": null,
+      "reportedOn": "2026-11-02",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.instagram.com/reel/DfPXTwYvs8m/",
+      "creator": "Audrey (softgirlnocode)",
+      "platform": "Instagram",
+      "type": "Reel",
+      "date": "2026-11-02",
+      "summary": "Asks engineers and PMs at @mondaydotcom Elevate how they'd judge the best AI agent.",
+      "likes": 90,
+      "comments": 14,
+      "viewsNote": "views n/a",
+      "adLabel": "none in caption; is_paid_partnership false",
+      "source": "Bright Data IG posts + Creator Buzz (Vin)",
+      "views": null,
+      "reportedOn": "2026-11-02",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.instagram.com/reel/DfPzjDhJkHk/",
+      "creator": "Fiona Lin (fifbuilds)",
+      "platform": "Instagram",
+      "type": "Reel",
+      "date": "2026-11-02",
+      "summary": "'Come with me to monday.com's flagship AI conference, Elevate'; tags @mondaydotcom.",
+      "likes": 32,
+      "comments": 4,
+      "viewsNote": "views n/a",
+      "adLabel": "#mondaypartner in caption; is_paid_partnership false",
+      "source": "Bright Data IG posts",
+      "views": null,
+      "reportedOn": "2026-11-02",
       "dryRun": false
     }
   ],
-  "lastRun": "2026-11-01T16:58Z (live, window since 2026-10-30; 2 new finds)"
+  "lastRun": "2026-11-02T17:57Z (live, window since 2026-11-01T16:58Z; 4 new finds: Aria Kim IG+LinkedIn, Audrey IG, Fiona Lin IG; DM https://monday.slack.com/archives/D038RJ45RQD/p1793642202110179)"
 }
