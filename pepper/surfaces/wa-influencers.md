@@ -4,6 +4,7 @@ chat_ids: ["120363412118905020@g.us"]
 platform: WhatsApp
 last_verified: 2026-10-21
 owner: Ilan
+sensitivity: mixed-external
 ---
 # Influencers @ monday (WhatsApp)
 

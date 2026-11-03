@@ -15,6 +15,10 @@ for p in sorted(root.glob("agents/*/prompt.md")):
         errors.append(f"{p}: hard-coded DM channel id (use config + user:<id>)")
     if re.search(r"group_mm5p24nn|group_mm65750m|group_mm65tada|group_mm5ptt65|group_mm5wxtwc", t) and "never" not in low:
         errors.append(f"{p}: R-13 references legacy group without a 'never' guard")
+    tools_p = p.parent / "allowed-tools.json"
+    tools = tools_p.read_text() if tools_p.exists() else ""
+    if re.search(r"slack_send_message|create_draft|create_item|create_update", tools) and "R-34" not in t:
+        errors.append(f"{p}: R-34 missing shared-memory read/dedupe/write step (agent sends, drafts or writes)")
     if re.search(r"(create|set|add)[^\n]{0,40}(deadline|due date)[^\n]{0,40}automation", low):
         errors.append(f"{p}: R-04 possible dating of an automation")
 for e in errors:

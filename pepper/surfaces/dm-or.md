@@ -4,6 +4,7 @@ chat_ids: ["whatsapp: Or (number ending 4996)", "slack:user:USZ21R877"]
 platform: WhatsApp + Slack
 last_verified: 2026-10-21
 owner: Ilan
+sensitivity: ilan+or
 ---
 # Or 1:1 (WhatsApp DM + Slack DM)
 

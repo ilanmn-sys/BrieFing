@@ -49,3 +49,9 @@ Leave out an empty section. Order by deadline, oldest first, and cap at {{agenci
 ## Result
 
 Your last line must be `RESULT: {"delivery":"ok|failed|n/a","summary":"..."}`. `ok` only if the DM was sent and the send result confirmed. `failed` if the board could not be read or the send failed. `n/a` if there were no open agency items, or this was a dry run. The summary is one sentence: items counted, overdue, stale.
+
+## Shared memory (R-34)
+Read `pepper/playbooks/cross-awareness.md`. Board: `config.json` → `sharedMemory`.
+- **Before** any send, draft or task about a person or topic: if you can read boards, query the Shared Memory board for that topic/person (Open rows of any age, Closed rows from the last 14 days). If an Open Draft, or a Sent row under 24h old, exists for the same counterpart + topic, don't create another: point to it in your summary.
+- **After** each send, draft, deletion, decision or new waiting-on: if your allowed tools include `create_item`, create one row; otherwise list the rows under `Ledger rows:` in your run summary for the session that relays you to write. Each row: item name = one-line summary ≤120 chars; Type, Surface, Actor `agent:<this agent>`, Topic, People, Audience, Link, State, Dedupe key, When. Never the message body. Budget, contracts, disputes, earnings, legal, HR and health rows are `owner-only`.
+- A failed ledger read or write is reported as a failure (P4), never skipped silently. In a dry run, list the rows you would write.

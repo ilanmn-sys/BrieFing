@@ -4,6 +4,7 @@ chat_ids: ["120363402527748008@g.us", "slack:C08STFTQFME"]
 platform: WhatsApp + Slack
 last_verified: 2026-10-21
 owner: Ilan
+sensitivity: internal
 ---
 # Communications: Comms✨ (WhatsApp) + #communications-team (Slack)
 

@@ -4,6 +4,7 @@ chat_ids: ["120363410963804272@g.us"]
 platform: WhatsApp
 last_verified: 2026-10-21
 owner: Ilan
+sensitivity: internal
 ---
 # monday alumni internal task force ✨🌸 (WhatsApp)
 

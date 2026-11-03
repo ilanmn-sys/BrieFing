@@ -20,7 +20,8 @@
     "teamRequestsArchive": 467729906,
     "routingTable": 18432388543,
     "triageRules": 18431311457,
-    "routingTableNote": "Ilan confirmed 2026-10-07: Routing is 'Comms Routing — who owns what' (18432388543), the routing table the Switchboard triage reads. routing and routingTable are the same board."
+    "routingTableNote": "Ilan confirmed 2026-10-07: Routing is 'Comms Routing — who owns what' (18432388543), the routing table the Switchboard triage reads. routing and routingTable are the same board.",
+    "sharedMemory": 18438292586
   },
   "groups": {
     "canonical": {
@@ -538,7 +539,28 @@
       ]
     },
     "legacyElevateListBoardId": 18435082524,
-    "boardNote": "Ilan, 01.11.2026: Influencers CRM 2026 (boardId) is the only creator board. Creator Buzz creators were imported from the Elevate List board (legacy, read-only) into groups.creatorBuzz; NYC Creator Buzz attendees are in group_mm7tsp9y. All syncs write here only."
+    "boardNote": "Ilan, 01.11.2026: Influencers CRM 2026 (boardId) is the only creator board. Creator Buzz creators were imported from the Elevate List board (legacy, read-only) into groups.creatorBuzz; NYC Creator Buzz attendees are in group_mm7tsp9y. All syncs write here only. Update 03.11.2026: the Elevate List board is no longer read-only for London; see influencers.elevateList.",
+    "elevateListBoardId": 18435082524,
+    "elevateList": {
+      "londonGroup": "group_mm8rqrbe",
+      "columns": {
+        "mondayApproval": "color_mm8rmc28",
+        "approvedBy": "multiple_person_mm8rchhp",
+        "approvalDate": "date_mm8r7jmh",
+        "badgeName": "text_mm8rw2qs",
+        "londonAttendance": "dropdown_mm8rda5v",
+        "masterclassPrefs": "long_text_mm8r9qgd",
+        "dietary": "text_mm8ree5v",
+        "nationality": "country_mm8rst8x",
+        "ukEta": "color_mm8r7y8g",
+        "photoConsent": "boolean_mm8r14f6",
+        "flight": "text_mm8rt881",
+        "accountUrl": "text_mm8g1wbr",
+        "accountEmail": "text_mm8gbjzj"
+      },
+      "formToken": "2094913f1f768b32996119328638dfbc",
+      "note": "Ilan, 03.11.2026: Elevate London is managed on the Elevate List board (shared with Creator Buzz: Vin, Elophia, Melissa can see it). Write only to the LONDON CREATORS group. Nothing internal on this board (budget totals, disputes, renewals). A creator is invoiced only when monday approval = Approved (set by Ilan or Yuval)."
+    }
   },
   "inbox": {
     "channel": "ilan-pa",
@@ -583,5 +605,23 @@
       ]
     },
     "note": "Per connector: if its token is in .env the server calls the API directly; otherwise it goes through Claude Code's connectors (snapshot every 15 minutes for reads, a short claude -p run for each write). DATA_MODE=api|connectors forces one mode for all."
+  },
+  "sharedMemory": {
+    "boardId": 18438292586,
+    "groupId": "topics",
+    "columns": {
+      "type": "color_mm8rry6y",
+      "surface": "text_mm8rmdd5",
+      "actor": "text_mm8r3sqb",
+      "topic": "text_mm8r8q6s",
+      "project": "text_mm8r6qc2",
+      "people": "text_mm8rhjr2",
+      "audience": "color_mm8r6zhp",
+      "link": "link_mm8rhfed",
+      "state": "color_mm8rjzd1",
+      "dedupeKey": "text_mm8rwkaj",
+      "when": "date_mm8r5ag6"
+    },
+    "note": "Created 2026-11-03 (Ilan approved: all sessions, no pilot). Private board, owner Ilan, Pepper subscribed. Spec: pepper/playbooks/cross-awareness.md. One row = one event: one-line summary as the item name + link; never the full message, never budget/contract/dispute/earnings/health/HR content."
   }
 }

@@ -4,6 +4,7 @@ chat_ids: ["19175666675-1579723915@g.us"]
 platform: WhatsApp
 last_verified: 2026-10-21
 owner: Ilan
+sensitivity: mixed-external
 ---
 # mondayPR🇮🇱 (WhatsApp)
 

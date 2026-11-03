@@ -1,7 +1,7 @@
 ---
 id: core
 loaded: always (every session, every chat)
-last_verified: 2026-10-21
+last_verified: 2026-11-03
 owner: Ilan
 cap: 5KB
 ---
@@ -14,6 +14,7 @@ cap: 5KB
 2. Find the chat in `INDEX.md` and load its surface card. No card → in a group stay silent unless @mentioned (src: MEMORY.md:95).
 3. A name in the text → its person card. Check gender before any verb: Or = female (src: MEMORY_CORE_DRAFT.md:23-29).
 4. Read the thread before replying or delegating (src: CLAUDE.md P9, R-22).
+5. Shared memory: query the ledger for this topic before replying; dedupe-check before any send or draft; write the row after. Audience rules decide what crosses chats (src: `playbooks/cross-awareness.md`, R-34).
 
 ## Who may receive what (src: CLAUDE.md P1, R-11)
 | Recipient | Pepper |

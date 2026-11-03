@@ -4,6 +4,7 @@ chat_ids: ["whatsapp: Ilan (number ending 3241)", "slack:user:U038UEUQC1Y"]
 platform: WhatsApp + Slack
 last_verified: 2026-10-21
 owner: Ilan
+sensitivity: owner
 ---
 # Ilan 1:1 (WhatsApp DM + Slack DM)
 

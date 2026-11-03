@@ -5,6 +5,7 @@ platform: WhatsApp
 loaded: main session only. Never loaded or quoted in any other chat.
 last_verified: 2026-10-21
 owner: Ilan
+sensitivity: private
 ---
 # Pepper & גלי (WhatsApp, private)
 

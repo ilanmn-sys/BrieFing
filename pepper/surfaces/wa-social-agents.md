@@ -4,6 +4,7 @@ chat_ids: ["120363409615287219@g.us"]
 platform: WhatsApp
 last_verified: 2026-10-21
 owner: Ilan
+sensitivity: internal
 ---
 # Social team agents 🤖 (WhatsApp)
 

@@ -4,6 +4,7 @@ chat_ids: ["120363046265574722@g.us"]
 platform: WhatsApp
 last_verified: 2026-10-21
 owner: Ilan
+sensitivity: internal
 ---
 # Media relations ✨ (WhatsApp)
 

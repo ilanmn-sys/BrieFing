@@ -1,7 +1,7 @@
 # Registry (IDs only)
 
 > Generated from `config.json` by `scripts/build-pepper-registry.py` — do not hand-edit.
-> config.json sha256: `6f28690bec51`. If it differs from the live file, rerun the script.
+> config.json sha256: `ccdaecd6977f`. If it differs from the live file, rerun the script.
 > Rules about how to use these IDs live in CORE.md and the cards, not here.
 
 ## People and bots
@@ -36,6 +36,7 @@ Not a send target: Slack DM channel `D0BCAGJV0AD`. Send to `user:<id>` (S-005).
 | routing | 18432388543 |
 | teamRequestsArchive | 467729906 |
 | triageRules | 18431311457 |
+| sharedMemory | 18438292586 |
 | agencies.syncNotes (Scherf <> monday.com) | 473764901 |
 | news.spokespeople | 457713771 |
 
@@ -80,7 +81,7 @@ Columns: timeline `timeline` · owner `person` · status `status8` · category `
 Groups: newArticles `new_group52193` · latestQuarter `group_mm1qym02`
 
 ## Influencers CRM 18425284143
-Groups: topPriority `topics` · activeOffers `group_mm6qet2w` · emailLog `group_mm6bw9km` · duplicates `group_mm63b5xd` · newYork `group_mm7tsp9y`
+Groups: topPriority `topics` · activeOffers `group_mm6qet2w` · emailLog `group_mm6bw9km` · duplicates `group_mm63b5xd` · newYork `group_mm7tsp9y` · uk `group_mm8mgdfg` · creatorBuzz `group_mm8p2w4`
 Columns used by the pilot: elevate `color_mm6y6wrt` · stage `color_mm5yncht` · owner `multiple_person_mm5y3cjy`
 
 ## Slack channels

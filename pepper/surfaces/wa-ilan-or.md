@@ -4,6 +4,7 @@ chat_ids: ["120363426187717225@g.us"]
 platform: WhatsApp
 last_verified: 2026-10-21
 owner: Ilan
+sensitivity: ilan+or
 ---
 # אילן אור ו-Pepper (WhatsApp)
 
