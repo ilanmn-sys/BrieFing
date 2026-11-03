@@ -108,6 +108,8 @@ the evidence behind it. Remove a rule the moment it stops being true.
   - The reply time is **not a fixed or recurring block**. Size it each morning from that day's queue: about 5 minutes per reply, at least 15 and at most 90 minutes. Place it in the **first** real free gap of the day (R-26). If no single gap fits, split it across the first gaps; if the day is packed, say so and put the top 3 replies first.
   - An empty queue means no block.
   - *(2026-10-26, Ilan: "the first part of the day is for replying to people… not fixed, dynamic by the day")*
+- **`R-32`** **Every message to a person opens by asking how they are.** Any Slack DM, email or reply that Claude, Pepper or an agent drafts for Ilan to a person starts with a short, warm check-in before the ask ("היי X, מה קורה? מה שלומך?" / "Hi X, hope you're well!"), in the message's language. One line, not a paragraph; skip it only in a reply inside a fast back-and-forth the same day. *(2026-11-03, Ilan: "always make sure to ask how people are")*
+- **`R-33`** **Elevate London emails CC Yuval Apeloig** (yuvalap@monday.com), internal or external, until the event ends (24.11.2026). Never reveal internal considerations (budget, renewals, disputes) to external parties. *(2026-11-03, Ilan)*
 - **`R-29`** **Instructions to Brie Fing stay private.** Ilan's asks to Brie Fing (the comms request desk agent) go to its Slack DM by user id (`config.requests.briefingAgentSlackId`), with the request link. Never post them as an update on the Comms Requests board: requesters and the team read those updates. Brie Fing's own replies to requesters on the board are fine. *(2026-10-12, Ilan)*
 
 ### Personal track
@@ -318,6 +320,7 @@ call would have prevented it.
 
 | Date | Change | Trigger |
 |---|---|---|
+| 2026-11-03 | Added `R-32` (open every message with a how-are-you) and `R-33` (CC Yuval on Elevate London emails; never share internal considerations externally) | Ilan, 03.11 |
 | 2026-10-26 | Added `R-31`: any message for Ilan is shown for approval first; sent directly only on an explicit "send" | A Slack DM went out on "רוצה לשלוח הודעה"; Ilan: "send it to me for approval first unless I explicitly asked to send" |
 | 2026-10-26 | Added `R-30`: each day opens with a reply queue; the reply block is sized and placed per day (first free gap, ~5 min/reply), never a fixed recurring block | Ilan: "the first part of the day is for replying to people… not fixed, dynamic by the day" |
 | 2026-10-25 | Amended `R-13`: added `meeting-action-items-to-tasks` as the 4th agent allowed to create in 📥 Pepper Tasks (Ilan's own meeting action items only, max 8 a run) | Ilan: "an agent that takes action items from meetings and puts them into tasks, permanently" |
