@@ -149,7 +149,54 @@
       "views": null,
       "reportedOn": "2026-11-02",
       "dryRun": false
+    },
+    {
+      "url": "https://www.instagram.com/reel/DfQSSO1Pj_k/",
+      "creator": "Natasha Badger",
+      "platform": "Instagram",
+      "type": "Reel",
+      "date": "2026-11-02",
+      "summary": "'I partnered with @mondaydotcom for Elevate in NYC': ideas for AI agents in her creator business; built an agent for campaign ops.",
+      "likes": 56,
+      "comments": 14,
+      "views": null,
+      "viewsNote": "views n/a",
+      "adLabel": "#ad in caption; IG paid-partnership flag not returned",
+      "source": "Bright Data IG posts + Creator Buzz (Vin)",
+      "reportedOn": "2026-11-03",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.instagram.com/reel/DfQ0WbQRZnp/",
+      "creator": "Maitri Mangal",
+      "platform": "Instagram",
+      "type": "Reel",
+      "date": "2026-11-03",
+      "summary": "Elevate takeaway: give every employee a week to learn AI; 'comment Monday' to try a @mondaydotcom agent.",
+      "likes": 212,
+      "comments": 32,
+      "views": null,
+      "viewsNote": "views n/a",
+      "adLabel": "#MondayPartner in caption; IG paid-partnership flag not returned",
+      "source": "Bright Data IG posts + Creator Buzz (Vin)",
+      "reportedOn": "2026-11-03",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=9rinEHiwvbY",
+      "creator": "Mor Nissim",
+      "platform": "YouTube",
+      "type": "video",
+      "date": "2026-11-03",
+      "summary": "Hebrew tutorial: building a monday AI agent connected to WhatsApp, after monday flew her to Elevate NYC; monday trial link try.monday.com.",
+      "likes": 4,
+      "comments": 0,
+      "views": 110,
+      "adLabel": "is_sponsored false; monday trial link in description",
+      "source": "Bright Data YouTube videos",
+      "reportedOn": "2026-11-03",
+      "dryRun": false
     }
   ],
-  "lastRun": "2026-11-02T17:57Z (live, window since 2026-11-01T16:58Z; 4 new finds: Aria Kim IG+LinkedIn, Audrey IG, Fiona Lin IG; DM https://monday.slack.com/archives/D038RJ45RQD/p1793642202110179)"
+  "lastRun": "2026-11-03T17:01Z (live, window since 2026-11-02T17:57Z; 3 new finds: Natasha Badger IG, Maitri Mangal IG, Mor Nissim YouTube; CRM Latest Post only (Deliverables not written this run, per run instructions); DM https://monday.slack.com/archives/D038RJ45RQD/p1793725240141149; ledger row 13455269056. Not counted: Vin Matano (Creator Buzz founder, not in roster) posted his own Elevate content 03.11. Naya YouTube failed (HPE_HEADER_OVERFLOW); some SERP queries failed upstream.)"
 }
