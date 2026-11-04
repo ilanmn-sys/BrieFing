@@ -196,7 +196,105 @@
       "source": "Bright Data YouTube videos",
       "reportedOn": "2026-11-03",
       "dryRun": false
+    },
+    {
+      "url": "https://www.instagram.com/reel/DfUrUf0ggzi/",
+      "creator": "Danielle Farage",
+      "platform": "Instagram",
+      "type": "Reel",
+      "date": "2026-11-04",
+      "summary": "Invited to Elevate by monday.com; built her first AI agent 'Deal Chaser' to handle outreach.",
+      "likes": 18,
+      "comments": 7,
+      "views": null,
+      "viewsNote": "views n/a",
+      "adLabel": "none in caption; IG paid-partnership flag not returned",
+      "source": "Creator Buzz (Elophia) + Bright Data IG posts",
+      "reportedOn": "2026-11-04",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.linkedin.com/posts/danielle-farage_ive-never-been-great-at-outreach-anyone-activity-7523748425310511104--vYX",
+      "creator": "Danielle Farage",
+      "platform": "LinkedIn",
+      "type": "post",
+      "date": "2026-11-04",
+      "summary": "Same content as her IG reel; tags monday.com.",
+      "likes": 11,
+      "comments": 2,
+      "views": null,
+      "adLabel": "none in text",
+      "aliases": [
+        "https://www.linkedin.com/posts/danielle-farage_ive-never-been-great-at-outreach-anyone-ugcPost-7523741987997515776-O_Ht/"
+      ],
+      "source": "Creator Buzz (Elophia) + Bright Data LinkedIn posts",
+      "reportedOn": "2026-11-04",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.instagram.com/reel/DfTMmYHRf2I/",
+      "creator": "Max Talks Tech",
+      "platform": "Instagram",
+      "type": "Reel",
+      "date": "2026-11-04",
+      "summary": "Build custom AI agents with zero setup, 'comment Agents'; #MondayPartner @mondaydotcom.",
+      "likes": 5,
+      "comments": 0,
+      "views": null,
+      "viewsNote": "views n/a",
+      "adLabel": "#MondayPartner in caption; IG paid-partnership flag not returned",
+      "crossPosts": [
+        "https://www.facebook.com/share/r/1E95tfBtLp/"
+      ],
+      "source": "Creator Buzz (Elophia) + Bright Data IG posts",
+      "reportedOn": "2026-11-04",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.tiktok.com/@maxtalkstech/video/7704111479934569758",
+      "creator": "Max Talks Tech",
+      "platform": "TikTok",
+      "type": "video",
+      "date": "2026-11-04",
+      "summary": "Same video as his IG reel; #mondaydotcom.",
+      "likes": 22,
+      "comments": 1,
+      "views": 304,
+      "adLabel": "#mondaydotcom; no commerce label returned",
+      "source": "Creator Buzz (Elophia) + Bright Data TikTok posts",
+      "reportedOn": "2026-11-04",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.youtube.com/shorts/HQu1gjC41jg",
+      "creator": "Max Talks Tech",
+      "platform": "YouTube",
+      "type": "Short",
+      "date": "2026-11-04",
+      "summary": "Same video as his IG reel; #mondaypartner.",
+      "likes": 18,
+      "comments": 1,
+      "views": 1080,
+      "adLabel": "#mondaypartner; is_sponsored false",
+      "source": "Creator Buzz (Elophia) + Bright Data YouTube videos",
+      "reportedOn": "2026-11-04",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.linkedin.com/posts/maitrimangal_mondaypartner-activity-7523363961589846016-kxes",
+      "creator": "Maitri Mangal",
+      "platform": "LinkedIn",
+      "type": "post",
+      "date": "2026-11-03",
+      "summary": "Same Elevate takeaway as her 03.11 IG reel (a week to learn AI), monday.com trial link; found late.",
+      "likes": 90,
+      "comments": 4,
+      "views": null,
+      "adLabel": "#MondayPartner in text",
+      "source": "Google SERP + Bright Data LinkedIn posts",
+      "reportedOn": "2026-11-04",
+      "dryRun": false
     }
   ],
-  "lastRun": "2026-11-03T17:01Z (live, window since 2026-11-02T17:57Z; 3 new finds: Natasha Badger IG, Maitri Mangal IG, Mor Nissim YouTube; CRM Latest Post only (Deliverables not written this run, per run instructions); DM https://monday.slack.com/archives/D038RJ45RQD/p1793725240141149; ledger row 13455269056. Not counted: Vin Matano (Creator Buzz founder, not in roster) posted his own Elevate content 03.11. Naya YouTube failed (HPE_HEADER_OVERFLOW); some SERP queries failed upstream.)"
+  "lastRun": "2026-11-04T17:16Z (live, window since 2026-11-03T17:01Z; 6 new finds: Danielle Farage IG+LI, Max Talks Tech IG+TikTok+YouTube Short (+FB cross-post), Maitri Mangal LI 03.11 found late; CRM Latest Post updated for Danielle 13434164351, Max 13016325387, Maitri 13434164221; DM https://monday.slack.com/archives/D038RJ45RQD/p1793812538764969; ledger row 13465818209. Failures: TikTok profiles discover run sd_mw2cqkqo295ftv776z still running after 25 min (not used); YouTube channels discover HPE_HEADER_OVERFLOW (4/5); IG profiles dead_page for 8 of 16 (soojintech, natashabadger, theblackfemaleengineer, alexisbarber, sajjaad.khader, maxtalkstech_, techwitharia, eilon.grouper); several SERP queries failed/empty. Soojin to post 05.11 per Elophia.)"
 }
