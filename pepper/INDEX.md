@@ -42,6 +42,7 @@ Look the key up here and load exactly what it names. Don't search the archive to
 | Or, אור, Or Elmaliah, "Oren" | `people/or-elmaliah.md` |
 | Amy, Amy B, Amy Bronstein | `people/amy-bronstein.md` |
 | Eden, עדן, Zohar, זהר, Anat, ענת, Scherf, שרף | `people/scherf-agency.md` |
+| Alice, Ali, אליס, אלי, Alice Simpson | `people/alice-simpson.md` |
 | Ilan, אילן | CORE.md (owner) |
 
 ## 4. Project → card
