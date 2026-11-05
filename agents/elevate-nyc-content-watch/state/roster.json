@@ -146,7 +146,7 @@
    "source": "Creator Buzz",
    "crmItemId": 13434168983,
    "instagram": "https://www.instagram.com/natashabadger/",
-   "tiktok": null,
+   "tiktok": "https://www.tiktok.com/@natasha.badger",
    "youtube": null,
    "x": null,
    "linkedin": "https://www.linkedin.com/in/natasha-badger"
@@ -212,7 +212,7 @@
    "linkedin": "https://www.linkedin.com/in/kierra-mcmillian-3777b51ab"
   }
  ],
- "resolvedOn": "2026-10-31 (first run, dry run): Creator Buzz channel + Google SERP + IG profile bios. Eilon IG corrected eilon.gruper (unavailable) -> eilon.grouper. Kierra Mcmillian unresolved. 2026-11-01: Maitri TikTok @techwithmaitrimangal (tagged as @maitrimangal in Sajjaad's TikTok). IG highlights dataset gd_ln0751ruyga74vnhk returns 'does not support collection' via API. 2026-11-02: LinkedIn posts dataset gd_lyy3tktm25m4avu764 works for single post URLs (linkedin.com/posts|pulse|feed/update; resolve lnkd.in first); use it for LinkedIn metrics.",
+ "resolvedOn": "2026-10-31 (first run, dry run): Creator Buzz channel + Google SERP + IG profile bios. Eilon IG corrected eilon.gruper (unavailable) -> eilon.grouper. Kierra Mcmillian unresolved. 2026-11-01: Maitri TikTok @techwithmaitrimangal (tagged as @maitrimangal in Sajjaad's TikTok). IG highlights dataset gd_ln0751ruyga74vnhk returns 'does not support collection' via API. 2026-11-02: LinkedIn posts dataset gd_lyy3tktm25m4avu764 works for single post URLs (linkedin.com/posts|pulse|feed/update; resolve lnkd.in first); use it for LinkedIn metrics. 2026-11-05: Natasha Badger TikTok @natasha.badger (same NYC event/The Marketing Groupe content as her IG).",
  "ilanPost": {
   "url": "https://www.linkedin.com/feed/update/urn:li:activity:7522572319110823936/",
   "date": "2026-11-01",

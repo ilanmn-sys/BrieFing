@@ -294,7 +294,38 @@
       "source": "Google SERP + Bright Data LinkedIn posts",
       "reportedOn": "2026-11-04",
       "dryRun": false
+    },
+    {
+      "url": "https://www.instagram.com/reel/DfVkOKesRTr/",
+      "creator": "Soojin Lee (soojintech)",
+      "platform": "Instagram",
+      "type": "Reel",
+      "date": "2026-11-04",
+      "summary": "Answers the 3 most common questions on building your first AI agents with @mondaydotcom.",
+      "likes": 94,
+      "comments": 27,
+      "views": null,
+      "viewsNote": "views n/a",
+      "adLabel": "#MondayPartner in caption; IG paid-partnership flag not returned",
+      "source": "Google SERP + Bright Data IG posts",
+      "reportedOn": "2026-11-05",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.linkedin.com/posts/mor-nissim-3498b01b4_ai-monday-%D7%94%D7%98%D7%9E%D7%A2%D7%94-activity-7522918087579344896-_10c",
+      "creator": "Mor Nissim",
+      "platform": "LinkedIn",
+      "type": "post",
+      "date": "2026-11-02",
+      "summary": "Hebrew: the best slide at Elevate was Roy Mann's three places to bring in AI; thanks monday for the conference. Found late.",
+      "likes": 58,
+      "comments": 6,
+      "views": null,
+      "adLabel": "none in text",
+      "source": "Google SERP + Bright Data LinkedIn posts",
+      "reportedOn": "2026-11-05",
+      "dryRun": false
     }
   ],
-  "lastRun": "2026-11-04T17:16Z (live, window since 2026-11-03T17:01Z; 6 new finds: Danielle Farage IG+LI, Max Talks Tech IG+TikTok+YouTube Short (+FB cross-post), Maitri Mangal LI 03.11 found late; CRM Latest Post updated for Danielle 13434164351, Max 13016325387, Maitri 13434164221; DM https://monday.slack.com/archives/D038RJ45RQD/p1793812538764969; ledger row 13465818209. Failures: TikTok profiles discover run sd_mw2cqkqo295ftv776z still running after 25 min (not used); YouTube channels discover HPE_HEADER_OVERFLOW (4/5); IG profiles dead_page for 8 of 16 (soojintech, natashabadger, theblackfemaleengineer, alexisbarber, sajjaad.khader, maxtalkstech_, techwitharia, eilon.grouper); several SERP queries failed/empty. Soojin to post 05.11 per Elophia.)"
+  "lastRun": "2026-11-05T17:01Z (live, window since 2026-11-04T17:16Z; 2 new finds: Soojin Lee IG reel 04.11 (first Soojin post), Mor Nissim LI 02.11 found late; CRM Latest Post updated for Soojin 13434171556 only (Mor's newest stays the 03.11 YouTube); Deliverables column not written this run (run scope: Latest Post only); DM https://monday.slack.com/archives/D038RJ45RQD/p1793898071662649; ledger row 13477508033. Creator Buzz: no NYC creator links. Gaps: IG dead_page (no posts in window) for sajjaad.khader, eilon.grouper, maxtalkstech_; TikTok dead_page for 7 of 9 profiles (incl. soojintech); YouTube videos dataset parse_error on 4 videos (incl. Mor), 3 channels no posts; LinkedIn via SERP only (Soojin LI none found). Natasha Badger TikTok @natasha.badger resolved (05.11 posts not about monday).)"
 }
