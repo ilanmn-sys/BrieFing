@@ -325,7 +325,89 @@
       "source": "Google SERP + Bright Data LinkedIn posts",
       "reportedOn": "2026-11-05",
       "dryRun": false
+    },
+    {
+      "url": "https://www.instagram.com/reel/DfXtMlOBOAL/",
+      "creator": "Alexis Barber",
+      "platform": "Instagram",
+      "type": "Reel",
+      "date": "2026-11-05",
+      "summary": "'Took myself to the future of work': Elevate 2026 by @mondaydotcom, real teams, real results, AI agents doing the busywork. First Alexis post.",
+      "likes": 80,
+      "comments": 8,
+      "views": null,
+      "viewsNote": "views n/a",
+      "adLabel": "#ad #mondaypartner in caption; IG paid-partnership flag not returned",
+      "crossPosts": [
+        "https://www.tiktok.com/@alexisbarber_/video/7704766399192911135"
+      ],
+      "source": "Bright Data IG posts",
+      "reportedOn": "2026-11-06",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.tiktok.com/@alexisbarber_/video/7704766399192911135",
+      "creator": "Alexis Barber",
+      "platform": "TikTok",
+      "type": "video",
+      "date": "2026-11-05",
+      "summary": "Same video as her IG reel; tags @mondaydotcom.",
+      "likes": 23,
+      "comments": 1,
+      "views": 310,
+      "adLabel": "commerce_info 'Paid partnership'; #ad #mondaypartner",
+      "source": "Bright Data TikTok posts",
+      "reportedOn": "2026-11-06",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.linkedin.com/posts/alexis-barber-57a732129_mondaypartner-activity-7524184115441483776-TN_9",
+      "creator": "Alexis Barber",
+      "platform": "LinkedIn",
+      "type": "post",
+      "date": "2026-11-05",
+      "summary": "Takeaways from monday.com Elevate: the proof is here, measurement is the new advantage, building is getting simpler; tags monday.com.",
+      "likes": 11,
+      "comments": 2,
+      "views": null,
+      "adLabel": "#mondaypartner in text",
+      "source": "Google SERP + Bright Data LinkedIn posts",
+      "reportedOn": "2026-11-06",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.instagram.com/p/DfXqN6KFM_k/",
+      "creator": "Natasha Badger",
+      "platform": "Instagram",
+      "type": "Carousel",
+      "date": "2026-11-05",
+      "summary": "Week-in-my-life in NYC; first highlight 'Monday.com's Elevate Summit'; tags @mondaydotcom.",
+      "likes": 39,
+      "comments": 8,
+      "views": null,
+      "adLabel": "none in caption (#paid = the company hashtagpaid); IG paid-partnership flag not returned",
+      "crossPosts": [
+        "https://www.tiktok.com/@natasha.badger/video/7704754097081093406"
+      ],
+      "source": "Google SERP + Bright Data IG posts",
+      "reportedOn": "2026-11-06",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.tiktok.com/@natasha.badger/video/7704754097081093406",
+      "creator": "Natasha Badger",
+      "platform": "TikTok",
+      "type": "video",
+      "date": "2026-11-05",
+      "summary": "Same week-in-my-life post as her IG carousel (Monday.com's Elevate Summit).",
+      "likes": 18,
+      "comments": 2,
+      "views": 313,
+      "adLabel": "none; no commerce label returned",
+      "source": "Bright Data TikTok posts",
+      "reportedOn": "2026-11-06",
+      "dryRun": false
     }
   ],
-  "lastRun": "2026-11-05T17:01Z (live, window since 2026-11-04T17:16Z; 2 new finds: Soojin Lee IG reel 04.11 (first Soojin post), Mor Nissim LI 02.11 found late; CRM Latest Post updated for Soojin 13434171556 only (Mor's newest stays the 03.11 YouTube); Deliverables column not written this run (run scope: Latest Post only); DM https://monday.slack.com/archives/D038RJ45RQD/p1793898071662649; ledger row 13477508033. Creator Buzz: no NYC creator links. Gaps: IG dead_page (no posts in window) for sajjaad.khader, eilon.grouper, maxtalkstech_; TikTok dead_page for 7 of 9 profiles (incl. soojintech); YouTube videos dataset parse_error on 4 videos (incl. Mor), 3 channels no posts; LinkedIn via SERP only (Soojin LI none found). Natasha Badger TikTok @natasha.badger resolved (05.11 posts not about monday).)"
+  "lastRun": "2026-11-06T16:58Z (live, window since 2026-11-05T17:01Z; 5 new finds: Alexis Barber IG reel + TikTok + LinkedIn 05.11 (first Alexis posts), Natasha Badger IG carousel + TikTok 05.11; CRM Latest Post updated for Alexis 13434164350 and Natasha 13434168983 (newest = TikTok for both); Deliverables column not written (run scope: Latest Post only); DM https://monday.slack.com/archives/D038RJ45RQD/p1793984282112749; ledger row 13490369083. Soojin 04.11 reel: no TikTok/LinkedIn cross-post found. Creator Buzz: only Soojin's already-reported reel. Not counted: Vin Matano (Creator Buzz) IG reel DfSLpRIP8u7 03.11 'Building Monday Agents' (agency, not a roster creator); Mariana Antaya IG reel DfUu6YxoFFR 04.11 email follow-up agent, no monday mention in caption (a commenter mentions 'the Monday run'), plus a Facebook AI summary snippet 'monday AI Agents' on an older Mariana video: check. Gaps: IG dead_page (no posts in window) eilon.grouper, maxtalkstech_, softgirlnocode, sajjaad.khader; TikTok dead_page 5 of 10; YouTube: Mor channel HPE_HEADER_OVERFLOW, 2 Sajjaad videos parse_error (titles via oEmbed not monday-related), 3 channels no posts; LinkedIn via SERP only.)"
 }
