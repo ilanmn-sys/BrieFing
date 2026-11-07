@@ -407,7 +407,37 @@
       "source": "Bright Data TikTok posts",
       "reportedOn": "2026-11-06",
       "dryRun": false
+    },
+    {
+      "url": "https://www.linkedin.com/posts/jadebonacolta_elevate2026-activity-7523365546365464576-rw-h",
+      "creator": "Jade Bonacolta",
+      "platform": "LinkedIn",
+      "type": "post",
+      "date": "2026-11-03",
+      "summary": "Spoke at Elevate by monday.com (5,000-person conference in NYC): 3 skills to become irreplaceable in 2027; #Elevate2026, tags monday.com and Elevate by monday.com. First Jade post; found late.",
+      "likes": 261,
+      "comments": 105,
+      "views": null,
+      "adLabel": "none in text",
+      "source": "Google SERP + Bright Data LinkedIn posts",
+      "reportedOn": "2026-11-07",
+      "dryRun": false
+    },
+    {
+      "url": "https://www.linkedin.com/posts/audrey-bai-056158127_mondaypartner-conference-activity-7523020552039571456-XYon",
+      "creator": "Audrey (softgirlnocode)",
+      "platform": "LinkedIn",
+      "type": "post",
+      "date": "2026-11-02",
+      "summary": "Same content as her 02.11 IG reel: asked engineers and PMs at monday.com Elevate how they'd judge the best AI agent; tags monday.com. Found late.",
+      "likes": 12,
+      "comments": 1,
+      "views": null,
+      "adLabel": "#mondaypartner in text",
+      "source": "Google SERP + Bright Data LinkedIn posts",
+      "reportedOn": "2026-11-07",
+      "dryRun": false
     }
   ],
-  "lastRun": "2026-11-06T16:58Z (live, window since 2026-11-05T17:01Z; 5 new finds: Alexis Barber IG reel + TikTok + LinkedIn 05.11 (first Alexis posts), Natasha Badger IG carousel + TikTok 05.11; CRM Latest Post updated for Alexis 13434164350 and Natasha 13434168983 (newest = TikTok for both); Deliverables column not written (run scope: Latest Post only); DM https://monday.slack.com/archives/D038RJ45RQD/p1793984282112749; ledger row 13490369083. Soojin 04.11 reel: no TikTok/LinkedIn cross-post found. Creator Buzz: only Soojin's already-reported reel. Not counted: Vin Matano (Creator Buzz) IG reel DfSLpRIP8u7 03.11 'Building Monday Agents' (agency, not a roster creator); Mariana Antaya IG reel DfUu6YxoFFR 04.11 email follow-up agent, no monday mention in caption (a commenter mentions 'the Monday run'), plus a Facebook AI summary snippet 'monday AI Agents' on an older Mariana video: check. Gaps: IG dead_page (no posts in window) eilon.grouper, maxtalkstech_, softgirlnocode, sajjaad.khader; TikTok dead_page 5 of 10; YouTube: Mor channel HPE_HEADER_OVERFLOW, 2 Sajjaad videos parse_error (titles via oEmbed not monday-related), 3 channels no posts; LinkedIn via SERP only.)"
+  "lastRun": "2026-11-07T16:54Z (live, window since 2026-11-06T16:58Z, scraped from 05.11; 2 new finds, both LinkedIn found late: Jade Bonacolta 03.11 (first Jade post) and Audrey Bai 02.11 (cross-post of her IG reel); CRM Latest Post updated for Jade 12984716804 and Audrey 13434168583 (LinkedIn 13:57 UTC newer than IG reel 13:00 UTC); Deliverables not written (run scope: Latest Post only); DM https://monday.slack.com/archives/D038RJ45RQD/p1794070825119609; ledger row 13496289846. Total 27 posts / 13 creators. Re-checked Mariana Antaya IG reel DfUu6YxoFFR 04.11: no monday mention in caption or comments (comments mention Claude Code), not counted; her TikTok @mar_antaya (01-07.11, 10 posts) has no monday mention; her 05.11 IG/TikTok 'BTS of creator events' NYC has no monday mention. Not counted: web3d.group IG reel DfRP9ptjEE7 and amphenol_conec IG DfPgVONlxC9 (Elevate recaps by non-roster accounts); Jean Kang LI 05.11 is about Microsoft Copilot. Creator Buzz: nothing new since 05.11. Gaps: IG dead_page eilon.grouper, daniellefarage; TikTok dead_page fifbuilds, techwithmaitrimangal, sajjaadkhader, danielle.farage; YouTube: Sajjaad and Taki HPE_HEADER_OVERFLOW, Mor video parse_error, Naya/Eilon no posts; X: no posts (Lauren, Jade); several SERP queries 502/empty after retry (Kierra, hashtag query); LinkedIn via SERP only.)"
 }
