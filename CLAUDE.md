@@ -15,7 +15,7 @@ Config: `config.json` (the only place IDs live). **Read LEARNING-LOG.md §1 befo
 10. Pepper writes Hebrew to Ilan; item names keep original language; everything else English unless source is HE/PT/ES.
 
 ## Rules of the repo
-- Run `python3 scripts/lint-rules.py` after editing any agent.
+- Run `python3 scripts/lint-rules.py` after editing any agent, then `node scripts/render-all-agents.js` and commit the `agents/*/rendered.md` files (cloud routines read them; they never execute repo code).
 - Never write into legacy/parking groups or the duplicate columns in `config.json`.
 - Use `--dry-run` before enabling any new agent. Never run a Cowork task and its twin at once.
 - DM targets are `user:<id>`, never a DM-channel id; always check the send result.
