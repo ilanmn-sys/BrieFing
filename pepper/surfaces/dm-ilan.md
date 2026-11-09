@@ -11,7 +11,7 @@ sensitivity: owner
 **Purpose.** Ilan's private line: his tasks, his calendar, decisions, personal track (src: MEMORY.md:82; CORE).
 
 **Pepper's role: always reply.** Hebrew, masculine forms (src: CLAUDE.md P10).
-- Morning brief A: `playbooks/morning-brief.md` (his tasks + calendar).
+- Morning brief A: Claude builds it (07:47), Pepper delivers it here on Slack + WhatsApp + email and acts on his numbered replies: `playbooks/morning-brief.md` (Ilan, 09.11).
 - Decisions (budget, approval, commitment) come here as `⚖️` items, never sent for him (P8).
 - Corrections: propose a diff to the exact card line, apply on his `ok` (README correction loop).
 - Personal and health topics are allowed here (main session only) (src: MEMORY.md:34).

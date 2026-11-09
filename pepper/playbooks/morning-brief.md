@@ -1,38 +1,39 @@
 ---
 id: morning-brief
-last_verified: 2026-10-26
+last_verified: 2026-11-09
 owner: Ilan
 ---
 # Playbook: morning brief
 
-Two outputs, kept apart (src: MEMORY.md:66-68; Ilan 21.10): **A** Ilan's Hebrew brief in his DM: mainly his tasks and his calendar, no media. **B** the brief in the Ilan+Or group: coverage, important events in the company calendar, prep for the day, social mentions.
+Two outputs, kept apart (src: MEMORY.md:66-68; Ilan 21.10): **A** Ilan's Hebrew daily brief: built by Claude, delivered by Pepper on three channels. **B** the brief in the Ilan+Or group: coverage, important events in the company calendar, prep for the day, social mentions.
 
-**Trigger.** Sun-Thu. A: after Claude's 07:00 strategy pass creates `🗓️ Daily Strategy — <date>` in 📥 Pepper Tasks (src: LEARNING-LOG §0). B: 07:30, cron `morning-brief-ilan-or-group` (src: MEMORY.md:58-64).
+**A replaced (Ilan, 09.11).** Pepper no longer builds her own brief A from the `🗓️ Daily Strategy` item. Claude's scheduled brief (07:47, Sun-Thu) builds it and DMs it to Pepper with the header `📨 BRIEF FOR ILAN`. Pepper delivers it; Ilan works from it by replying to her.
+
+**Trigger.** Sun-Thu. A: Claude's DM `📨 BRIEF FOR ILAN | DD.MM` arrives in Pepper's Slack DM (~07:50). B: 07:30, cron `morning-brief-ilan-or-group` (src: MEMORY.md:58-64).
 Gate first: system clock (P5), then `is_holiday.py` (exit 0 = stop) (src: HEARTBEAT.md:24-37). Friday and Saturday: no brief (src: Ilan 21.10).
 
-**Inputs**
-- A: the Daily Strategy item. Board canonical groups + 👨‍👩 personal track (IDs: `registry.md`). Today's calendar (R-26). Switchboard 18431118484, not the 467729906 archive (C-14).
-- B: coverage from Muck Rack, NewsAPI, Bright Data, Gmail alerts, Tier-1 global ≤5 + Tier-1 Israel ≤5, articles only (src: MEMORY.md:63-64). Plus important events in the company calendar today, prep for the day, and social mentions of monday (src: Ilan 21.10).
-
-**Steps: A, Ilan's brief**
-1. Brief gate on every item: exists and active; owner Ilan; not already done (Slack, Gmail Sent, WhatsApp); not covered by a meeting in the next 48h; not a meta item. If it looks done → **propose** Done, never auto-archive (src: proposed/02 §9; LESSONS.md:244-450; R-10; C-11).
-2. **Open with the reply queue (R-30).** List everyone waiting on a reply from Ilan: Slack, Gmail, and WhatsApp from the `wa-digest` window. For each: who, channel and link, what they asked, waiting since, and the draft link if one exists. Externals and near-deadline items come first.
-   Suggest one reply block sized to the queue: about 5 minutes per reply, at least 15 and at most 90 minutes, in the **first** free gap of the day. If no gap is long enough, split it. Empty queue → no block. It is never a fixed or recurring block (src: Ilan 26.10).
-3. Then the tasks: Hebrew, at most 7 items, 🔥 Today before 🔴 Overdue, each with a concrete reason (src: LEARNING-LOG §0; R-01, R-02).
-4. Suggested block per item: a 30-min gap 08:00-19:00 from the real calendar, after the reply block. Calendar unreadable → say so, suggest no times (src: R-26).
-5. Personal track: separate section, at most 3 items, health first. Main-session DM only, never a group (src: R-17, R-18; MEMORY.md:34).
-6. Overdue > 10 → propose specific cuts or reschedules. Proposals only (src: LESSONS.md:2711-2712; R-10).
-7. Send to Slack `user:U038UEUQC1Y` and check the result (src: CLAUDE.md repo rules).
-8. Ilan replies `apply all` / `apply 1,3` / `skip`. Claude applies. Calendar blocks only after approval, English titles (src: LEARNING-LOG §0; R-27). `morning-dynamic-blocks` does not auto-book (src: Ilan 21.10; C-13).
+**Steps: A, deliver Ilan's brief**
+1. Check the date in the header is today (P5). An older brief → don't deliver; tell Ilan it is stale.
+2. Deliver the text as is (no rewording, no additions) on all three, and check each result:
+   - Slack DM `user:U038UEUQC1Y`.
+   - WhatsApp DM to Ilan (`surfaces/dm-ilan.md`). Same text; Slack link markup becomes plain URLs.
+   - Email to ilanmn@monday.com, subject `☀️ בריף יומי | <weekday> DD.MM`, body = the brief with clickable links. This is a send to Ilan (P1), not a draft.
+3. A failed channel → say which one in the Slack DM, with a retry (P4). Never a silent skip.
+4. **Working from the brief.** Ilan replies to Pepper (Slack thread or WhatsApp) with an item number and a verb: `1 שלח`, `3 טיוטה`, `2 תזכירי לי ב-15:00`, `4 תעבירי לקלוד`. Pepper does it under her normal rules:
+   - Internal colleague or Ilan → sends; external, journalist or exec → draft only, Ilan sends (P1, R-11).
+   - A decision (budget, approval, commitment) → never sent; `⚖️` item to Ilan (P8, R-19).
+   - Read the thread before replying (P9). Work Pepper can't do → `🤖` item in 📥 Pepper Tasks for Claude.
+   - Ledger row per action (R-34). Board changes stay propose-only (P2).
+5. No brief from Claude by 08:30 → tell Ilan in the Slack DM that the brief didn't arrive (P4). Do not build a substitute.
 
 **Steps: B, Ilan+Or brief**
 1. Every item has its original link (src: MEMORY.md:39, :198).
 2. Live-check against the group history (src: LESSONS.md:2653-2673). Drop widget-only and self-admitted noise (src: LESSONS.md:870-941).
 3. Hebrew format per `surfaces/wa-ilan-or.md`. Nothing found → send nothing (P-39b).
 
-**Output.** A: one Hebrew Slack DM. B: one WhatsApp message to `wa-ilan-or`.
+**Output.** A: the same brief on Slack DM, WhatsApp DM and email. B: one WhatsApp message to `wa-ilan-or`.
 
-**Done when.** A was delivered (send result ok) and Ilan's reply is applied or logged in LEARNING-LOG §2. B was delivered once, or nothing qualified.
+**Done when.** A was delivered on all three channels (each send result ok, or the failure reported) and Ilan's replies are done or logged. B was delivered once, or nothing qualified.
 
 **On failure (P4).** Board, calendar or Slack down → Ilan gets a short Hebrew note saying which source failed, plus a retry. Never a silent skip, never "nothing today" filler. Partial scan → say "partial", never "ok" (src: MEMORY.md:703-711; S-008).
 
