@@ -440,7 +440,23 @@
       "source": "Google SERP + Bright Data LinkedIn posts",
       "reportedOn": "2026-11-07",
       "dryRun": false
+    },
+    {
+      "url": "https://www.linkedin.com/posts/natasha-badger_ad-mondaydotcom-aiagents-activity-7523135215800713216-MDp7",
+      "creator": "Natasha Badger",
+      "platform": "LinkedIn",
+      "type": "post",
+      "date": "2026-11-02",
+      "summary": "Same content as her 02.11 IG reel: 'I partnered with monday.com for Elevate in NYC', AI-agent ideas for her creator business and The Marketing Groupe; built an agent for campaign ops; tags monday.com. Found late.",
+      "likes": 22,
+      "comments": 2,
+      "views": null,
+      "adLabel": "#ad #mondaydotcom in text",
+      "source": "Google SERP + Bright Data LinkedIn posts gd_lyy3tktm25m4avu764",
+      "reportedOn": "2026-11-09",
+      "dryRun": false,
+      "crmNote": "Latest Post not changed: CRM already holds her newer 05.11 TikTok find"
     }
   ],
-  "lastRun": "2026-11-08T16:59Z (live, Sunday, window since 2026-11-07T16:54Z, scraped from 06.11; 0 new finds. Sunday no-news DM with running count: https://monday.slack.com/archives/D038RJ45RQD/p1794157179196929; ledger row 13498864708; no CRM writes (nothing new). Total still 27 posts / 13 creators (23 in Nov). Highlights: gd_ln0751ruyga74vnhk still 'does not support collection'; used IG profiles gd_l1vikfch901nx3by4 highlight titles instead: none named monday/Elevate (candidates to eyeball: Natasha 'Event Life', Alexis 'october', Mariana 'New York', Eilon 'כנסים ונהנים'). Added Maitri FB cross-post of her 03.11 reel (found via SERP) to crossPosts, not counted as a new find. Not counted: Naya IG reel DfaJcH6PVi3 06.11 (#GammaPartner, no monday); Sajjaad LI 'LinkedIn invited me to their HQ'; Taki/Kayvon/Mariana posts 06-08.11 no monday mention. Creator Buzz: nothing since 05.11. No stories reminder (no find in last 48h). Gaps: IG posts dead_page (twice) eilon.grouper, daniellefarage, alexisbarber, maxtalkstech_, mornissim_ (profile dataset's latest posts checked instead: no new mention); TikTok dead_page fifbuilds, danielle.farage, sajjaadkhader, techwithmaitrimangal, alexisbarber_; YouTube Sajjaad 2 new videos parse_error (titles via oEmbed: AI courses, CS students; descriptions unchecked), Light dataset refuses collection; Taki/Naya/Eilon no YT posts; X: Lauren, Jade dead_page/no posts; SERP failures after retry: Alexis Barber, Ilan Manassen recap query, site:instagram mondaydotcom; LinkedIn via SERP only.)"
+  "lastRun": "2026-11-09T17:05Z (live, window since 2026-11-08T16:59Z, scraped from 07.11; 1 new find: Natasha Badger LinkedIn 02.11 found late via SERP, metrics via LinkedIn posts dataset). DM: https://monday.slack.com/archives/D038RJ45RQD/p1794243932011349 (Hebrew, מאנדיי per R-36). CRM: no writes (run limited to Latest Post; Natasha's Latest Post already shows her newer 05.11 find). Total 28 posts / 13 creators (24 in Nov). No stories reminder (no find dated in last 48h). Not counted: Mor Nissim IG p/DfaFhZ2n_av 06.11 (building/rappel photos, no monday in caption; SERP snippet mixed in her older Elevate caption); Danielle Farage IG Dfh0EoCATzw 09.11 (#AdobePartner, no monday); Kierra Mcmillian comment 'Ahh love this!!' on John Worm's (monday.com) Elevate LinkedIn post, not her own post; Maitri/Soojin/Taki/Kayvon/Mariana/Natasha/Sajjaad/Naya/Eilon/Fiona/Audrey/Max posts 07-09.11 no monday mention. Creator Buzz: only London logistics messages since last run, no creator links. Gaps: IG posts dead_page mornissim_, alexisbarber, maxtalkstech_, daniellefarage, techwitharia (IG profiles dataset latest posts checked instead: no new mention); TikTok dead_page mar_antaya and one taki.gpt video; YouTube videos dataset parse_error on 23 of 24 videos (titles via oEmbed, none new with monday; descriptions unchecked); X Lauren/Jade dead_page; SERP still failing after retry: \"Sajjaad Khader\" monday.com, \"Jade Bonacolta\" monday.com, \"Kierra Mcmillian\" monday.com; LinkedIn via SERP only.)"
 }
