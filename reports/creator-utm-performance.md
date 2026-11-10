@@ -129,3 +129,87 @@ The two tables match visitors to accounts differently, which is why Mariana has 
 5. **"Activated" is a proxy.** It means the first board load after signup, which is the only activation flag in the visits table. It is not a product-qualified activation.
 6. **CRM links predate Elevate.** They use `utm_source=influencers`, not `elevate`. Jake's link has never had a real visit. If he posted it, the bit.ly may not have been used.
 7. **Delivery note:** Aria's email cc to sandrachen@sixteenth.com bounced. Aria herself received the link, and it has 1 visit.
+
+## 5. Efficiency (cost, views, followers)
+
+Added 10.11.2026 (system clock). Visits and accounts come from a fresh Q1 run on 10.11 (data through 09.11), and they match section 2A. Fees, views and followers are in `reports/creator-utm-inputs.csv`, so a daily job can join them to fresh Kremer numbers. Read-only: nothing was sent and no board was changed.
+
+**Bottom line:** On cost per visit, **Maitri is the most efficient creator whose traffic clearly came from her content.** She cost $250 per visit, and her one signup cost $8,000. Mariana is cheaper on paper, at $186 per visit and $2,411 per account, but 152 of her 181 visits came on 28.10, the event day. Without that day she costs **$1,164 per visit and $16,875 per account.** Five paid creators (Natasha, Fiona, Max, Taki and Naya, who was unpaid) have no visits yet.
+
+### Table
+
+Fees are creator fees. Creator Buzz fees do **not** include the agency's 18% (with it, the NYC total is $80,771). Narrative fees are the figures in Zip #16198. Views: V = verified (Bright Data, 10.11), R = creator-reported, * = partial (covers only some of the creator's monday posts), n/a = no figure. Followers are on the platform where the creator posted the monday content, or their main platform if no post was found.
+
+| Creator | Group | Fee | Visits | Accounts | $/visit | $/account | Views | Views→visits | Views→accounts | Followers (platform) | Visits ÷ followers | Accounts / 10K followers |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---:|---:|
+| Mariana (Mar) Antaya | Narrative | $33,750 | 181 | 14 | $186 | $2,411 | n/a | n/a | n/a | 492,389 IG | 0.0368% | 0.284 |
+| ↳ Mariana without 28.10 | | $33,750 | 29 | 2 | $1,164 | $16,875 | n/a | n/a | n/a | 492,389 IG | 0.0059% | 0.041 |
+| Maitri | Creator Buzz | $8,000 | 32 | 1 | $250 | $8,000 | 26,000 R* | 0.12% | 0.0038% | 234,537 IG | 0.0136% | 0.043 |
+| Danielle | Creator Buzz | $4,000 | 11 | 0 | $364 | no accounts | n/a | n/a | n/a | 26,352 LinkedIn | 0.0417% | 0 |
+| Sajjaad | Narrative | $10,000 | 26 | 0 | $385 | no accounts | n/a | n/a | n/a | 355,000 YouTube | 0.0073% | 0 |
+| Audrey | Creator Buzz | $14,000 | 31 | 0 | $452 | no accounts | n/a | n/a | n/a | 186,875 IG | 0.0166% | 0 |
+| Alexis | Creator Buzz | $6,000 | 5 | 0 | $1,200 | no accounts | 529 V* | (0.95%)† | 0% | 61,044 IG | 0.0082% | 0 |
+| Kayvon | Narrative | $20,000 | 11 | 0 | $1,818 | no accounts | n/a | n/a | n/a | 497,723 IG | 0.0022% | 0 |
+| Soojin | Creator Buzz | $15,000 | 8 | 0 | $1,875 | no accounts | n/a | n/a | n/a | 196,230 IG | 0.0041% | 0 |
+| Aria | Creator Buzz | $10,000 | 1 | 0 | $10,000 | no accounts | n/a | n/a | n/a | 126,173 IG | 0.0008% | 0 |
+| Natasha | Creator Buzz | $5,000 | 0 | 0 | no visits | no accounts | 385 V* | 0% | 0% | 30,232 IG | 0% | 0 |
+| Fiona | Creator Buzz | $3,450 | 0 | 0 | no visits | no accounts | n/a | n/a | n/a | 24,177 IG | 0% | 0 |
+| Max Talks Tech | Creator Buzz | $3,000 | 0 | 0 | no visits | no accounts | 1,646 V* | 0% | 0% | 397,700 TikTok | 0% | 0 |
+| Taki | Narrative | $10,000 | 0 | 0 | no visits | no accounts | n/a | n/a | n/a | 263,700 TikTok | 0% | 0 |
+| Naya | Narrative | $0 (attendance only) | 0 | 0 | n/a | n/a | n/a | n/a | n/a | 125,994 IG | 0% | 0 |
+| **Total (14)** | | **$142,200** | **306** | **15** | **$465** | **$9,480** | | | | 3,018,126 | 0.0101% | 0.050 |
+| **Total without Mariana's 28.10** | | $142,200 | 154 | 3 | $923 | $47,400 | | | | | 0.0051% | 0.010 |
+
+- **With the 18% Creator Buzz agency fee** ($154,521 all-in), the total is $505 per visit and $10,301 per account, or $1,003 and $51,507 without Mariana's 28.10. The Creator Buzz rank order doesn't change: Maitri is $295 per visit and Danielle $429.
+- **Views figures:**
+  - Maitri: 26,000 is Vin's number for her 29.10 Reel only, posted in #creatorbuzz-mondaycrm on 29.10. Her 03.11 Reel and her LinkedIn post have no view count.
+  - Max: 1,646 = 427 on TikTok + 1,219 on YouTube Shorts. His IG Reel has no view count.
+  - Alexis: 529 is her TikTok only.
+  - Natasha: 385 is her TikTok only.
+- † **Alexis's ratio isn't meaningful.** All 5 of her visits came on 28–29.10, a week before her TikTok went up on 05.11.
+
+### Ranking (primary: cost per visit; cost per account alongside)
+
+| # | Creator | $/visit | $/account | Note |
+|---|---|---:|---:|---|
+| 1 | Mariana | $186 | $2,411 | **Event-day spike.** 152 of her 181 visits and 12 of her 14 accounts came on 28.10. Without that day: $1,164 per visit and $16,875 per account, which would put her **6th**. |
+| 2 | Maitri | $250 | $8,000 | Her traffic follows her 29.10 Reel, peaking at 12 visits on 29.10. Her signup came on 04.11. **Best content-driven result.** |
+| 3 | Danielle | $364 | – | Highest visits ÷ followers (0.042%), with a small LinkedIn audience |
+| 4 | Sajjaad | $385 | – | All visits on 28–29.10, before his 31.10 LinkedIn post |
+| 5 | Audrey | $452 | – | All visits on 28–29.10, before her 02.11 Reel |
+| 6 | Alexis | $1,200 | – | All visits on 28–29.10 |
+| 7 | Kayvon | $1,818 | – | Visits on 07–08.11. No monday post found yet. |
+| 8 | Soojin | $1,875 | – | Visits on 05–09.11, after her 04.11 Reel |
+| 9 | Aria | $10,000 | – | 1 visit |
+| 10–13 | Fiona, Max, Natasha, Taki | no visits | – | $21,450 spent with no visits. Taki has no monday post found. |
+| – | Naya | n/a | n/a | No fee, no posting obligation |
+
+### Takeaway
+
+Only two creators produced accounts. Of those, only Maitri's traffic clearly comes from her content: her visits track her 29.10 Reel, which had a reported 26K views. At $250 per visit and $8,000 per account, she is the most efficient creator in this group. Mariana's $186 per visit looks best, but it rests on in-person use at Elevate on 28.10. Without that day she drops to the middle of the pack, at $1,164 per visit. Most other creators' visits, including Audrey's, Sajjaad's, Alexis's and Aria's, also cluster on 28–29.10, before their Reels and posts went up. That points to event-day Stories or in-person sharing rather than the paid feed content. Overall, the program has cost $465 per visit and $9,480 per account so far, or $923 and $47,400 without Mariana's event day. Paid conversion isn't readable until about 25.11. For London, the creator-level numbers favor mid-size, tightly niched creators who post right away (Maitri, Danielle) over large accounts (Kayvon, Taki, Sajjaad), whose visits per follower are among the lowest.
+
+### Data gaps
+
+1. **Instagram and LinkedIn views can't be verified.** Bright Data's IG Reels dataset returned 0 of 10 view counts (10.11, snapshot `sd_mwajla2sjb8d0448i`), as on earlier runs. The LinkedIn posts dataset has no views field. The only creator-reported number found is Maitri's 26K. No Gmail recap emails from Creator Buzz, Narrative, The Drive or Viral Nation have view numbers. **Ask both agencies for per-post insights screenshots** (views, reach, link clicks, story views) to fill this in.
+2. **No monday post was found for Mariana, Kayvon, Taki or Naya** (content-watch `found.json`, last run 09.11). Their views are n/a. Mariana's and Kayvon's visits therefore can't be tied to a post.
+3. **Story views are missing.** Every Creator Buzz creator's IG Story set was live around the event (Creator Buzz sheet, "Content Status"), and the event-day visits most likely came from there. Bright Data can't collect Stories.
+4. **Fees:**
+   - Creator Buzz fees come from the agency's sheet "Monday Elevate NYC", tab "Final Creators" (the "Negotiation Responses" column). They sum to $68,450, which matches the agreed $80,771 ÷ 1.18.
+   - Some CRM Deliverables notes still show older numbers: Audrey $9,000, Aria $8,000, Maitri $9,000, Alexis $10,000, Natasha $7,000, Danielle $5,750 and Fiona $3,400. Use the sheet.
+   - Narrative fees are taken as given (Zip #16198). It isn't confirmed whether any Narrative agency fee sits on top.
+   - Kayvon's CRM item also mentions a duplicate $26K offer. $20,000 per Zip was used.
+   - Naya is $0: the CRM says "Attendance only: signed 18.10, no fee and no posting obligation". Her $20,925 package from 08.10 no longer applies.
+5. **Followers:**
+   - The IG figures are from Bright Data on 10.11 (Reels dataset) or on 08.11 (IG profiles, for Mariana, Kayvon and Naya). Soojin is at 196K, above the 168.9K in the brief.
+   - Danielle is LinkedIn (CRM, 26,352). She has only 3.7K on IG.
+   - Max is TikTok (397.7K, 10.11). He has 232K on IG and 28.1K on YouTube.
+   - Taki is TikTok (263.7K, 09.11). He has 238K on IG.
+   - Sajjaad is YouTube, 355K from the CRM. It wasn't re-verified, and his only monday post is on LinkedIn, where his follower count is unknown.
+6. **Small numbers.** Apart from Mariana and Maitri, every creator has 0 accounts, so cost per account can't separate them. Cost per visit rests on 1–32 visits per creator.
+7. **Revenue isn't in this view.** All creators are at 0 payers and $0 ARR (section 2B). Rerun after 25.11.
+
+## 6. Board columns (Influencers CRM 2026, board 18425284143), added 10.11.2026
+
+Inputs (numbers, updated daily by the 08:39 run): UTM Visits `numeric_mm8z9jyb`, UTM Accounts `numeric_mm8zyedt`, UTM Activated `numeric_mm8zxhqs`, UTM Payers (28d) `numeric_mm8z2a3m`, UTM Data As Of `date_mm8z1ccm`. Set once: Elevate Fee (USD) `numeric_mm8zrytk`, Post Views `numeric_mm8zyn45`.
+Formulas: $ / Visit `formula_mm8zzppt`, $ / Account `formula_mm8z9wj1`, Views → Visits % `formula_mm8zhvy3`, Visits / Followers % `formula_mm8zv8f8` (uses the existing Followers column).
+Item ids per creator: `crm_item_id` in creator-utm-inputs.csv.
