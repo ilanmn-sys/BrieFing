@@ -456,6 +456,31 @@
       "reportedOn": "2026-11-09",
       "dryRun": false,
       "crmNote": "Latest Post not changed: CRM already holds her newer 05.11 TikTok find"
+    },
+    {
+      "url": "https://www.linkedin.com/posts/advicewithjean_secret-to-thriving-in-corporate-stop-expecting-ugcPost-7525929335107682305-WOEC/",
+      "creator": "Jean Kang",
+      "platform": "LinkedIn",
+      "type": "Post",
+      "date": "2026-11-10",
+      "summary": "Personal-brand post: building her brand opened doors to stages like monday.com's flagship conference, Elevate; tags Elevate by monday.com.",
+      "likes": 196,
+      "comments": 40,
+      "views": null,
+      "source": "shared by Ilan 11.11"
+    },
+    {
+      "url": "https://www.instagram.com/reel/DfkZFUcSTH5/",
+      "creator": "Jean Kang",
+      "platform": "Instagram",
+      "type": "Reel",
+      "date": "2026-11-10",
+      "summary": "Same message as the LinkedIn post; tags @mondaydotcom, #elevate2026 #mondaypartner.",
+      "likes": 94,
+      "comments": 11,
+      "views": null,
+      "adLabel": "#mondaypartner in caption",
+      "source": "shared by Ilan 11.11"
     }
   ],
   "lastRun": "2026-11-10T16:48Z (live, window since 2026-11-09T17:05Z, scraped from 08.11; 0 new finds). DM: none sent (prompt: DM only on new finds; no stories reminder due since no find dated in the last 48h; not Sunday). CRM: no writes (nothing new; run limited to Latest Post). Total still 28 posts / 13 creators (24 in Nov). Checked: IG posts 26 posts 08-10.11 across 15 profiles, none mention monday/Elevate (Danielle Dfh0EoCATzw = #AdobePartner; Audrey DfhsTUki0Ke = #lovablepartner; Alexis Dfh9uY_Gx2g = Second Sense giveaway; Natasha DffwRIdFHdg TMG offsite). TikTok 12 videos 08-10.11, none match. YouTube latest titles via oEmbed (Mor, Sajjaad, Taki) none match; dataset returned no records. X Lauren/Jade no posts in period. Not counted: Mariana Antaya Facebook video 04.11 'slackers in group projects' follow-up email agent (Google AI summary mentions 'Monday.com or Notion', but caption and FB data have no monday mention); Facebook repost of Maitri's Elevate content on page parttimeentrepreneurmindset (not her own account, original already reported); Jade Bonacolta/Hilary Gridley on monday.com Elevate session pages (monday's site, not their posts). Creator Buzz: only London rates/logistics since last run, no creator links. Gaps: TikTok mar_antaya returns 'User is banned' (dead_page); IG no posts in period for mornissim_, maxtalkstech_; YouTube videos dataset no records for MorNissim/SajjaadKhader (titles checked, descriptions unchecked); SERP still failing after 2 retries: \"Natasha Badger\" Elevate, site:linkedin.com \"Alexis Barber\" Elevate, \"Kierra Mcmillian\" Elevate; LinkedIn via SERP only.)"
