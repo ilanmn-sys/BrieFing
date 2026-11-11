@@ -1,0 +1,12 @@
+{
+  "id": "pre-meeting-brief",
+  "name": "Pre-meeting brief",
+  "group": "Board & Pepper",
+  "cron": "5 7-18 * * 0-4",
+  "tz": "Asia/Jerusalem",
+  "enabled": false,
+  "schedule": "Hourly :05, 07:05–18:05 Sun–Thu",
+  "cloud": {
+    "mode": "dry-run"
+  }
+}
