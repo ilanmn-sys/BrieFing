@@ -467,7 +467,9 @@
       "likes": 196,
       "comments": 40,
       "views": null,
-      "source": "shared by Ilan 11.11"
+      "source": "shared by Ilan 11.11",
+      "reportedOn": "2026-11-11",
+      "dryRun": false
     },
     {
       "url": "https://www.instagram.com/reel/DfkZFUcSTH5/",
@@ -480,8 +482,11 @@
       "comments": 11,
       "views": null,
       "adLabel": "#mondaypartner in caption",
-      "source": "shared by Ilan 11.11"
+      "source": "shared by Ilan 11.11",
+      "reportedOn": "2026-11-11",
+      "dryRun": false,
+      "metricsNote": "11.11 IG posts dataset: 113 likes"
     }
   ],
-  "lastRun": "2026-11-10T16:48Z (live, window since 2026-11-09T17:05Z, scraped from 08.11; 0 new finds). DM: none sent (prompt: DM only on new finds; no stories reminder due since no find dated in the last 48h; not Sunday). CRM: no writes (nothing new; run limited to Latest Post). Total still 28 posts / 13 creators (24 in Nov). Checked: IG posts 26 posts 08-10.11 across 15 profiles, none mention monday/Elevate (Danielle Dfh0EoCATzw = #AdobePartner; Audrey DfhsTUki0Ke = #lovablepartner; Alexis Dfh9uY_Gx2g = Second Sense giveaway; Natasha DffwRIdFHdg TMG offsite). TikTok 12 videos 08-10.11, none match. YouTube latest titles via oEmbed (Mor, Sajjaad, Taki) none match; dataset returned no records. X Lauren/Jade no posts in period. Not counted: Mariana Antaya Facebook video 04.11 'slackers in group projects' follow-up email agent (Google AI summary mentions 'Monday.com or Notion', but caption and FB data have no monday mention); Facebook repost of Maitri's Elevate content on page parttimeentrepreneurmindset (not her own account, original already reported); Jade Bonacolta/Hilary Gridley on monday.com Elevate session pages (monday's site, not their posts). Creator Buzz: only London rates/logistics since last run, no creator links. Gaps: TikTok mar_antaya returns 'User is banned' (dead_page); IG no posts in period for mornissim_, maxtalkstech_; YouTube videos dataset no records for MorNissim/SajjaadKhader (titles checked, descriptions unchecked); SERP still failing after 2 retries: \"Natasha Badger\" Elevate, site:linkedin.com \"Alexis Barber\" Elevate, \"Kierra Mcmillian\" Elevate; LinkedIn via SERP only.)"
+  "lastRun": "2026-11-11T16:48Z (live, window since 2026-11-10T16:48Z, scraped from 09.11; 0 new finds). DM: stories reminder only (Jean Kang, find dated 10.11 within 48h), sent OK https://monday.slack.com/archives/D038RJ45RQD/p1794416806386529. CRM: no writes (nothing new; Jean's Latest Post was set manually 11.11; run limited to Latest Post). Total 30 posts / 14 creators (26 in Nov), incl. Jean Kang's 2 posts of 10.11 added manually. Not yet posted: Taki Wong, Eilon Gruper, Kayvon Jafarzadeh, Mariana Antaya, Naya (Nyaradzo Bere), Hilary Gridley, Kierra Mcmillian. Checked: IG posts 31 posts 09-11.11 across 14 profiles, only match = Jean DfkZFUcSTH5 (already logged); TikTok 10 videos 09-10.11, none match; YouTube RSS (Mor, Sajjaad, Taki) titles+descriptions none match, dataset no records; X Lauren/Jade no posts in period. LinkedIn dataset checks (no monday/Elevate mention): Hilary Gridley 09.11 systems-management post, Jean Kang 05.11 Copilot post (weekday 'Monday' only), Aria Kim 06.11, Audrey Bai 06.11. Mariana TikTok 05.11 'AI personal assistant' no monday mention. Not counted: 'How monday AI agents Handle Marketing' YouTube = The Digital Project Manager (not a roster creator). Creator Buzz: only London rates/logistics, no creator links. SERP: all queries succeeded (some after retry). Gaps: IG no posts in period for natashabadger, maxtalkstech_, eilon.grouper; TikTok no posts for danielle.farage, taki.gpt, natasha.badger, fifbuilds, alexisbarber_; LinkedIn via SERP only. Shared Memory ledger row not written (run limited to DM + CRM Latest Post)."
 }
