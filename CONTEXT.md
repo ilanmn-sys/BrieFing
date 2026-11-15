@@ -122,6 +122,6 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 
 ## Other threads in flight (as of 15.11)
 
-- **Geektime "monday Builders":** 60K vs a 45K renewal. Ido has been waiting since 12.11. Ilan owes Scherf a brief, and the decision goes through Or.
+- **Geektime "monday Builders":** 60K vs a 45K renewal. On hold (Ilan, 15.11): no answer to Ido until Ilan discusses it with Or and Scherf.
 - **AWS re:Invent talk:** Keren Koshman asked for comms approval. The deck has been received.
 - **Gmail:** about 25 stale drafts are waiting for Ilan to delete by hand.
