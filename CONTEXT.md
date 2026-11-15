@@ -104,7 +104,7 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
   - Within the £3,500 minimum. Hawksmoor was released.
 - **Tue 24.11:**
   - 10:00 keynote
-  - 11:30–12:15 headset tour (Capital Lounge 1+2, Level 2)
+  - 11:30–12:15 headset tour, meeting in the creator room Alice Simpson booked at ExCeL (calendar: "We Are Alive roundtable room"); not Capital Lounge
   - about 14:00 creator workshop, opened by a Daniel Lereya Q&A
 - **Press registration:** https://elevate-widgets.monday.com/emea/page/6959790/press-registration
 - **UTM format:** `…multi-multi-event-london-{slug}`.
