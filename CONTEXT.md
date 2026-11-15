@@ -63,7 +63,7 @@ Last updated: 2026-11-15.
 | Elevate NYC content watch | `trig_01Pd12AtXYpfMKC3jwZwhtdi` | daily until 30.11 | commit `agents/elevate-nyc-content-watch/state` after each run |
 | Weekly LinkedIn proposal | `trig_01N9EfxTDXtkTTnQNT8wXp9x` | Wed | — |
 
-Under discussion (15.11): run the routines in their own sessions instead of this chat, cut the Slack noise to one brief plus exceptions, and send the brief directly instead of through Pepper.
+Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own sessions instead of this chat (main benefit: no context compaction, faster chat, fewer tokens); (2) cut Slack noise to one brief plus exceptions; (3) send the brief directly instead of through Pepper, keeping Pepper only to execute "שלח". Raise again after London (24.11) or when Ilan asks.
 
 ## People
 
