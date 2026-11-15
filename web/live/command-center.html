@@ -15,6 +15,7 @@
   --spark:#7B4BE0; --spark-2:#E0458B; --spark-soft:#F1EAFD;
   --crit:#C23A28; --crit-soft:#FBE7E3; --warn:#A2650C; --warn-soft:#FBF0DC; --ok:#2E8B57; --ok-soft:#E0F2E7; --idle:#6B7280; --idle-soft:#EEEDE9;
   --busy:#CBC7BE; --focus:#0E7C86; --free:#2E8B57; --req:#B4366E; --req-soft:#FAE3EE;
+  --who:#1F6F9E; --who-soft:#DFEEF7; --ldn:#2C3E8F; --ldn-soft:#E4E8F8;
   --f-display:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
   --f-body:"Public Sans","Heebo",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
@@ -30,6 +31,7 @@
   --spark:#A98BFF; --spark-2:#FF6FAE; --spark-soft:#231C3D;
   --crit:#FF7D6B; --crit-soft:#3B1C17; --warn:#F0BC5E; --warn-soft:#382A12; --ok:#62D296; --ok-soft:#15301F; --idle:#9AA1B2; --idle-soft:#202432;
   --busy:#3A4052; --focus:#3CC4CF; --free:#62D296; --req:#FF7FB5; --req-soft:#3A1828;
+  --who:#6BC0F0; --who-soft:#12293A; --ldn:#9DB0FF; --ldn-soft:#1A2147;
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0D0F14; --bg-glow1:rgba(43,182,194,.16); --bg-glow2:rgba(140,108,255,.16);
@@ -41,6 +43,7 @@
   --spark:#A98BFF; --spark-2:#FF6FAE; --spark-soft:#231C3D;
   --crit:#FF7D6B; --crit-soft:#3B1C17; --warn:#F0BC5E; --warn-soft:#382A12; --ok:#62D296; --ok-soft:#15301F; --idle:#9AA1B2; --idle-soft:#202432;
   --busy:#3A4052; --focus:#3CC4CF; --free:#62D296; --req:#FF7FB5; --req-soft:#3A1828;
+  --who:#6BC0F0; --who-soft:#12293A; --ldn:#9DB0FF; --ldn-soft:#1A2147;
   color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -64,7 +67,7 @@ a{color:var(--accent)}
 @keyframes pulse{50%{opacity:.3}}
 
 /* Live counters */
-.stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.stats{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px}
 .stat{appearance:none;text-align:left;border:1px solid var(--line);background:var(--panel);border-radius:var(--r);padding:14px 16px 12px;box-shadow:var(--shadow);cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;position:relative;overflow:hidden;color:var(--ink);font:inherit;transition:transform .18s ease,box-shadow .18s ease}
 .stat:hover{transform:translateY(-2px);box-shadow:var(--shadow-hi)}
 .stat::after{content:"";position:absolute;right:-30px;top:-30px;width:90px;height:90px;border-radius:50%;background:var(--c-soft);opacity:.9}
@@ -74,6 +77,7 @@ a{color:var(--accent)}
 .stat .hint{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stat.c-task{--c:var(--task);--c-soft:var(--task-soft)}.stat.c-mail{--c:var(--mail);--c-soft:var(--mail-soft)}.stat.c-slack{--c:var(--slack);--c-soft:var(--slack-soft)}.stat.c-agent{--c:var(--agent);--c-soft:var(--agent-soft)}
 .stat.c-spark{--c:var(--spark);--c-soft:var(--spark-soft)}
+.stat.c-who{--c:var(--who);--c-soft:var(--who-soft)}
 .stat.c-spark b{background:linear-gradient(100deg,var(--spark),var(--spark-2));-webkit-background-clip:text;background-clip:text;color:transparent}
 
 /* Day timeline */
@@ -186,6 +190,16 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:60
 .plan .step .acts{display:flex;gap:6px;flex-wrap:wrap}
 .plan .step.acted{opacity:.5}.plan .step.acted b{text-decoration:line-through}
 .plan .tiers{display:flex;gap:10px;flex-wrap:wrap;padding:10px 16px 0;color:var(--muted);font-size:12.5px}
+/* Prepared plan (a morning agent wrote plans/<date>): include, move, resize, then book them all */
+.plan .pbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 16px 0}
+.plan .pctx{margin:0;padding:8px 16px 0;color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.plan .step .edit{display:flex;gap:6px 10px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.plan .step .edit label{display:inline-flex;gap:5px;align-items:center}
+.plan .step .edit input[type=time],.plan .step .edit select{padding:3px 6px;font:500 12.5px var(--f-mono);border-radius:8px}
+.plan .step .links{display:flex;gap:6px;flex-wrap:wrap}
+.plan .step.off{opacity:.55}
+.plan .step .bk{font-size:12.5px;font-weight:500;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.plan .step .bk.ok{color:var(--ok)}.plan .step .bk.bad{color:var(--crit)}.plan .step .bk.warn{color:var(--warn)}
 .coll{display:flex;flex-direction:column;gap:6px;border:1px dashed var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px}
 .coll .ch{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .coll .ch b{font-weight:600}
@@ -230,6 +244,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
 .row.acted{opacity:.62}.row.acted:hover,.row.acted:focus-within{opacity:1}
 .row.gone .t{text-decoration:line-through;text-decoration-color:var(--ok)}
 .row.gone{opacity:.5}
+.row.gone:has(.drawer){opacity:1}
 .row.gone .mark{background:var(--ok);animation:pop .5s ease}
 @keyframes pop{40%{transform:scale(1.8)}}
 
@@ -239,6 +254,32 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
 .drawer .line{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
 .drawer .out{font-size:13px;font-weight:500}
 .drawer .out.ok{color:var(--ok)}.drawer .out.bad{color:var(--crit)}
+
+/* Subtasks under a task row, and follow-up suggestions in its drawer */
+.subs{padding-left:22px;display:flex;flex-direction:column;gap:4px;font-size:13px}
+.subs .tog{align-self:flex-start;background:none;border:0;padding:2px 0;color:var(--muted);font-weight:600;font-size:12.5px}
+.subs .tog:hover{background:none;color:var(--ink)}
+.subs ul{list-style:none;margin:0;padding:0 0 0 10px;display:flex;flex-direction:column;gap:3px;border-left:2px solid color-mix(in srgb,var(--task) 30%,var(--line))}
+.subs li{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:flex-start;min-width:0}
+.subs li .n{min-width:0;flex:1;overflow-wrap:anywhere}
+.subs li .n a{color:inherit;text-decoration:none}.subs li .n a:hover{color:var(--task)}
+.subs li.done .n{text-decoration:line-through;color:var(--muted)}
+.subs input[type=checkbox]{margin-top:3px;accent-color:var(--ok);flex:none}
+.subs .err{margin:4px 0;flex-basis:100%}
+.fus{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.fu{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:10px 12px;display:flex;flex-direction:column;gap:7px;min-width:0}
+.fu .k{font:700 11px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--task)}
+.fu .k.message{color:var(--slack)}.fu .k.email{color:var(--mail)}.fu .k.meeting{color:var(--day)}
+.fu .k bdi{text-transform:none;letter-spacing:0;color:var(--muted);font-weight:600}
+.fu input[type=text],.fu input[type=email],.fu textarea,.fu select{width:100%}
+.fu textarea{min-height:76px;font-size:13px}
+.fu p{margin:0;color:var(--muted);font-size:12.5px;overflow-wrap:anywhere}
+.fu .line{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.fu .out{font-size:12.5px}
+.fu.made{border-color:color-mix(in srgb,var(--ok) 45%,var(--line))}
+.fus .err{margin:0;grid-column:1/-1}
+.next{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px dashed var(--line);padding-top:8px}
+@media (max-width:620px){.subs{padding-left:0}}
 
 /* Tabs */
 .tabs{display:flex;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line);overflow-x:auto}
@@ -263,14 +304,57 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
 .chanpick .hint{margin-right:4px}
 .chanpick button[aria-pressed="true"]{background:var(--slack-soft);border-color:color-mix(in srgb,var(--slack) 40%,transparent);color:var(--slack)}
 
+.panel.c-who{--c:var(--who);--c-soft:var(--who-soft);border-color:color-mix(in srgb,var(--who) 35%,var(--line))}
+.panel.c-ldn{--c:var(--ldn);--c-soft:var(--ldn-soft)}
+a.btnl{display:inline-flex;align-items:center;gap:6px;font:600 12.5px/1.2 var(--f-body);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:5px 10px;text-decoration:none;white-space:nowrap}
+a.btnl:hover{background:var(--c-soft,var(--sunk));border-color:color-mix(in srgb,var(--c,var(--accent)) 40%,var(--line))}
+.ldn{padding:12px 16px 14px;display:flex;flex-direction:column;gap:10px}
+.ldn-top{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:center}
+.ldn-t{font:800 34px/1 var(--f-display);font-variant-numeric:tabular-nums;letter-spacing:-.02em;color:var(--ldn)}
+.ldn ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:13px}
+.ldn li{display:grid;grid-template-columns:54px minmax(0,1fr);gap:8px;align-items:baseline}
+.ldn li .w{font:500 12px var(--f-mono);font-variant-numeric:tabular-nums;color:var(--muted)}
+.ldn li span{min-width:0;overflow-wrap:anywhere}
+.sugg{display:flex;flex-direction:column;gap:8px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.sugg .sh{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.sugg .sh b{font:700 13px var(--f-display)}
+.sb{display:grid;grid-template-columns:96px minmax(0,1fr);gap:4px 10px;border:1px dashed color-mix(in srgb,var(--focus) 45%,var(--line));border-radius:12px;padding:8px 10px;align-items:start}
+.sb .w{font:600 12.5px var(--f-mono);font-variant-numeric:tabular-nums;color:var(--focus)}
+.sb .b{display:flex;flex-direction:column;gap:4px;min-width:0}
+.sb .b b{font-weight:600;overflow-wrap:anywhere}
+.sb ul{margin:0;padding-left:16px;font-size:12.5px;color:var(--muted)}
+.sb li{overflow-wrap:anywhere}
+.sb .drawer{grid-column:1/-1;margin-left:0}
+.prep{display:flex;flex-direction:column}
+.prep details{border-top:1px solid var(--line);padding:10px 16px}
+.prep details:first-child{border-top:0}
+.prep summary{cursor:pointer;display:grid;grid-template-columns:96px minmax(0,1fr);gap:2px 10px;align-items:baseline;list-style:none}
+.prep summary::-webkit-details-marker{display:none}
+.prep summary .w{font:500 12.5px var(--f-mono);font-variant-numeric:tabular-nums;color:var(--muted)}
+.prep summary b{font-weight:600;overflow-wrap:anywhere;min-width:0}
+.prep summary .d{grid-column:2;color:var(--muted);font-size:12.5px}
+.prep .pb{display:flex;flex-direction:column;gap:8px;padding:10px 0 2px;font-size:13px;min-width:0}
+.prep .pb h4{margin:0;font:700 11px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.prep .pb ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:3px}
+.prep .pb li{overflow-wrap:anywhere;min-width:0}
+.prep .ppl{display:flex;flex-wrap:wrap;gap:4px}
+.prep .ppl span{font-size:12px;background:var(--sunk);border-radius:999px;padding:1px 8px;overflow-wrap:anywhere}
+.prep .agd{white-space:pre-wrap;background:var(--sunk);border-radius:10px;padding:8px 10px;max-height:140px;overflow:auto;overflow-wrap:anywhere;font-size:12.5px}
+.prep .err{margin:0}
+@media (max-width:620px){.sb{grid-template-columns:minmax(0,1fr)}.prep summary{grid-template-columns:minmax(0,1fr)}.prep summary .d{grid-column:1}}
+.flag{background:var(--warn-soft);color:var(--warn);border-radius:10px;padding:7px 10px;font-weight:600;font-size:13px;overflow-wrap:anywhere}
+.vsw{display:flex;gap:6px;flex-wrap:wrap}
+.vsw button[aria-pressed="true"]{background:var(--spark-soft);color:var(--spark);border-color:color-mix(in srgb,var(--spark) 40%,transparent)}
+.prep li .drawer{margin:8px 0 4px}
+.prep li > button.sm{padding:2px 8px;font-size:12px;vertical-align:1px}
 .learn{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
 .learn .line{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .foot{color:var(--faint);font-size:12.5px;text-align:center;max-width:72ch;margin:6px auto 0;text-wrap:balance}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:13px;font-weight:500;max-width:calc(100% - 32px);box-shadow:var(--shadow-hi);z-index:9;animation:drop .2s ease}
 
-@media (max-width:1000px) and (min-width:621px){.stats{grid-template-columns:repeat(6,minmax(0,1fr))}.stat{grid-column:span 2}}
+@media (max-width:1000px) and (min-width:621px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}.stat.c-who{grid-column:span 2}}
 @media (max-width:900px){main{grid-template-columns:minmax(0,1fr)}.col.work{order:-1}.hero{grid-template-columns:minmax(0,1fr)}.chips{justify-content:flex-start}}
-@media (max-width:620px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.chip{padding:3px 8px;font-size:11.5px}.stat b{font-size:28px}.rh{grid-template-columns:auto minmax(0,1fr)}.rh .r{grid-column:2;justify-self:start}.acts{padding-left:0}.drawer{margin-left:0}.ev{grid-template-columns:82px minmax(0,1fr)}.ticks span:nth-child(even){visibility:hidden}.dayline .legend{display:none}}
+@media (max-width:620px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat.c-who{grid-column:span 2}.ldn-top{grid-template-columns:minmax(0,1fr)}.chip{padding:3px 8px;font-size:11.5px}.stat b{font-size:28px}.rh{grid-template-columns:auto minmax(0,1fr)}.rh .r{grid-column:2;justify-self:start}.acts{padding-left:0}.drawer{margin-left:0}.ev{grid-template-columns:82px minmax(0,1fr)}.ticks span:nth-child(even){visibility:hidden}.dayline .legend{display:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -284,6 +368,12 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   </header>
 
   <section class="stats" id="stats" aria-label="At a glance"></section>
+
+  <section class="panel c-who" aria-labelledby="led-h" id="sec-ledger">
+    <div class="ph"><h2 id="led-h"><span class="ic">🧠</span>Who's waiting on whom</h2><span class="meta" id="led-meta"></span></div>
+    <div class="tabs" role="tablist" id="led-tabs"></div>
+    <div id="ledger"><div class="skel"></div><div class="skel"></div></div>
+  </section>
 
   <section class="dayline" aria-label="Today's timeline">
     <div class="top"><b id="dl-title">Your day</b>
@@ -311,11 +401,22 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
 
   <main>
     <div class="col">
+      <section class="panel c-ldn" aria-labelledby="ldn-h" id="sec-london">
+        <div class="ph"><h2 id="ldn-h"><span class="ic">🇬🇧</span>Elevate London</h2><span class="meta" id="ldn-meta">23.11.2026</span></div>
+        <div class="ldn" id="london"></div>
+      </section>
+
+      <section class="panel c-day" aria-labelledby="prep-h" id="sec-prep">
+        <div class="ph"><h2 id="prep-h"><span class="ic">🧾</span>Meeting prep</h2><span class="meta" id="prep-meta"></span></div>
+        <div class="prep" id="prep"><div class="skel"></div></div>
+      </section>
+
       <section class="panel c-day" aria-labelledby="day-h" id="sec-day">
         <div class="ph"><h2><span class="ic">◷</span><span id="day-h">Today</span></h2>
           <div class="daysw" role="tablist" aria-label="Day"><button class="tab" role="tab" data-day="0" aria-selected="true">Today</button><button class="tab" role="tab" data-day="1" aria-selected="false">Tomorrow</button></div>
           <span class="meta" id="day-meta"></span><button class="sm" id="new-block" type="button">＋ Task block</button></div>
         <div class="row" id="blk-host" style="border:0;padding:0 16px"></div>
+        <div class="sugg" id="sugg" hidden></div>
         <div id="day"><div class="skel"></div><div class="skel"></div></div>
       </section>
 
@@ -364,7 +465,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     </div>
   </main>
 
-  <p class="foot">Live from monday, Gmail, Google Calendar, Slack and your Claude routines, with your own connector access. Nothing is written until you click. Email replies are saved to Gmail Drafts and never sent.</p>
+  <p class="foot">Live from monday (your projects, requests and the Shared Memory ledger), Gmail, Google Calendar, Slack and your Claude routines, with your own connector access. Nothing is written until you click. Email replies are saved to Gmail Drafts and never sent; Slack replies are drafts unless you confirm Send, and replies to outside people are drafts only.</p>
 </div>
 
 <script>
@@ -411,10 +512,16 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   const ME_NAME = 'Ilan Manassen';
   const S = { MON: 'monday.com', GM: 'Gmail', CAL: 'Google Calendar', SL: 'Slack', CCR: 'Claude Code Remote' };
   const TASK_KINDS = ['done', 'update', 'block', 'delegate'];
+  // 🧠 Shared Memory ledger: the cross-session record of who is waiting on whom (questions, follow-ups, drafts, decisions).
+  const LED = { board: 18438292586, group: 'topics', type: 'color_mm8rry6y', state: 'color_mm8rjzd1', surface: 'text_mm8rmdd5', actor: 'text_mm8r3sqb', topic: 'text_mm8r8q6s', people: 'text_mm8rhjr2', audience: 'color_mm8r6zhp', link: 'link_mm8rhfed', key: 'text_mm8rwkaj', when: 'date_mm8r5ag6', limit: 1000 };
+  const LED_TABS = [['q', '📥 Waiting on you'], ['w', "🔁 You're waiting on"], ['d', '✍️ Ready to send'], ['x', '⚖️ Decisions']];
+  const DECIDE_RX = /decid|decision|approv|budget|sign[- ]?off|go\/no|להחליט|החלטה|אישור|לאשר|תקציב/i;
+  const WORK_RX = /draft|brief|proposal|deck|plan|write|narrative|pitch|outline|review|prep|טיוט|בריף|הצעה|מצגת|לכתוב|כתיבת|תכנון|הכנה/i;
+  const LONDON = { date: '2026-11-23', hideAfter: '2026-11-25', brief: 'https://claude.ai/artifact/PPZ1hBxKR2nq1XgmP31qch' };
 
   // ---- State ----
-  const st = { collect: null, requests: null, rqTab: 'mine', tasks: null, inbox: null, slack: null, mentions: null, chan: null, mine: null, slTab: 'dm', events: { 0: null, 1: null }, agents: null, src: {}, tab: 'today', day: 0, ideas: [], openDrawer: null, doneIds: new Set() };
-  let mcp = null, sample = null;
+  const st = { ledger: null, ledgerTab: 'q', collect: null, requests: null, rqTab: 'mine', tasks: null, inbox: null, slack: null, mentions: null, chan: null, mine: null, slTab: 'dm', events: { 0: null, 1: null }, agents: null, src: {}, tab: 'today', day: 0, ideas: [], openDrawer: null, doneIds: new Set(), subMeta: undefined, subMetaErr: '', subOpen: new Set() };
+  let mcp = null, sample = null, db = null, planOwner = null;   // planOwner: false = not the owner (the prepared plan is read-only)
 
   // ---- Small helpers ----
   const $ = (id) => document.getElementById(id);
@@ -502,9 +609,11 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     const slack = [...dmList(), ...mentionList()];
     const ag = st.agents || [], bad = ag.filter((a) => /FAIL/.test((a.last_run || {}).status || '')).length;
     const moves = touchedHere.size;
+    const lq = ledgerList('q').length, lfu = ledgerFuDue().length;
     const tile = (cls, ico, lbl, val, hint, target) => h('button', { class: 'stat ' + cls, type: 'button', onclick: () => { const el = $(target); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } },
       h('span', { class: 'ico' }, ico), h('span', { class: 'lbl' }, lbl), h('b', {}, val), h('span', { class: 'hint' }, hint));
     $('stats').replaceChildren(
+      tile('c-who', '⧗', 'Waiting', st.ledger ? lq + lfu : '–', st.ledger ? lq + ' question' + (lq === 1 ? '' : 's') + ' · ' + lfu + ' follow-up' + (lfu === 1 ? '' : 's') + ' due' : (st.ledgerErr ? 'ledger unavailable' : 'loading…'), 'sec-ledger'),
       tile('c-task', '☰', 'Today', st.tasks ? todayTasks.length : '–', st.tasks ? overdue + ' overdue on the board' : 'loading…', 'sec-tasks'),
       tile('c-mail', '✉', 'Unread', st.inbox ? mail.length : '–', st.inbox ? (vip ? vip + ' from VIPs' : 'most important first') : 'loading…', 'sec-inbox'),
       tile('c-slack', '#', 'Slack', st.slack ? slack.length : '–', st.slack ? dmList().length + ' DMs · ' + mentionList().length + ' mentions' : 'loading…', 'sec-slack'),
@@ -567,16 +676,19 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   function startWatches() {
     unsubs.splice(0).forEach((u) => u());
     watch(S.MON, 'get_board_items_page', {
-      boardId: BOARD, limit: 300, includeColumns: true, includeGroup: true,
+      boardId: BOARD, limit: 300, includeColumns: true, includeGroup: true, includeSubItems: true, subItemLimit: 25,
       columnIds: [COL.status, COL.deadline, COL.priority, COL.person, COL.calBlock],
       filters: [{ columnId: 'group', operator: 'any_of', compareValue: GROUPS.map((g) => g.id) }],
     }, 'mon', (p, at) => {
       st.tasks = (p.items || []).filter((it) => (it.column_values || {})[COL.status] !== 'Done').map((it) => {
         const cv = it.column_values || {};
-        return { id: String(it.id), name: it.name, url: it.url, group: it.group && it.group.id, status: cv[COL.status], deadline: cv[COL.deadline], priority: cv[COL.priority], owner: cv[COL.person], calBlock: cv[COL.calBlock], created: it.created_at, updated: it.updated_at };
+        return { id: String(it.id), name: it.name, url: it.url, group: it.group && it.group.id, status: cv[COL.status], deadline: cv[COL.deadline], priority: cv[COL.priority], owner: cv[COL.person], calBlock: cv[COL.calBlock], created: it.created_at, updated: it.updated_at,
+          subs: (it.subitems || []).map((s) => ({ id: String(s.id), name: s.name || '', url: s.url || '', cv: s.column_values || {} })) };
       });
       $('tk-meta').textContent = 'Updated ' + ago(at);
-      renderTasks(); renderCheckins(); if (st.ideas.length) renderIdeas(); maybeIdeas(); maybeTriage();
+      // An open drawer in Tasks (a follow-up in progress) is kept: the list re-renders when it closes.
+      if (drawerIn('tasks')) st.resortPending = true; else renderTasks();
+      renderCheckins(); if (st.ideas.length) renderIdeas(); maybeIdeas(); maybeTriage();
     }, (e, drop) => { if (drop || !st.tasks) { st.tasks = drop ? null : st.tasks; $('tk-tabs').replaceChildren(); $('tasks').replaceChildren(errBox(errText(e, 'monday'), refreshAll)); } });
 
     watch(S.MON, 'get_board_items_page', {
@@ -591,6 +703,8 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       $('rq-meta').textContent = 'Switchboard · ' + ago(at);
       renderRequests(); maybeIdeas();
     }, (e, drop) => { if (drop || !st.requests) { st.requests = drop ? null : st.requests; $('rq-tabs').replaceChildren(); $('requests').replaceChildren(errBox(errText(e, 'monday'), refreshAll)); } });
+
+    startLedgerWatch();
 
     watch(S.GM, 'search_threads', { query: INBOX_Q, pageSize: 30 }, 'gm', (p, at) => {
       st.inbox = (p.threads || []).map((t) => {
@@ -609,6 +723,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
         st.events[off] = (p.events || []).filter((e) => e.status !== 'cancelled' && !(e.attendees || []).some((a) => a.self && a.responseStatus === 'declined'));
         if (st.day === off) renderDay();
         if (off === 0) { renderDayline(); renderCheckins(); }
+        renderPrep(); renderSugg();
         if (st.ideas.length) renderIdeas();
         maybeIdeas();
       }, (e, drop) => { if (drop) st.events[off] = null; if (st.day === off && (drop || !st.events[off])) $('day').replaceChildren(errBox(errText(e, 'Google Calendar'), refreshAll)); });
@@ -718,14 +833,97 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
           h('span', { class: 'r' }, t.deadline ? ddmm(t.deadline) : '—'),
           (t.priority || t.owner) && h('span', { class: 'd' }, [t.priority, t.owner].filter(Boolean).join(' · '))),
         h('div', { class: 'acts' },
+          replyBtn(row, 'task', t),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'done', t) }, '✓ Done'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'update', t) }, '✎ Update'),
+          h('button', { class: 'sm spark', title: 'Claude suggests the next step; add it as a subtask or draft the message', onclick: () => openDrawer(row, 'next', t) }, '↳ Follow-up'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'block', t) }, '◷ Block time'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'addblock', t) }, '⊕ Add to block'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'delegate', t) }, '→ Hand off'),
-          h('button', { class: 'sm', onclick: () => openDrawer(row, 'followup', { kind: 'task', ...t }) }, '🔁 Pepper follow-up')));
+          h('button', { class: 'sm', onclick: () => openDrawer(row, 'followup', { kind: 'task', ...t }) }, '🔁 Pepper follow-up')),
+        subsBlock(t));
       return row;
     })));
+  }
+
+  // ---- Subtasks: the task's monday subitems, collapsed to a count, ticked Done from here ----
+  // The subitem board and its Done label are read from the board itself (get_board_info), never assumed.
+  // If they cannot be determined safely, subtasks are shown read-only.
+  async function loadSubMeta() {
+    if (!mcp) return;
+    st.subMeta = undefined; st.subMetaErr = '';
+    try {
+      const p = await call(S.MON, 'get_board_info', { boardId: BOARD, filters: { columns: { only: true } } });
+      const b = (p && p.board) || p || {};
+      const sub = (b.columns || []).find((c) => c.type === 'subtasks');
+      const subBoard = sub && sub.settings && (sub.settings.boardIds || [])[0];
+      const doneOf = (c) => ((c.settings || {}).labels || []).find((l) => l.is_done && l.label && !l.is_deactivated);
+      const cols = (b.subItemColumns || []).filter((c) => c.type === 'status' && doneOf(c));
+      const col = cols.length === 1 ? cols[0] : cols.find((c) => c.id === COL.status) || null;   // several candidates and none is the board's own status column: ambiguous
+      if (subBoard && col) st.subMeta = { board: String(subBoard), col: col.id, done: doneOf(col).label };
+      else { st.subMeta = null; st.subMetaErr = 'Subtasks are read-only: the subitem board has no single status column with a Done label.'; }
+    } catch (e) { st.subMeta = null; st.subMetaErr = 'Subtasks are read-only: could not read the subitem board. ' + errText(e, 'monday'); }
+    if (drawerIn('tasks')) st.resortPending = true; else renderTasks();
+  }
+  const subDone = (s) => { const m = st.subMeta; return m && m.col in s.cv ? s.cv[m.col] === m.done : null; };
+  function subsBlock(t) {
+    const subs = t.subs || []; if (!subs.length) return null;
+    const open = st.subOpen.has(t.id), nDone = subs.filter((s) => subDone(s) === true).length;
+    const box = h('div', { class: 'subs' });
+    box.append(h('button', { class: 'tog', type: 'button', 'aria-expanded': String(open), onclick: () => { open ? st.subOpen.delete(t.id) : st.subOpen.add(t.id); box.replaceWith(subsBlock(t) || ''); } },
+      (open ? '▾ ' : '▸ ') + subs.length + ' subtask' + (subs.length > 1 ? 's' : '') + (nDone ? ' · ' + nDone + ' done' : '')));
+    if (!open) return box;
+    box.append(h('ul', {}, subs.map((s) => subLine(t, s))));
+    if (st.subMeta === null && st.subMetaErr) box.append(errBox(st.subMetaErr, loadSubMeta));
+    return box;
+  }
+  function subLine(t, s) {
+    const m = st.subMeta, done = subDone(s);
+    const li = h('li', { class: done ? 'done' : '' });
+    const name = h('span', { class: 'n', dir: 'auto' }, s.url ? h('a', { href: s.url, target: '_blank', rel: 'noopener' }, s.name) : s.name);
+    const status = m && s.cv[m.col] && !done ? h('span', { class: 'pill idle' }, s.cv[m.col]) : null;
+    if (m && mcp && m.col in s.cv) {
+      const cb = h('input', { type: 'checkbox', checked: !!done, disabled: !!done, 'aria-label': 'Mark “' + s.name + '” Done', title: done ? 'Done' : 'Mark Done on the board and tell Pepper' });
+      cb.addEventListener('change', () => { if (cb.checked) tickSub(t, s, cb, li); });
+      li.append(cb, name, status);
+    } else li.append(h('span', { class: 'hint', 'aria-hidden': 'true' }, '•'), name);
+    return li;
+  }
+  // Done means done everywhere: the subitem's status on its board, then Pepper is told.
+  async function tickSub(t, s, cb, li) {
+    const m = st.subMeta; if (!m || !mcp) { cb.checked = false; return; }
+    cb.disabled = true; li.querySelectorAll('.err').forEach((x) => x.remove());
+    try { await call(S.MON, 'change_item_column_values', { boardId: Number(m.board), itemId: Number(s.id), columnValues: JSON.stringify({ [m.col]: { label: m.done } }) }); }
+    catch (e) { cb.checked = false; cb.disabled = false; li.append(errBox('Subtask not marked Done. ' + errText(e, 'monday'), () => { cb.checked = true; tickSub(t, s, cb, li); })); return; }
+    s.cv[m.col] = m.done; li.className = 'done';
+    mcp.invalidate(S.MON).catch(() => {});
+    try { await dmPepper(`✅ תת-משימה הושלמה: «${s.name.slice(0, 200)}» (במשימה «${t.name.slice(0, 120)}»)`); toast('Subtask Done on the board, and Pepper was told.'); }
+    catch (e) { li.append(errBox('Done on the board, but telling Pepper failed. ' + errText(e, 'Slack'), () => dmPepper(`✅ תת-משימה הושלמה: «${s.name.slice(0, 200)}» (במשימה «${t.name.slice(0, 120)}»)`).then(() => { li.querySelectorAll('.err').forEach((x) => x.remove()); toast('Pepper was told.'); }).catch((e2) => toast(errText(e2, 'Slack'))))); return; }
+    const box = li.closest('.subs'); if (box) box.replaceWith(subsBlock(t) || '');
+  }
+  // Creates a monday subitem under the task. Only its name is set; nothing else on the board changes.
+  async function addSubtask(t, name, btn, say) {
+    const was = btn.textContent; btn.disabled = true; btn.textContent = 'Adding…';
+    try {
+      const p = await call(S.MON, 'create_item', { boardId: BOARD, parentItemId: Number(t.id), name: name.slice(0, 255), columnValues: '{}' });
+      const id = newItemId(p, t.id), m = st.subMeta;
+      const tk = (st.tasks || []).find((x) => x.id === t.id) || t;
+      (tk.subs = tk.subs || []).push({ id: id || 'new-' + Date.now(), name, url: (p && p.url) || (id && m ? 'https://monday.monday.com/boards/' + m.board + '/pulses/' + id : ''), cv: id && m ? { [m.col]: null } : {} });
+      st.subOpen.add(t.id);
+      const row = $('task-' + t.id);
+      if (row) { const old = row.querySelector(':scope > .subs'), nb = subsBlock(tk); if (old) old.replaceWith(nb); else row.querySelector(':scope > .acts').after(nb); }
+      say('Subtask added under «' + t.name.slice(0, 60) + '». Nothing else changed on the board.', true);
+      btn.textContent = '✓ Added'; touch(t.id); mcp.invalidate(S.MON).catch(() => {});
+      return true;
+    } catch (e) { say('Subtask not added. ' + errText(e, 'monday'), false); btn.disabled = false; btn.textContent = was; return false; }
+  }
+  function newItemId(p, parentId) {
+    if (p && typeof p === 'object') {
+      const v = p.id || p.item_id || p.itemId || (p.item && p.item.id) || (p.create_subitem && p.create_subitem.id) || (p.data && ((p.data.create_subitem || {}).id || (p.data.create_item || {}).id));
+      if (v) return String(v);
+    }
+    const ids = [...String(typeof p === 'string' ? p : JSON.stringify(p || '')).matchAll(/\b(\d{9,})\b/g)].map((x) => x[1]).filter((x) => x !== String(parentId) && x !== String(BOARD) && x !== (st.subMeta || {}).board);
+    return ids.length === 1 ? ids[0] : '';
   }
 
   // ---- Requests (Switchboard) ----
@@ -770,6 +968,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
           h('span', { class: 'd', dir: 'auto' }, [r.requester && 'from ' + r.requester, r.domain, r.region, st.rqTab === 'inbox' ? r.groupTitle : (r.owner !== ME_NAME ? r.owner : '')].filter(Boolean).join(' · '))),
         h('div', { class: 'acts' },
           h('button', { class: 'sm spark', onclick: () => openDrawer(row, 'brie', r) }, '🤖 Ask Brie Fing'),
+          replyBtn(row, 'request', r),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'reqstatus', r) }, waiting ? '⇄ Status' : '✓ Status / Done'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'update', { ...r, board: RQ.board }) }, '✎ Update'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'followup', { kind: 'request', ...r }) }, '🔁 Pepper follow-up')));
@@ -868,7 +1067,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
           h('span', { class: 'd', dir: 'auto' }, h('b', {}, nameOf(m.from)), ' — ', m.snippet)),
         triBlock(tr, () => row, 'mailtask', m),
         h('div', { class: 'acts' },
-          h('button', { class: 'sm ' + (tr && !tr.reply ? '' : 'spark'), onclick: () => openDrawer(row, 'reply', m, { how: tr && tr.how || '' }) }, tr && tr.reply ? '✦ Suggested reply' : '✦ Suggest reply'),
+          h('button', { class: 'sm ' + (tr && !tr.reply ? '' : 'spark'), title: 'Reply with a suggested draft from the thread', onclick: () => openDrawer(row, 'reply', m, { how: tr && tr.how || '' }) }, tr && tr.reply ? '↩ Reply ✦' : '↩ Reply'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'mailtask', m) }, '→ Make it a task'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'note', { kind: 'mail', ...m }) }, '✎ My update'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'followup', { kind: 'mail', ...m }) }, '🔁 Pepper follow-up'),
@@ -1008,7 +1207,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
           h('span', { class: 'd', dir: 'auto' }, m.text.replace(/<@U[A-Z0-9]+\|([^>]+)>/g, '@$1').replace(/&amp;/g, '&').slice(0, 280))),
         triBlock(tr, () => row, 'slacktask', m),
         h('div', { class: 'acts' },
-          h('button', { class: 'sm ' + (tr && !tr.reply ? '' : 'spark'), onclick: () => openDrawer(row, 'slackreply', m, { how: tr && tr.how || '' }) }, tr && tr.reply ? '✦ Suggested reply' : '✦ Suggest reply'),
+          h('button', { class: 'sm ' + (tr && !tr.reply ? '' : 'spark'), title: 'Reply with a suggested draft from the conversation', onclick: () => openDrawer(row, 'slackreply', m, { how: tr && tr.how || '' }) }, tr && tr.reply ? '↩ Reply ✦' : '↩ Reply'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'slacktask', m) }, '→ Make it a task'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'note', { kind: 'slack', ...m }) }, '✎ My update'),
           h('button', { class: 'sm', onclick: () => openDrawer(row, 'followup', { kind: 'slack', ...m }) }, '🔁 Pepper follow-up'),
@@ -1043,7 +1242,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   document.querySelectorAll('[data-day]').forEach((b) => b.addEventListener('click', () => {
     st.day = Number(b.dataset.day);
     document.querySelectorAll('[data-day]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
-    renderDay();
+    renderDay(); renderSugg();
   }));
 
   // ---- Agents ----
@@ -1064,6 +1263,320 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     })));
   }
 
+  // ---- 🧠 Who's waiting on whom: the Shared Memory ledger, Open rows only (State is filtered here, not on the server) ----
+  const addDays = (s, n) => { const d = new Date(s + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+  const dayDiff = (a, b) => Math.round((Date.parse(a + 'T00:00:00Z') - Date.parse(b + 'T00:00:00Z')) / 864e5);   // a minus b, in days
+  const FU_RX = /fu:(\d{1,2})\.(\d{1,2})/;
+  // "fu:DD.MM" carries no year: take the year that puts it nearest today.
+  function fuOf(key) {
+    const m = String(key || '').match(FU_RX); if (!m) return null;
+    const dd = Number(m[1]), mo = Number(m[2]); if (dd < 1 || dd > 31 || mo < 1 || mo > 12) return null;
+    const t0 = today(), y = Number(t0.slice(0, 4)), tail = '-' + String(mo).padStart(2, '0') + '-' + String(dd).padStart(2, '0');
+    let best = null;
+    for (const yy of [y - 1, y, y + 1]) { const c = yy + tail; if (best === null || Math.abs(dayDiff(c, t0)) < Math.abs(dayDiff(best, t0))) best = c; }
+    return best;
+  }
+  // The same key with the follow-up date moved; the rest of the text is kept as it is.
+  function withFu(key, date) {
+    key = String(key || ''); const m = key.match(FU_RX);
+    const d = String(Number(date.slice(8, 10))), mo = String(Number(date.slice(5, 7)));
+    if (!m) return (key ? key + '|' : '') + 'fu:' + d.padStart(2, '0') + '.' + mo.padStart(2, '0');
+    return key.replace(FU_RX, 'fu:' + d.padStart(m[1].length, '0') + '.' + mo.padStart(m[2].length, '0'));
+  }
+  const linkUrl = (v) => { const m = String(v || '').match(/https?:\/\/[^\s"<>]+/); return m ? m[0] : ''; };
+  const relDay = (s) => { if (!s) return ''; const n = dayDiff(today(), s); return n === 0 ? 'today' : n === 1 ? 'yesterday' : n > 1 ? n + 'd ago' : 'in ' + (-n) + 'd'; };
+  try { const t = localStorage.getItem('cc-led-tab'); if (LED_TABS.some(([k]) => k === t)) st.ledgerTab = t; } catch (_) {}
+
+  function ledgerList(tab) {
+    const rows = st.ledger || [];
+    if (tab === 'q') return rows.filter((r) => r.type === 'Question').sort((a, b) => (a.when || '9999').localeCompare(b.when || '9999'));
+    if (tab === 'w') return rows.filter((r) => r.type === 'Waiting on').sort((a, b) => (a.fu || '9999').localeCompare(b.fu || '9999') || (a.when || '').localeCompare(b.when || ''));
+    if (tab === 'd') return rows.filter((r) => r.type === 'Draft').sort((a, b) => (b.when || '').localeCompare(a.when || ''));
+    return rows.filter((r) => r.type === 'Decision' || (r.type === 'Task' && DECIDE_RX.test(r.name))).sort((a, b) => (a.when || '9999').localeCompare(b.when || '9999'));
+  }
+  const ledgerFuDue = () => ledgerList('w').filter((r) => r.fu && r.fu <= today());
+  let ledgerUnsub = null;
+  function startLedgerWatch() {
+    if (ledgerUnsub) { try { ledgerUnsub(); } catch (_) {} ledgerUnsub = null; }
+    ledgerUnsub = watch(S.MON, 'get_board_items_page', {
+      boardId: LED.board, limit: LED.limit, includeColumns: true, includeGroup: false,
+      columnIds: [LED.type, LED.state, LED.surface, LED.actor, LED.topic, LED.people, LED.audience, LED.link, LED.key, LED.when],
+      filters: [{ columnId: 'group', operator: 'any_of', compareValue: [LED.group] }],
+      orderBy: [{ columnId: '__creation_log__', direction: 'desc' }],
+    }, 'mon', (p, at) => {
+      st.ledgerErr = '';
+      st.ledger = (p.items || []).map((it) => {
+        const cv = it.column_values || {};
+        const v = (k) => { const x = cv[k]; return x == null ? '' : typeof x === 'object' ? String(x.text || x.label || x.url || '') : String(x); };
+        const lk = cv[LED.link], when = v(LED.when);
+        return { id: String(it.id), name: it.name || '', url: it.url || '', type: v(LED.type), state: v(LED.state), surface: v(LED.surface), actor: v(LED.actor), topic: v(LED.topic), people: v(LED.people), audience: v(LED.audience),
+          link: linkUrl(lk && typeof lk === 'object' ? lk.url || lk.text : lk), key: v(LED.key), when: /^\d{4}-\d{2}-\d{2}/.test(when) ? when.slice(0, 10) : '', fu: fuOf(v(LED.key)) };
+      }).filter((r) => r.state === 'Open' && !st.doneIds.has(r.id));
+      const capped = p.pagination && p.pagination.has_more;
+      $('led-meta').textContent = st.ledger.length + ' open · ' + ago(at) + (capped ? ' · newest ' + LED.limit + ' rows read' : '');
+      if (drawerIn('ledger')) st.resortPending = true; else renderLedger();
+      renderLondon(); renderPrep(); if (!drawerIn('sugg')) renderSugg(); queueMicrotask(renderStats);
+    }, (e, drop) => {
+      if (drop || !st.ledger) {
+        st.ledger = drop ? null : st.ledger; st.ledgerErr = errText(e, 'monday');
+        $('led-tabs').replaceChildren(); $('led-meta').textContent = '';
+        $('ledger').replaceChildren(errBox('Could not read the Shared Memory ledger. ' + st.ledgerErr, retryLedger));
+        renderLondon(); queueMicrotask(renderStats);
+      }
+    });
+  }
+  function retryLedger() { $('ledger').replaceChildren(h('div', { class: 'skel' })); mcp.invalidate(S.MON, 'get_board_items_page').catch(() => {}).finally(startLedgerWatch); }
+
+  function renderLedger() {
+    if (!st.ledger) return;
+    $('led-tabs').replaceChildren(...LED_TABS.map(([k, l]) => h('button', { class: 'tab', role: 'tab', 'aria-selected': String(st.ledgerTab === k), onclick: () => { st.ledgerTab = k; try { localStorage.setItem('cc-led-tab', k); } catch (_) {} renderLedger(); } }, l, h('span', { class: 'n' }, ledgerList(k).length))));
+    const rows = ledgerList(st.ledgerTab), t0 = today();
+    const empty = { q: 'No open question waiting on you.', w: 'You are not waiting on anyone right now.', d: 'No draft waiting to be sent.', x: 'No open decision on the ledger.' }[st.ledgerTab];
+    if (!rows.length) { $('ledger').replaceChildren(h('div', { class: 'empty' }, empty)); return; }
+    $('ledger').replaceChildren(h('div', { class: 'list' }, rows.map((r) => ledgerRow(r, t0))));
+  }
+  function ledgerRow(r, t0) {
+    const tab = st.ledgerTab, age = r.when ? dayDiff(t0, r.when) : 0;
+    const fuOver = !!(r.fu && r.fu < t0), fuToday = r.fu === t0;
+    const mark = tab === 'w' ? (fuOver ? 'crit' : fuToday ? 'warn' : 'acc') : tab === 'q' ? (age >= 3 ? 'crit' : age >= 1 ? 'warn' : 'acc') : tab === 'x' ? 'warn' : 'acc';
+    const right = tab === 'w' ? (r.fu ? 'fu ' + ddmm(r.fu) : r.when ? ddmm(r.when) : '—') : r.when ? relDay(r.when) : '—';
+    const meta = [r.people, r.topic, tab === 'w' && r.when ? 'sent ' + ddmm(r.when) : tab === 'q' && r.when ? 'since ' + ddmm(r.when) : '', r.surface].filter(Boolean).join(' · ');
+    const row = h('div', { class: 'row', id: 'led-' + r.id },
+      h('div', { class: 'rh' },
+        h('span', { class: 'mark ' + mark }),
+        h('span', { class: 't', dir: 'auto' }, r.url ? h('a', { href: r.url, target: '_blank', rel: 'noopener', title: 'Open the ledger row in monday' }, r.name) : r.name,
+          tab === 'w' && fuOver && h('span', { class: 'pill crit' }, 'follow-up due'), tab === 'w' && fuToday && h('span', { class: 'pill warn' }, 'follow-up today'),
+          tab === 'q' && age >= 3 && h('span', { class: 'pill crit' }, age + ' days'), tab === 'x' && r.type !== 'Decision' && h('span', { class: 'pill idle' }, r.type)),
+        h('span', { class: 'r' }, right),
+        meta && h('span', { class: 'd', dir: 'auto' }, meta)),
+      h('div', { class: 'acts' },
+        r.link && h('a', { class: 'btnl', href: r.link, target: '_blank', rel: 'noopener' }, tab === 'd' ? 'Open draft ↗' : 'Open ↗'),
+        replyBtn(row, 'ledger', r) || h('span', { class: 'hint', style: 'align-self:center' }, r.link ? 'Reply where it lives: the link is not a Gmail, Slack or monday thread.' : 'No link to reply in.'),
+        h('button', { class: 'sm', type: 'button', onclick: () => openDrawer(row, 'ledgerdone', r) }, '✓ Done / answered'),
+        tab === 'w' && h('button', { class: 'sm', type: 'button', onclick: () => openDrawer(row, 'ledgersnooze', r) }, '⏭ Snooze fu +1d')));
+    return row;
+  }
+
+  // ---- 🇬🇧 Elevate London: countdown, the London rows on the ledger and their nearest follow-ups. Hidden after 25.11. ----
+  function renderLondon() {
+    const sec = $('sec-london'); if (!sec) return;
+    const t0 = today();
+    if (t0 > LONDON.hideAfter) { sec.hidden = true; return; }
+    sec.hidden = false;
+    const n = dayDiff(LONDON.date, t0), dayName = fmt(new Date(LONDON.date + 'T12:00:00Z'), { weekday: 'short', day: 'numeric', month: 'short' });
+    const big = n > 0 ? 'T-' + n : n === 0 ? 'Today' : 'T+' + (-n);
+    const sub = n > 1 ? n + ' days to Elevate London · ' + dayName : n === 1 ? 'Tomorrow · ' + dayName : n === 0 ? 'Elevate London is today' : 'Wrap-up: follow-ups and thank-yous';
+    const rows = (st.ledger || []).filter((r) => /^london/i.test(r.topic.trim()));
+    const fus = rows.filter((r) => r.fu).sort((a, b) => a.fu.localeCompare(b.fu)).slice(0, 3);
+    $('london').replaceChildren(
+      h('div', { class: 'ldn-top' }, h('span', { class: 'ldn-t' }, big),
+        h('div', {}, h('div', { style: 'font-weight:600' }, sub),
+          h('div', { class: 'hint' }, st.ledger ? rows.length + ' open London item' + (rows.length === 1 ? '' : 's') + ' on the ledger' : st.ledgerErr ? 'Ledger unavailable. ' + st.ledgerErr : 'Reading the ledger…'))),
+      fus.length ? h('ul', {}, fus.map((r) => h('li', {}, h('span', { class: 'w' }, ddmm(r.fu)),
+        h('span', { dir: 'auto' }, r.link ? h('a', { href: r.link, target: '_blank', rel: 'noopener' }, r.name) : r.name,
+          r.fu < t0 ? h('span', { class: 'pill crit' }, 'due') : r.fu === t0 ? h('span', { class: 'pill warn' }, 'today') : null))))
+        : st.ledger ? h('span', { class: 'hint' }, 'No follow-up dates on the open London items.') : null,
+      h('div', { style: 'display:flex;gap:8px;flex-wrap:wrap' }, h('a', { class: 'btnl', href: LONDON.brief, target: '_blank', rel: 'noopener' }, '📄 London brief ↗')));
+  }
+
+  // ---- 🗓️ Suggested blocks: reply, follow-up and focus time from the ledger, placed in real free gaps (R-26) ----
+  function suggestBlocks(off) {
+    const day = dayStr(off), evs = st.events[off];
+    if (!evs || !st.ledger) return null;
+    const free = freeGaps(day, evs, 15).map(([a, b]) => [Math.ceil(a / 5) * 5, b]);
+    const have = blocksOn(off).map((e) => ((e.summary || '') + '\n' + (e.description || '')).toLowerCase());
+    const place = (mins) => { for (const g of free) if (g[1] - g[0] >= mins) { const s = g[0]; g[0] += mins; return s; } return null; };   // blocks never overlap each other
+    const r15 = (m) => Math.ceil(m / 15) * 15, out = [];
+    const add = (kind, label, title, mins, items, tag) => {
+      if (have.some((x) => x.includes(tag))) return;    // already on the calendar
+      let s = place(mins);
+      if (s == null && kind === 'focus') for (const m of [45, 30]) if (m < mins && (s = place(m)) != null) { mins = m; break; }
+      if (s == null) return;
+      out.push({ kind, day, start: toHM(s), mins, label, title, items });
+    };
+    const qs = ledgerList('q');
+    if (qs.length) add('reply', 'Reply block · ' + qs.length + ' question' + (qs.length > 1 ? 's' : '') + ' waiting on you', 'Focus: Reply block (' + qs.length + ')', Math.min(90, Math.max(15, r15(qs.length * 5))), qs, 'reply block');
+    const fus = ledgerList('w').filter((r) => r.fu && r.fu <= day);
+    if (fus.length) add('fu', 'Follow-ups · ' + fus.length + ' due by ' + ddmm(day), 'Focus: Follow-ups (' + fus.length + ')', Math.min(60, Math.max(15, r15(fus.length * 5))), fus, 'follow-ups');
+    const seen = new Set(), work = [];
+    for (const r of [...ledgerList('x'), ...(st.ledger || []).filter((x) => !['Sent', 'Answer', 'Draft', 'Question', 'Waiting on'].includes(x.type) && WORK_RX.test(x.name))]) if (!seen.has(r.id)) { seen.add(r.id); work.push(r); }
+    for (const r of work.slice(0, 3)) {
+      const decision = r.type === 'Decision' || DECIDE_RX.test(r.name);
+      add('focus', (decision ? 'Decide: ' : 'Work on: ') + r.name, NON_EN_RX.test(r.name) ? '' : 'Focus: ' + r.name.slice(0, 80), decision ? 30 : 60, [r], '/pulses/' + r.id);
+    }
+    return out;
+  }
+  function renderSugg() {
+    const box = $('sugg'); if (!box || drawerIn('sugg')) return;
+    const list = mcp ? suggestBlocks(st.day) : null;
+    if (!list) { box.hidden = true; return; }
+    box.hidden = false;
+    box.replaceChildren(h('div', { class: 'sh' }, h('b', {}, '🗓️ Suggested blocks · ' + (st.day ? 'tomorrow' : 'today')),
+      h('span', { class: 'hint' }, list.length ? 'From the ledger, in your free time 08:00–19:00. Nothing is booked until you click.' : 'Nothing on the ledger needs a block, or no free gap fits.')),
+      ...list.map((s) => {
+        const card = h('div', { class: 'sb' }, h('span', { class: 'w' }, s.start + '–' + toHM(toMin(s.start) + s.mins)),
+          h('div', { class: 'b' }, h('b', { dir: 'auto' }, s.label),
+            s.kind !== 'focus' && h('ul', {}, s.items.slice(0, 6).map((r) => h('li', { dir: 'auto' }, r.link ? h('a', { href: r.link, target: '_blank', rel: 'noopener' }, r.name) : r.name))),
+            s.kind !== 'focus' && s.items.length > 6 && h('span', { class: 'hint' }, '+ ' + (s.items.length - 6) + ' more'),
+            h('div', { style: 'display:flex;gap:6px;flex-wrap:wrap' }, h('button', { class: 'sm spark', type: 'button', onclick: () => openDrawer(card, 'suggblock', s) }, '📅 Block it'))));
+        return card;
+      }));
+  }
+
+  // ---- 🧾 Meeting prep: the next meetings with other people, their open loops on the ledger, and recent mail (loaded on expand) ----
+  const prepMail = {}, prepOpen = new Set();
+  function nextMeetings() {
+    const now = Date.now(), seen = new Set(), out = [];
+    for (const off of [0, 1]) for (const e of st.events[off] || []) {
+      if (seen.has(e.id) || !(e.start && e.start.dateTime) || FOCUS_RX.test(e.summary || '')) continue;
+      if (Date.parse((e.end && e.end.dateTime) || e.start.dateTime) <= now) continue;
+      if ((e.attendees || []).some((a) => a.self && a.responseStatus === 'declined')) continue;
+      const att = (e.attendees || []).filter((a) => !a.self && !a.resource && !/resource\.calendar\.google\.com$/i.test(a.email || '') && emailOf(a.email).toLowerCase() !== ME_EMAIL);
+      if (!att.length) continue;
+      seen.add(e.id); out.push({ e, off, att });
+    }
+    return out.sort((a, b) => Date.parse(a.e.start.dateTime) - Date.parse(b.e.start.dateTime)).slice(0, 3);
+  }
+  const attName = (a) => a.displayName || String(a.email || '').split('@')[0].split(/[._-]/).filter(Boolean).map((w) => w[0].toUpperCase() + w.slice(1)).join(' ') || 'Guest';
+  const isExternal = (a) => !!a.email && !/@monday\.com$/i.test(a.email);
+  function loopsFor(att) {
+    return (st.ledger || []).filter((r) => {
+      const ppl = r.people.toLowerCase(); if (!ppl) return false;
+      return att.some((a) => {
+        if (String(a.displayName || '').toLowerCase().split(/\s+/).some((w) => w.length >= 3 && ppl.includes(w))) return true;
+        const local = String(a.email || '').toLowerCase().split('@')[0];
+        return ppl.split(/[,;/&|+]+/).some((p) => { const w = p.trim().split(/\s+/); return w.some((x) => x.length >= 3 && /^[a-z]+$/.test(x) && (local.startsWith(x) || (w.length > 1 && local === (w[0][0] || '') + x))); });
+      });
+    });
+  }
+  const agendaOf = (e) => {
+    const txt = decode(String(e.description || '').replace(/<br\s*\/?>/gi, '\n').replace(/<\/(p|div|li)>/gi, '\n').replace(/<[^>]+>/g, ''));
+    return txt.split(/─{4,}|Join Zoom Meeting|is inviting you to a scheduled Zoom|Join with Google Meet|Microsoft Teams meeting/)[0].replace(/\n{3,}/g, '\n\n').trim().slice(0, 500);
+  };
+  const meetLink = (e) => e.hangoutLink || (((e.conferenceData || {}).entryPoints || []).find((x) => x.entryPointType === 'video') || {}).uri || linkUrl(e.location) || (String(e.description || '').match(/https:\/\/[\w.-]*(zoom\.us|meet\.google\.com|teams\.microsoft\.com)\/[^\s"<>]+/) || [''])[0];
+  async function loadPrepMail(id, att) {
+    const emails = att.map((a) => emailOf(a.email)).filter(Boolean).slice(0, 8);
+    if (!emails.length) { prepMail[id] = { state: 'ok', threads: [] }; renderPrep(); return; }
+    prepMail[id] = { state: 'loading' }; renderPrep();
+    try {
+      const p = await call(S.GM, 'search_threads', { query: 'newer_than:14d (' + emails.map((x) => 'from:' + x + ' OR to:' + x).join(' OR ') + ')', pageSize: 3 });
+      prepMail[id] = { state: 'ok', threads: (p.threads || []).slice(0, 3).map((t) => { const ms = t.messages || [], last = ms[ms.length - 1] || {}; return { subject: decode(last.subject) || '(no subject)', snippet: decode(last.snippet), from: nameOf(last.sender), url: t.viewUrl || last.viewUrl, date: last.date }; }) };
+    } catch (e) { prepMail[id] = { state: 'err', err: errText(e, 'Gmail') }; }
+    renderPrep();
+  }
+  function renderPrep() {
+    const box = $('prep'); if (!box || !mcp) return;
+    if (drawerIn('prep')) { st.resortPending = true; return; }
+    if (!st.events[0]) return;
+    const list = nextMeetings();
+    $('prep-meta').textContent = list.length ? 'Next ' + list.length + ' with other people' : '';
+    if (!list.length) { box.replaceChildren(h('div', { class: 'empty' }, 'No more meetings with other people today or tomorrow.')); return; }
+    box.replaceChildren(...list.map(({ e, off, att }) => {
+      const s = new Date(e.start.dateTime), loops = loopsFor(att), ext = att.filter(isExternal).length, link = meetLink(e), agenda = agendaOf(e), pm = prepMail[e.id];
+      const det = h('details', { open: prepOpen.has(e.id) });
+      det.addEventListener('toggle', () => { if (det.open) { prepOpen.add(e.id); if (!prepMail[e.id]) loadPrepMail(e.id, att); } else prepOpen.delete(e.id); });
+      const mail = !pm ? h('span', { class: 'hint' }, 'Loads when you open this card.')
+        : pm.state === 'loading' ? h('span', { class: 'hint' }, 'Reading recent mail…')
+        : pm.state === 'err' ? errBox('Mail not loaded. ' + pm.err, () => loadPrepMail(e.id, att))
+        : pm.threads.length ? h('ul', {}, pm.threads.map((t) => h('li', { dir: 'auto' }, t.url ? h('a', { href: t.url, target: '_blank', rel: 'noopener' }, t.subject) : t.subject, h('span', { class: 'hint' }, ' · ' + t.from + (t.snippet ? ' — ' + t.snippet.slice(0, 140) : '')))))
+        : h('span', { class: 'hint' }, 'No mail with them in the last 14 days.');
+      det.append(
+        h('summary', {}, h('span', { class: 'w' }, (off ? 'Tmrw ' : 'Today ') + hm(s)), h('b', { dir: 'auto' }, e.summary || 'Meeting'),
+          h('span', { class: 'd' }, att.length + ' other' + (att.length > 1 ? 's' : '') + (ext ? ' · ' + ext + ' external' : '') + ' · ' + (loops.length ? loops.length + ' open loop' + (loops.length > 1 ? 's' : '') : 'no open loops'))),
+        h('div', { class: 'pb' },
+          h('h4', {}, 'Who'), h('div', { class: 'ppl' }, att.slice(0, 14).map((a) => h('span', { dir: 'auto', title: a.email || '' }, attName(a), isExternal(a) ? h('span', { class: 'pill warn' }, 'external') : null, a.responseStatus === 'declined' ? h('span', { class: 'pill idle' }, 'declined') : null)), att.length > 14 ? h('span', {}, '+' + (att.length - 14)) : null),
+          h('h4', {}, 'Open loops with them'),
+          loops.length ? h('ul', {}, loops.slice(0, 6).map((r) => { const li = h('li', { dir: 'auto' }, h('span', { class: 'pill idle', style: 'margin:0 6px 0 0' }, r.type || 'Open'), r.link ? h('a', { href: r.link, target: '_blank', rel: 'noopener' }, r.name) : r.name, r.fu ? h('span', { class: 'hint' }, ' · fu ' + ddmm(r.fu)) : null); const b = replyBtn(li, 'ledger', r); if (b) li.append(' ', b); return li; }))
+            : h('span', { class: 'hint' }, st.ledger ? 'Nothing open on the ledger with these people.' : 'The ledger has not loaded.'),
+          h('h4', {}, 'Recent mail'), mail,
+          agenda && h('h4', {}, 'Agenda'), agenda && h('div', { class: 'agd', dir: 'auto' }, agenda),
+          h('div', { style: 'display:flex;gap:6px;flex-wrap:wrap' }, link && h('a', { class: 'btnl', href: link, target: '_blank', rel: 'noopener' }, 'Join ↗'), e.htmlLink && h('a', { class: 'btnl', href: e.htmlLink, target: '_blank', rel: 'noopener' }, 'Open in Calendar ↗'))));
+      return det;
+    }));
+  }
+
+  // ---- ↩ Reply: one drawer for Gmail, Slack and monday, with a suggested reply built from the conversation ----
+  // The surface comes from the row: an inbox thread, a Slack message, a task or request (monday updates), or a ledger row's Link.
+  const VIP_RX = new RegExp(VIPS.map((v) => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'i');
+  const EXT_CHAN_RX = /^ext|[-_]ext\b|agenc|connect|shared|partner|vendor/i;
+  const isMondayMail = (e) => /@monday\.com$/i.test(emailOf(e));
+  const YUVAL = 'yuvalap@monday.com';   // R-33: cc on Elevate London email
+  function gmailThreadFromLink(url) {
+    url = String(url || ''); if (!/mail\.google\.com/.test(url)) return '';
+    let m = url.match(/thread-f:(\d{6,})/);
+    if (m) { try { return BigInt(m[1]).toString(16); } catch (_) { return ''; } }
+    m = url.match(/#(?:[^/#?]+\/)+([0-9a-f]{16})(?![\w])/i);
+    return m ? m[1].toLowerCase() : '';
+  }
+  function slackFromLink(url) {
+    const m = String(url || '').match(/slack\.com\/archives\/([A-Z0-9]+)\/p(\d{10})(\d{6})/); if (!m) return null;
+    const th = (String(url).match(/thread_ts=(\d{10}\.\d{6})/) || [])[1] || '';
+    return { channel: m[1], ts: m[2] + '.' + m[3], thread: th };
+  }
+  const mondayFromLink = (url) => (String(url || '').match(/monday\.com\/(?:boards\/\d+\/)?pulses\/(\d+)/) || [])[1] || '';
+  function replyTarget(kind, o) {
+    if (!o) return null;
+    if (kind === 'mail') return { surface: 'gmail', threadId: o.id, title: o.subject || '', who: nameOf(o.from), link: o.url, onDone: () => markActed(o.id) };
+    if (kind === 'slack') {
+      const oneToOne = o.src === 'dm' && (o.others || []).length === 1 && !o.thread;
+      return { surface: 'slack', channel: o.channel, thread: o.thread || '', ts: o.ts, userId: oneToOne ? o.others[0] : '', chanName: o.channelName || '', who: o.from || '', title: slText(o).slice(0, 90), link: o.permalink,
+        external: EXT_CHAN_RX.test(o.channelName || ''), onDone: () => touch(o.id), onClose: () => markHandled(o.id) };
+    }
+    if (kind === 'task' || kind === 'request') return { surface: 'monday', itemId: o.id, title: o.name, who: kind === 'request' ? (o.requester || '') : '', link: o.url, onDone: () => markActed(o.id) };
+    if (kind === 'ledger') {
+      const L = o.link, base = { title: o.name, who: o.people, link: L, ledger: o, external: /extern/i.test(o.audience || '') };
+      const g = gmailThreadFromLink(L); if (g) return { ...base, surface: 'gmail', threadId: g };
+      const s = slackFromLink(L);
+      if (s) return { ...base, surface: 'slack', channel: s.channel, ts: s.ts, thread: s.thread || (s.channel[0] === 'D' ? '' : s.ts), dm: s.channel[0] === 'D', userId: '' };
+      const mo = mondayFromLink(L); if (mo) return { ...base, surface: 'monday', itemId: mo };
+      return null;
+    }
+    return null;
+  }
+  const replyBtn = (row, kind, o, extra) => { const t = replyTarget(kind, o); return t && h('button', { class: 'sm spark', type: 'button', title: 'Reply with a suggested draft from the conversation', onclick: () => openDrawer(row, 'ureply', t, extra || {}) }, '↩ Reply'); };
+  // Open ledger rows about the same person or topic: context the reply should not contradict.
+  function relatedLoops(t) {
+    const names = String(t.who || '').toLowerCase().split(/[,;/&|+\s]+/).filter((w) => w.length >= 3);
+    const topic = t.ledger && t.ledger.topic;
+    return (st.ledger || []).filter((r) => r !== t.ledger && ((topic && r.topic === topic) || (names.length && names.some((w) => r.people.toLowerCase().includes(w))))).slice(0, 6);
+  }
+  const addWorkdays = (s, n) => { let d = s; while (n > 0) { d = addDays(d, 1); const w = new Date(d + 'T12:00:00Z').getUTCDay(); if (w !== 5 && w !== 6) n--; } return d; };   // Sun-Thu week
+  const splitEmails = (s) => [...new Set(String(s || '').split(/[,;\s]+/).map((x) => emailOf(x).toLowerCase()).filter(Boolean))];
+  const cutQuote = (txt) => String(txt || '').split(/\n\s*On .{0,120}wrote:|\n\s*בתאריך .{0,120}כתב|\n-{2,}\s*Original Message|\n\s*From: .*\n\s*Sent: /)[0].replace(/\n{3,}/g, '\n\n').trim();
+  function replyRules(surface, ext, london) {
+    return [
+      'You draft a reply for Ilan Manassen, Senior Communications Manager at monday.com. Follow every rule:',
+      '1. Write in the language of the conversation: a Hebrew thread gets a Hebrew reply. In Hebrew write "מאנדיי" for monday.com, and spell Adaya as "עדיה".',
+      '2. Open with a short how-are-you line to the person (R-32), then get to the point. Warm, concise, in Ilan\'s own voice.',
+      '3. Answer exactly what the latest message asks. When it helps, propose one concrete next step with a date or time (free slots are in WORK).',
+      '4. Never commit to a budget, price, approval, contract term or decision. If the conversation asks Ilan to decide or approve something, write a holding reply (acknowledge, say when he will come back) and set decision_needed to true.',
+      ext ? '5. The other side is EXTERNAL (outside monday.com). Never reveal internal considerations: no budgets or internal numbers beyond what they already said, no internal debates or approvals, no other vendors or their prices, no mention of boards, notes or agents.'
+        : '5. The other side is internal (monday.com colleagues). Be direct, but still never decide budgets or approvals for Ilan.',
+      '6. Never invent facts, dates, numbers or links. Put anything unknown in [brackets].',
+      surface === 'gmail' ? '7. Email: plain text body only, no subject line, no markdown. Sign off "Ilan".' + (london ? ' Yuval is cc\'d (Elevate London); do not mention it.' : '')
+        : surface === 'slack' ? '7. Slack: short and natural like a Slack message, plain text, no sign-off.'
+        : '7. monday update: 2-5 short lines, plain text, no markdown, no sign-off.',
+      'Reply with ONLY a JSON object: {"short": the short version (2-4 lines); "full": a fuller version (a few more lines, same rules); "decision_needed": true or false; "decision": what Ilan must decide, in English, or ""; "asks_question": true if the reply asks the other side for something; "language": "he", "en" or another code}.',
+    ].join('\n');
+  }
+  async function closeLedgerRow(r) {
+    await call(S.MON, 'change_item_column_values', { boardId: LED.board, itemId: Number(r.id), columnValues: JSON.stringify({ [LED.state]: { label: 'Closed' } }) });
+    st.doneIds.add(r.id); st.ledger = (st.ledger || []).filter((x) => x.id !== r.id);
+    mcp.invalidate(S.MON, 'get_board_items_page').catch(() => {});
+    queueMicrotask(() => { renderLondon(); renderStats(); if (drawerIn('ledger') || drawerIn('prep')) st.resortPending = true; else { renderLedger(); renderPrep(); } });
+  }
+  // A new "Waiting on" row on the ledger after Ilan asked something: follow up in 1 working day (internal) or 2 (external).
+  async function trackFollowup(t, ext) {
+    const r = t.ledger || {}, fu = addWorkdays(today(), ext ? 2 : 1), people = r.people || t.who || '', topic = r.topic || '';
+    const cv = { [LED.type]: { label: 'Waiting on' }, [LED.state]: { label: 'Open' }, [LED.surface]: t.surface, [LED.people]: people, [LED.topic]: topic, [LED.actor]: 'ui:command-center', [LED.when]: { date: today() },
+      [LED.key]: [t.surface, people, topic].filter(Boolean).join('|') + '|fu:' + ddmm(fu) };
+    if (r.audience) cv[LED.audience] = { label: r.audience };
+    if (/^https?:\/\//.test(t.link || '')) cv[LED.link] = { url: t.link, text: 'open' };
+    await call(S.MON, 'create_item', { boardId: LED.board, groupId: LED.group, name: ('Asked ' + (people || 'them') + ': ' + (r.name || t.title || 'reply')).slice(0, 255), columnValues: JSON.stringify(cv) });
+    mcp.invalidate(S.MON, 'get_board_items_page').catch(() => {});
+    return fu;
+  }
+
   // ---- Drawers: one inline form at a time; every write sits behind its own button ----
   function openDrawer(row, kind, obj, preset) {
     if (!mcp) return;
@@ -1077,6 +1590,162 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     row.append(d); st.openDrawer = d;
     d.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     const f = d.querySelector('textarea,input'); if (f) f.focus({ preventScroll: true });
+  }
+  function drawerIn(id) { const box = $(id); return !!(st.openDrawer && st.openDrawer.isConnected && box && box.contains(st.openDrawer)); }
+  // "What's next?" under a task just marked Done or updated.
+  function nextPrompt(d, t, after, note) {
+    return h('div', { class: 'next' }, h('b', {}, 'What’s next?'), h('span', { class: 'hint' }, 'Claude suggests follow-ups from this task.'),
+      h('button', { class: 'spark sm', type: 'button', onclick: () => openDrawer(d.closest('.row'), 'next', t, { after, note }) }, '↳ Suggest follow-ups'));
+  }
+
+  // ---- Follow-ups: Claude reads the task, its updates and the related mail and Slack, and suggests the next steps ----
+  const FU_KINDS = { message: 'Slack message', email: 'Email', task: 'Task', meeting: 'Meeting' };
+  const STOP = new Set('with from that this have about after before into your their there what when where will reply send sent mail email task follow done update וגם אחרי לפני עבור שלי שלך מול עם על את'.split(' '));
+  function relatedFor(t) {
+    const words = [...new Set((t.name.toLowerCase().match(/[\p{L}\p{N}]{4,}/gu) || []).filter((w) => !STOP.has(w)))];
+    const person = ((t.name.split(/\s[—–-]\s/)[1] || '').trim().toLowerCase());
+    const near = (txt) => { txt = String(txt || '').toLowerCase(); return words.filter((w) => txt.includes(w)).length >= 2 || (person.length > 2 && txt.includes(person)); };
+    const mail = (st.inbox || []).filter((m) => { const tr = triOf(m); return (tr && tr.related.includes(t.id)) || near(m.from + ' ' + m.subject + ' ' + m.snippet); }).slice(0, 5);
+    const slack = slackAll().filter((m) => { const tr = st.sltriage[m.id]; return (tr && tr.related.includes(t.id)) || near(m.from + ' ' + m.text); }).slice(0, 5);
+    // People the page already knows, so a draft can go to them without a lookup.
+    const known = { slack: {}, mail: {} };
+    slack.forEach((m) => { if (m.from && /^U[A-Z0-9]+$/.test(m.fromId)) known.slack[m.from.trim().toLowerCase()] = m.fromId; });
+    mail.forEach((m) => { const n = nameOf(m.from).toLowerCase(), e = emailOf(m.from); if (n && e) known.mail[n] = e; });
+    return { mail, slack, known };
+  }
+  async function suggestFollowups(t, preset, list, btn) {
+    if (!sample) return;
+    const was = btn.textContent; btn.disabled = true; btn.textContent = '✦ Thinking…';
+    list.replaceChildren(h('div', { class: 'thinking' }, 'Reading the task’s updates and the related mail and Slack…'));
+    let updates = '', readErr = null;
+    try {
+      const p = await call(S.MON, 'get_updates', { objectIds: [String(t.id)], objectType: 'Item', limit: 6 });
+      updates = (p.updates || []).map((u) => `${(u.created_at || '').slice(0, 10)} ${(u.creator || {}).name || ''}: ${(u.text_body || '').slice(0, 600)}`).join('\n') || '(no updates on the item)';
+    } catch (e) { readErr = e; updates = '(the updates could not be read)'; }
+    const rel = relatedFor(t);
+    const task = { name: t.name, status: t.status || 'not set', deadline: t.deadline || 'none', group: (GROUPS.find((g) => g.id === t.group) || {}).label || '', priority: t.priority || '', owner: t.owner || '' };
+    const prompt =
+      'You suggest follow-up tasks for Ilan Manassen, Senior Communications Manager at monday.com (media relations, exec comms, events, influencer program). ' +
+      (preset.after === 'done' ? 'He just marked this task Done. ' : preset.after === 'update' ? 'He just posted an update on this task. ' : 'He is looking at this task. ') +
+      'Suggest exactly 3 concrete next steps that follow logically from it, using its updates and the related email and Slack: who must now be told, chased, thanked, briefed or met, and what work it unblocks. Do not repeat existing_subtasks. ' +
+      'A budget, approval or commitment is Ilan\'s decision: suggest it as a task for him to decide, never draft the decision itself. Never invent facts, dates or numbers: put unknowns in [brackets]. ' +
+      'kind: "message" = a Slack message to a monday.com colleague; "email" = an email (outside people such as journalists, agencies, creators and vendors get email); "task" = work Ilan does himself; "meeting" = a call or meeting to set up. ' +
+      'Reply with ONLY a JSON array of 3 objects: {"title": imperative, max 10 words, in the task name\'s language; "why": one short line with the evidence, in English; "kind": "message"|"email"|"task"|"meeting"; "who": the person\'s full name as written in the data, or ""; ' +
+      '"channel": "slack" for message, "gmail" for email, else ""; "draft": for message and email only, the text Ilan would send, 2-5 short lines, no subject line, written as Ilan (sign "Ilan" only in an email); English, unless the related context with that person is in Hebrew; Hebrew if the person is Ilan himself; "" for task and meeting}.\n\n' +
+      'TASK:\n' + JSON.stringify(task) + '\n\nUPDATES ON THE TASK (newest first):\n' + updates +
+      (preset.note ? '\n\nILAN\'S UPDATE JUST NOW:\n' + preset.note : '') +
+      '\n\nRELATED EMAIL:\n' + (rel.mail.map((m) => `From: ${m.from} | ${m.date || ''} | ${m.subject}: ${(m.snippet || '').slice(0, 300)}`).join('\n') || 'none') +
+      '\n\nRELATED SLACK:\n' + (rel.slack.map((m) => `From: ${m.from} | ${m.src === 'dm' ? 'DM' : '#' + m.channelName} | ${m.time}: ${slText(m).slice(0, 300)}`).join('\n') || 'none') +
+      '\n\nEXISTING_SUBTASKS:\n' + JSON.stringify((t.subs || []).map((s) => s.name)) + '\n\nWORK:\n' + JSON.stringify(workContext(30));
+    try {
+      const arr = await sample.json(prompt, { cache: false, modelTier: 'default' });
+      const sugg = (Array.isArray(arr) ? arr : []).filter((s) => s && s.title).slice(0, 3).map((s) => ({ title: String(s.title), why: String(s.why || ''), kind: FU_KINDS[s.kind] ? s.kind : 'task', who: String(s.who || '').trim(), channel: String(s.channel || ''), draft: String(s.draft || '') }));
+      list.replaceChildren(...(sugg.length ? sugg.map((s) => fuCard(t, s, rel.known)) : [h('div', { class: 'hint' }, 'No suggestion this time. Add your own follow-up below, or ask again.')]));
+    } catch (e) {
+      list.replaceChildren(errBox(e.code === 'not_granted' ? 'Claude access was not allowed for this page. Allow it in the artifact’s Permissions menu.' : e.code === 'rate_limited' ? 'Claude is busy. Retry in a minute.' : 'Could not get follow-up suggestions (' + (e.code || 'error') + ').', () => suggestFollowups(t, preset, list, btn)));
+    }
+    if (readErr) list.append(errBox('Suggested without the task’s updates: ' + errText(readErr, 'monday'), () => suggestFollowups(t, preset, list, btn)));
+    btn.disabled = false; btn.textContent = was === '✦ Suggest follow-ups' ? '✦ Suggest again' : was;
+  }
+  async function findSlackUsers(name, known) {
+    const id = known.slack[name.toLowerCase()]; if (id) return [{ id, name, email: '' }];
+    const parse = (p) => [...String(typeof p === 'string' ? p : (p && p.results) || JSON.stringify(p || '')).matchAll(/^\d+\.\s+(.+?) - (U[A-Z0-9]+)(?: - (\S+@\S+))?/gm)].map((m) => ({ name: m[1].trim(), id: m[2], email: m[3] || '' }));
+    const words = name.split(/\s+/).filter(Boolean).slice(0, 3);
+    let found = parse(await call(S.SL, 'slack_search_users', { keywords: words.length > 1 ? ['"' + name + '"'] : words, natural_language_query: '', limit: 5, response_format: 'concise' }));
+    if (!found.length && words.length > 1) found = parse(await call(S.SL, 'slack_search_users', { keywords: words, natural_language_query: '', limit: 5, response_format: 'concise' }));
+    return found;
+  }
+  function fuCard(t, s, known) {
+    const card = h('div', { class: 'fu' });
+    const out = h('div', { class: 'out', role: 'status' });
+    const say = (msg, ok) => { out.className = 'out ' + (ok === true ? 'ok' : ok === false ? 'bad' : ''); out.textContent = msg; };
+    const title = h('input', { type: 'text', dir: 'auto', 'aria-label': 'Follow-up title' }); title.value = s.title;
+    const add = h('button', { class: 'sm pri', type: 'button' }, '＋ Add as subtask');
+    add.onclick = async () => { const n = title.value.trim(); if (!n) { say('The title is empty.', false); return; } if (await addSubtask(t, n, add, say)) card.classList.add('made'); };
+    const btns = [add], extra = [];
+    const draft = s.kind === 'message' || s.kind === 'email' ? h('textarea', { dir: 'auto', 'aria-label': 'Draft' }) : null;
+    if (draft) draft.value = s.draft;
+    if (s.kind === 'message') {
+      const who = h('input', { type: 'text', dir: 'auto', placeholder: 'Person’s name', 'aria-label': 'Slack recipient' }); who.value = s.who;
+      const pick = h('select', { 'aria-label': 'Which person', hidden: true });
+      who.addEventListener('input', () => { pick.hidden = true; pick.replaceChildren(); });
+      const go = h('button', { class: 'sm', type: 'button' }, '✎ Draft in Slack');
+      go.onclick = async () => {
+        const msg = draft.value.trim(); if (!msg) { say('The draft is empty.', false); return; }
+        let id = !pick.hidden && pick.value, to = id ? pick.selectedOptions[0].textContent : '';
+        if (!id) {
+          const name = who.value.trim(); if (!name) { say('Write who it is for.', false); who.focus(); return; }
+          go.disabled = true; say('Finding ' + name + ' in Slack…');
+          let found;
+          try { found = await findSlackUsers(name, known); } catch (e) { go.disabled = false; say(errText(e, 'Slack'), false); return; }
+          go.disabled = false;
+          if (!found.length) { say('No one in Slack matches “' + name + '”. Check the name.', false); return; }
+          if (found.length > 1) { pick.replaceChildren(...found.map((u) => h('option', { value: u.id }, u.name + (u.email ? ' · ' + u.email : '')))); pick.hidden = false; say('Several people match. Pick one, then click Draft in Slack again.'); return; }
+          id = found[0].id; to = found[0].name;
+        }
+        if (!/^U[A-Z0-9]+$/.test(id)) { say('That is not a Slack user id, so nothing was saved.', false); return; }   // DM targets are user ids, never DM channel ids
+        busy2(go, true, 'Saving…');
+        try { await call(S.SL, 'slack_send_message_draft', { channel_id: id, message: msg }); say('Saved as a Slack draft to ' + to + '. Nothing was sent.', true); go.remove(); touch(t.id); }
+        catch (e) { say(/attached_draft_exists/.test((e && e.message) || '') ? 'You already have an unsent draft to ' + to + ' in Slack. Send or delete it there first.' : errText(e, 'Slack'), false); busy2(go, false, '✎ Draft in Slack'); }
+      };
+      extra.push(h('label', { class: 'f' }, 'To (Slack)', who, pick)); btns.push(go);
+    }
+    if (s.kind === 'email') {
+      const to = h('input', { type: 'email', placeholder: 'name@company.com', 'aria-label': 'Email recipient' }); to.value = known.mail[s.who.toLowerCase()] || '';
+      const subj = h('input', { type: 'text', dir: 'auto', 'aria-label': 'Subject' }); subj.value = s.title;
+      let looked = false;
+      const go = h('button', { class: 'sm', type: 'button' }, '✉ Draft in Gmail');
+      go.onclick = async () => {
+        const body = draft.value.trim(); if (!body) { say('The draft is empty.', false); return; }
+        if (!emailOf(to.value) && s.who && !looked) {
+          looked = true; go.disabled = true; say('Looking up ' + s.who + '…');
+          try { const u = (await findSlackUsers(s.who, { slack: {}, mail: {} })).find((x) => x.email); if (u) { to.value = u.email; go.disabled = false; say('Found ' + u.name + '. Check the address, then click Draft in Gmail again.'); return; } } catch (_) {}
+          go.disabled = false; say('No address found for ' + s.who + '. Add one, or click again to save the draft without a recipient.'); return;
+        }
+        busy2(go, true, 'Saving…');
+        try {
+          const p = await call(S.GM, 'create_draft', { to: emailOf(to.value) ? [emailOf(to.value)] : [], subject: subj.value.trim(), body });
+          out.className = 'out ok'; out.replaceChildren('Saved to Gmail Drafts. Nothing was sent. ', p && p.viewUrl ? h('a', { href: p.viewUrl, target: '_blank', rel: 'noopener' }, 'Open in Gmail') : '');
+          go.remove(); touch(t.id);
+        } catch (e) { say(errText(e, 'Gmail'), false); busy2(go, false, '✉ Draft in Gmail'); }
+      };
+      extra.push(h('label', { class: 'f' }, 'To', to), h('label', { class: 'f' }, 'Subject', subj)); btns.push(go);
+    }
+    if (s.kind === 'meeting') btns.push(h('button', { class: 'sm', type: 'button', onclick: (ev) => { ev.currentTarget.remove(); holdTime(card, t, title, s.who, say); } }, '◷ Hold time'));
+    card.append(h('span', { class: 'k ' + s.kind }, FU_KINDS[s.kind], s.who ? h('bdi', {}, ' · ' + s.who) : null), title, s.why && h('p', { dir: 'auto' }, s.why), ...extra, draft, h('div', { class: 'line' }, btns), out);
+    return card;
+  }
+  const busy2 = (btn, on, label) => { btn.disabled = on; if (label) btn.textContent = label; };
+  // A meeting follow-up reuses the calendar picker: a hold on Ilan's own calendar, no guests invited (he sends the invite).
+  function holdTime(card, t, titleIn, who, say) {
+    const date = h('input', { type: 'date', value: today(), 'aria-label': 'Day' });
+    const time = h('input', { type: 'time', value: '', step: 900, 'aria-label': 'Start' });
+    const dur = h('select', { 'aria-label': 'Length' }, [15, 30, 45, 60].map((m) => h('option', { value: m, selected: m === 30 }, m + ' min')));
+    const ttl = h('input', { type: 'text', placeholder: 'English title', 'aria-label': 'Calendar title' });
+    if (!NON_EN_RX.test(titleIn.value)) ttl.value = titleIn.value.slice(0, 90);
+    else if (sample) {
+      ttl.placeholder = 'Translating the title to English…';
+      sample('Translate this into a short English calendar title, at most 8 words. Reply with the title only, no quotes:\n' + titleIn.value, { modelTier: 'quick' })
+        .then(({ text }) => { if (!ttl.value) ttl.value = text.trim().replace(/^["']|["']$/g, ''); }).catch(() => { ttl.placeholder = 'English title (write it in English)'; });
+    }
+    const go = h('button', { class: 'sm pri', type: 'button' }, 'Add to calendar');
+    let clash = false;
+    const cal = calPicker(date, time, dur, () => { clash = false; go.textContent = 'Add to calendar'; });
+    cal.refresh(false);
+    go.onclick = async () => {
+      if (!date.value || !time.value) { say('Pick a day and a start time.', false); return; }
+      if (!ttl.value.trim() || NON_EN_RX.test(ttl.value)) { say('Calendar titles are always in English. Write the title in English.', false); return; }
+      if (cal.gaps() && !fits(cal.gaps(), toMin(time.value), Number(dur.value)) && !clash) { clash = true; go.textContent = 'Add anyway'; say('That time overlaps a meeting or falls outside 08:00–19:00. Pick a free slot, or click “Add anyway”.', false); return; }
+      busy2(go, true, 'Adding…');
+      try {
+        await call(S.CAL, 'create_event', { summary: ttl.value.trim().slice(0, 100), startTime: date.value + 'T' + time.value + ':00', endTime: plusMin(date.value, time.value, Number(dur.value)), availability: 'AVAILABILITY_BUSY', description: 'Follow-up from the Command Center' + (who && !NON_EN_RX.test(who) ? ' (with ' + who + ')' : '') + '. Task: ' + (t.url || t.name) });
+        say(`Held ${time.value}, ${ddmm(date.value)} on your calendar. No one was invited.`, true); go.remove(); mcp.invalidate(S.CAL).catch(() => {}); touch(t.id);
+      } catch (e) { say(errText(e, 'Google Calendar'), false); busy2(go, false, 'Retry'); }
+    };
+    const anchor = card.querySelector(':scope > .line');
+    [h('div', { class: 'hint' }, 'Holds the time on your calendar only. No guests are invited: send the invite yourself.'),
+      h('div', { class: 'line' }, h('label', { class: 'f' }, 'Day', date), h('label', { class: 'f' }, 'Start', time), h('label', { class: 'f' }, 'Length', dur)), cal.box,
+      h('label', { class: 'f' }, 'Calendar title', ttl), h('div', { class: 'line' }, go)].forEach((el) => card.insertBefore(el, anchor));
   }
 
   function describeRef(o) {
@@ -1113,12 +1782,13 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   // Items Ilan already acted on from this page drop to the bottom of their list (re-sorted when the drawer closes).
   const actedLast = (rows, idOf) => rows.filter((x) => !isTouched(idOf(x))).concat(rows.filter((x) => isTouched(idOf(x))));
   const actedPill = (id) => isTouched(id) && h('span', { class: 'pill ok' }, '✓ acted');
-  function resortLists() { st.resortPending = false; if (st.openDrawer) return; renderTasks(); renderRequests(); renderInbox(); renderSlack(); }
+  function resortLists() { st.resortPending = false; if (st.openDrawer) return; renderTasks(); renderRequests(); renderInbox(); renderSlack(); renderLedger(); renderSugg(); renderPrep(); }
   function markActed(ref) { touch(ref); queueMicrotask(renderStats); st.ideas = st.ideas.filter((i) => String(i.ref) !== String(ref)); renderIdeas(); renderPlan(); maybeMoreAfterAction(); }
 
   // ---- Calendar picker: the day's real calendar inside a booking drawer. Click a free slot (or the timeline) to pick it. ----
   const FOCUS_RX = /^focus:/i;
-  const pulseIds = (txt) => [...String(txt || '').matchAll(/\/pulses\/(\d+)/g)].map((m) => m[1]);
+  // Task links in an event description; Shared Memory ledger links (a 🗓️ suggested block) are not tasks.
+  const pulseIds = (txt) => [...String(txt || '').matchAll(/(?:boards\/(\d+)\/)?pulses\/(\d+)/g)].filter((m) => m[1] !== String(LED.board)).map((m) => m[2]);
   function calPicker(date, time, dur, onChange) {
     const box = h('div', { class: 'calv' }), hint = h('div', { class: 'hint' });
     let evs = null, gaps = null, loading = '';
@@ -1179,6 +1849,24 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   const openTasksForBlocks = () => (st.tasks || []).filter((t) => !st.doneIds.has(t.id)).slice().sort((a, b) => (a.group === GROUPS[0].id ? 0 : 1) - (b.group === GROUPS[0].id ? 0 : 1) || byPriority(a, b));
 
   const DRAWERS = {
+    // Follow-ups for a task: Claude's three suggestions, each one a subtask and, for a message or email, a draft. Plus Ilan's own.
+    next(d, t, { say, close, out, preset }) {
+      const list = h('div', { class: 'fus' });
+      const again = h('button', { class: 'spark sm', type: 'button' }, '✦ Suggest follow-ups');
+      again.onclick = () => suggestFollowups(t, preset, list, again);
+      const other = h('input', { type: 'text', dir: 'auto', placeholder: 'Other follow-up…', 'aria-label': 'Other follow-up', style: 'flex:1;min-width:180px' });
+      const addOther = h('button', { class: 'sm', type: 'button' }, '＋ Add as subtask');
+      addOther.onclick = async () => {
+        const name = other.value.trim(); if (!name) { say('Write the follow-up first.', false); other.focus(); return; }
+        if (await addSubtask(t, name, addOther, say)) { other.value = ''; addOther.disabled = false; addOther.textContent = '＋ Add as subtask'; }
+      };
+      other.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') { ev.preventDefault(); addOther.click(); } });
+      d.append(h('div', { class: 'hint' }, (preset.after === 'done' ? 'Done. ' : preset.after === 'update' ? 'Update posted. ' : '') + 'Follow-ups go under this task as subtasks. Messages and emails are saved as drafts, never sent.'),
+        list, h('div', { class: 'line' }, other, addOther), h('div', { class: 'line' }, again, close), out);
+      if (sample) again.click();
+      else list.append(h('div', { class: 'hint' }, 'Claude suggestions are not available in this view. Add your own follow-up below.'));
+    },
+
     done(d, t, { out, say, busy, close }) {
       const go = h('button', { class: 'pri' }, 'Mark Done + tell Pepper');
       go.onclick = async () => {
@@ -1189,6 +1877,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
         catch (e) { say('Done on the board, but telling Pepper failed. ' + errText(e, 'Slack'), false); }
         st.doneIds.add(t.id); d.closest('.row').classList.add('gone'); go.remove();
         mcp.invalidate(S.MON).catch(() => {}); markActed(t.id);
+        if (!t.board) d.append(nextPrompt(d, t, 'done'));
       };
       d.append(h('div', { class: 'hint' }, 'Sets status to Done on the board, then DMs Pepper: done means done everywhere.'), h('div', { class: 'line' }, go, close), out);
     },
@@ -1205,7 +1894,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       go.onclick = async () => {
         const txt = ta.value.trim(); if (!txt) { say('Write something first.', false); return; }
         busy(go, true, 'Posting…');
-        try { await call(S.MON, 'create_update', { itemId: Number(t.id), body: escHtml(txt).replace(/\n/g, '<br>') }); say('Update posted on the item.', true); go.remove(); markActed(t.id); }
+        try { await call(S.MON, 'create_update', { itemId: Number(t.id), body: escHtml(txt).replace(/\n/g, '<br>') }); say('Update posted on the item.', true); go.remove(); markActed(t.id); if (!t.board) d.append(nextPrompt(d, t, 'update', txt)); }
         catch (e) { say(errText(e, 'monday'), false); busy(go, false, 'Retry'); }
       };
       d.append(ta, h('div', { class: 'line' }, ai, go, close), out);
@@ -1338,92 +2027,178 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       d.append(h('label', { class: 'f' }, 'Hand to', target), ta, h('div', { class: 'line' }, go, close), out);
     },
 
-    reply(d, m, { say, busy, close, out, preset }) {
-      const how = h('input', { type: 'text', placeholder: 'Optional direction, e.g. “yes for Tuesday, ask for questions in advance”', style: 'width:100%', dir: 'auto', value: preset.how || '' });
-      const ta = h('textarea', { dir: 'auto', placeholder: 'Claude drafts here. Edit freely.', style: 'min-height:150px' });
-      const ai = h('button', { class: 'spark sm' }, '✦ Draft reply');
-      const go = h('button', { class: 'pri' }, 'Save to Gmail Drafts');
-      let thread = null, replyTo = null;
-      async function loadThread() {
-        if (thread) return;
-        const p = await call(S.GM, 'get_thread', { threadId: m.id, messageFormat: 'PLAIN_TEXT' });
-        thread = p.messages || [];
-        replyTo = [...thread].reverse().find((x) => emailOf(x.sender).toLowerCase() !== ME_EMAIL) || thread[thread.length - 1] || null;
+    // ↩ Reply (Gmail, Slack or monday): read the conversation, suggest a short and a fuller reply, then draft, send or post on click.
+    ureply(d, t, { say, busy, close, out, preset }) {
+      if (!t) { d.append(h('div', { class: 'hint' }, 'This item has no Gmail, Slack or monday link to reply in. Open it instead.'), h('div', { class: 'line' }, close)); return; }
+      const c = { text: '', external: !!t.external, lastMsgId: '', subject: '', updates: [], asks: false, london: /^london/i.test((t.ledger && t.ledger.topic) || '') };
+      const flag = h('div', { class: 'flag', role: 'note', hidden: true });
+      const where = h('div', { class: 'hint', dir: 'auto' }, { gmail: 'Email', slack: 'Slack', monday: 'monday update' }[t.surface] + (t.title ? ' · ' + t.title.slice(0, 90) : ''));
+      const status = h('div', { class: 'hint' }, 'Reading the conversation…');
+      const vars = { short: '', full: '' }; let cur = 'short';
+      const ta = h('textarea', { dir: 'auto', placeholder: sample ? 'Claude drafts here from the conversation. Edit freely.' : 'Write your reply.', style: 'min-height:150px', 'aria-label': 'Reply' });
+      const vsw = h('div', { class: 'vsw', role: 'group', 'aria-label': 'Version' });
+      const vb = (k, l) => h('button', { class: 'sm', type: 'button', 'aria-pressed': String(cur === k), onclick: () => { vars[cur] = ta.value; cur = k; ta.value = vars[k]; vsw.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === k))); }, 'data-v': k }, l);
+      vsw.append(vb('short', 'Short'), vb('full', 'Fuller'));
+      vsw.hidden = true;
+      const instr = h('input', { type: 'text', dir: 'auto', placeholder: 'Optional instruction, e.g. “make it firmer”, “ask for the PO”', value: preset.how || '', style: 'flex:1;min-width:160px', 'aria-label': 'Instruction for Claude' });
+      const regen = h('button', { class: 'spark sm', type: 'button' }, '↻ Regenerate');
+      const fields = h('div', { class: 'line' }), acts = h('div', { class: 'line' }), after = h('div', { class: 'next', hidden: true });
+      // Surface-specific fields
+      const toIn = h('input', { type: 'text', placeholder: 'name@company.com', 'aria-label': 'To', style: 'flex:1;min-width:200px' });
+      const ccIn = h('input', { type: 'text', placeholder: 'cc, comma separated', 'aria-label': 'Cc', style: 'flex:1;min-width:200px' });
+      const subj = h('input', { type: 'text', dir: 'auto', 'aria-label': 'Subject', style: 'flex:1;min-width:200px' });
+      const under = h('input', { type: 'checkbox' }), underL = h('label', { style: 'display:flex;gap:6px;align-items:center;font-size:13px', hidden: true }, under, h('span', {}, 'Reply under the latest update'));
+      if (t.surface === 'gmail') fields.append(h('label', { class: 'f', style: 'flex:1' }, 'To', toIn), h('label', { class: 'f', style: 'flex:1' }, 'Cc', ccIn), h('label', { class: 'f', style: 'flex:1 1 100%' }, 'Subject', subj));
+      if (t.surface === 'monday') fields.append(underL);
+      const ctxFacts = () => JSON.stringify({ surface: t.surface, about: t.title, with: t.who || '', external: c.external, ledger: t.ledger ? { type: t.ledger.type, topic: t.ledger.topic, summary: t.ledger.name } : undefined });
+
+      async function load() {
+        if (t.surface === 'gmail') {
+          const p = await call(S.GM, 'get_thread', { threadId: t.threadId, messageFormat: 'PLAIN_TEXT' });
+          const ms = p.messages || []; if (!ms.length) throw { code: 'empty', message: 'The thread came back empty.' };
+          const last = ms[ms.length - 1], other = [...ms].reverse().find((x) => emailOf(x.sender).toLowerCase() !== ME_EMAIL);
+          c.lastMsgId = last.id;
+          const toAddr = (other ? emailOf(other.sender) : emailOf((last.toRecipients || [])[0])).toLowerCase();
+          const pool = new Set([...(last.toRecipients || []), ...(last.ccRecipients || []), last.sender].map((x) => emailOf(x).toLowerCase()).filter(Boolean));
+          pool.delete(ME_EMAIL); pool.delete(toAddr);
+          c.subject = decode(ms[0].subject || last.subject || t.title || '');
+          c.external = c.external || [toAddr, ...pool].some((e) => e && !isMondayMail(e));
+          c.london = c.london || /london/i.test(c.subject);
+          if (c.london) pool.add(YUVAL);
+          toIn.value = toAddr; ccIn.value = [...pool].join(', '); subj.value = /^re:/i.test(c.subject) ? c.subject : 'Re: ' + c.subject;
+          c.text = ms.slice(-6).map((x) => `From: ${x.sender}\nTo: ${(x.toRecipients || []).join(', ')}${(x.ccRecipients || []).length ? '\nCc: ' + x.ccRecipients.join(', ') : ''}\nDate: ${x.date}\n\n${cutQuote(x.plaintextBody || decode(x.snippet)).slice(0, 2500)}`).join('\n\n---\n\n').slice(-10000);
+          return 'Read ' + ms.length + ' message' + (ms.length > 1 ? 's' : '') + (c.external ? ' · external thread' : '') + (c.london ? ' · cc Yuval (R-33)' : '');
+        }
+        if (t.surface === 'slack') {
+          const p = t.thread ? await call(S.SL, 'slack_read_thread', { channel_id: t.channel, message_ts: t.thread, limit: 30, response_format: 'concise' })
+            : await call(S.SL, 'slack_read_channel', t.ts ? { channel_id: t.channel, limit: 15, response_format: 'concise', latest: (Number(t.ts) + 1).toFixed(6) } : { channel_id: t.channel, limit: 15, response_format: 'concise' });
+          c.text = (typeof p === 'string' ? p : JSON.stringify(p)).slice(-7000);
+          return 'Read the ' + (t.thread ? 'thread' : 'conversation') + (c.external ? ' · external' : '');
+        }
+        const p = await call(S.MON, 'get_updates', { objectIds: [String(t.itemId)], objectType: 'Item', limit: 8 });
+        c.updates = (p.updates || []).slice().sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
+        const lu = c.updates[0];
+        if (lu && lu.id) { underL.hidden = false; under.checked = !/manassen|^ilan\b/i.test((lu.creator || {}).name || ''); underL.querySelector('span').textContent = 'Reply under the latest update' + ((lu.creator || {}).name ? ' (' + lu.creator.name + ', ' + String(lu.created_at || '').slice(0, 10) + ')' : ''); }
+        c.text = c.updates.map((u) => `${String(u.created_at || '').slice(0, 10)} ${(u.creator || {}).name || ''}: ${String(u.text_body || '').slice(0, 800)}`).reverse().join('\n') || '(no updates on the item yet)';
+        return c.updates.length ? 'Read ' + c.updates.length + ' update' + (c.updates.length > 1 ? 's' : '') : 'No updates on the item yet';
       }
-      ai.onclick = async () => {
-        say('Reading the whole thread…');
-        try { await loadThread(); } catch (e) { say(errText(e, 'Gmail'), false); return; }
-        say('');
-        const text = thread.map((x) => `From: ${x.sender}\nDate: ${x.date}\n\n${(x.plaintextBody || decode(x.snippet) || '').replace(/\|\s*\|/g, ' ').replace(/\n{3,}/g, '\n\n')}`).join('\n\n---\n\n').slice(-9000);
-        await draftWithClaude(
-          'You draft email replies for Ilan Manassen, Senior Communications Manager at monday.com. Read the whole thread, then write ONLY the reply body: plain text, no subject line, no markdown. ' +
-          'Use the language of the latest message. Be concise, warm and specific, and answer every question asked. ' +
-          'Never commit to a budget, approval, price or decision: write [Ilan to decide: …] where one is needed. Never invent facts, dates or numbers: put anything unknown in [brackets]. Sign off as "Ilan". ' +
-          'Use what Ilan\'s work board says (WORK below) to make the reply concrete: the real status, owners and dates of the related task or request, and free calendar slots when the email asks to meet. Do not mention the board or internal notes to the sender. ' +
-          (how.value.trim() ? `Ilan's direction for this reply: """${how.value.trim()}""". ` : '') +
-          (relatedText(triOf(m)).length ? '\n\nRELATED WORK:\n' + relatedText(triOf(m)).join('\n') : '') +
-          '\n\nWORK:\n' + JSON.stringify(workContext(40)) + '\n\nTHREAD (oldest first):\n' + text, ta, ai, say);
-      };
-      go.onclick = async () => {
-        const body = ta.value.trim(); if (!body) { say('The draft is empty.', false); return; }
-        busy(go, true, 'Saving…');
+      async function gen() {
+        if (!sample) return;
+        regen.disabled = true; regen.textContent = '✦ Writing…'; if (!ta.value) ta.placeholder = '✦ Writing two versions…';
+        const loops = relatedLoops(t);
+        const prompt = replyRules(t.surface, c.external, c.london) +
+          '\n\nWHAT THIS IS:\n' + ctxFacts() +
+          '\n\nCONVERSATION (oldest first):\n' + (c.text || '(could not be read; use what is known)') +
+          (loops.length ? '\n\nOTHER OPEN LOOPS WITH THEM (do not contradict):\n' + loops.map((r) => `- ${r.type}: ${r.name}${r.fu ? ' (follow-up ' + ddmm(r.fu) + ')' : ''}`).join('\n') : '') +
+          '\n\nWORK:\n' + JSON.stringify(workContext(30)) +
+          (instr.value.trim() ? '\n\nILAN\'S INSTRUCTION FOR THIS REPLY: ' + instr.value.trim() : '');
         try {
-          await loadThread();
-          const subj = (replyTo && decode(replyTo.subject)) || m.subject || '';
-          const to = emailOf(replyTo && replyTo.sender) || emailOf(m.from);
-          const p = await call(S.GM, 'create_draft', { to: to ? [to] : [], subject: /^re:/i.test(subj) ? subj : 'Re: ' + subj, body, replyToMessageId: replyTo ? replyTo.id : undefined });
-          out.className = 'out ok';
-          out.replaceChildren('Saved to Drafts. Nothing was sent. ', p && p.viewUrl ? h('a', { href: p.viewUrl, target: '_blank', rel: 'noopener' }, 'Open in Gmail') : '');
-          go.remove(); markActed(m.id);
-        } catch (e) { say(errText(e, 'Gmail'), false); busy(go, false, 'Retry'); }
-      };
-      d.append(how, ta, h('div', { class: 'line' }, ai, go, close), out);
-      if (sample) ai.click();
+          const r = await sample.json(prompt, { cache: false, modelTier: 'default' });
+          vars.short = String((r && r.short) || '').trim(); vars.full = String((r && r.full) || '').trim() || vars.short;
+          ta.value = vars[cur]; vsw.hidden = !vars.short;
+          c.asks = !!(r && r.asks_question);
+          flag.hidden = !(r && r.decision_needed);
+          flag.textContent = '⚖️ Decision needed: ' + ((r && r.decision) || 'this asks for your decision') + '. The draft only holds; the decision is yours.';
+          say('');
+        } catch (e) { say(e.code === 'not_granted' ? 'Claude access was not allowed for this page. Write the reply yourself.' : e.code === 'rate_limited' ? 'Claude is busy. Try ↻ Regenerate in a minute.' : 'Could not draft (' + (e.code || 'error') + '). Write it yourself or retry.', false); }
+        regen.disabled = false; regen.textContent = '↻ Regenerate';
+      }
+      regen.onclick = gen;
+      function done(msg) {
+        toast(msg); vars[cur] = ta.value;
+        c.did = true; if (t.onDone) t.onDone();
+        if (t.ledger && (st.ledger || []).some((x) => x.id === t.ledger.id)) {
+          const ans = h('button', { class: 'sm', type: 'button' }, '✓ Mark as answered');
+          ans.onclick = async () => { ans.disabled = true; try { await closeLedgerRow(t.ledger); ans.textContent = '✓ Closed on the ledger'; toast('Closed on the ledger.'); } catch (e) { ans.disabled = false; say('Not closed. ' + errText(e, 'monday'), false); } };
+          after.replaceChildren(h('b', {}, 'On the ledger:'), ans);
+        } else after.replaceChildren(h('b', {}, 'Track it:'));
+        const fuWhen = addWorkdays(today(), c.external ? 2 : 1);
+        const trk = h('button', { class: 'sm' + (c.asks ? ' spark' : ''), type: 'button', title: 'Adds a “Waiting on” row to the Shared Memory ledger' }, '🔁 Track follow-up · ' + ddmm(fuWhen));
+        trk.onclick = async () => { trk.disabled = true; try { const fu = await trackFollowup(t, c.external); trk.textContent = '✓ Tracking, follow-up ' + ddmm(fu); toast('Added to the ledger: follow up ' + ddmm(fu) + '.'); } catch (e) { trk.disabled = false; say('Not tracked. ' + errText(e, 'monday'), false); } };
+        after.append(trk); after.hidden = false;
+      }
+      const txt = () => ta.value.trim();
+      if (t.surface === 'gmail') {
+        const go = h('button', { class: 'pri' }, 'Save as Gmail draft');
+        go.onclick = async () => {
+          if (!txt()) { say('The reply is empty.', false); return; }
+          const to = splitEmails(toIn.value), cc = splitEmails(ccIn.value).filter((x) => !to.includes(x));
+          if (!to.length) { say('Add a recipient.', false); toIn.focus(); return; }
+          busy(go, true, 'Saving…');
+          try {
+            const p = await call(S.GM, 'create_draft', { to, cc: cc.length ? cc : undefined, subject: subj.value.trim(), body: txt(), replyToMessageId: c.lastMsgId || undefined });
+            out.className = 'out ok'; out.replaceChildren('Saved to Gmail Drafts. Nothing was sent. ', p && p.viewUrl ? h('a', { href: p.viewUrl, target: '_blank', rel: 'noopener' }, 'Open in Gmail') : '');
+            go.remove(); done('Saved to Gmail Drafts.');
+          } catch (e) { say(errText(e, 'Gmail'), false); busy(go, false, 'Save as Gmail draft'); }
+        };
+        acts.append(go, h('span', { class: 'hint' }, 'Email is never sent from here.'));
+      }
+      if (t.surface === 'slack') {
+        const vip = VIP_RX.test(t.who || '');
+        async function dest() {
+          if (t.thread) return { channel_id: t.channel, thread_ts: t.thread };
+          if (t.userId) return { channel_id: t.userId };
+          if (t.dm) {   // a DM goes to the person's user id, never the DM channel id
+            const name = String(t.who || '').split(/[,;/&|+]/)[0].trim(); if (!name) throw { code: 'no_user', message: 'Could not tell who this DM is with. Reply from Slack.' };
+            const found = await findSlackUsers(name, { slack: {}, mail: {} });
+            if (found.length !== 1) throw { code: 'no_user', message: (found.length ? 'Several people match “' : 'No one in Slack matches “') + name + '”. Reply from Slack.' };
+            t.userId = found[0].id; return { channel_id: t.userId };
+          }
+          return { channel_id: t.channel };
+        }
+        const draft = h('button', { class: 'pri' }, 'Save as Slack draft');
+        draft.onclick = async () => {
+          if (!txt()) { say('The reply is empty.', false); return; }
+          busy(draft, true, 'Saving…');
+          try { const to = await dest(); if (to.channel_id[0] === 'D' && !to.thread_ts) throw { code: 'dm_channel', message: 'A DM needs the person’s user id.' }; await call(S.SL, 'slack_send_message_draft', { ...to, message: txt() }); say('Saved as a Slack draft. Nothing was sent.', true); draft.remove(); if (send) send.remove(); done('Saved as a Slack draft.'); }
+          catch (e) { say(/attached_draft_exists/.test((e && e.message) || '') ? 'You already have an unsent draft there in Slack. Send or delete it first.' : e && e.code === 'no_user' ? e.message : errText(e, 'Slack'), false); busy(draft, false, 'Save as Slack draft'); }
+        };
+        let send = null;
+        if (c.external) acts.append(draft, h('span', { class: 'hint' }, 'Draft only: this conversation includes people outside monday.com.'));
+        else {
+          send = h('button', {}, 'Send');
+          let armed = false;
+          send.onclick = async () => {
+            if (!txt()) { say('The reply is empty.', false); return; }
+            if (c.external) { say('Draft only for external conversations.', false); return; }
+            if (!armed) { armed = true; send.textContent = vip ? 'Send to ' + (t.who || '').trim() + '?' : 'Confirm send'; say(vip ? 'This goes to an exec, as you, now. Click “Send to ' + (t.who || '').trim() + '?” to send.' : 'This sends now, as you. Click “Confirm send” to send.'); return; }
+            busy(send, true, 'Sending…');
+            try { const to = await dest(); if (to.channel_id[0] === 'D' && !to.thread_ts) throw { code: 'dm_channel', message: 'A DM needs the person’s user id.' }; await call(S.SL, 'slack_send_message', { ...to, message: txt() }); say('Sent.', true); send.remove(); draft.remove(); done('Sent in Slack.'); }
+            catch (e) { say(e && e.code === 'no_user' ? e.message : errText(e, 'Slack'), false); busy(send, false, 'Send'); armed = false; }
+          };
+          acts.append(draft, send);
+        }
+      }
+      if (t.surface === 'monday') {
+        const go = h('button', { class: 'pri' }, 'Post update');
+        go.onclick = async () => {
+          if (!txt()) { say('The update is empty.', false); return; }
+          busy(go, true, 'Posting…');
+          const lu = c.updates[0];
+          try {
+            await call(S.MON, 'create_update', { itemId: Number(t.itemId), body: escHtml(txt()).replace(/\n/g, '<br>'), parentId: under.checked && lu && lu.id ? Number(lu.id) : undefined });
+            say('Posted on the item' + (under.checked && lu ? ', under the latest update.' : '.'), true); go.remove(); done('Update posted on monday.');
+            mcp.invalidate(S.MON, 'get_updates').catch(() => {});
+          } catch (e) { say(errText(e, 'monday'), false); busy(go, false, 'Post update'); }
+        };
+        acts.append(go);
+      }
+      close.addEventListener('click', () => { if (c.did && t.onClose) t.onClose(); });
+      acts.append(close);
+      d.append(where, status, fields, flag, vsw, ta, h('div', { class: 'line' }, instr, sample ? regen : null), acts, out, after);
+      if (t.link) where.append(' · ', h('a', { href: t.link, target: '_blank', rel: 'noopener' }, 'Open ↗'));
+      regen.disabled = true;
+      load().then((msg) => { status.textContent = msg; }, (e) => { status.replaceChildren(errBox('Could not read the conversation. ' + (e && e.code === 'empty' ? e.message : errText(e, { gmail: 'Gmail', slack: 'Slack', monday: 'monday' }[t.surface])) + ' You can still write the reply.', () => { status.textContent = 'Reading the conversation…'; load().then((m) => { status.textContent = m; gen(); }, () => { status.textContent = 'Still could not read it.'; }); })); })
+        .then(() => {
+          // An external conversation found while loading: Slack drops to draft only.
+          if (t.surface === 'slack' && c.external && acts.querySelector('button:not(.pri):not(.ghost)')) { acts.querySelectorAll('button:not(.pri):not(.ghost)').forEach((b) => b.remove()); }
+          regen.disabled = false; return sample ? gen() : null;
+        });
     },
 
-    slackreply(d, m, { say, busy, close, out, preset }) {
-      // Replies go out only on an explicit click (principle 1). A 1:1 DM goes to the person's user id, never the DM channel id.
-      const target = m.src === 'dm' && m.others.length === 1 && !m.thread ? m.others[0] : m.channel;
-      const how = h('input', { type: 'text', placeholder: 'Optional direction for the reply', style: 'width:100%', dir: 'auto', value: preset.how || '' });
-      const ta = h('textarea', { dir: 'auto', placeholder: 'Claude drafts here. Edit freely.' });
-      const ai = h('button', { class: 'spark sm' }, '✦ Draft reply');
-      const draft = h('button', {}, 'Save as Slack draft');
-      const send = h('button', { class: 'pri' }, 'Send');
-      let armed = false;
-      ai.onclick = async () => {
-        say('Reading the conversation…');
-        let ctx = '';
-        try {
-          const p = m.thread ? await call(S.SL, 'slack_read_thread', { channel_id: m.channel, message_ts: m.thread, limit: 30, response_format: 'concise' })
-                             : await call(S.SL, 'slack_read_channel', { channel_id: m.channel, limit: 15, response_format: 'concise' });
-          ctx = (typeof p === 'string' ? p : JSON.stringify(p)).slice(-7000);
-        } catch (e) { ctx = 'Latest message only: ' + m.text; }
-        say('');
-        await draftWithClaude(
-          'You draft Slack replies for Ilan Manassen, Senior Communications Manager at monday.com. Read the conversation and write ONLY the reply text to the latest message from ' + (m.from || 'the other person') + '. ' +
-          'Same language as the conversation (usually Hebrew), short and natural like a Slack message, no greeting line, no sign-off. Answer what was asked. ' +
-          'Never commit to a budget, approval or decision: write [Ilan to decide: …]. Never invent facts; put unknowns in [brackets]. ' +
-          'Use what Ilan\'s work board says (WORK below) to make the reply concrete: the real status, owners and dates of the related task or request, and free calendar slots when someone asks to meet. Do not mention the board itself. ' +
-          (how.value.trim() ? 'Ilan\'s direction: "' + how.value.trim() + '". ' : '') +
-          (relatedText(st.sltriage[m.id]).length ? '\n\nRELATED WORK:\n' + relatedText(st.sltriage[m.id]).join('\n') : '') +
-          '\n\nWORK:\n' + JSON.stringify(workContext(40)) + '\n\nCONVERSATION:\n' + ctx, ta, ai, say);
-      };
-      draft.onclick = async () => {
-        const msg = ta.value.trim(); if (!msg) { say('The reply is empty.', false); return; }
-        busy(draft, true, 'Saving…');
-        try { await call(S.SL, 'slack_send_message_draft', m.thread ? { channel_id: m.channel, message: msg, thread_ts: m.thread } : { channel_id: target, message: msg }); say('Saved as a draft in Slack. Nothing was sent.', true); draft.remove(); send.remove(); markHandled(m.id); }
-        catch (e) { say(errText(e, 'Slack'), false); busy(draft, false, 'Save as Slack draft'); }
-      };
-      send.onclick = async () => {
-        const msg = ta.value.trim(); if (!msg) { say('The reply is empty.', false); return; }
-        if (!armed) { armed = true; send.textContent = 'Confirm send'; say('This sends now, as you. Click “Confirm send” to send it.'); return; }
-        busy(send, true, 'Sending…');
-        try { await call(S.SL, 'slack_send_message', m.thread ? { channel_id: m.channel, message: msg, thread_ts: m.thread } : { channel_id: target, message: msg }); say('Sent.', true); draft.remove(); send.remove(); markHandled(m.id); }
-        catch (e) { say(errText(e, 'Slack'), false); busy(send, false, 'Send'); armed = false; }
-      };
-      d.append(how, ta, h('div', { class: 'line' }, ai, draft, send, close), out);
-      if (sample) ai.click();
-    },
+    // The inbox and Slack reply buttons, Claude's next moves and the game plan all open the same ↩ Reply drawer.
+    reply(d, m, ctx) { DRAWERS.ureply(d, replyTarget('mail', m), ctx); },
+    slackreply(d, m, ctx) { DRAWERS.ureply(d, replyTarget('slack', m), ctx); },
 
     // What the item is, in one line Pepper can act on: title, who, link.
     // (shared by "My update" and "Pepper follow-up" on tasks, emails and Slack messages)
@@ -1532,6 +2307,81 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       };
       d.append(h('div', { class: 'hint' }, preset.task ? 'Claude suggested this task from the email. Edit it, then Pepper files it in the right group.' : 'Pepper runs the board, so she files it in the right group with the right owner.'), ta, h('div', { class: 'line' }, go, close), out);
     },
+
+    // 🧠 Ledger: close a row (State → Closed). Only that column changes.
+    ledgerdone(d, r, { say, busy, close, out }) {
+      const go = h('button', { class: 'pri' }, 'Mark Closed on the ledger');
+      go.onclick = async () => {
+        busy(go, true, 'Saving…');
+        try { await call(S.MON, 'change_item_column_values', { boardId: LED.board, itemId: Number(r.id), columnValues: JSON.stringify({ [LED.state]: { label: 'Closed' } }) }); }
+        catch (e) { say('Not closed. ' + errText(e, 'monday'), false); busy(go, false, 'Retry'); return; }
+        st.doneIds.add(r.id); st.ledger = (st.ledger || []).filter((x) => x.id !== r.id);
+        toast('Closed on the ledger: ' + r.name.slice(0, 60));
+        d.remove(); st.openDrawer = null; renderLedger(); renderLondon(); renderSugg(); renderPrep(); renderStats();
+        mcp.invalidate(S.MON, 'get_board_items_page').catch(() => {});
+      };
+      d.append(h('div', { class: 'hint' }, 'Sets State to Closed on this Shared Memory row. Nothing else changes and nothing is sent.'), h('div', { class: 'line' }, go, close), out);
+    },
+
+    // 🧠 Ledger: move the follow-up date. Only the fu:DD.MM part of the dedupe key is rewritten.
+    ledgersnooze(d, r, { say, busy, close, out }) {
+      const t0 = today(), base = r.fu && r.fu > t0 ? r.fu : t0;
+      const date = h('input', { type: 'date', value: addDays(base, 1), min: addDays(t0, 1), 'aria-label': 'New follow-up date' });
+      const preview = h('div', { class: 'hint', dir: 'ltr', style: 'overflow-wrap:anywhere' });
+      const show = () => { preview.textContent = /^\d{4}-\d{2}-\d{2}$/.test(date.value) ? 'Dedupe key becomes: ' + withFu(r.key, date.value) : ''; };
+      date.addEventListener('input', show); date.addEventListener('change', show); show();
+      const go = h('button', { class: 'pri' }, 'Move follow-up');
+      go.onclick = async () => {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(date.value)) { say('Pick a date.', false); return; }
+        const key = withFu(r.key, date.value);
+        busy(go, true, 'Saving…');
+        try { await call(S.MON, 'change_item_column_values', { boardId: LED.board, itemId: Number(r.id), columnValues: JSON.stringify({ [LED.key]: key }) }); }
+        catch (e) { say('Not moved. ' + errText(e, 'monday'), false); busy(go, false, 'Retry'); return; }
+        r.key = key; r.fu = date.value;
+        toast('Follow-up moved to ' + ddmm(date.value) + '.');
+        d.remove(); st.openDrawer = null; renderLedger(); renderLondon(); renderSugg(); renderStats();
+        mcp.invalidate(S.MON, 'get_board_items_page').catch(() => {});
+      };
+      d.append(h('div', { class: 'hint' }, r.fu ? 'Follow-up is ' + ddmm(r.fu) + (r.fu < t0 ? ' (overdue, so +1 day counts from today)' : '') + '. Only the fu:DD.MM part of the dedupe key changes.' : 'No follow-up date yet: one is added at the end of the dedupe key.'),
+        h('label', { class: 'f' }, 'New follow-up date', date), preview, h('div', { class: 'line' }, go, close), out);
+    },
+
+    // 🗓️ A suggested block: the same calendar picker as a task block. One Focus event on Ilan's calendar, no guests.
+    suggblock(d, s, { say, busy, close, out }) {
+      const date = h('input', { type: 'date', value: s.day });
+      const time = h('input', { type: 'time', value: s.start, step: 300 });
+      const durs = [...new Set([15, 30, 45, 60, 90, s.mins])].sort((a, b) => a - b);
+      const dur = h('select', {}, durs.map((m) => h('option', { value: m, selected: m === s.mins }, m + ' min')));
+      const title = h('input', { type: 'text', value: s.title, placeholder: 'English title', style: 'flex:1;min-width:180px' });
+      if (!s.title && s.items[0] && sample) {
+        title.placeholder = 'Translating the title to English…';
+        sample('Translate this into a short English calendar title, at most 8 words. Reply with the title only, no quotes:\n' + s.items[0].name, { modelTier: 'quick' })
+          .then(({ text }) => { if (!title.value) title.value = 'Focus: ' + text.trim().replace(/^["']|["']$/g, ''); })
+          .catch(() => { title.placeholder = 'English title (write it in English)'; });
+      }
+      const go = h('button', { class: 'pri' }, 'Create block');
+      let confirmClash = false;
+      const cal = calPicker(date, time, dur, () => { confirmClash = false; go.textContent = 'Create block'; });
+      cal.refresh(true);
+      go.onclick = async () => {
+        if (!date.value || !time.value) { say('Pick a day and a start time.', false); return; }
+        if (!title.value.trim() || NON_EN_RX.test(title.value)) { say('Calendar titles are always in English (R-27).', false); return; }
+        if (!FOCUS_RX.test(title.value)) title.value = 'Focus: ' + title.value.trim();
+        if (cal.gaps() && !fits(cal.gaps(), toMin(time.value), Number(dur.value)) && !confirmClash) { confirmClash = true; go.textContent = 'Create anyway'; say('That time overlaps a meeting or falls outside 08:00–19:00. Pick a free slot, or click “Create anyway”.', false); return; }
+        const desc = 'Block from the Command Center: ' + s.label + '\nCovers:\n' + s.items.map((r, n) => `${n + 1}. ${r.name}${r.people ? ' (' + r.people + ')' : ''}${r.link ? '\n   ' + r.link : ''}\n   Ledger: ${r.url}`).join('\n');
+        busy(go, true, 'Creating…');
+        try {
+          await call(S.CAL, 'create_event', { summary: title.value.slice(0, 100), startTime: date.value + 'T' + time.value + ':00', endTime: plusMin(date.value, time.value, Number(dur.value)), availability: 'AVAILABILITY_BUSY', description: desc.slice(0, 7000) });
+          say(`Blocked ${time.value}–${toHM(toMin(time.value) + Number(dur.value))}, ${ddmm(date.value)}. No one was invited.`, true); go.remove();
+          toast('Blocked on your calendar: ' + title.value.slice(0, 60));
+          st.resortPending = true; mcp.invalidate(S.CAL).catch(() => {});
+        } catch (e) { say(errText(e, 'Google Calendar'), false); busy(go, false, 'Retry'); }
+      };
+      d.append(h('div', { class: 'hint' }, 'On your calendar only, busy, no guests. The item list and links go in the event description.'),
+        h('div', { class: 'line' }, h('label', { class: 'f' }, 'Day', date), h('label', { class: 'f' }, 'Start', time), h('label', { class: 'f' }, 'Length', dur)), cal.box,
+        h('label', { class: 'f' }, 'Title', title), h('div', { class: 'line' }, go, close), out);
+    },
+
 
     run(d, a, { say, busy, close, out, preset }) {
       const ta = h('input', { type: 'text', placeholder: 'Optional note for this run', style: 'width:100%', dir: 'auto', value: preset.text || '' });
@@ -1643,11 +2493,17 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
         if (t.updated && Date.parse(t.updated) > end + 60000) continue;   // already updated after the block
         out.push({ ev: e, task: t, end });
       }
+      // A block booked from the prepared plan with no open task of its own: ask about the block itself.
+      const doc = prepDoc();
+      if (!ts.length && doc && !ciDone.has(e.id + ':plan')) {
+        const b = doc.blocks.map(pv).find((x) => x.status === 'booked' && (x.eventId ? x.eventId === e.id : focusTitle(x) === e.summary && x.start === hm(new Date(e.start.dateTime))));
+        if (b) out.push({ ev: e, plan: b, end });
+      }
     }
     return out.sort((a, b) => b.end - a.end);
   }
   function renderCheckins() {
-    const list = checkIns(), box = $('checkins'); if (!box) return;
+    const list = checkIns(), box = $('checkins'); if (!box || drawerIn('ci-cards')) return;
     box.hidden = !list.length; if (!list.length) return;
     const go = (c, kind, preset) => {
       const g = GROUPS.find((x) => x.id === c.task.group); if (g && st.tab !== g.key) { st.tab = g.key; renderTasks(); }
@@ -1655,7 +2511,15 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       row.scrollIntoView({ behavior: 'smooth', block: 'center' }); row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 1600);
       openDrawer(row, kind, c.task, preset || {}); ciClose(c.ev.id + ':' + c.task.id);
     };
-    $('ci-cards').replaceChildren(...list.map((c) => h('div', { class: 'card' },
+    const planCard = (c) => { const card = h('div', { class: 'card' },
+      h('span', { class: 'k' }, 'Block ended ' + hm(new Date(c.end))),
+      h('b', { dir: 'auto' }, c.plan.title),
+      h('p', {}, 'Can it be marked Done? If not, where does it stand, and does it need more time?'),
+      h('div', { class: 'acts' },
+        h('button', { class: 'sm pri', onclick: () => { ciClose(c.ev.id + ':plan'); markPrepDone(c.plan); } }, '✓ Done'),
+        h('button', { class: 'sm', onclick: () => openDrawer(card, 'suggblock', { day: today(), start: firstFit(freeGaps(today(), st.events[0] || [], 30), 30) || '', mins: 30, title: focusTitle(c.plan), label: c.plan.title, items: [] }) }, '◷ More time'),
+        h('button', { class: 'sm ghost', onclick: () => ciClose(c.ev.id + ':plan') }, 'Later'))); return card; };
+    $('ci-cards').replaceChildren(...list.map((c) => c.plan ? planCard(c) : h('div', { class: 'card' },
       h('span', { class: 'k' }, 'Block ended ' + hm(new Date(c.end))),
       h('b', { dir: 'auto' }, c.task.name),
       h('p', {}, 'Can it be marked Done? If not, where does it stand?'),
@@ -1892,12 +2756,14 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
   st.plan = (() => { try { const v = JSON.parse(localStorage.getItem(PLAN_KEY) || 'null'); return v && v.date === today() && Array.isArray(v.items) ? v : null; } catch (_) { return null; } })();
   let planBusy = false, planTimer = null;
   function maybePlan() {
+    if (prepDoc()) { renderPlan(); return; }
     if (st.plan || planBusy) { if (st.plan) renderPlan(); return; }
     clearTimeout(planTimer);
     const ready = st.tasks && st.inbox && st.events[0] && st.requests;
     planTimer = setTimeout(() => { if (!st.plan && st.tasks && st.events[0]) getPlan(false); }, ready ? 400 : 10000);
   }
   async function getPlan(force) {
+    if (!force && prepDoc()) { renderPlan(); return; }
     if (!sample) { $('plan').replaceChildren(h('div', { class: 'thinking' }, 'Claude ranking is not available in this view. Tasks below are sorted by deadline and priority.')); return; }
     if (planBusy) return; planBusy = true; $('re-plan').hidden = true;
     $('plan').replaceChildren(h('div', { class: 'thinking' }, '① Ranking your day against your calendar…')); $('plan-meta').textContent = 'Thinking…';
@@ -1948,6 +2814,7 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     return !!(t && t.updated && ymd(new Date(t.updated)) === today() && Date.parse(t.updated) - Date.parse(t.created || t.updated) > 120000);
   }
   function renderPlan() {
+    if (prepDoc()) return renderPrepared();
     if (!st.plan) return;
     $('re-plan').hidden = false;
     const all = st.plan.items.filter((x) => !isSnoozed(x) && (findRef(x) || planActed(x)));
@@ -1974,6 +2841,156 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
       })));
   }
 
+  // ---- Prepared plan: plans/<YYYY-MM-DD> in the page's db, written each morning by an agent (owner only). ----
+  // With no doc for today the live ranking above runs exactly as before.
+  st.prep = { state: 'none', doc: null }; st.prepEdit = {}; st.prepLocal = {}; st.prepBook = {}; st.prepSel = {};
+  let prepUnsub = null, prepDay = '', prepBooking = false, prepSave = Promise.resolve();
+  const prepDoc = () => (st.prep && st.prep.doc && Array.isArray(st.prep.doc.blocks) ? st.prep.doc : null);
+  const pv = (b) => ({ ...b, ...(st.prepEdit[b.id] || {}), ...(st.prepLocal[b.id] || {}) });
+  const focusTitle = (b) => 'Focus: ' + String(b.title || '').replace(FOCUS_RX, '').trim();
+  function watchPrepared() {
+    if (!db) return;
+    const day = today(); if (prepUnsub && prepDay === day) return;
+    if (prepUnsub) { try { prepUnsub(); } catch (_) {} prepUnsub = null; }
+    const had = !!prepDoc();
+    prepDay = day; st.prep = { state: 'loading', doc: null }; st.prepEdit = {}; st.prepLocal = {}; st.prepBook = {}; st.prepSel = {};
+    if (had) { $('plan').replaceChildren(h('div', { class: 'thinking' }, 'Reading today’s plan…')); maybePlan(); }
+    try {
+      prepUnsub = db.doc('plans/' + day).onSnapshot((snap) => {
+        if (prepDay !== day) return;
+        const was = !!prepDoc();
+        if (!snap.exists) {
+          if (snap.metadata && snap.metadata.fromCache) return;
+          st.prep = { state: 'missing', doc: null };
+          if (was) { $('plan').replaceChildren(h('div', { class: 'thinking' }, 'No prepared plan for today. Ranking live…')); maybePlan(); }
+          return;
+        }
+        const d = snap.data() || {};
+        st.prep = { state: 'ready', doc: { ...d, blocks: (Array.isArray(d.blocks) ? d.blocks : []).filter((b) => b && b.id) } };
+        renderPlan(); renderCheckins();
+      }, () => { if (prepDay === day && !prepDoc()) { st.prep = { state: 'error', doc: null }; maybePlan(); } });
+    } catch (_) { st.prep = { state: 'error', doc: null }; }
+  }
+  // Busy meetings that overlap a block (its own booked event excluded). null = the calendar has not loaded.
+  // Google's own recurring "Focus time" (eventType FOCUS_TIME) is where these blocks go, so it is not a clash.
+  function prepConflicts(b) {
+    const evs = st.events[0]; if (!evs || !/^\d\d:\d\d$/.test(b.start || '')) return null;
+    const s = toMin(b.start), e = s + (Number(b.durationMin) || 30), day = today();
+    return evs.filter((ev) => isBusy(ev) && ev.eventType !== 'FOCUS_TIME' && !(b.eventId && ev.id === b.eventId) && busyOn(day, [ev]).some(([a, z]) => a < e && z > s)).map((ev) => ev.summary || 'Busy');
+  }
+  const prepPast = (b) => !/^\d\d:\d\d$/.test(b.start || '') || toMin(b.start) < toMin(hm(new Date()));
+  const prepIncluded = (b) => st.prepSel[b.id] !== false;
+  function prepBookable(b) {
+    b = pv(b);
+    if ((b.status || 'proposed') !== 'proposed' || !prepIncluded(b) || prepPast(b)) return false;
+    const cf = prepConflicts(b); return !!cf && !cf.length && !!String(b.title || '').trim() && !NON_EN_RX.test(b.title);
+  }
+  // Event id from a create_event result, whatever its envelope.
+  function eventIdOf(p) {
+    if (typeof p === 'string') { try { p = JSON.parse(p); } catch (_) { return ''; } }
+    if (!p || typeof p !== 'object') return '';
+    const ev = p.event || p; return String(ev.id || p.eventId || '');
+  }
+  // The game plan's booking path: one Focus event on Ilan's own calendar, busy, no guests, no notifications. R-27: English only.
+  async function bookFocusEvent({ title, date, start, mins, description }) {
+    const t = String(title || '').replace(FOCUS_RX, '').trim();
+    if (!t || NON_EN_RX.test(t)) throw { code: 'not_english', message: 'The calendar title must be in English (R-27). Fix the title in the plan; nothing was booked.' };
+    if (NON_EN_RX.test(description)) throw { code: 'not_english', message: 'The event description must be in English (R-27). Nothing was booked.' };
+    const p = await call(S.CAL, 'create_event', { summary: ('Focus: ' + t).slice(0, 100), startTime: date + 'T' + start + ':00', endTime: plusMin(date, start, mins), timeZone: TZ, availability: 'AVAILABILITY_BUSY', notificationLevel: 'NONE', description });
+    return eventIdOf(p);
+  }
+  function prepDesc(b) {
+    const links = (Array.isArray(b.links) ? b.links : []).filter((l) => l && /^https?:\/\//.test(l.url || '')).map((l) => (l.label && !NON_EN_RX.test(l.label) ? l.label + ': ' : '') + l.url);
+    return [NON_EN_RX.test(b.whyEn || '') ? '' : String(b.whyEn || '').trim(), links.join('\n'), 'Created from the Command Center game plan'].filter(Boolean).join('\n\n');
+  }
+  // Writes status/eventId (and the booked start and length) back to the doc. Only the owner can write; one write at a time.
+  function savePrepared() {
+    const day = prepDay;
+    prepSave = prepSave.catch(() => {}).then(() => {
+      const doc = prepDoc(); if (!db || !doc) throw { code: 'unavailable', message: 'The plan is not loaded.' };
+      const blocks = JSON.parse(JSON.stringify(doc.blocks.map((b) => (st.prepLocal[b.id] ? { ...b, ...st.prepLocal[b.id] } : b))));
+      return db.doc('plans/' + day).update({ blocks });
+    });
+    return prepSave;
+  }
+  const dbErrText = (e) => (e && e.code === 'invalid_argument' ? 'Only the owner can change the plan.' : (e && (e.message || e.code)) || 'unknown error');
+  const AMBIG = ['server_unavailable', 'upstream_error', 'cancelled', 'timeout'];
+  async function bookPrepared(list) {
+    if (prepBooking || !mcp || !list.length) return;
+    prepBooking = true; renderPlan();
+    const day = today(); let ok = 0, bad = 0;
+    for (const b0 of list) {
+      const b = pv(b0), mins = Number(b.durationMin) || 30;
+      st.prepBook[b.id] = { state: 'pending', msg: 'Booking…' }; renderPlan();
+      let id;
+      try { id = await bookFocusEvent({ title: b.title, date: day, start: b.start, mins, description: prepDesc(b) }); }
+      catch (e) {
+        bad++;
+        st.prepBook[b.id] = { state: 'err', msg: e && e.code === 'not_english' ? e.message : 'Not booked. ' + errText(e, 'Google Calendar') + (!e || !e.code || AMBIG.includes(e.code) ? ' It may have been created anyway: check your calendar before retrying.' : '') };
+        renderPlan(); continue;
+      }
+      ok++;
+      st.prepLocal[b.id] = { status: 'booked', eventId: id || null, start: b.start, durationMin: mins };
+      st.prepBook[b.id] = { state: 'ok', msg: `Booked ${b.start}–${toHM(toMin(b.start) + mins)}.` };
+      try { await savePrepared(); }
+      catch (e) { st.prepBook[b.id] = { state: 'warn', msg: 'Booked on your calendar, but the plan was not updated (' + dbErrText(e) + ').', save: true }; }
+      renderPlan();
+    }
+    prepBooking = false; mcp.invalidate(S.CAL).catch(() => {}); renderPlan();
+    toast(bad ? `Booked ${ok} of ${ok + bad}. ${bad} failed: see the plan.` : `Booked ${ok} block${ok === 1 ? '' : 's'} on your calendar. No one was invited.`);
+  }
+  async function markPrepDone(b) {
+    st.prepLocal[b.id] = { ...(st.prepLocal[b.id] || {}), status: 'done' };
+    try { await savePrepared(); toast('Marked done in today’s plan.'); } catch (e) { toast('Done here, but the plan was not updated: ' + dbErrText(e)); }
+    renderPlan();
+  }
+  function renderPrepared() {
+    const doc = prepDoc(), canWrite = planOwner !== false;
+    $('re-plan').hidden = true;
+    const gen = doc.generatedAt ? (/^\d\d:\d\d$/.test(doc.generatedAt) ? doc.generatedAt : !isNaN(Date.parse(doc.generatedAt)) ? hm(new Date(doc.generatedAt)) : '') : '';
+    const blocks = doc.blocks.map(pv).sort((a, b) => String(a.start || '99').localeCompare(String(b.start || '99')) || (a.priority || 3) - (b.priority || 3));
+    const booked = blocks.filter((b) => b.status === 'booked' || b.eventId).length;
+    $('plan-meta').textContent = (gen ? 'Prepared ' + gen : 'Prepared') + ' · ' + booked + '/' + blocks.length + ' booked';
+    if (!blocks.length) { $('plan').replaceChildren(h('div', { class: 'thinking' }, 'Today’s prepared plan has no blocks.')); return; }
+    const ready = blocks.filter(prepBookable);
+    const failed = blocks.filter((b) => (st.prepBook[b.id] || {}).state === 'err' && prepBookable(b));
+    const all = h('button', { class: 'sm pri', type: 'button', disabled: !ready.length || prepBooking || !mcp || !canWrite, title: 'Books every included, unbooked block that fits a free slot' }, prepBooking ? 'Booking…' : '📅 סגור הכל ביומן (' + ready.length + ')');
+    all.onclick = () => bookPrepared(ready);
+    const why = !mcp ? 'Connect Google Calendar to book.' : !canWrite ? 'Only the plan’s owner can book from it.' : !st.events[0] ? 'Reading your calendar…' : ready.length ? 'Busy, on your calendar only, no guests, no notifications.' : 'Nothing left to book: blocks are booked, excluded, past, or overlap a meeting.';
+    let k = 0;
+    $('plan').replaceChildren(
+      h('div', { class: 'pbar' }, all, failed.length > 1 && h('button', { class: 'sm', type: 'button', disabled: prepBooking, onclick: () => bookPrepared(failed) }, 'Retry failed (' + failed.length + ')'), h('span', { class: 'hint' }, why)),
+      doc.context && h('p', { class: 'pctx', dir: 'auto' }, String(doc.context)),
+      doc.calendarNote && h('p', { class: 'pctx', dir: 'auto' }, '🗓️ ' + String(doc.calendarNote)),
+      h('div', { class: 'steps' }, blocks.map((b) => {
+        const status = b.status || 'proposed', isBooked = status === 'booked' || (!!b.eventId && status !== 'done' && status !== 'skipped');
+        const mins = Number(b.durationMin) || 30, end = /^\d\d:\d\d$/.test(b.start || '') ? toHM(toMin(b.start) + mins) : '';
+        const tier = ['must', 'should', 'could'][Math.max(1, Math.min(3, Number(b.priority) || 2)) - 1];
+        const proposed = status === 'proposed' && !isBooked, inc = prepIncluded(b);
+        const cf = proposed ? prepConflicts(b) : [], past = proposed && prepPast(b), bk = st.prepBook[b.id];
+        const editable = proposed && canWrite && !prepBooking;
+        const start = h('input', { type: 'time', step: 300, value: b.start || '', disabled: !editable, 'aria-label': 'Start' });
+        start.addEventListener('change', () => { if (/^\d\d:\d\d$/.test(start.value)) { st.prepEdit[b.id] = { ...(st.prepEdit[b.id] || {}), start: start.value }; renderPlan(); } });
+        const dur = h('select', { disabled: !editable, 'aria-label': 'Length' }, [...new Set([15, 30, 45, 60, 90, 120, mins])].sort((x, y) => x - y).map((m) => h('option', { value: m, selected: m === mins }, m + ' min')));
+        dur.addEventListener('change', () => { st.prepEdit[b.id] = { ...(st.prepEdit[b.id] || {}), durationMin: Number(dur.value) }; renderPlan(); });
+        const cb = h('input', { type: 'checkbox', checked: inc, disabled: !editable, 'aria-label': 'Include in Book all' });
+        cb.addEventListener('change', () => { st.prepSel[b.id] = cb.checked; renderPlan(); });
+        const retry = bk && bk.state === 'err' && proposed && h('button', { class: 'sm', type: 'button', disabled: prepBooking || !prepBookable(b), onclick: () => bookPrepared([b]) }, 'Retry');
+        const resave = bk && bk.save && h('button', { class: 'sm', type: 'button', onclick: async () => { try { await savePrepared(); st.prepBook[b.id] = { state: 'ok', msg: 'Booked, and saved in the plan.' }; } catch (e) { st.prepBook[b.id] = { ...bk, msg: 'Still not saved in the plan (' + dbErrText(e) + ').' }; } renderPlan(); } }, 'Save again');
+        return h('div', { class: 'step ' + tier + (status === 'done' || status === 'skipped' ? ' acted' : '') + (proposed && !inc ? ' off' : '') },
+          h('span', { class: 'n' }, isBooked || status === 'done' ? '✓' : status === 'skipped' ? '–' : String(++k)),
+          h('div', { class: 'body' },
+            h('div', { class: 'top' }, h('span', { class: 'slot' }, end ? b.start + '–' + end : 'no time'), h('b', { dir: 'auto' }, focusTitle(b)),
+              b.kind && h('span', { class: 'pill idle' }, b.kind), isBooked && h('span', { class: 'pill ok' }, 'booked'), status === 'done' && h('span', { class: 'pill ok' }, 'done'), status === 'skipped' && h('span', { class: 'pill idle' }, 'skipped')),
+            b.why && h('p', { dir: 'auto' }, String(b.why)),
+            Array.isArray(b.links) && b.links.length > 0 && h('div', { class: 'links' }, b.links.filter((l) => l && /^https?:\/\//.test(l.url || '')).slice(0, 6).map((l) => h('a', { class: 'btnl', href: l.url, target: '_blank', rel: 'noopener', dir: 'auto' }, (l.label || 'Open') + ' ↗'))),
+            proposed && h('div', { class: 'edit' }, h('label', {}, cb, 'Include'), h('label', {}, 'Start', start), h('label', {}, 'Length', dur),
+              past ? h('span', { class: 'pill warn' }, 'start passed: move it later') : cf === null ? h('span', { class: 'hint' }, 'checking calendar…') : cf.length ? h('span', { class: 'pill crit', title: cf.join(', ') }, '⚠ overlaps ' + cf[0].slice(0, 40) + (cf.length > 1 ? ' +' + (cf.length - 1) : '')) : h('span', { class: 'pill ok' }, 'free'),
+              NON_EN_RX.test(b.title || '') && h('span', { class: 'pill crit' }, 'title not English (R-27)')),
+            bk && h('div', { class: 'bk ' + ({ ok: 'ok', err: 'bad', warn: 'warn' }[bk.state] || ''), role: 'status' }, bk.msg, retry, resave)));
+      })));
+  }
+
   // ---- Boot ----
   try { const t = localStorage.getItem('cc-tab'); if (GROUPS.some((g) => g.key === t)) st.tab = t; } catch (_) {}
   renderChips(); renderStats();
@@ -1982,7 +2999,8 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
     const g = H < 5 ? 'Late night' : H < 12 ? 'Good morning' : H < 17 ? 'Good afternoon' : 'Good evening';
     $('hello').replaceChildren(g + ', ', h('em', {}, 'Ilan'));
     $('sub').textContent = fmt(new Date(), { weekday: 'long', day: 'numeric', month: 'long' }) + ' · ' + hm(new Date()) + ' Tel Aviv';
-    renderDayline(); renderCheckins(); wakeSnoozed();
+    renderDayline(); renderCheckins(); wakeSnoozed(); renderLondon();
+    if (db && prepDay !== today()) watchPrepared(); else if (prepDoc() && !$('plan').contains(document.activeElement)) renderPlan();   // past-start items stop being bookable
   };
   tick(); setInterval(tick, 30000);
 
@@ -2001,11 +3019,15 @@ main{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;ali
 
   (async () => {
     const cl = window.claude;
-    const offline = (msg) => { for (const id of ['tasks', 'inbox', 'slack', 'day', 'agents']) $(id).replaceChildren(h('div', { class: 'empty' }, msg)); $('ideas').replaceChildren(h('div', { class: 'thinking' }, msg)); ['mon', 'gm', 'sl', 'cal', 'ag'].forEach((k) => setSrc(k, 'idle', msg)); };
+    const offline = (msg) => { for (const id of ['tasks', 'inbox', 'slack', 'day', 'agents', 'ledger', 'prep']) $(id).replaceChildren(h('div', { class: 'empty' }, msg)); $('ideas').replaceChildren(h('div', { class: 'thinking' }, msg)); ['mon', 'gm', 'sl', 'cal', 'ag'].forEach((k) => setSrc(k, 'idle', msg)); };
     if (!cl || !cl.use) { offline('Open this page in Claude to load your live data.'); return; }
+    Promise.all([cl.use('db'), cl.use('user')]).then(async ([d, u]) => {
+      try { planOwner = u ? await u.isOwner() : null; } catch (_) { planOwner = null; }
+      db = d; if (db) watchPrepared();
+    }).catch(() => {});
     [mcp, sample] = await Promise.all([cl.use('mcp'), cl.use('sample')]);
     if (!mcp) { offline('Live connectors are not available in this view. Open it in claude.ai while signed in.'); return; }
-    startWatches();
+    startWatches(); loadSubMeta();
   })();
 })();
 </script>
