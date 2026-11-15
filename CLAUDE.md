@@ -1,6 +1,6 @@
 # Ilan's Command Center
 
-Config: `config.json` (the only place IDs live). **Read LEARNING-LOG.md §1 before scoring or writing anything.**
+Config: `config.json` (the only place IDs live). **Read LEARNING-LOG.md §1 before scoring or writing anything.** Then read `CONTEXT.md`: people, boards, artifacts and what's in flight. Facts Ilan states in chat go there in the same turn (R-41).
 
 ## Principles
 1. Who sends (Ilan, 2026-10-20). Pepper drafts and sends to Ilan and to internal monday.com colleagues: DMs, summaries, reminders, task follow-ups and internal emails. Anything to an external party (agencies, creators, vendors), to a journalist or to an exec stays a draft for Ilan to send. A decision (budget, approval, commitment) is never sent; see 8. Claude and the scheduled agents still only draft: Gmail → Drafts only; Slack replies to others only on explicit click.
