@@ -26,7 +26,7 @@ Last updated: 2026-11-15.
   - Or Elmaliah is a VIP: Slack DMs to her are drafts too.
   - Show the text first unless he says "שלח" (R-31). A budget, approval or commitment decision is never sent; it is his.
 - **Openers:** every message opens with a how-are-you (R-32).
-- **Elevate London emails** CC yuvalap@monday.com until 24.11 (R-33). Don't reveal internal considerations to externals.
+- **Don't reveal internal considerations to externals** (R-33). Do NOT CC Yuval: she is on maternity leave from 15.11.
 - **Spelling:** write מאנדיי in Hebrew (R-36) and עדיה, not אדיה (R-38).
 - **Follow-ups:** every ask gets a Waiting-on ledger row with `fu:DD.MM` (R-37).
 - **Competitors (R-39):** Asana (hard no), ClickUp, Notion, Wrike, Smartsheet, Atlassian, Airtable, ServiceNow, Salesforce, HubSpot, Pipedrive, Attio, GoHighLevel.
@@ -68,7 +68,7 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 ## People
 
 **Internal**
-- **Yuval Apeloig** (yuvalap@): owns London with Ilan; CC on London email.
+- **Yuval Apeloig** (yuvalap@): on maternity leave from 15.11. Do not CC or route anything to her; Ilan owns London alone.
 - **Or Elmaliah:** VIP, PR lead; Geektime decisions go through her.
 - **Adaya Brum** (עדיה, procurement): Slack U08MBQRHFA5 / DM D0C2BJPA3CL.
 - **Inbal Jozefov** (registrations): U08BDUF8CAF / DM D098MQU4L94.

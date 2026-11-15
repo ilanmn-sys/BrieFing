@@ -118,7 +118,7 @@ the evidence behind it. Remove a rule the moment it stops being true.
 - **`R-41`** **Say it once, write it down.** When Ilan states a preference, a rule or a fact about a person (who is coming, who was where, how he wants something phrased), write it to the repo in the same turn: a rule here, a fact in `CONTEXT.md`. Chat memory does not survive between sessions. *(2026-11-15, Ilan: moving to fresh sessions)*
 - **`R-42`** **Calendar time blocks are booked from the Command Center.** The morning brief writes the day plan to the Command Center (`plans/<date>`); Ilan reviews and books with "סגור הכל ביומן". Agents never create the blocks themselves. One home for state: no separate planner pages. *(2026-11-15, Ilan)*
 - **`R-32`** **Every message to a person opens by asking how they are.** Any Slack DM, email or reply that Claude, Pepper or an agent drafts for Ilan to a person starts with a short, warm check-in before the ask ("היי X, מה קורה? מה שלומך?" / "Hi X, hope you're well!"), in the message's language. One line, not a paragraph; skip it only in a reply inside a fast back-and-forth the same day. *(2026-11-03, Ilan: "always make sure to ask how people are")*
-- **`R-33`** **Elevate London emails CC Yuval Apeloig** (yuvalap@monday.com), internal or external, until the event ends (24.11.2026). Never reveal internal considerations (budget, renewals, disputes) to external parties. *(2026-11-03, Ilan)*
+- **`R-33`** **Never reveal internal considerations (budget, renewals, disputes) to external parties.** ~~Elevate London emails CC Yuval Apeloig~~: retired 2026-11-15, Yuval is on maternity leave. Do not CC her on anything. *(2026-11-03, Ilan; amended 2026-11-15, Ilan)*
 - **`R-29`** **Instructions to Brie Fing stay private.** Ilan's asks to Brie Fing (the comms request desk agent) go to its Slack DM by user id (`config.requests.briefingAgentSlackId`), with the request link. Never post them as an update on the Comms Requests board: requesters and the team read those updates. Brie Fing's own replies to requesters on the board are fine. *(2026-10-12, Ilan)*
 
 ### Personal track
@@ -337,6 +337,7 @@ call would have prevented it.
 | 2026-11-09 | Added `R-38` (Hebrew spelling: עדיה, not אדיה) | Ilan, 09.11 |
 | 2026-11-10 | Added `R-39` (competitor definition: work-management/Work OS + CRM/service; AI-agent products are not competitors) | Ilan, 10.11 |
 | 2026-11-11 | `R-39`: AI app builders (Lovable, Bolt, Replit, v0) are not competitors | Ilan, 11.11 |
+| 2026-11-15 | Amended `R-33`: stop CC-ing Yuval (maternity leave); removed her from all open drafts | Ilan, 15.11 |
 | 2026-11-15 | Added `R-40` (no volunteering creator travel), `R-41` (write preferences to the repo the same turn), `R-42` (time blocks booked from the Command Center) | Ilan, 14–15.11 |
 | 2026-10-26 | Added `R-31`: any message for Ilan is shown for approval first; sent directly only on an explicit "send" | A Slack DM went out on "רוצה לשלוח הודעה"; Ilan: "send it to me for approval first unless I explicitly asked to send" |
 | 2026-10-26 | Added `R-30`: each day opens with a reply queue; the reply block is sized and placed per day (first free gap, ~5 min/reply), never a fixed recurring block | Ilan: "the first part of the day is for replying to people… not fixed, dynamic by the day" |
