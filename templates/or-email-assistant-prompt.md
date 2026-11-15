@@ -74,3 +74,22 @@ HARD RULES
 - Never put financials, customer numbers or internal plans into anything going outside monday.com.
 - Don't change labels Or set herself.
 ```
+
+---
+
+## Follow-up (2026-11-15): self-learning + test run
+
+Or asked whether it can learn the classification and make the changes itself. Draft to Or (Slack DM D03BV6RRLGY, draft Dr0CHR3D9K6H) with two paste-ins for the Cowork task chat:
+
+```
+Add these as standing rules at the top of rules.md and follow them from now on, every run:
+1. LEARN AND APPLY: when you learn a rule (from my relabels, moves, forwards, ✏️ labels, or something I tell you here), save it in rules.md and immediately re-apply it to the last 7 days of inbox and archive. Relabel/re-route any thread it now classifies differently. Forwards still go only to Noam, Ilan or Alice, and never re-send a forward that already went out. Log every change in log.md.
+2. CONFIDENCE: a rule about a whole domain or topic needs 2 consistent corrections; a rule about a single sender needs 1.
+3. REPORT: every run summary ends with "🧠 Learned": each rule added or changed (rule + the example that taught it). If I reply "undo <rule>", remove it and revert its re-labels.
+4. If a rule in rules.md conflicts with your original instructions, rules.md wins, except the hard rules (never send anything except forwards to Noam/Ilan/Alice, never delete or mark spam, never forward budget/legal/HR/IR/confidential).
+Confirm by showing me the updated top of rules.md.
+```
+
+```
+Test run now. Do NOT forward, label, archive or create drafts. Take the last 20 threads in my inbox and show me a table: sender · subject · your decision (Noam / Ilan / Alice / 🔴 / 🟡 / Vendor pitch / FYI / ❓) · one-line reason. Don't write to log.md.
+```
