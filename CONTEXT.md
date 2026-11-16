@@ -2,7 +2,7 @@
 
 This file is the memory that carries between chat sessions. Rules live in `LEARNING-LOG.md` §1. This file holds the facts: who is who, where things are, and what is in flight. When Ilan states a fact or a preference in chat, write it here or in the log in the same turn (R-41).
 
-Last updated: 2026-11-15.
+Last updated: 2026-11-16.
 
 ## Ilan and how he works
 
@@ -88,7 +88,7 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 - **Ruth Rosenthal:** handles the Rathbone hotel group booking (10 rooms). Not Ilan's.
 
 **External (drafts only)**
-- **Creator Buzz** (London creator agency): Vin vin@creatorbuzz.com, Melissa melissa@creatorbuzz.com. Slack Connect `#creatorbuzz-mondaycrm` `C09SND9EV09` cannot take sends or drafts from Claude; put copy-paste text in the self-DM.
+- **Creator Buzz** (London creator agency): Vin vin@creatorbuzz.com, Melissa melissa@creatorbuzz.com. Agency fee: 18% of the deal total (Ilan, 16.11); Ilan is considering the same 18% for Narrative's London creators. Slack Connect `#creatorbuzz-mondaycrm` `C09SND9EV09` cannot take sends or drafts from Claude; put copy-paste text in the self-DM.
 - **Narrative:** Regev regev@narrativegroup.co. His 7 London options (14.11) were all passed. Margo margo@narrativegroup.co sent a second batch of 4. It was evaluated 15.11 in `reports/narrative-london-batch2.md`: Christian Zimmer Maybe ($6,500), The Metaverse Guy Maybe if Zoho/Vani is ruled not a competitor ($1,500), Nick Sadler Pass, Jason West Pass.
 - **Scherf** (Israeli influencer agency): Eden, Zohar, Dalia. Weekly sync Sunday 12:00.
 - **Signal Tours** (travel): Sharon Shulman sharons@signaltours.com.
