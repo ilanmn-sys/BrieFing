@@ -57,10 +57,10 @@ Last updated: 2026-11-16.
 | Routine | ID | When | Rule for relaying it |
 |---|---|---|---|
 | Morning brief (via Pepper) + day plan | `trig_01Esk6zwQiY1f313Gci4ZPD9` | Sun–Thu 07:47 | one line + link |
-| Reply tracker | `trig_01KVkFNwP9ehvDi1P6s6KXxq` | 3× daily | only if a DM was sent |
-| London creator sync | `trig_01TQNok2ioEUYvohRHEYhXiP` | daily until 19.11 | short summary |
-| Creator UTM daily report | `trig_0148sS7vhvanWQ5FU2UUkqxz` | daily | silent unless it fails |
-| Elevate NYC content watch | `trig_01Pd12AtXYpfMKC3jwZwhtdi` | daily until 30.11 | commit `agents/elevate-nyc-content-watch/state` after each run |
+| Reply tracker | `trig_01KVkFNwP9ehvDi1P6s6KXxq` | daily 20:47 (Sun–Thu) | only if a DM was sent |
+| London creator sync | `trig_01TQNok2ioEUYvohRHEYhXiP` | DISABLED 16.11 (usage) | — |
+| Creator UTM report | `trig_0148sS7vhvanWQ5FU2UUkqxz` | weekly, Sun 08:39 | silent unless it fails |
+| Elevate NYC content watch | `trig_01Pd12AtXYpfMKC3jwZwhtdi` | every 3 days until 30.11 | commit `agents/elevate-nyc-content-watch/state` after each run |
 | Weekly LinkedIn proposal | `trig_01N9EfxTDXtkTTnQNT8wXp9x` | Wed | — |
 
 Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own sessions instead of this chat (main benefit: no context compaction, faster chat, fewer tokens); (2) cut Slack noise to one brief plus exceptions; (3) send the brief directly instead of through Pepper, keeping Pepper only to execute "שלח". Raise again after London (24.11) or when Ilan asks.
@@ -129,3 +129,5 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 ## Dennis (monday PR agent 17796) — changed 16.11
 - No website recommendations any more: we no longer upload coverage to the website. Website? column now only records coverage (No / Not coverage / Duplicate / Pending Review).
 - Iron rule: digests, #media-relations posts, owner DMs, the Hebrew brief and drafts to Pepper carry only articles new since the previous digest (publish date ≤3 days old, item ID not in `triage_memory/digested_ids.json`). Backfill and n8n imports with old dates stay silent on the board. (Triggered by Or's 16.11 complaint about Aug–Sep items in #media-relations.)
+
+- 16.11: Ilan near his usage cap. Routines cut back (table above). Keep replies short; avoid full-thread/FULL_CONTENT reads and subagents unless needed.
