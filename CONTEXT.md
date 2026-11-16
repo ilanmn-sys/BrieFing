@@ -125,3 +125,7 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 - **Geektime "monday Builders":** 60K vs a 45K renewal. On hold (Ilan, 15.11): no answer to Ido until Ilan discusses it with Or and Scherf.
 - **AWS re:Invent talk:** Keren Koshman asked for comms approval. The deck has been received.
 - **Gmail:** about 25 stale drafts are waiting for Ilan to delete by hand.
+
+## Dennis (monday PR agent 17796) — changed 16.11
+- No website recommendations any more: we no longer upload coverage to the website. Website? column now only records coverage (No / Not coverage / Duplicate / Pending Review).
+- Iron rule: digests, #media-relations posts, owner DMs, the Hebrew brief and drafts to Pepper carry only articles new since the previous digest (publish date ≤3 days old, item ID not in `triage_memory/digested_ids.json`). Backfill and n8n imports with old dates stay silent on the board. (Triggered by Or's 16.11 complaint about Aug–Sep items in #media-relations.)
