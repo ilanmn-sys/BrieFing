@@ -107,7 +107,7 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
   - 11:30–12:15 headset tour, meeting in the creator room Alice Simpson booked at ExCeL (calendar: "We Are Alive roundtable room"); not Capital Lounge
   - about 14:00 creator workshop, opened by a Daniel Lereya Q&A
 - **Press registration:** https://elevate-widgets.monday.com/emea/page/6959790/press-registration
-- **UTM format:** `…multi-multi-event-london-{slug}`.
+- **UTM format:** `https://monday.com?utm_medium=influencers&utm_source=elevate&utm_campaign=multi-multi-event-london-{first name}` (same template as NYC, confirmed by Ilan 16.11). Links per creator: `templates/london-creator-utm.csv`; they go out in the checklist email 21–22.11, not in the invite.
 
 **Creators**
 - **Target:** about 10 in total, including the Israelis.
