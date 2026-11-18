@@ -26,12 +26,12 @@ Guests
 
 Menu
 - Menu Noël (£85 per person), with a pre-order from each guest (list to follow with final numbers)
-- Request: could Steak frites be added as a fourth main? (also asked by email)
+- Steak frites confirmed as a fourth main at +£10pp: for guests choosing it, select 'No Main' and write 'Steak frites' under dietary requirements
 - Dietary estimate: a few vegetarian, 1–3 vegan, possibly 1–2 gluten-free; final list by 17.11
 
 Reception
 - Arrival drink: a glass of Champagne, or a soft drink alternative
-- Canapés: 2 per person on arrival (please recommend a selection)
+- Canapés: 2 per person on arrival: smoked salmon blinis with citrus cream, and marinated grilled chicken skewers with honey and mustard dip
 
 Drinks with dinner
 - House white and red wine with dinner, still and sparkling water, soft drinks. No spirits, no open bar.
