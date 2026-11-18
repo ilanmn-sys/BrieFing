@@ -143,3 +143,4 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 - 18.11: Steak frites added as 4th main option at +£10pp (Ilan approved).
 - 18.11: Tunde, Moddy, Beatrice registered + sent accounts (to Daria for credits) and added to dinner/keynote/tour/workshop invites; all 4 events now guests-can't-see-guests. Asked Nora re badge pickup + cameras for Moddy.
 - Plan 19.11 (Ilan): creator emails. Non-repliers: reminder. Repliers: dietary + (if Balthazar requires) menu choice + personal UTM. All: masterclass sign-up push. Our creators only (CB 7, Narrative 2, Scherf 3), not Reut's. Check-in scheduled 19.11 08:30 IL (trig_01Y6ytJ1Zthgd946cgPngrq6).
+- Zohar Dublin (Scherf) and Tara Crymble (Creator Buzz team) are NOT creators (Ilan 18.11): event registration + dietary + optional masterclasses only; no UTM, no AI credits.
