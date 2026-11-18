@@ -14,7 +14,7 @@ What the research says (web search 18.11; Bright Data account is inactive, so no
 1. Elevate London is in 5 days. Half the work behind our creator program is done by AI agents. Here's exactly what they do.
 2. I ran a creator program for ~40 guests with a small team and a stack of AI agents. 3 of them changed how I work.
 
-## Post
+## Post v2 (superseded)
 
 Elevate London is in 5 days. Half the work behind our creator program is done by AI agents. Here's exactly what they do.
 
@@ -46,6 +46,36 @@ What made it work:
 • Humans decide. Budgets, approvals and anything external stay with a person.
 
 The agents handle the follow-ups. We get more time for the people in the room.
+
+What's the first part of your job you'd hand to an agent?
+
+## Post v3 (18.11, shorter + NYC opener + anticipation and creator experience)
+
+At Elevate NYC we started handing parts of our creator program to AI agents. For Elevate London, 5 days away, they run a big part of it. Here's what they do.
+
+🔎 The research agent
+• Reads each creator's recent posts and real engagement
+• Flags past brand deals that could clash with ours
+• Gives a one-line verdict: fit, maybe or pass
+
+📊 The measurement agent
+• Scans creator content every three days after the event
+• Logs every post and its reach on a monday.com board
+• Stays silent unless something new shows up
+
+📬 The coordination agent
+• Reads every thread with creators, agencies and the venue
+• Prepares each reply as a draft. Nothing external goes out without me reading it
+• Gives every ask an owner and a follow-up date
+
+The rule that made it work: agents draft and remind, people decide.
+
+And all of it serves one thing: the creators' experience in London.
+• A community dinner with creators, ambassadors and our team the night before
+• A guided tour of the event right after the keynote
+• A hands-on workshop where they build their own AI agents on monday.com, with the people who make the product
+
+Can't wait to see what they build. See you in London 👋
 
 What's the first part of your job you'd hand to an agent?
 
