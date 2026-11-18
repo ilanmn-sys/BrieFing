@@ -120,6 +120,7 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 - **Not coming:** Harry Stebbings and Jack Roberts (unavailable), Temi (passed).
 - **Other open items:** Matt Pocock was invited 11.11 with no reply; a follow-up draft and LinkedIn text are ready. Myriam needs an updated boilerplate, because the headcount is outdated.
 
+- Dinner print designs (18.11): `templates/london-dinner-print/` (placecard, menu, blank menu, A3 placemat, 60 cm centrepiece) with the official Elevate logo. Alison handles the design questions from here; Ilan does not want to spend more time on them.
 ## Other threads in flight (as of 15.11)
 
 - **Geektime "monday Builders":** 60K vs a 45K renewal. On hold (Ilan, 15.11): no answer to Ido until Ilan discusses it with Or and Scherf.
