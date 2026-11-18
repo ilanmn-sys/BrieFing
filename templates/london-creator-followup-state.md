@@ -26,4 +26,6 @@ Updated: 18.11 14:10 IL. Checks: 15:30, 18:30, 21:30, 07:45. Drafts built 08:30 
 | Zohar Dublin | partner (Scherf), not creator | ? | n/a | | | registration + dietary + masterclasses only |
 
 ## Open questions
-- Nora: badge pickup / photo ID / cameras (asked 18.11 14:00).
+- Nora answered 18.11 14:18 (for Moddy): normal registration at check-in like all attendees; bring photo ID, go through security, show the QR code emailed at registration. Phones fine. Professional cameras: check with Amalia Hochmann (Slack U07CKL7FQHK), not yet asked.
+- Reut 18.11 15:27: her group is not confirmed ("if you decide to come, tell me by tomorrow"); answers tomorrow. Treat Reut + 4 as TBC.
+- Pre-order choices: 0/38 as of 18.11 15:30 IL (team, Lee-at, Reut no replies yet; Vin/Margo drafts may not be sent yet).
