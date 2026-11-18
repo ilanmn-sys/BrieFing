@@ -5,7 +5,7 @@ Direction (Ilan, 18.11): hands-on AI, simpler and clearer, focused on three part
 What the research says (web search 18.11; Bright Data account is inactive, so not used):
 - Hook must land before the "see more" cut, about 140–210 characters.
 - Dwell time and comments count more than likes; skimmable posts with short lines do best.
-- Sweet spot is roughly 1,200–2,000 characters. This draft is about 1,700.
+- Sweet spot is roughly 1,200–2,000 characters. This draft is about 1,500.
 - Keep links out of the body (put any link in the first comment). End with a specific question to drive comments.
 - Optional: a PDF carousel version (one slide per agent) tends to get higher engagement.
 
