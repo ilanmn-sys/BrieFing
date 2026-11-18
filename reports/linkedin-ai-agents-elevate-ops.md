@@ -79,6 +79,35 @@ Can't wait to see what they build. See you in London 👋
 
 What's the first part of your job you'd hand to an agent?
 
+## Post v4 (18.11, specific + wow)
+
+Three weeks ago, one of our AI agents flagged a creator's paid post for a competitor. I missed the flag and said yes anyway. The agent was right.
+
+That's when I stopped treating agents as helpers and started running Elevate London like a team.
+
+Here's what the team does this week:
+
+🔎 Research
+• Before any creator gets a yes, an agent reads our own past research first, then their recent content and brand deals
+• That miss became rule #45: memory before the web. We now have 46 rules, each one born from a real mistake
+
+📊 Measurement
+• After Elevate NYC an agent logged 30 posts from 15 creators on a monday.com board, every three days, no screenshots
+• London starts the moment the keynote ends
+
+📬 Coordination
+• A 38-person dinner, three agencies, 11 ambassadors and a venue with a hard supplier cut-off
+• One draft per person, rewritten in place when the venue or a creator replies
+• Overnight, an agent re-checks the inbox four times so the morning drafts are right the first time
+• Nothing external goes out until I read it and hit send
+
+🎨 And the fun part
+• The dinner centrepiece and placemats went from a roll-up file to print-ready PDFs, 3 mm bleed, 370 dpi, in one conversation
+
+All of it for one thing: the creators' experience next week. A dinner the night before, a guided tour after the keynote, and a workshop where they build their own agents on monday.com with the people who make the product.
+
+What would your first agent do?
+
 ## Notes for Ilan
 - "Half the work" is a judgement call; soften to "a big part of the work" if you prefer.
 - The research-agent "conflict" refers to a creator's competitor partnership; no names.
