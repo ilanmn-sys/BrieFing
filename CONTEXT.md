@@ -141,3 +141,4 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 - 18.11 Reut's 4 dinner creators: Callum Mcdonnell, Grace Andrews (we passed her paid Creator Buzz offer 17.11, Elevate List 13558089187 = Declined), Beth Thomas, Adam Faulkner. Reut's group, no invites from us.
 - 18.11 Balthazar: canapés = smoked salmon blinis + chicken skewers (Ilan). Steak frites possible at +£10pp (select 'No Main' + 'Steak frites' in dietary). No drinks package; drinks on consumption, wine by bottle. Asked Dora to allow ordering on the night or extend pre-orders to Fri 20.11 12:00 UK; questionnaire held until she answers (cannot edit after submit).
 - 18.11: Steak frites added as 4th main option at +£10pp (Ilan approved).
+- 18.11: Tunde, Moddy, Beatrice registered + sent accounts (to Daria for credits) and added to dinner/keynote/tour/workshop invites; all 4 events now guests-can't-see-guests. Asked Nora re badge pickup + cameras for Moddy.
