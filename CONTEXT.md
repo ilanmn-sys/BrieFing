@@ -137,3 +137,4 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 - 18.11: Ilan sends the Narrative creator invites (Christian, Zain) himself, not via Margo. Drafts r-2067721336305321840 / r3162238585293887730 have an empty To (creator emails not on file), CC Margo.
 - 18.11: no invites from us to Reut's creators (Ilan).
 - 18.11 dinner: Allison Grey NOT attending (Ilan). Ambassadors now 11 confirmed (+2 pending, dropped if no reply by 19.11), names not yet received. Named list 21 + Reut + 4 Reut creators + 11 ambassadors + CS 1 = 38 (40 max).
+- 18.11 ambassador names (Lee-at, 11): Simran Ghattoraya, Yogesh Pokale, David Simpson, Trevor Chauvin-DeCaro, Shiro Zayas, Clare Groves, Feride Ozer, Rissa Ream, Oyedokun Bibitayo Oyefunke, Cionna Evans (vegetarian), Chad Bruce (no fish or seafood).
