@@ -108,11 +108,11 @@ All of it for one thing: the creators' experience next week. A dinner the night 
 
 What would your first agent do?
 
-## Post v5 (18.11, no incident story, personalised experience) - RECOMMENDED
+## Post v6 (18.11, photo-arrival hook) - RECOMMENDED. Post on arrival day, Mon 23.11, with the arrival photo
 
-Tonight, while I sleep, an AI agent will check my inbox four times, so that tomorrow morning every email to our London creators is already written, and right.
+Just landed for Elevate London. What this photo doesn't show is the team that got me here: a few people, and a lot of AI agents.
 
-That's what running Elevate London's creator program looks like now: a small team, and a lot of agents.
+Some of them checked my inbox through the night, so every morning the emails to our creators were already written, and right.
 
 🔎 Research
 • Before any creator gets a yes, an agent reads our own past research first, then their recent content and brand deals
@@ -134,7 +134,7 @@ The agents do the logistics so the experience can be personal. Every creator get
 • AI credits loaded on their own monday.com account before they arrive
 • Masterclasses they picked from the agenda
 • A workshop where they build an agent for their own work, with the people who make the product
-• A seat at a community dinner the night before, with their name on the card
+• A seat at tonight's community dinner, with their name on the card
 
 Can't wait to see what they build.
 
