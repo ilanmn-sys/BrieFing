@@ -136,3 +136,4 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 - 18.11 dinner headcount (Ilan): Oya out, Shir in; Reut herself likely joins plus one CS person. Reut's group = 5 total including Reut (Ilan 18.11). If everyone comes: team 9 + Creator Buzz 7 + Scherf 3 + Narrative 2 + Reut 1 + CS 1 + Reut creators 4 + ambassadors 14 = 41 of 48. Balthazar draft r3951518547552224212 still says 35 + up to 4.
 - 18.11: Ilan sends the Narrative creator invites (Christian, Zain) himself, not via Margo. Drafts r-2067721336305321840 / r3162238585293887730 have an empty To (creator emails not on file), CC Margo.
 - 18.11: no invites from us to Reut's creators (Ilan).
+- 18.11 dinner: Allison Grey NOT attending (Ilan). Ambassadors now 11 confirmed (+2 pending, dropped if no reply by 19.11), names not yet received. Named list 21 + Reut + 4 Reut creators + 11 ambassadors + CS 1 = 38 (40 max).
