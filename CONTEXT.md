@@ -133,3 +133,4 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 
 - 16.11: Ilan near his usage cap. Routines cut back (table above). Keep replies short; avoid full-thread/FULL_CONTENT reads and subagents unless needed.
 - 17.11 dinner headcount (Ilan): Vin NOT coming (Tara is); Dor Cohen IN (added to dinner invite); Reut asks +4 creators; one more Narrative creator besides Christian = The Metaverse Guy (Zain Ul Abedeen, CRM 13554479376); email via Margo; Shir Yarkoni probably replaces Oya. Est. ~26 sure, ~40 with ambassadors, max ~43 of 48.
+- 18.11 dinner headcount (Ilan): Oya out, Shir in; Reut herself likely joins plus one CS person. If everyone comes: team 9 + Creator Buzz 7 + Scherf 3 + Narrative 2 + Reut 1 + CS 1 + Reut creators 4 + ambassadors 14 = 41 of 48. Balthazar draft r3951518547552224212 still says 35 + up to 4.
