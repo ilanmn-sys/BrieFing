@@ -1,45 +1,55 @@
-# LinkedIn post draft: running Elevate London with a team of AI agents (18.11.2026)
+# LinkedIn post draft v2: running Elevate London with AI agents (18.11.2026)
 
-Direction (Ilan, 18.11): more hands-on AI. How we run Elevate with a small team and many sub-agents, in AI language. No mention of reserve duty. No fees, no competitors, no creator names beyond what's public.
+Direction (Ilan, 18.11): hands-on AI, simpler and clearer, focused on three parts (research, measurement, email coordination), each with bullet points. No reserve duty, no fees, no competitor names, no creator names.
+
+What the research says (web search 18.11; Bright Data account is inactive, so not used):
+- Hook must land before the "see more" cut, about 140–210 characters.
+- Dwell time and comments count more than likes; skimmable posts with short lines do best.
+- Sweet spot is roughly 1,200–2,000 characters. This draft is about 1,700.
+- Keep links out of the body (put any link in the first comment). End with a specific question to drive comments.
+- Optional: a PDF carousel version (one slide per agent) tends to get higher engagement.
 
 ## Hook options (recommended first)
 
-1. Elevate London is in 5 days. My "team" for the creator program is two people and about 20 AI agents.
-2. I didn't hire an assistant for Elevate London. I built an org chart of agents.
-3. The most useful thing I built this quarter isn't a campaign. It's a team of agents that runs the boring 80% of an event.
+1. Elevate London is in 5 days. Half the work behind our creator program is done by AI agents. Here's exactly what they do.
+2. I ran a creator program for ~40 guests with a small team and a stack of AI agents. 3 of them changed how I work.
 
-## Body
+## Post
 
-[Hook]
+Elevate London is in 5 days. Half the work behind our creator program is done by AI agents. Here's exactly what they do.
 
-Running a creator program at a conference looks glamorous from the outside. Inside, it's ~40 dinner guests, a dozen creators across three agencies, travel, registrations, menus, print files and a hundred small follow-ups.
+🔎 1. The research agent
+Before we say yes to a creator, an agent does the homework:
+• Reads their recent posts across platforms
+• Checks real engagement, not just follower count
+• Flags past brand deals that could clash with ours
+• Writes a one-line verdict: fit, maybe or pass
+It caught a conflict we would have missed. That alone paid for the setup.
 
-So this time I ran it like an AI-native team:
+📊 2. The measurement agent
+After the event, the work isn't over:
+• Scans creator content every three days
+• Logs every post, likes, comments and views on a monday.com board
+• Matches each creator to their own tracking link
+• Stays silent unless something new shows up
+No more chasing screenshots in DMs.
 
-🧭 An orchestrator agent that holds the full context (people, deadlines, who promised what) and hands work to sub-agents.
-🔎 Research agents that vet every creator before we say yes: fit, audience, past brand deals. One flagged a conflict we'd have missed.
-📬 An inbox agent that reads every thread and prepares the reply as a draft. Nothing goes to a partner without me reading it.
-📋 A ledger on monday.com where every ask gets an owner and a follow-up date, so nothing falls through.
-📰 A PR agent on monday.com that triages coverage every morning and only pings me when something new matters.
-📈 A watcher that tracks creator content and reach after the event, every three days.
-🎨 Even the dinner print files (placemats, centrepiece, menus) went from idea to print-ready PDF with 3 mm bleed in one conversation.
+📬 3. The coordination agent
+The part nobody sees: dozens of threads with creators, agencies, the venue and our team.
+• Reads every thread before replying
+• Prepares each reply as a draft. Nothing external goes out without me reading it
+• Gives every ask an owner and a follow-up date
+• Re-checks the inbox through the day, so drafts are up to date before I open them
 
-What I learned:
+What made it work:
+• Written rules. Every mistake became a rule the agents read before they act.
+• Humans decide. Budgets, approvals and anything external stay with a person.
 
-1. Agents need rules, not vibes. Every mistake became a written rule the agents read before they act. We're at 46 of them.
-2. Humans own decisions. Agents draft, check and remind. Budgets, approvals and anything external go through a person.
-3. Context is the product. The agents are only as good as the shared memory they read from.
+The agents handle the follow-ups. We get more time for the people in the room.
 
-The result: a small team running an event program that would have needed a much bigger one, and more time for the part that matters, the people in the room.
-
-See you at Elevate London 👋
-
-## Call to action (pick one)
-
-- Are you running your team with agents yet? What's the first job you'd hand over?
-- What would you give an agent first: your inbox, your follow-ups or your research?
+What's the first part of your job you'd hand to an agent?
 
 ## Notes for Ilan
-- "about 20 agents" = the automations in this repo (agents/ has 23 entries). Adjust if you'd rather say "a dozen".
-- "46 rules" = R-01 to R-46 in LEARNING-LOG.md.
-- The flagged conflict refers to a creator's competitor partnership; no names in the post.
+- "Half the work" is a judgement call; soften to "a big part of the work" if you prefer.
+- The research-agent "conflict" refers to a creator's competitor partnership; no names.
+- Post on a weekday morning UK/US overlap and reply to comments in the first hour.
