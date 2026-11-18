@@ -57,3 +57,6 @@ Special requests
 Payment
 - Deposit (£3,500 minimum spend + 15% service) paid in full on 12.11
 - Any balance: invoice monday.com Ltd, PO012602991, attention Adaya Brum
+
+## Update 18.11 (Dora)
+- Page 2, pre-orders question: select **No**, then pick any one starter, main and dessert so the form lets you continue to page 3. Pre-orders go separately on Dora's docx form by Thu 19.11 15:00 UK.

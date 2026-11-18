@@ -3,7 +3,9 @@
 Updated: 18.11 14:10 IL. Checks: 15:30, 18:30, 21:30, 07:45. Drafts built 08:30 from this file.
 
 ## Balthazar (Dora)
-- Asked 18.11: can guests order on the night? If not, pre-order extension to Fri 20.11 12:00 UK. Awaiting answer.
+- Dora 18.11 14:27: NO ordering on the night. Pre-orders due **Thu 19.11 15:00 UK (17:00 IL), hard supplier cut-off**. Pre-order form (docx: name, starter, main, dessert, dietary) attached to msg 1a1eea089b366913.
+- Questionnaire can be submitted now: page 2 select 'No' for pre-orders, pick one starter/main/dessert to proceed.
+- Menu Noël (£85): STARTERS buffalo mozzarella (v) / duck liver parfait / gravadlax. MAINS turkey ballotine / sea bass / chargrilled halloumi (v) / steak frites (+£10). DESSERTS Christmas pudding / dark chocolate mousse / crème brûlée. VEGAN+GF: baby gem salad / roasted sweet potato / sorbet.
 - Menu Noël £85; Steak frites +£10pp (approved); vegan: baby gem salad / roasted sweet potato / sorbet (both GF).
 - Canapés: salmon blinis + chicken skewers. Drinks on consumption.
 
