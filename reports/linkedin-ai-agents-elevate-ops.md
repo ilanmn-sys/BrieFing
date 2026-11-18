@@ -108,6 +108,38 @@ All of it for one thing: the creators' experience next week. A dinner the night 
 
 What would your first agent do?
 
+## Post v5 (18.11, no incident story, personalised experience) - RECOMMENDED
+
+Tonight, while I sleep, an AI agent will check my inbox four times, so that tomorrow morning every email to our London creators is already written, and right.
+
+That's what running Elevate London's creator program looks like now: a small team, and a lot of agents.
+
+🔎 Research
+• Before any creator gets a yes, an agent reads our own past research first, then their recent content and brand deals
+• 46 written rules guide it, each one born from a real mistake
+
+📊 Measurement
+• After Elevate NYC an agent logged 30 posts from 15 creators on a monday.com board, every three days, no screenshots
+• London starts the moment the keynote ends
+
+📬 Coordination
+• A 38-person dinner, three agencies, 11 ambassadors and a venue with a hard supplier cut-off
+• One draft per person, rewritten in place when the venue or a creator replies
+• Nothing external goes out until I read it and hit send
+
+🎨 And the fun part
+• The dinner centrepiece and placemats went from a roll-up file to print-ready PDFs in one conversation
+
+The agents do the logistics so the experience can be personal. Every creator gets:
+• AI credits loaded on their own monday.com account before they arrive
+• Masterclasses they picked from the agenda
+• A workshop where they build an agent for their own work, with the people who make the product
+• A seat at a community dinner the night before, with their name on the card
+
+Can't wait to see what they build.
+
+What would your first agent do?
+
 ## Notes for Ilan
 - "Half the work" is a judgement call; soften to "a big part of the work" if you prefer.
 - The research-agent "conflict" refers to a creator's competitor partnership; no names.
