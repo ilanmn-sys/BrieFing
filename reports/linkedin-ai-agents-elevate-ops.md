@@ -140,6 +140,38 @@ Can't wait to see what they build.
 
 What would your first agent do?
 
+## Post v7 (18.11, experience first, then the agents behind it) - RECOMMENDED. Post before the trip with the 'I'm attending Elevate' photo
+
+Next week at Elevate London, a group of tech creators will build their own AI agents with the people who make monday.com.
+
+Behind the scenes, we're doing the same thing.
+
+What the creators get, made for each of them:
+• AI credits loaded on their own monday.com account before they arrive
+• Masterclasses picked from the agenda
+• A guided tour after the keynote
+• A workshop where they build an agent for their own work
+• A community dinner the night before, with their name on the card
+
+What it takes: a small team, and a lot of AI agents.
+
+🔎 Research
+• Before any creator gets a yes, an agent reads our own past research first, then their content and brand deals
+• 46 written rules guide it, each one born from a real mistake
+
+📬 Coordination
+• A 38-person dinner, three agencies, 11 ambassadors and a venue with a hard supplier cut-off
+• Overnight, an agent re-checks the inbox, so every morning the emails are already written, and right
+• Nothing external goes out until I read it and hit send
+
+📊 Measurement
+• After Elevate NYC an agent logged 30 posts from 15 creators on a monday.com board, no screenshots
+• London starts the moment the keynote ends
+
+The agents take the logistics. The people get the attention.
+
+What would your first agent do?
+
 ## Notes for Ilan
 - "Half the work" is a judgement call; soften to "a big part of the work" if you prefer.
 - The research-agent "conflict" refers to a creator's competitor partnership; no names.
