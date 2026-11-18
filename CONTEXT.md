@@ -138,3 +138,4 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 - 18.11: no invites from us to Reut's creators (Ilan).
 - 18.11 dinner: Allison Grey NOT attending (Ilan). Ambassadors now 11 confirmed (+2 pending, dropped if no reply by 19.11), names not yet received. Named list 21 + Reut + 4 Reut creators + 11 ambassadors + CS 1 = 38 (40 max).
 - 18.11 ambassador names (Lee-at, 11): Simran Ghattoraya, Yogesh Pokale, David Simpson, Trevor Chauvin-DeCaro, Shiro Zayas, Clare Groves, Feride Ozer, Rissa Ream, Oyedokun Bibitayo Oyefunke, Cionna Evans (vegetarian), Chad Bruce (no fish or seafood).
+- 18.11 Reut's 4 dinner creators: Callum Mcdonnell, Grace Andrews (we passed her paid Creator Buzz offer 17.11, Elevate List 13558089187 = Declined), Beth Thomas, Adam Faulkner. Reut's group, no invites from us.
