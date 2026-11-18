@@ -28,4 +28,6 @@ Updated: 18.11 14:10 IL. Checks: 15:30, 18:30, 21:30, 07:45. Drafts built 08:30 
 ## Open questions
 - Nora answered 18.11 14:18 (for Moddy): normal registration at check-in like all attendees; bring photo ID, go through security, show the QR code emailed at registration. Phones fine. Professional cameras: check with Amalia Hochmann (Slack U07CKL7FQHK), not yet asked.
 - Reut 18.11 15:27: her group is not confirmed ("if you decide to come, tell me by tomorrow"); answers tomorrow. Treat Reut + 4 as TBC.
-- Pre-order choices: 0/38 as of 18.11 15:30 IL (team, Lee-at, Reut no replies yet; Vin/Margo drafts may not be sent yet).
+- 18.11 18:30 check: Christian replied (registered; account link sent to Daria; added to dinner/keynote/tour/workshop). He says MOST MASTERCLASSES ARE FULLY BOOKED; Margo asked him which ones he wants. Tomorrow's masterclass push needs a plan (ask Nora/Elevate team to hold creator seats?) before telling creators to sign up.
+- Reut 18.11 15:59: asks if CRM group can be ~10 total (budget approved), still confirming people; asked whether we have a branded invite she can send. Ilan's call (capacity 48; current list 38 incl. Reut 5).
+- Pre-order choices: 0/38 as of 18.11 18:30 IL (team, Lee-at, Reut no replies yet; Vin/Margo drafts may not be sent yet).
