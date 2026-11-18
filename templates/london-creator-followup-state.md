@@ -30,4 +30,5 @@ Updated: 18.11 14:10 IL. Checks: 15:30, 18:30, 21:30, 07:45. Drafts built 08:30 
 - Reut 18.11 15:27: her group is not confirmed ("if you decide to come, tell me by tomorrow"); answers tomorrow. Treat Reut + 4 as TBC.
 - 18.11 18:30 check: Christian replied (registered; account link sent to Daria; added to dinner/keynote/tour/workshop). He says MOST MASTERCLASSES ARE FULLY BOOKED; Margo asked him which ones he wants. Tomorrow's masterclass push needs a plan (ask Nora/Elevate team to hold creator seats?) before telling creators to sign up.
 - Reut 18.11 15:59: asks if CRM group can be ~10 total (budget approved), still confirming people; asked whether we have a branded invite she can send. Ilan's call (capacity 48; current list 38 incl. Reut 5).
-- Pre-order choices: 0/38 as of 18.11 18:30 IL (team, Lee-at, Reut no replies yet; Vin/Margo drafts may not be sent yet).
+- 18.11 21:30 check: questionnaire SUBMITTED; Dora sent the function sheet (msg 1a1f003254991a1d) for Ilan to review. Christian: masterclasses he wanted clash with the workshop, no action. Lee-at: "will try to get it to you today". Reut (19:44) asks again for the branded invite to send her group.
+- Pre-order choices: 0/38 as of 18.11 21:30 IL (team, Lee-at, Reut no replies yet; Vin/Margo drafts may not be sent yet).
