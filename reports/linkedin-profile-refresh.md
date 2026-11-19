@@ -58,6 +58,12 @@ His posts are a year ahead of his profile. The posts say "hands-on AI, creators,
 
 ## 3. Headline options (220 characters max)
 
+### v2 (19.11, broader, after Ilan: "too specific?") - RECOMMENDED
+1. **(Recommended)** Senior Communications Manager at monday.com | Media relations, creators and events | Building with AI agents *(~100 characters)*
+2. Communications at monday.com | Global media relations and creator partnerships | Hands-on with AI *(~95 characters)*
+3. Global comms at monday.com | Turning AI agents into a comms team superpower *(~75 characters)*
+
+### v1 (superseded: too specific; named one event and listed internal tools)
 1. **(Recommended)** Senior Communications Manager at monday.com | Global media relations | Creator programs at Elevate | I build and run AI agents for comms work *(141 characters)*
 2. Comms at monday.com, run with a small team and a lot of AI agents | Media relations, creators and events | Agents for research, coverage tracking and inbox *(155 characters)*
 3. Global media relations and creator programs at monday.com | Hands-on AI: agents that research creators, measure coverage and draft my replies *(141 characters)*
