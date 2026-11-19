@@ -1,6 +1,6 @@
 # London creator follow-up: live state (input for the 19.11 08:30 drafts)
 
-Updated: 18.11 14:10 IL. Checks: 15:30, 18:30, 21:30, 07:45. Drafts built 08:30 from this file.
+Updated: 19.11 17:10 IL. RULE: every update to Dora attaches a freshly regenerated form (see CONTEXT 19.11).
 
 ## Balthazar (Dora)
 - Dora 18.11 14:27: NO ordering on the night. Pre-orders due **Thu 19.11 15:00 UK (17:00 IL), hard supplier cut-off**. Pre-order form (docx: name, starter, main, dessert, dietary) attached to msg 1a1eea089b366913.
