@@ -121,6 +121,7 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 - **Other open items:** Matt Pocock was invited 11.11 with no reply; a follow-up draft and LinkedIn text are ready. Myriam needs an updated boilerplate, because the headcount is outdated.
 
 - Dinner print designs (18.11): `templates/london-dinner-print/` (placecard, menu, blank menu, A3 placemat, 60 cm centrepiece) with the official Elevate logo. Alison handles the design questions from here; Ilan does not want to spend more time on them.
+- 19.11 creator drafts: Tunde → r-5561650855268504207; Beatrice → r2441375275120874180; Charlie (replied 18.11, now group A) → r3826083447364112040; Moddy → r8530541213878378375; Christian → r-6501669693619978285; Lara → r8729590963823729606; Agi → r2006087600749914249; Zain (info@themetaversecompany.uk, cc Margo) → r-1087741229784212082; Tara → r3342847467114656593; Zohar (HE) → r7523839367153971206; Hila (HE) → r9077690786995926907; Amichai (HE, cc Zohar) → r-7395316010608937851. All in the invite threads except Tara/Zohar (new). Old London drafts deleted (15.11 invite drafts Lara/Agi/Tunde/Beatrice/Charlie-collabs, Hila 17.11). Hila registered with Hila@leadshift-ai.com (her 18.11 email).
 ## Other threads in flight (as of 15.11)
 
 - **Geektime "monday Builders":** 60K vs a 45K renewal. On hold (Ilan, 15.11): no answer to Ido until Ilan discusses it with Or and Scherf.
