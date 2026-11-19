@@ -76,7 +76,7 @@ His posts are a year ahead of his profile. The posts say "hands-on AI, creators,
 >
 > What I work on:
 > • Media relations for a global tech company, from Tel Aviv: Tier 1 outlets, launches, office openings and regional PR across markets.
-> • Creator programs at Elevate, monday.com's flagship event. We don't hand creators a seat at the keynote. We give them something to build. At Elevate NYC they built their own AI agents with our product team, and published 30+ posts in the weeks after. Elevate London adds a community dinner, a guided tour of the event and a hands-on agent workshop with our product leadership.
+> • Creator partnerships. I run monday.com's creator program year-round: finding the right creators, partnerships with agencies, roundtables with our leadership, and events. We don't just hand creators a brief. We give them something to build. At Elevate NYC they built their own AI agents with our product team and published 30+ posts in the weeks after; London is next.
 > • AI in comms. I run weekly AI sessions with our comms team, one domain at a time, always on a real task.
 >
 > The agents behind my day, built on monday.com and Claude:
@@ -102,7 +102,7 @@ Notes:
 > I run global media relations and the creator program at monday.com, with a small team and a lot of AI agents.
 >
 > • Media: Tier 1 press, launches and regional PR for a global tech company, from Tel Aviv.
-> • Creators: at Elevate NYC, creators built their own AI agents with our product team and published 30+ posts. London is next.
+> • Creators: I run our creator program year-round, from partnerships to roundtables and events. At Elevate NYC, creators built their own AI agents with our product team and published 30+ posts.
 > • AI: I build agents on monday.com and Claude that research creators, track coverage and draft my replies. I also run weekly AI sessions for our comms team.
 >
 > My rule: agents draft and remind, people decide. Nothing external goes out until I read it.
@@ -111,7 +111,7 @@ Notes:
 
 ## 5. Current role: monday.com
 
-**Title suggestion:** Senior Communications Manager, Global Media Relations & Creator Programs
+**Title suggestion:** Senior Communications Manager, Global Media Relations & Creator Partnerships
 (Keep "Senior Communications Manager" as the official part. Only add the second half if it fits the internal title [verify].)
 
 **Description:**
@@ -119,7 +119,7 @@ Notes:
 > I lead global media relations and the creator program for monday.com, and build the AI agents that run much of the work behind them.
 >
 > • Global media relations: international earned media from Tel Aviv, with Tier 1 outlets and regional PR partners. Launches include a campaign for monday.com's open platform, with a press release written for both people and AI agents, delivered in 10 days.
-> • Creator programs: built the creator program for Elevate. NYC (Oct 2026): a day of headset tour, keynote, hands-on AI agent workshop with the product team and a community dinner; 30+ creator posts tracked afterwards. London (Nov 2026): creator dinner, event tour and an agent workshop with product leadership.
+> • Creator program: built and run monday.com's creator program: sourcing and vetting creators, agency partnerships, content and measurement, plus creator experiences at our events. Elevate NYC (Oct 2026): a day of headset tour, keynote, hands-on AI agent workshop with the product team and a community dinner; 30+ creator posts tracked afterwards. London (Nov 2026): creator dinner, event tour and an agent workshop with product leadership.
 > • Creator roundtables in Israel: a series of creator roundtables with monday.com leadership, each with a hands-on agent-building session (EvolveTLV, June 2026, was the third).
 > • AI agents for comms: built and run agents on monday.com and Claude for creator research, coverage measurement and monitoring (real-time alerts on top-tier coverage), and inbox coordination (replies drafted, follow-ups tracked).
 > • AI adoption: run weekly hands-on AI sessions with the comms team, one domain at a time (media relations, social, internal comms), plus a shared knowledge base every team agent draws on.
