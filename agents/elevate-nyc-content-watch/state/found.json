@@ -490,7 +490,22 @@
       "reportedOn": "2026-11-11",
       "dryRun": false,
       "metricsNote": "11.11 IG posts dataset: 113 likes"
+    },
+    {
+      "url": "https://www.linkedin.com/posts/advicewithjean_2023-worked-as-a-program-manager-in-tech-activity-7528124839799328768-_Zo_",
+      "creator": "Jean Kang",
+      "platform": "LinkedIn",
+      "type": "post",
+      "date": "2026-11-16",
+      "summary": "Joined monday.com's panel at Elevate NYC (hosted by David Conkling, with Rafi N. and Gaby Gorgol): 3 aha moments on using AI in your career; tags monday.com and Elevate by monday.com. Posted 16.11 16:00 UTC, found late.",
+      "likes": 220,
+      "comments": 89,
+      "views": null,
+      "adLabel": "none in text",
+      "source": "Google SERP + Bright Data LinkedIn posts gd_lyy3tktm25m4avu764",
+      "reportedOn": "2026-11-19",
+      "dryRun": false
     }
   ],
-  "lastRun": "2026-11-16T17:05Z (live, window since 2026-11-15T16:49Z, scraped from 14.11; 0 new finds). DM: none sent (no new finds, no failure; Monday so no running-count line). Stories list empty (newest find Jean Kang 10.11, past 48h; no creator in a posting window). CRM: no writes. Total 30 posts / 14 creators (26 in Nov), unchanged. Not yet posted: Taki Wong, Eilon Gruper, Kayvon Jafarzadeh, Mariana Antaya, Naya (Nyaradzo Bere), Hilary Gridley, Kierra Mcmillian. Checked: IG posts 34 rows 14-16.11 across 16 profiles, none match (maxtalkstech_ dead_page = no posts; Danielle Farage 16.11 and softgirlnocode 16.11 posts are Adobe MAX recaps; Natasha Badger 15.11 '3 countries, 2 conferences' = Web Summit + Female Founder World, no monday/Elevate); TikTok 11 videos 14-16.11, none match (dead_page/no posts: mar_antaya, fifbuilds, alexisbarber_, techwithmaitrimangal); YouTube dataset dead_page for all 3 returned inputs (0 records); RSS fallback for all 5 channels: 5 videos 15-16.11 (Taki 1, Mor 1, Sajjaad 1, Naya 2, Eilon 0), none match; X Lauren/Jade dead_page. Highlights not run (Sunday-only check). Creator Buzz: 2 messages since last run (Vin on London creators Grace Andrews/Mischa Collins; Tara Crymble joined), no NYC creator post links. SERP: 63 queries (last week), 1 failure ('Lauren Vriens' monday.com) retried OK. Not counted: weekday 'Monday' hits; Workflow Magic/Vered Levinstein FB aggregator videos with Aria/Maitri; Maitri FB 'networking questions' video (Adobe MAX); Jean Kang own comment on her known 10.11 LinkedIn post (alias); monday.com company pages."
+  "lastRun": "2026-11-19T16:58Z (live, window since 2026-11-16T17:05Z, scraped from 16.11; 1 new find: Jean Kang LinkedIn 16.11 Elevate panel post). Bright Data worked (no suspension error): IG posts 47 rows 16-19.11 across 15 profiles (eilon.grouper, sajjaad.khader dead_page; 3 post dead_pages retried OK), none match (Maitri 19.11 Grok Bot reel, Soojin 17.11 Gamma #gammapartner, Danielle 18.11 Adobe MAX, Mariana Microsoft Ignite: not monday). TikTok 27 videos, none match (sajjaadkhader, fifbuilds dead_page). YouTube dataset dead_page for all 5 inputs (0 records); RSS fallback for all 5 channels: Taki 3, Naya 3, others 0, none match. X Lauren/Jade dead_page (not checked). Creator Buzz: messages since last run are London logistics (dinner menus, Will Francis, Temi, Nathan, Jade Beason), no NYC creator post links. SERP: 80 queries (last week), 10 rate-limit failures retried OK. Not counted: incredibleleaders IG reel (not a roster creator); Shiran Nawi / Kate Kenner / Leslie White / Stefan Karadzic posts (not creators); Workflow Magic/Vered Levinstein FB aggregator with Aria; weekday 'Monday'/generic 'elevate' hits. CRM: Jean Kang (12984714651) Deliverables appended (PUBLISHED line added; her 10.11 finds were not in Deliverables before) + Latest Post replaced. DM sent: https://monday.slack.com/archives/D038RJ45RQD/p1795107447379389. Stories list empty (Jean's find is >48h old; no creator in a posting window). Highlights not run (Sunday-only). Total 31 posts / 14 creators (27 in Nov). Not yet posted: Taki Wong, Eilon Gruper, Kayvon Jafarzadeh, Mariana Antaya, Naya (Nyaradzo Bere), Hilary Gridley, Kierra Mcmillian."
 }
