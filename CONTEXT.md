@@ -129,6 +129,7 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 - **Gmail:** about 25 stale drafts are waiting for Ilan to delete by hand.
 
 ## Dennis (monday PR agent 17796) — changed 16.11
+- 19.11 (Ilan): real-time alerts. Job 3 Step 3 now posts to #media-relations every fresh Tier 1/2 coverage item (plus spokesperson/negative) with summary, publish date, outlet, competitors, sentiment; stock/financial-media noise excluded. New Step 3b: Tier 1/2 items naming a specific monday product (alone or vs competitors) → DM Allison Grey (U0BQNJD25DX). Inbox sweep now hourly 08–20 (added 9,11,13,15,17,19); n8n import hourly 08–20.
 - No website recommendations any more: we no longer upload coverage to the website. Website? column now only records coverage (No / Not coverage / Duplicate / Pending Review).
 - Iron rule: digests, #media-relations posts, owner DMs, the Hebrew brief and drafts to Pepper carry only articles new since the previous digest (publish date ≤3 days old, item ID not in `triage_memory/digested_ids.json`). Backfill and n8n imports with old dates stay silent on the board. (Triggered by Or's 16.11 complaint about Aug–Sep items in #media-relations.)
 
