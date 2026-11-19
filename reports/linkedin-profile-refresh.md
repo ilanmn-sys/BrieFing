@@ -70,7 +70,19 @@ His posts are a year ahead of his profile. The posts say "hands-on AI, creators,
 
 ## 4. About
 
-### Recommended version (about 1,600 characters)
+### v2 RECOMMENDED (19.11, ~850 characters; Ilan: "too long?")
+
+> I run global media relations and the creator program at monday.com, with a small team and a lot of AI agents.
+>
+> • Media: Tier 1 press, launches and regional PR for a global tech company, from Tel Aviv.
+> • Creators: year-round partnerships, leadership roundtables and creator experiences at our events. At Elevate NYC, creators built their own AI agents with our product team.
+> • AI: I build agents on monday.com and Claude that research, track coverage and draft my replies, and I run weekly AI sessions for our comms team.
+>
+> My rule: agents draft and remind, people decide.
+>
+> Happy to talk creators, comms and AI that actually ships work.
+
+### v1 long version (about 1,600 characters, superseded)
 
 > I run global media relations and the creator program at monday.com. A lot of the work behind both is done by AI agents I built and run myself.
 >
