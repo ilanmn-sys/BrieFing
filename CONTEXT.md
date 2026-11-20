@@ -158,3 +158,4 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 - 19.11 18:57 IL: Bright Data WORKS again via api.brightdata.com (content-watch run OK); the 18.11 'suspended' note is outdated. NYC watch: 1 new find (Jean Kang LinkedIn 16.11), total 31 posts / 14 creators.
 - 19.11 13:00 UTC Amichai: dessert = chocolate mousse (not sorbet; Dora still has sorbet, fix in next update). His monday account email: asheqel@gmail.com (no URL), for Daria. Dora 18:45 IL: revised function sheet + asks if we want to PRE-PAY (Ilan's call).
 - 19.11 ~20:50 IL: told Dora we pay by credit card on the night (no pre-pay); sent Amichai mousse fix + form (35/42).
+- 20.11 08:19 UK: Simon Shubbar suggests Hosanna Ouellette (U0ACFPFCURH, growth, builds agents) for his Balthazar seat. Not invited yet; once she confirms + picks a menu, replace Simon's row and send Dora the regenerated form.
