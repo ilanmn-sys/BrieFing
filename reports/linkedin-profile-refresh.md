@@ -126,7 +126,15 @@ Notes:
 **Title suggestion:** Senior Communications Manager, Global Media Relations & Creator Partnerships
 (Keep "Senior Communications Manager" as the official part. Only add the second half if it fits the internal title [verify].)
 
-**Description:**
+**Description v2 SHORT (21.11, ~480 characters; Ilan: "too long?") - RECOMMENDED:**
+
+> Global media relations and the creator program for monday.com.
+>
+> • Media: international earned media from Tel Aviv, with Tier 1 outlets and regional PR partners.
+> • Creators: year-round partnerships, leadership roundtables and creator experiences at our events (Elevate NYC and London 2026: creators built their own AI agents with our product team).
+> • AI: built agents for creator research, coverage tracking and inbox follow-ups; run weekly AI sessions for the comms team.
+
+**Description v1 long (superseded):**
 
 > I lead global media relations and the creator program for monday.com, and build the AI agents that run much of the work behind them.
 >
