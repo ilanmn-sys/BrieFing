@@ -132,7 +132,7 @@ Notes:
 >
 > • Media: international earned media from Tel Aviv, with Tier 1 outlets and regional PR partners.
 > • Creators: year-round partnerships, leadership roundtables and creator experiences at our events (Elevate NYC and London 2026: creators built their own AI agents with our product team).
-> • AI: built agents for creator research, coverage tracking and inbox follow-ups; run weekly AI sessions for the comms team.
+> • AI: bringing AI agents into how the comms team works, hands-on.
 
 **Description v1 long (superseded):**
 
