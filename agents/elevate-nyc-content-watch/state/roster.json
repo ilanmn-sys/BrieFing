@@ -1,221 +1,352 @@
 {
- "note": "Elevate NYC (28-29.10.2026) creators to watch until 30.11.2026. Handles marked null are unresolved: resolve on the first run (bio links, Creator Buzz list, SERP) and write them back here. crmItemId = Influencers CRM item (board in config.json influencers.boardId).",
- "creators": [
-  {
-   "name": "Taki Wong",
-   "source": "Narrative",
-   "crmItemId": 13143426668,
-   "instagram": "https://www.instagram.com/taki.gpt/",
-   "tiktok": "https://www.tiktok.com/@taki.gpt",
-   "youtube": "https://www.youtube.com/@takigpt",
-   "x": null,
-   "linkedin": "https://ca.linkedin.com/in/taki-wong"
-  },
-  {
-   "name": "Mor Nissim",
-   "source": "Direct (IL)",
-   "crmItemId": 12993720069,
-   "instagram": "https://www.instagram.com/mornissim_",
-   "tiktok": null,
-   "youtube": "https://www.youtube.com/@MorNissim",
-   "x": null,
-   "linkedin": "https://il.linkedin.com/in/mor-nissim-3498b01b4"
-  },
-  {
-   "name": "Eilon (Ayalon) Gruper",
-   "source": "Direct (Scherf)",
-   "crmItemId": 13285487559,
-   "instagram": "https://www.instagram.com/eilon.grouper/",
-   "tiktok": null,
-   "youtube": "https://www.youtube.com/channel/UCnxE3DNx_ZQcTY1ZGmCQ9kQ",
-   "x": null,
-   "linkedin": null
-  },
-  {
-   "name": "Sajjaad Khader",
-   "source": "Narrative",
-   "crmItemId": 13275338333,
-   "instagram": "https://www.instagram.com/sajjaad.khader/",
-   "tiktok": "https://www.tiktok.com/@sajjaadkhader",
-   "youtube": "https://www.youtube.com/@SajjaadKhader",
-   "x": null,
-   "linkedin": null
-  },
-  {
-   "name": "Kayvon Jafarzadeh",
-   "source": "Narrative",
-   "crmItemId": 13200890527,
-   "instagram": "https://www.instagram.com/kayvon.ai/",
-   "tiktok": null,
-   "youtube": null,
-   "x": null,
-   "linkedin": "https://www.linkedin.com/in/kayvon-jafarzadeh"
-  },
-  {
-   "name": "Mariana Antaya",
-   "source": "Narrative",
-   "crmItemId": 13200879080,
-   "instagram": "https://www.instagram.com/mar_antaya",
-   "tiktok": "https://www.tiktok.com/@mar_antaya",
-   "youtube": null,
-   "x": null,
-   "linkedin": "https://www.linkedin.com/in/marianaantaya"
-  },
-  {
-   "name": "Nyaradzo Bere (Naya)",
-   "source": "Narrative",
-   "crmItemId": 13200879116,
-   "instagram": "https://www.instagram.com/theblackfemaleengineer",
-   "tiktok": null,
-   "youtube": "https://www.youtube.com/c/TheBlackFemaleEngineer",
-   "x": null,
-   "linkedin": "https://www.linkedin.com/in/theblackfemaleengineer"
-  },
-  {
-   "name": "Lauren Vriens",
-   "source": "Elevate speaker",
-   "crmItemId": 12984716516,
-   "instagram": null,
-   "tiktok": null,
-   "youtube": null,
-   "x": "https://x.com/LaurenVriens",
-   "linkedin": "https://www.linkedin.com/in/laurenvriens"
-  },
-  {
-   "name": "Jean Kang",
-   "source": "Elevate speaker",
-   "crmItemId": 12984714651,
-   "instagram": "https://www.instagram.com/advicewithjean/",
-   "tiktok": null,
-   "youtube": null,
-   "x": null,
-   "linkedin": "https://www.linkedin.com/in/advicewithjean"
-  },
-  {
-   "name": "Jade Bonacolta",
-   "source": "Elevate speaker",
-   "crmItemId": 12984716804,
-   "instagram": null,
-   "tiktok": null,
-   "youtube": null,
-   "x": "https://x.com/JadeBonacolta",
-   "linkedin": "https://www.linkedin.com/in/jadebonacolta"
-  },
-  {
-   "name": "Hilary Gridley",
-   "source": "Elevate speaker",
-   "crmItemId": 12984713934,
-   "instagram": null,
-   "tiktok": null,
-   "youtube": null,
-   "x": null,
-   "linkedin": "https://www.linkedin.com/in/hilarygridley"
-  },
-  {
-   "name": "Aria Kim",
-   "source": "Creator Buzz",
-   "crmItemId": 13434171555,
-   "instagram": "https://www.instagram.com/techwitharia",
-   "tiktok": null,
-   "youtube": null,
-   "x": null,
-   "linkedin": "https://www.linkedin.com/in/techwitharia"
-  },
-  {
-   "name": "Audrey (softgirlnocode)",
-   "source": "Creator Buzz",
-   "crmItemId": 13434168583,
-   "instagram": "https://www.instagram.com/softgirlnocode",
-   "tiktok": "https://www.tiktok.com/@softgirlnocode",
-   "youtube": null,
-   "x": null,
-   "linkedin": "https://www.linkedin.com/in/audrey-bai-056158127"
-  },
-  {
-   "name": "Max Talks Tech",
-   "source": "Creator Buzz",
-   "crmItemId": 13016325387,
-   "instagram": "https://www.instagram.com/maxtalkstech_",
-   "tiktok": "https://www.tiktok.com/@maxtalkstech",
-   "youtube": null,
-   "x": null,
-   "linkedin": null
-  },
-  {
-   "name": "Natasha Badger",
-   "source": "Creator Buzz",
-   "crmItemId": 13434168983,
-   "instagram": "https://www.instagram.com/natashabadger/",
-   "tiktok": "https://www.tiktok.com/@natasha.badger",
-   "youtube": null,
-   "x": null,
-   "linkedin": "https://www.linkedin.com/in/natasha-badger"
-  },
-  {
-   "name": "Maitri Mangal",
-   "source": "Creator Buzz",
-   "crmItemId": 13434164221,
-   "instagram": "https://www.instagram.com/maitrimangal/",
-   "tiktok": "https://www.tiktok.com/@techwithmaitrimangal",
-   "youtube": null,
-   "x": null,
-   "linkedin": "https://www.linkedin.com/in/maitrimangal"
-  },
-  {
-   "name": "Danielle Farage",
-   "source": "Creator Buzz",
-   "crmItemId": 13434164351,
-   "instagram": "https://www.instagram.com/daniellefarage/",
-   "tiktok": "https://www.tiktok.com/@danielle.farage",
-   "youtube": null,
-   "x": null,
-   "linkedin": "https://www.linkedin.com/in/danielle-farage"
-  },
-  {
-   "name": "Alexis Barber",
-   "source": "Creator Buzz",
-   "crmItemId": 13434164350,
-   "instagram": "https://www.instagram.com/alexisbarber/",
-   "tiktok": "https://www.tiktok.com/@alexisbarber_",
-   "youtube": null,
-   "x": null,
-   "linkedin": "https://www.linkedin.com/in/alexis-barber-57a732129"
-  },
-  {
-   "name": "Fiona Lin (fifbuilds)",
-   "source": "Creator Buzz",
-   "crmItemId": 13434168701,
-   "instagram": "https://www.instagram.com/fifbuilds",
-   "tiktok": "https://www.tiktok.com/@fifbuilds",
-   "youtube": null,
-   "x": null,
-   "linkedin": null
-  },
-  {
-   "name": "Soojin Lee (soojintech)",
-   "source": "Creator Buzz",
-   "crmItemId": 13434171556,
-   "instagram": "https://www.instagram.com/soojintech",
-   "tiktok": "https://www.tiktok.com/@soojintech",
-   "youtube": null,
-   "x": null,
-   "linkedin": "https://www.linkedin.com/in/soojin-lee1"
-  },
-  {
-   "name": "Kierra Mcmillian",
-   "source": "Dinner guest",
-   "crmItemId": 13434164812,
-   "instagram": null,
-   "tiktok": null,
-   "youtube": null,
-   "x": null,
-   "linkedin": "https://www.linkedin.com/in/kierra-mcmillian-3777b51ab"
+  "note": "Elevate NYC (28-29.10.2026, event=nyc) creators watched until 30.11.2026, and Elevate London (24.11.2026, event=london) creators watched until 24.12.2026 (added 24.11 by Ilan). Handles marked null are unresolved: resolve on the first run (bio links, Creator Buzz list, SERP) and write them back here. crmItemId = Influencers CRM item (board in config.json influencers.boardId); null = no CRM item, so report only and do not write to any board.",
+  "creators": [
+    {
+      "name": "Taki Wong",
+      "source": "Narrative",
+      "crmItemId": 13143426668,
+      "instagram": "https://www.instagram.com/taki.gpt/",
+      "tiktok": "https://www.tiktok.com/@taki.gpt",
+      "youtube": "https://www.youtube.com/@takigpt",
+      "x": null,
+      "linkedin": "https://ca.linkedin.com/in/taki-wong",
+      "event": "nyc"
+    },
+    {
+      "name": "Mor Nissim",
+      "source": "Direct (IL)",
+      "crmItemId": 12993720069,
+      "instagram": "https://www.instagram.com/mornissim_",
+      "tiktok": null,
+      "youtube": "https://www.youtube.com/@MorNissim",
+      "x": null,
+      "linkedin": "https://il.linkedin.com/in/mor-nissim-3498b01b4",
+      "event": "nyc"
+    },
+    {
+      "name": "Eilon (Ayalon) Gruper",
+      "source": "Direct (Scherf)",
+      "crmItemId": 13285487559,
+      "instagram": "https://www.instagram.com/eilon.grouper/",
+      "tiktok": null,
+      "youtube": "https://www.youtube.com/channel/UCnxE3DNx_ZQcTY1ZGmCQ9kQ",
+      "x": null,
+      "linkedin": null,
+      "event": "nyc"
+    },
+    {
+      "name": "Sajjaad Khader",
+      "source": "Narrative",
+      "crmItemId": 13275338333,
+      "instagram": "https://www.instagram.com/sajjaad.khader/",
+      "tiktok": "https://www.tiktok.com/@sajjaadkhader",
+      "youtube": "https://www.youtube.com/@SajjaadKhader",
+      "x": null,
+      "linkedin": null,
+      "event": "nyc"
+    },
+    {
+      "name": "Kayvon Jafarzadeh",
+      "source": "Narrative",
+      "crmItemId": 13200890527,
+      "instagram": "https://www.instagram.com/kayvon.ai/",
+      "tiktok": null,
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/kayvon-jafarzadeh",
+      "event": "nyc"
+    },
+    {
+      "name": "Mariana Antaya",
+      "source": "Narrative",
+      "crmItemId": 13200879080,
+      "instagram": "https://www.instagram.com/mar_antaya",
+      "tiktok": "https://www.tiktok.com/@mar_antaya",
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/marianaantaya",
+      "event": "nyc"
+    },
+    {
+      "name": "Nyaradzo Bere (Naya)",
+      "source": "Narrative",
+      "crmItemId": 13200879116,
+      "instagram": "https://www.instagram.com/theblackfemaleengineer",
+      "tiktok": null,
+      "youtube": "https://www.youtube.com/c/TheBlackFemaleEngineer",
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/theblackfemaleengineer",
+      "event": "nyc"
+    },
+    {
+      "name": "Lauren Vriens",
+      "source": "Elevate speaker",
+      "crmItemId": 12984716516,
+      "instagram": null,
+      "tiktok": null,
+      "youtube": null,
+      "x": "https://x.com/LaurenVriens",
+      "linkedin": "https://www.linkedin.com/in/laurenvriens",
+      "event": "nyc"
+    },
+    {
+      "name": "Jean Kang",
+      "source": "Elevate speaker",
+      "crmItemId": 12984714651,
+      "instagram": "https://www.instagram.com/advicewithjean/",
+      "tiktok": null,
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/advicewithjean",
+      "event": "nyc"
+    },
+    {
+      "name": "Jade Bonacolta",
+      "source": "Elevate speaker",
+      "crmItemId": 12984716804,
+      "instagram": null,
+      "tiktok": null,
+      "youtube": null,
+      "x": "https://x.com/JadeBonacolta",
+      "linkedin": "https://www.linkedin.com/in/jadebonacolta",
+      "event": "nyc"
+    },
+    {
+      "name": "Hilary Gridley",
+      "source": "Elevate speaker",
+      "crmItemId": 12984713934,
+      "instagram": null,
+      "tiktok": null,
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/hilarygridley",
+      "event": "nyc"
+    },
+    {
+      "name": "Aria Kim",
+      "source": "Creator Buzz",
+      "crmItemId": 13434171555,
+      "instagram": "https://www.instagram.com/techwitharia",
+      "tiktok": null,
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/techwitharia",
+      "event": "nyc"
+    },
+    {
+      "name": "Audrey (softgirlnocode)",
+      "source": "Creator Buzz",
+      "crmItemId": 13434168583,
+      "instagram": "https://www.instagram.com/softgirlnocode",
+      "tiktok": "https://www.tiktok.com/@softgirlnocode",
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/audrey-bai-056158127",
+      "event": "nyc"
+    },
+    {
+      "name": "Max Talks Tech",
+      "source": "Creator Buzz",
+      "crmItemId": 13016325387,
+      "instagram": "https://www.instagram.com/maxtalkstech_",
+      "tiktok": "https://www.tiktok.com/@maxtalkstech",
+      "youtube": null,
+      "x": null,
+      "linkedin": null,
+      "event": "nyc"
+    },
+    {
+      "name": "Natasha Badger",
+      "source": "Creator Buzz",
+      "crmItemId": 13434168983,
+      "instagram": "https://www.instagram.com/natashabadger/",
+      "tiktok": "https://www.tiktok.com/@natasha.badger",
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/natasha-badger",
+      "event": "nyc"
+    },
+    {
+      "name": "Maitri Mangal",
+      "source": "Creator Buzz",
+      "crmItemId": 13434164221,
+      "instagram": "https://www.instagram.com/maitrimangal/",
+      "tiktok": "https://www.tiktok.com/@techwithmaitrimangal",
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/maitrimangal",
+      "event": "nyc"
+    },
+    {
+      "name": "Danielle Farage",
+      "source": "Creator Buzz",
+      "crmItemId": 13434164351,
+      "instagram": "https://www.instagram.com/daniellefarage/",
+      "tiktok": "https://www.tiktok.com/@danielle.farage",
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/danielle-farage",
+      "event": "nyc"
+    },
+    {
+      "name": "Alexis Barber",
+      "source": "Creator Buzz",
+      "crmItemId": 13434164350,
+      "instagram": "https://www.instagram.com/alexisbarber/",
+      "tiktok": "https://www.tiktok.com/@alexisbarber_",
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/alexis-barber-57a732129",
+      "event": "nyc"
+    },
+    {
+      "name": "Fiona Lin (fifbuilds)",
+      "source": "Creator Buzz",
+      "crmItemId": 13434168701,
+      "instagram": "https://www.instagram.com/fifbuilds",
+      "tiktok": "https://www.tiktok.com/@fifbuilds",
+      "youtube": null,
+      "x": null,
+      "linkedin": null,
+      "event": "nyc"
+    },
+    {
+      "name": "Soojin Lee (soojintech)",
+      "source": "Creator Buzz",
+      "crmItemId": 13434171556,
+      "instagram": "https://www.instagram.com/soojintech",
+      "tiktok": "https://www.tiktok.com/@soojintech",
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/soojin-lee1",
+      "event": "nyc"
+    },
+    {
+      "name": "Kierra Mcmillian",
+      "source": "Dinner guest",
+      "crmItemId": 13434164812,
+      "instagram": null,
+      "tiktok": null,
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/kierra-mcmillian-3777b51ab",
+      "event": "nyc"
+    },
+    {
+      "name": "Charlie Hills",
+      "source": "Creator Buzz",
+      "event": "london",
+      "crmItemId": null,
+      "instagram": "https://www.instagram.com/charliehills/",
+      "tiktok": "https://www.tiktok.com/@charliejhills",
+      "youtube": "https://www.youtube.com/@CharlieHillsAI",
+      "x": "https://x.com/charliejhills",
+      "linkedin": "https://www.linkedin.com/in/charlie-hills"
+    },
+    {
+      "name": "Lara Acosta",
+      "source": "Creator Buzz",
+      "event": "london",
+      "crmItemId": null,
+      "instagram": "https://www.instagram.com/laraacostar/",
+      "tiktok": null,
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://uk.linkedin.com/in/laraacostar"
+    },
+    {
+      "name": "Tunde Alao",
+      "source": "Creator Buzz",
+      "event": "london",
+      "crmItemId": null,
+      "instagram": "https://www.instagram.com/itstundeanthony/",
+      "tiktok": null,
+      "youtube": "https://www.youtube.com/@ItsTundeAlao",
+      "x": null,
+      "linkedin": null
+    },
+    {
+      "name": "Moddy Mankus",
+      "source": "Creator Buzz",
+      "event": "london",
+      "crmItemId": null,
+      "instagram": "https://www.instagram.com/moddy.talks/",
+      "tiktok": "https://www.tiktok.com/@moddy.a.m",
+      "youtube": "https://www.youtube.com/@moddy.a.m",
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/modestasmankus/"
+    },
+    {
+      "name": "Beatrice Vladut",
+      "source": "Creator Buzz",
+      "event": "london",
+      "crmItemId": null,
+      "instagram": null,
+      "tiktok": null,
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/beatricevladut/"
+    },
+    {
+      "name": "Agi (The London Founder)",
+      "source": "Creator Buzz",
+      "event": "london",
+      "crmItemId": null,
+      "instagram": "https://www.instagram.com/thelondonfounder/",
+      "tiktok": "https://www.tiktok.com/@londonfounder",
+      "youtube": null,
+      "x": null,
+      "linkedin": null
+    },
+    {
+      "name": "Christian Zimmer",
+      "source": "Narrative",
+      "event": "london",
+      "crmItemId": 13143456400,
+      "instagram": "https://www.instagram.com/chrispathway/",
+      "tiktok": "https://www.tiktok.com/@chrispathway",
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/christian-zimmer-4b482b252/"
+    },
+    {
+      "name": "Zain Ul Abedeen (The Metaverse Guy)",
+      "source": "Narrative",
+      "event": "london",
+      "crmItemId": 13554479376,
+      "instagram": null,
+      "tiktok": null,
+      "youtube": "https://www.youtube.com/@TheMetaverseGuy",
+      "x": null,
+      "linkedin": null
+    },
+    {
+      "name": "Amichai Sheqel",
+      "source": "Scherf",
+      "event": "london",
+      "crmItemId": null,
+      "instagram": "https://www.instagram.com/amichai.ai/",
+      "tiktok": "https://www.tiktok.com/@amichai.ai",
+      "youtube": null,
+      "x": null,
+      "linkedin": "https://www.linkedin.com/in/amichai-sheqel-0519091ab"
+    },
+    {
+      "name": "Hila Naor",
+      "source": "Scherf",
+      "event": "london",
+      "crmItemId": null,
+      "instagram": "https://www.instagram.com/hila.naor_/",
+      "tiktok": null,
+      "youtube": null,
+      "x": null,
+      "linkedin": null
+    }
+  ],
+  "resolvedOn": "2026-10-31 (first run, dry run): Creator Buzz channel + Google SERP + IG profile bios. Eilon IG corrected eilon.gruper (unavailable) -> eilon.grouper. Kierra Mcmillian unresolved. 2026-11-01: Maitri TikTok @techwithmaitrimangal (tagged as @maitrimangal in Sajjaad's TikTok). IG highlights dataset gd_ln0751ruyga74vnhk returns 'does not support collection' via API. 2026-11-02: LinkedIn posts dataset gd_lyy3tktm25m4avu764 works for single post URLs (linkedin.com/posts|pulse|feed/update; resolve lnkd.in first); use it for LinkedIn metrics. 2026-11-05: Natasha Badger TikTok @natasha.badger (same NYC event/The Marketing Groupe content as her IG). 2026-11-07: Mariana Antaya TikTok @mar_antaya (same name, same videos as IG mar_antaya).",
+  "ilanPost": {
+    "url": "https://www.linkedin.com/feed/update/urn:li:activity:7522572319110823936/",
+    "date": "2026-11-01",
+    "note": "Ilan's LinkedIn recap of the NYC creator program. Report creators who reshare or comment on it as finds (platform LinkedIn, type reshare/comment) when Google search surfaces them."
   }
- ],
- "resolvedOn": "2026-10-31 (first run, dry run): Creator Buzz channel + Google SERP + IG profile bios. Eilon IG corrected eilon.gruper (unavailable) -> eilon.grouper. Kierra Mcmillian unresolved. 2026-11-01: Maitri TikTok @techwithmaitrimangal (tagged as @maitrimangal in Sajjaad's TikTok). IG highlights dataset gd_ln0751ruyga74vnhk returns 'does not support collection' via API. 2026-11-02: LinkedIn posts dataset gd_lyy3tktm25m4avu764 works for single post URLs (linkedin.com/posts|pulse|feed/update; resolve lnkd.in first); use it for LinkedIn metrics. 2026-11-05: Natasha Badger TikTok @natasha.badger (same NYC event/The Marketing Groupe content as her IG). 2026-11-07: Mariana Antaya TikTok @mar_antaya (same name, same videos as IG mar_antaya).",
- "ilanPost": {
-  "url": "https://www.linkedin.com/feed/update/urn:li:activity:7522572319110823936/",
-  "date": "2026-11-01",
-  "note": "Ilan's LinkedIn recap of the NYC creator program. Report creators who reshare or comment on it as finds (platform LinkedIn, type reshare/comment) when Google search surfaces them."
- }
 }
