@@ -73,7 +73,7 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 - **Adaya Brum** (עדיה, procurement): Slack U08MBQRHFA5 / DM D0C2BJPA3CL.
 - **Inbal Jozefov** (registrations): U08BDUF8CAF / DM D098MQU4L94.
 - **Sophie Spence** (EMEA events): U086WNZNKRQ.
-- **Daria:** monday accounts and AI credits, D08BJF3LYLQ.
+- **Daria:** monday accounts and AI credits, D08BJF3LYLQ. Backup when she is out: Tomer Aloni (U0837B2QWQJ).
 - **Tzah:** UTM links, D0ABBUGP1QV.
 - **Shoshi:** U01V0LS5NF7.
 - **Oya/Aviya:** U085VU6B8H0 / D0C9PBN69L7.
@@ -211,3 +211,4 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 - 24.11 14:11 UK sync: credits 10/10 confirmed in Daria DM (14:00 UK); ledger rows 13625160923 + 13626207443 closed. No other new London Slack/Gmail (Clarity UK coverage roundup 13:35 UK in #clarity-monday, not London-creator). Brief v50. DM to Ilan 14:11 UK.
 - 24.11 15:10 UK sync: Ilan sent Daria Tara's email (tara.crym@gmail.com) in the credits DM 14:57 UK; no reply yet (ledger waiting row 13627452213). No other new London Slack/Gmail; no creator posts spotted via Slack/Gmail. Brief not republished.
 - 24.11 (Ilan): content watch now covers 10 London creators (roster event=london, watch to 24.12; report-only except Christian 13143456400 + Zain 13554479376 CRM). Trigger trig_01Pd12AtXYpfMKC3jwZwhtdi daily 18:47 IL to 01.12, then back to every 3 days (reminder trig_01ELcGdAS7nSLMkW7CxoCg9d on 02.12).
+- 24.11 16:10 UK sync: Daria (15:11 UK) is out of the office and pointed Ilan to Tomer Aloni (U0837B2QWQJ) for today's credits; Ilan asked Tomer 15:15 UK to load credits for tara.crym@gmail.com. Tomer 15:53 UK asked what it is about and whether it is part of Elevate; unanswered (ledger 13628130740; Daria row 13627452213 closed). No creator thank-yous/posts in Slack/Gmail; no other new London activity. Brief not republished.
