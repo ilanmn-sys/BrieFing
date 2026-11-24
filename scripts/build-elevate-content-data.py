@@ -23,6 +23,7 @@ def match(name):
         if norm(c['name'].split()[0]) == first: return c
     return None
 
+av = thumbs.get('_avatars', {})
 posts = []
 for i, p in enumerate(found):
     c = match(p['creator'])
@@ -36,6 +37,7 @@ for i, p in enumerate(found):
         'viewsNote': p.get('viewsNote'),
         'thumb': ('thumbs/' + t['file']) if t else None,
         'ratio': (round(t['w'] / t['h'], 3) if t and t.get('h') else None),
+        'avatar': ('thumbs/avatars/' + os.path.basename(av[p['creator']]['file'])) if p['creator'] in av else None,
     })
 posted = {norm((match(p['creator']) or {'name': p['creator']})['name']) for p in found}
 upcoming = [{'name': c['name'], 'event': c.get('event', 'nyc'),
