@@ -59,7 +59,7 @@ Last updated: 2026-11-16.
 | Morning brief (via Pepper) + day plan | `trig_01Esk6zwQiY1f313Gci4ZPD9` | Sun–Thu 07:47 | one line + link |
 | Reply tracker | `trig_01KVkFNwP9ehvDi1P6s6KXxq` | daily 20:47 (Sun–Thu) | only if a DM was sent |
 | London creator sync | `trig_01TQNok2ioEUYvohRHEYhXiP` | DISABLED 16.11 (usage) | — |
-| Creator UTM report | `trig_0148sS7vhvanWQ5FU2UUkqxz` | weekly, Sun 08:39 | silent unless it fails |
+| Creator UTM report | `trig_0148sS7vhvanWQ5FU2UUkqxz` | daily 08:39 (from 25.11; NYC + London, ranked) | silent unless it fails |
 | Elevate NYC content watch | `trig_01Pd12AtXYpfMKC3jwZwhtdi` | every 3 days until 30.11 | commit `agents/elevate-nyc-content-watch/state` after each run |
 | Weekly LinkedIn proposal | `trig_01N9EfxTDXtkTTnQNT8wXp9x` | Wed | — |
 
@@ -219,3 +219,4 @@ Parked 15.11 (Ilan: "let's put a pin in it"): (1) run the routines in their own 
 - 24.11 20:53 IL reply tracker: DM sent (D038RJ45RQD p1795546350772999). New waiting-on-Ilan rows: Another/Veja agents trial for Álvaro Leme 13629918627, Signal Tours asks which PO covers Tara's travel 13629918626 (owner-only), Forrest Richardson customer escalation (Search Everywhere) 13629918628. 18 London rows moot after the event set Superseded (workshop/dinner/meeting points/Matt Pocock/Amalia/Reut/Hila/Shanee/Or-sync). Old Gmail drafts still to delete by hand: 8 creator emails 19.11, Matt fu, Or reserve-duty fu.
 - 24.11 19:10 UK sync: quiet. Tomer Aloni DM silent (Tara credits still unanswered, ledger 13628130740 open). No new London Slack (all channels/DMs; Ilan's only message was the 18:52 UK reply-tracker DM), no creator/agency/We Are Alive Gmail, no creator thank-yous or new post links. Booth leaderboard final 19:00 UK (not London-creator). Brief not republished.
 - 24.11 evening: 29 IG story mentions on event day from 9/10 London creators verified via Sprout API (findings show Beatrice at 5, not 6 as first counted); Beatrice IG = @beavladut; logged on CRM items (update + Deliverables line each; Beatrice IG column filled); media capture pending (Sprout-only, ~24h).
+- 25.11: Ilan: UTM report → daily again, NYC + London (24 creators), ranked per event by $/visit (then $/account, visits÷followers), ⚡ event-day vs 📱 content flag. Kremer re-authed 25.11. Sajjaad UTM: 11 visits / 2 accounts 23–24.11 (reel 'comment monday' DM link may not carry our UTM: ask Narrative).
