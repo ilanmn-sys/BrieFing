@@ -41,6 +41,7 @@ Last updated: 2026-11-16.
 |---|---|
 | Ledger: who waits on whom, open loops | Shared Memory board `18438292586`, group `topics`. Columns: Type `color_mm8rry6y` · Surface `text_mm8rmdd5` · Actor `text_mm8r3sqb` · Topic `text_mm8r8q6s` · People `text_mm8rhjr2` · Audience `color_mm8r6zhp` · Link `link_mm8rhfed` · State `color_mm8rjzd1` · Dedupe `text_mm8rwkaj` · When `date_mm8r5ag6` |
 | Influencers CRM 2026 | board `18425284143`. Latest Post `long_text_mm70dpn`, Deliverables `long_text_mm5y6bjc`, UTM columns `numeric_mm8z9jyb` / `numeric_mm8zyedt` / `numeric_mm8zxhqs` / `numeric_mm8z2a3m`, `date_mm8z1ccm` |
+| Influencers CRM per-platform followers (25.11) | IG `numeric_mm9egyzt`, TikTok `numeric_mm9edw1d`, YouTube subs `numeric_mm9ernz3`, LinkedIn `numeric_mm9ezr1z`, X `numeric_mm9erxna`, Total (all platforms, sum of non-empty) `numeric_mm9e4bpf`, as-of `date_mm9e21r7`; Followers `numeric_mm5ywa2b` stays = main platform. Data: `reports/creator-followers.csv` |
 | Elevate List (London creators, shared with Creator Buzz) | board `18435082524`, group `group_mm8rqrbe`. Never set the approval column `color_mm8rmc28` |
 | Elevate attendance (media / creators / ambassadors) | board `18436014899` (Allison Grey). London dinner group `group_mm946c5j` |
 | Budget board | `18430005022` (has no London lines yet) |
