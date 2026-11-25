@@ -1,7 +1,9 @@
 -- =============================================================================
--- Creator UTM performance: Elevate NYC (14) + London (10) creators
+-- Creator UTM performance: Elevate NYC (20) + London (10) creators
 -- Warehouse: Snowflake via the Kremer MCP (mcp__Kremer__run-sql). Read-only.
--- Built 2026-11-10; London added 2026-11-25. Report: reports/creator-utm-performance.md
+-- Built 2026-11-10; London added 2026-11-25; 6 NYC Israeli creators/speakers added 2026-11-25
+--   (UTMs from Ilan's 27.10 checklist emails; Kierra Mcmillian, dinner guest, had no UTM).
+--   Report: reports/creator-utm-performance.md
 --
 -- HOW TO RERUN
 --   Edit only the parameter CTEs at the top of each query:
@@ -66,6 +68,12 @@ utm_list (event, creator, creator_group, utm_source, utm_campaign) AS (
       ('nyc',    'Sajjaad', 'Narrative', 'elevate', 'multi-multi-event-multi-sajjaad'),
       ('nyc',    'Taki', 'Narrative', 'elevate', 'multi-multi-event-multi-taki'),
       ('nyc',    'Naya', 'Narrative', 'elevate', 'multi-multi-event-multi-naya'),
+      ('nyc',    'Mor Nissim', 'Israeli creator', 'elevate', 'multi-multi-event-multi-mor'),
+      ('nyc',    'Eilon (Ayalon) Gruper', 'Israeli creator', 'elevate', 'multi-multi-event-multi-eilon'),
+      ('nyc',    'Lauren Vriens', 'Speaker', 'elevate', 'multi-multi-event-multi-laurenvriens'),
+      ('nyc',    'Jean Kang', 'Speaker', 'elevate', 'multi-multi-event-multi-jeankang'),
+      ('nyc',    'Jade Bonacolta', 'Speaker', 'elevate', 'multi-multi-event-multi-jadebonacolta'),
+      ('nyc',    'Hilary Gridley', 'Speaker', 'elevate', 'multi-multi-event-multi-hilarygridley'),
       ('london', 'Charlie Hills', 'Creator Buzz', 'elevate', 'multi-multi-event-london-charlie'),
       ('london', 'Lara Acosta', 'Creator Buzz', 'elevate', 'multi-multi-event-london-lara'),
       ('london', 'Moddy', 'Creator Buzz', 'elevate', 'multi-multi-event-london-moddy'),
@@ -137,6 +145,12 @@ utm_list (event, creator, creator_group, utm_source, utm_campaign) AS (
       ('nyc',    'Sajjaad', 'Narrative', 'elevate', 'multi-multi-event-multi-sajjaad'),
       ('nyc',    'Taki', 'Narrative', 'elevate', 'multi-multi-event-multi-taki'),
       ('nyc',    'Naya', 'Narrative', 'elevate', 'multi-multi-event-multi-naya'),
+      ('nyc',    'Mor Nissim', 'Israeli creator', 'elevate', 'multi-multi-event-multi-mor'),
+      ('nyc',    'Eilon (Ayalon) Gruper', 'Israeli creator', 'elevate', 'multi-multi-event-multi-eilon'),
+      ('nyc',    'Lauren Vriens', 'Speaker', 'elevate', 'multi-multi-event-multi-laurenvriens'),
+      ('nyc',    'Jean Kang', 'Speaker', 'elevate', 'multi-multi-event-multi-jeankang'),
+      ('nyc',    'Jade Bonacolta', 'Speaker', 'elevate', 'multi-multi-event-multi-jadebonacolta'),
+      ('nyc',    'Hilary Gridley', 'Speaker', 'elevate', 'multi-multi-event-multi-hilarygridley'),
       ('london', 'Charlie Hills', 'Creator Buzz', 'elevate', 'multi-multi-event-london-charlie'),
       ('london', 'Lara Acosta', 'Creator Buzz', 'elevate', 'multi-multi-event-london-lara'),
       ('london', 'Moddy', 'Creator Buzz', 'elevate', 'multi-multi-event-london-moddy'),
