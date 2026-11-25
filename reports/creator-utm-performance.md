@@ -4,7 +4,7 @@ Built 25.11.2026 (system clock, Asia/Jerusalem). Data runs through **24.11.2026*
 
 ## Bottom line
 
-- **London (10 creators, links out 23.11):** **490 visits, 12 accounts, 3 activated** in the first ~1.5 days. Christian Zimmer leads (221 visits, 4 accounts, **$45/visit**), then Moddy (155) and Amichai (88 visits, 5 accounts, best signup rate). Agi, Tunde and Zain: 0 so far.
+- **London (10 creators, links out 23.11):** **490 visits, 12 accounts, 3 activated** in the first ~1.5 days. Christian Zimmer leads (221 visits, 4 accounts, **$45/visit**), then Moddy (155, $74/visit on paper, see caveat) and Amichai (88 visits, 5 accounts, best signup rate, no content fee). Agi, Tunde and Zain: 0 so far.
 - **Unlike NYC, London traffic is content-driven, not in-room.** Almost every visit comes from Instagram (`l.instagram.com`), on mobile, from dozens of countries, and peaks right after each creator's story (Christian 10:15 + 18:28 UTC, Amichai 18:17 UTC). Event-day share is 100% by construction (the only data days are 23–24.11), so the flag below uses referrer, timing and geography instead of the date.
 - **Moddy's 155 is suspect:** 177 visits in 10 minutes (17:31–17:41 UTC, 108 in one minute), then silence; 34 already bot-flagged, 43% desktop, 0 get-started in the burst. Treat as unverified until it repeats on a later post.
 - **NYC (14 creators):** **318 visits, 18 accounts, 2 activated** (10.11: 306 / 15). Since 10.11: +12 visits and +3 accounts (Sajjaad 11 visits, 2 accounts on 23–24.11 via Instagram/ManyChat; Maitri 1 account on 13.11). Mariana is still 86% event-day traffic.
@@ -12,23 +12,23 @@ Built 25.11.2026 (system clock, Asia/Jerusalem). Data runs through **24.11.2026*
 
 ## 🇬🇧 London ranking (start 23.11; data 23–24.11)
 
-Primary sort $/visit (cheapest first), $/account alongside; fee n/a ranked by visits after them; no-visit creators last. Fees = CRM Deal Value (`numeric_mm5y6ykh`), currency not stated on the board; blank for Moddy, Amichai, Hila.
+Primary sort $/visit (cheapest first), $/account alongside; creators with no content fee ranked by visits/accounts after them; no-visit creators last. Fees in USD, creator fee excluding the 18% agency fee (fees resolved 25.11: Christian from Narrative's confirmed email, Moddy from the Creator Buzz sheet, Amichai/Hila from Ilan).
 
 | # | Creator | Agency | Fee | Visits | Accounts | Activated | $/visit | $/account | Visits ÷ followers | Traffic |
 |---|---|---|---:|---:|---:|---:|---:|---:|---:|---|
-| 1 | Christian Zimmer | Narrative | 10,000 | 221 | 4 | 1 | $45 | $2,500 | 0.067% (328K IG) | 📱 content: IG, 50+ countries, peaks 10–11 & 18–19 UTC after his stories |
-| 2 | Lara Acosta | Creator Buzz | 13,000 | 14 | 1 | 0 | $929 | $13,000 | 0.004% (396K IG) | 📱 content: IG, 18–21 UTC, 10 countries |
-| 3 | Beatrice Vladut | Creator Buzz | 4,000 | 2 | 0 | 0 | $2,000 | – | n/a | ❔ 2 visits, RO, via Google |
-| 4 | Charlie Hills | Creator Buzz | 20,500 | 8 | 1 | 0 | $2,563 | $20,500 | 0.006% (123K IG) | 📱 content: mostly IG, GB |
-| 5 | Moddy | Creator Buzz | fee n/a | 155 | 1 | 0 | – | – | 0.061% (252K IG) | ⚠️ 10-minute burst 17:31–17:41 UTC after 17:29 story; likely partly non-human |
-| 6 | Amichai Sheqel | Scherf | fee n/a | 88 | 5 | 2 | – | – | 0.076% (116K IG) | 📱 content: IL mobile via IG from 18–19 UTC (story 18:17) |
-| 7 | Hila Naor | Scherf | fee n/a | 2 | 0 | 0 | – | – | 0.006% (32K IG) | ❔ 2 IL visits at 11 UTC (Google/direct), possibly her own test |
-| – | Agi, Tunde Alao, Zain Ul Abedeen | CB / CB / Narrative | 15,500 | 0 | 0 | 0 | no visits | – | – | 15,500 spent, no visits yet |
-| | **Total (10)** | | 63,000 known (7/10) | **490** | **12** | **3** | $257* | $10,500* | | |
+| 1 | Christian Zimmer | Narrative | $10,000 | 221 | 4 | 1 | $45 | $2,500 | 0.067% (328K IG) | 📱 content: IG, 50+ countries, peaks 10–11 & 18–19 UTC after his stories |
+| 2 | Moddy ⚠️ | Creator Buzz | $11,450 | 155 | 1 | 0 | $74 | $11,450 | 0.061% (252K IG) | ⚠️ 10-minute burst 17:31–17:41 UTC after 17:29 story; likely partly non-human. Ex-burst ~3 visits ≈ $3,800/visit |
+| 3 | Lara Acosta | Creator Buzz | $13,000 | 14 | 1 | 0 | $929 | $13,000 | 0.004% (396K IG) | 📱 content: IG, 18–21 UTC, 10 countries |
+| 4 | Beatrice Vladut | Creator Buzz | $4,000 | 2 | 0 | 0 | $2,000 | – | n/a | ❔ 2 visits, RO, via Google |
+| 5 | Charlie Hills | Creator Buzz | $20,500 | 8 | 1 | 0 | $2,563 | $20,500 | 0.006% (123K IG) | 📱 content: mostly IG, GB |
+| 6 | Amichai Sheqel | Scherf | no fee (accommodation + flights only) | 88 | 5 | 2 | – | – | 0.076% (116K IG) | 📱 content: IL mobile via IG from 18–19 UTC (story 18:17) |
+| 7 | Hila Naor | Scherf | no fee (accommodation + flights only) | 2 | 0 | 0 | – | – | 0.006% (32K IG) | ❔ 2 IL visits at 11 UTC (Google/direct), possibly her own test |
+| – | Agi, Tunde Alao, Zain Ul Abedeen | CB / CB / Narrative | $15,500 | 0 | 0 | 0 | no visits | – | – | $15,500 spent, no visits yet |
+| | **Total (10)** | | **$74,450** | **490** | **12** | **3** | **$152** | **$6,204** | | |
 
-\* On the 7 creators with a known fee (245 visits, 6 accounts). Attribution table (Q2): 534 attributed visitors, 17 signups (Amichai 8, Christian 4, Lara 3), 0 qualified, 0 paying.
+Totals are on all 10 creators (Amichai and Hila at $0 content fee). On the 5 fee-paid creators with visits: 400 visits, 7 accounts. Excluding Moddy's burst (keeping his ~3 other visits), the London total is ~$220/visit (~338 visits). Attribution table (Q2): 534 attributed visitors, 17 signups (Amichai 8, Christian 4, Lara 3), 0 qualified, 0 paying.
 
-Fee notes: Christian's CRM value is 10,000, but Narrative quoted $6,500 on 15.11 (at $6,500 he is $29/visit). Creator Buzz/Narrative fees exclude the 18% agency fee.
+Fee notes: Christian $10,000 USD is Narrative's final package (Margo 17.11, Ilan "Confirmed!" the same day; Gmail thread 1a1ea1dec25ff498); the $6,500 of 15.11 was the opening offer. Moddy $11,450 USD: Creator Buzz sheet "Monday Elevate EMEA" > Final (30–60s IG video + 1 IG story + dinner + conference). Amichai and Hila: accommodation + flights only, no content fee (Ilan, 25.11); their travel cost is not counted in the fee column. Creator Buzz/Narrative fees exclude the 18% agency fee.
 
 ## 🗽 NYC ranking (start 27.10; event days 28–29.10)
 
@@ -52,7 +52,7 @@ Attribution table (Q2): 302 attributed visitors, 20 signups (Mariana 16), 0 qual
 ## Interpretation
 
 - **London's content worked faster than NYC's.** In 1.5 days London produced 1.5x NYC's 4-week visit total, and the referrer/timing/geography says it came from stories, not from the room. NYC's best content-driven creator (Maitri, $242/visit) is 5x Christian's $45.
-- **Mid-size Israeli and European creators with an engaged audience converted best:** Amichai (5 accounts from 88 visits, 6%) and Christian (4 from 221). Large Creator Buzz accounts (Lara 396K, Charlie 123K) brought little so far.
+- **Mid-size Israeli and European creators with an engaged audience converted best:** Amichai (5 accounts from 88 visits, 6%, with no content fee) and Christian (4 from 221). Large Creator Buzz accounts (Lara 396K, Charlie 123K) brought little so far.
 - **Moddy needs a second look** before he gets credit (burst pattern above). If the burst is excluded he has ~3 visits.
 - **NYC is flat since 10.11** except Sajjaad's new Instagram/ManyChat push (23–24.11, 11 visits, 2 accounts) — his only accounts, both outside event days.
 
@@ -61,5 +61,5 @@ Attribution table (Q2): 302 attributed visitors, 20 signups (Mariana 16), 0 qual
 - **Payer flags mature 28 days after signup** (NYC 28.10 cohort: 25.11; London: ~22.12). 0 payers today is not a final result.
 - **Touch-level attribution** (visits table): every visit keeps its own UTM, so a person who clicked two creator links counts for both. The attribution table (one winning touch per signup) is shown for comparison.
 - **Lag:** data through 24.11; 25.11 posts are not in yet. Bots/demo excluded (`is_bot_or_demo`), which removed 34 of Moddy's visits. Activated = first board load after signup.
-- **London fees** come from the CRM Deal Value column (currency not stated); 3 of 10 are blank. NYC fees are creator fees from the Creator Buzz sheet / Zip #16198, excluding the 18% agency fee.
+- **London fees** are the CRM Deal Value column (USD), resolved for all 10 on 25.11 (see fee notes); Amichai and Hila are $0 content fee (accommodation + flights only). NYC fees are creator fees from the Creator Buzz sheet / Zip #16198, excluding the 18% agency fee.
 - Board: Influencers CRM 2026 (18425284143) UTM columns updated for all 24 creators on 25.11 (data date 2026-11-24).
