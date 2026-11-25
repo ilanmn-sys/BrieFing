@@ -1,15 +1,16 @@
 -- =============================================================================
--- Creator UTM performance: Elevate NYC creators (+ CRM bit.ly links)
+-- Creator UTM performance: Elevate NYC (14) + London (10) creators
 -- Warehouse: Snowflake via the Kremer MCP (mcp__Kremer__run-sql). Read-only.
--- Built 2026-11-10. Report: reports/creator-utm-performance.md
+-- Built 2026-11-10; London added 2026-11-25. Report: reports/creator-utm-performance.md
 --
 -- HOW TO RERUN
---   Edit only the two parameter CTEs at the top of each query:
---     params    -> start_date (first day a link was shared) and end_date
---                  (CURRENT_DATE() by default; the visits table lags one day,
---                  so the newest row is yesterday).
---     utm_list  -> one row per creator: creator name, utm_source, utm_campaign.
---                  Add London creators here (e.g. ...multi-event-london...).
+--   Edit only the parameter CTEs at the top of each query:
+--     params    -> end_date (CURRENT_DATE() by default; the visits table lags
+--                  one day, so the newest row is yesterday).
+--     events    -> start_date per event (first day its links were shared):
+--                  nyc 2026-10-27, london 2026-11-23.
+--     utm_list  -> one row per creator: event, creator, agency, utm_source,
+--                  utm_campaign. Results come out per event with a TOTAL row each.
 --   Each query is a single statement (no SET variables), because Kremer's
 --   run-sql runs one statement per call.
 --
@@ -43,49 +44,53 @@
 -- Q1. Visits -> signups -> activation -> payers, per creator (visits table)
 -- -----------------------------------------------------------------------------
 WITH params AS (
-    SELECT '2026-10-27'::DATE AS start_date,      -- first link sent 27.10.2026
-           CURRENT_DATE()     AS end_date
+    SELECT CURRENT_DATE() AS end_date            -- visits table lags ~1 day
 ),
-utm_list (creator, creator_group, utm_source, utm_campaign) AS (
+events (event, start_date) AS (
+    -- Per-event start date = the day the links first went out.
+    SELECT * FROM VALUES ('nyc', '2026-10-27'::DATE), ('london', '2026-11-23'::DATE)
+),
+utm_list (event, creator, creator_group, utm_source, utm_campaign) AS (
     SELECT * FROM VALUES
-      ('Soojin',            'Creator Buzz', 'elevate', 'multi-multi-event-multi-soojin'),
-      ('Audrey',            'Creator Buzz', 'elevate', 'multi-multi-event-multi-audrey'),
-      ('Aria',              'Creator Buzz', 'elevate', 'multi-multi-event-multi-aria'),
-      ('Maitri',            'Creator Buzz', 'elevate', 'multi-multi-event-multi-maitri'),
-      ('Alexis',            'Creator Buzz', 'elevate', 'multi-multi-event-multi-alexis'),
-      ('Natasha',           'Creator Buzz', 'elevate', 'multi-multi-event-multi-natasha'),
-      ('Danielle',          'Creator Buzz', 'elevate', 'multi-multi-event-multi-daniellefarage'),
-      ('Fiona',             'Creator Buzz', 'elevate', 'multi-multi-event-multi-fifbuilds'),
-      ('Max Talks Tech',    'Creator Buzz', 'elevate', 'multi-multi-event-multi-maxtalkstech'),
-      ('Mariana (Mar) Antaya','Narrative',  'elevate', 'multi-multi-event-multi-mariana'),
-      ('Kayvon',            'Narrative',    'elevate', 'multi-multi-event-multi-kayvon'),
-      ('Sajjaad',           'Narrative',    'elevate', 'multi-multi-event-multi-sajjaad'),
-      ('Taki',              'Narrative',    'elevate', 'multi-multi-event-multi-taki'),
-      ('Naya',              'Narrative',    'elevate', 'multi-multi-event-multi-naya')
-      -- Other NYC links sent by Ilan (not in the 14-creator scope), add if wanted:
-      -- ('Vin Matano (Creator Buzz)','Other','elevate','multi-multi-event-multi-vinmatano'),
-      -- ('Eilon','Other','elevate','multi-multi-event-multi-eilon'),
-      -- ('Mor','Other','elevate','multi-multi-event-multi-mor'),
-      -- ('Lauren Vriens','Other','elevate','multi-multi-event-multi-laurenvriens'),
-      -- ('Jean Kang','Other','elevate','multi-multi-event-multi-jeankang'),
-      -- ('Jade Bonacolta','Other','elevate','multi-multi-event-multi-jadebonacolta'),
-      -- ('Hilary Gridley','Other','elevate','multi-multi-event-multi-hilarygridley'),
-      -- CRM bit.ly links (source=influencers; shared before 2026, so use an early start_date):
-      -- ('Jake Abrams','CRM','influencers','ww-en-brand-other-jake'),
-      -- ('Davidson Daniel','CRM','influencers','ww-en-brand-work_mgmt-davidson')
+      ('nyc',    'Soojin', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-soojin'),
+      ('nyc',    'Audrey', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-audrey'),
+      ('nyc',    'Aria', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-aria'),
+      ('nyc',    'Maitri', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-maitri'),
+      ('nyc',    'Alexis', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-alexis'),
+      ('nyc',    'Natasha', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-natasha'),
+      ('nyc',    'Danielle', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-daniellefarage'),
+      ('nyc',    'Fiona', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-fifbuilds'),
+      ('nyc',    'Max Talks Tech', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-maxtalkstech'),
+      ('nyc',    'Mariana (Mar) Antaya', 'Narrative', 'elevate', 'multi-multi-event-multi-mariana'),
+      ('nyc',    'Kayvon', 'Narrative', 'elevate', 'multi-multi-event-multi-kayvon'),
+      ('nyc',    'Sajjaad', 'Narrative', 'elevate', 'multi-multi-event-multi-sajjaad'),
+      ('nyc',    'Taki', 'Narrative', 'elevate', 'multi-multi-event-multi-taki'),
+      ('nyc',    'Naya', 'Narrative', 'elevate', 'multi-multi-event-multi-naya'),
+      ('london', 'Charlie Hills', 'Creator Buzz', 'elevate', 'multi-multi-event-london-charlie'),
+      ('london', 'Lara Acosta', 'Creator Buzz', 'elevate', 'multi-multi-event-london-lara'),
+      ('london', 'Moddy', 'Creator Buzz', 'elevate', 'multi-multi-event-london-moddy'),
+      ('london', 'Beatrice Vladut', 'Creator Buzz', 'elevate', 'multi-multi-event-london-beatrice'),
+      ('london', 'Agi', 'Creator Buzz', 'elevate', 'multi-multi-event-london-agi'),
+      ('london', 'Tunde Alao', 'Creator Buzz', 'elevate', 'multi-multi-event-london-tunde'),
+      ('london', 'Hila Naor', 'Scherf', 'elevate', 'multi-multi-event-london-hila'),
+      ('london', 'Amichai Sheqel', 'Scherf', 'elevate', 'multi-multi-event-london-amichai'),
+      ('london', 'Christian Zimmer', 'Narrative', 'elevate', 'multi-multi-event-london-christian'),
+      ('london', 'Zain Ul Abedeen', 'Narrative', 'elevate', 'multi-multi-event-london-zain')
 ),
 v AS (
     SELECT u.creator, u.creator_group, u.utm_campaign, f.*
     FROM utm_list u
+    JOIN events e ON e.event = u.event
     JOIN bigbrain.l3.fact_tof_visits_daily f
       ON LOWER(f.visit_marketing_source) = u.utm_source
      AND LOWER(f.visit_campaign_name)    = u.utm_campaign
     CROSS JOIN params p
     WHERE f.record_source = 'signup_flow'
-      AND f.day BETWEEN p.start_date AND p.end_date
+      AND f.day BETWEEN e.start_date AND p.end_date
       AND COALESCE(f.is_bot_or_demo, 0) = 0
 )
 SELECT
+    u.event,
     u.creator_group,
     u.creator,
     u.utm_campaign,
@@ -102,46 +107,61 @@ SELECT
     COUNT(DISTINCT IFF(v.is_payer_28 = 1, v.pulse_account_id, NULL))                AS payers_28d
 FROM utm_list u
 LEFT JOIN v ON v.creator = u.creator
-GROUP BY ROLLUP ((u.creator_group, u.creator, u.utm_campaign))   -- last row = TOTAL
-ORDER BY u.creator IS NULL, visits DESC;
+GROUP BY u.event, ROLLUP ((u.creator_group, u.creator, u.utm_campaign))   -- per-event TOTAL rows
+ORDER BY u.event, u.creator IS NULL, visits DESC;
 
 
 -- -----------------------------------------------------------------------------
 -- Q2. Attributed visitors, signups, paying accounts and ARR (attribution table)
 -- -----------------------------------------------------------------------------
 WITH params AS (
-    SELECT '2026-10-27'::DATE AS start_date,
-           CURRENT_DATE()     AS end_date
+    SELECT CURRENT_DATE() AS end_date            -- visits table lags ~1 day
 ),
-utm_list (creator, creator_group, utm_source, utm_campaign) AS (
+events (event, start_date) AS (
+    -- Per-event start date = the day the links first went out.
+    SELECT * FROM VALUES ('nyc', '2026-10-27'::DATE), ('london', '2026-11-23'::DATE)
+),
+utm_list (event, creator, creator_group, utm_source, utm_campaign) AS (
     SELECT * FROM VALUES
-      ('Soojin',            'Creator Buzz', 'elevate', 'multi-multi-event-multi-soojin'),
-      ('Audrey',            'Creator Buzz', 'elevate', 'multi-multi-event-multi-audrey'),
-      ('Aria',              'Creator Buzz', 'elevate', 'multi-multi-event-multi-aria'),
-      ('Maitri',            'Creator Buzz', 'elevate', 'multi-multi-event-multi-maitri'),
-      ('Alexis',            'Creator Buzz', 'elevate', 'multi-multi-event-multi-alexis'),
-      ('Natasha',           'Creator Buzz', 'elevate', 'multi-multi-event-multi-natasha'),
-      ('Danielle',          'Creator Buzz', 'elevate', 'multi-multi-event-multi-daniellefarage'),
-      ('Fiona',             'Creator Buzz', 'elevate', 'multi-multi-event-multi-fifbuilds'),
-      ('Max Talks Tech',    'Creator Buzz', 'elevate', 'multi-multi-event-multi-maxtalkstech'),
-      ('Mariana (Mar) Antaya','Narrative',  'elevate', 'multi-multi-event-multi-mariana'),
-      ('Kayvon',            'Narrative',    'elevate', 'multi-multi-event-multi-kayvon'),
-      ('Sajjaad',           'Narrative',    'elevate', 'multi-multi-event-multi-sajjaad'),
-      ('Taki',              'Narrative',    'elevate', 'multi-multi-event-multi-taki'),
-      ('Naya',              'Narrative',    'elevate', 'multi-multi-event-multi-naya')
+      ('nyc',    'Soojin', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-soojin'),
+      ('nyc',    'Audrey', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-audrey'),
+      ('nyc',    'Aria', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-aria'),
+      ('nyc',    'Maitri', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-maitri'),
+      ('nyc',    'Alexis', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-alexis'),
+      ('nyc',    'Natasha', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-natasha'),
+      ('nyc',    'Danielle', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-daniellefarage'),
+      ('nyc',    'Fiona', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-fifbuilds'),
+      ('nyc',    'Max Talks Tech', 'Creator Buzz', 'elevate', 'multi-multi-event-multi-maxtalkstech'),
+      ('nyc',    'Mariana (Mar) Antaya', 'Narrative', 'elevate', 'multi-multi-event-multi-mariana'),
+      ('nyc',    'Kayvon', 'Narrative', 'elevate', 'multi-multi-event-multi-kayvon'),
+      ('nyc',    'Sajjaad', 'Narrative', 'elevate', 'multi-multi-event-multi-sajjaad'),
+      ('nyc',    'Taki', 'Narrative', 'elevate', 'multi-multi-event-multi-taki'),
+      ('nyc',    'Naya', 'Narrative', 'elevate', 'multi-multi-event-multi-naya'),
+      ('london', 'Charlie Hills', 'Creator Buzz', 'elevate', 'multi-multi-event-london-charlie'),
+      ('london', 'Lara Acosta', 'Creator Buzz', 'elevate', 'multi-multi-event-london-lara'),
+      ('london', 'Moddy', 'Creator Buzz', 'elevate', 'multi-multi-event-london-moddy'),
+      ('london', 'Beatrice Vladut', 'Creator Buzz', 'elevate', 'multi-multi-event-london-beatrice'),
+      ('london', 'Agi', 'Creator Buzz', 'elevate', 'multi-multi-event-london-agi'),
+      ('london', 'Tunde Alao', 'Creator Buzz', 'elevate', 'multi-multi-event-london-tunde'),
+      ('london', 'Hila Naor', 'Scherf', 'elevate', 'multi-multi-event-london-hila'),
+      ('london', 'Amichai Sheqel', 'Scherf', 'elevate', 'multi-multi-event-london-amichai'),
+      ('london', 'Christian Zimmer', 'Narrative', 'elevate', 'multi-multi-event-london-christian'),
+      ('london', 'Zain Ul Abedeen', 'Narrative', 'elevate', 'multi-multi-event-london-zain')
 ),
 a AS (
     SELECT u.creator, c.*
     FROM utm_list u
+    JOIN events e ON e.event = u.event
     JOIN bigbrain.l3.fact_campaign_monitoring_dwh c
       ON LOWER(c.source)   = u.utm_source
      AND LOWER(c.campaign) = u.utm_campaign
     CROSS JOIN params p
     WHERE c.type IN ('people', 'attribution')
-      AND c.created_at >= p.start_date
+      AND c.created_at >= e.start_date
       AND c.created_at <  DATEADD(day, 1, p.end_date)
 )
 SELECT
+    u.event,
     u.creator_group,
     u.creator,
     u.utm_campaign,
@@ -154,8 +174,8 @@ SELECT
     COALESCE(SUM(IFF(a.type = 'attribution', a.mrr_999999, 0)), 0) * 12                       AS arr_from_latest_mrr
 FROM utm_list u
 LEFT JOIN a ON a.creator = u.creator
-GROUP BY ROLLUP ((u.creator_group, u.creator, u.utm_campaign))
-ORDER BY u.creator IS NULL, attributed_visitors DESC;
+GROUP BY u.event, ROLLUP ((u.creator_group, u.creator, u.utm_campaign))
+ORDER BY u.event, u.creator IS NULL, attributed_visitors DESC;
 
 
 -- -----------------------------------------------------------------------------
@@ -177,7 +197,7 @@ ORDER BY visits DESC;
 
 
 -- -----------------------------------------------------------------------------
--- Q4. Daily trend for one creator (spot event-day spikes vs. post-driven traffic)
+-- Q4. Daily trend (single creator; see Q5 for all London creators) (spot event-day spikes vs. post-driven traffic)
 -- -----------------------------------------------------------------------------
 SELECT day, COUNT(DISTINCT visit_id) AS visits,
        COUNT(DISTINCT IFF(is_hard_signup = 1, pulse_account_id, NULL)) AS signup_accounts
@@ -188,3 +208,19 @@ WHERE record_source = 'signup_flow'
   AND LOWER(visit_campaign_name) = 'multi-multi-event-multi-mariana'   -- change me
 GROUP BY 1
 ORDER BY 1;
+
+
+-- -----------------------------------------------------------------------------
+-- Q5. Daily trend per London creator (event-day spike vs. content-driven)
+-- -----------------------------------------------------------------------------
+SELECT day, REPLACE(LOWER(visit_campaign_name), 'multi-multi-event-london-', '') AS creator,
+       COUNT(DISTINCT visit_id) AS visits,
+       COUNT(DISTINCT IFF(is_hard_signup = 1, pulse_account_id, NULL)) AS signup_accounts
+FROM bigbrain.l3.fact_tof_visits_daily
+WHERE record_source = 'signup_flow'
+  AND day >= '2026-11-23'
+  AND COALESCE(is_bot_or_demo, 0) = 0
+  AND LOWER(visit_marketing_source) = 'elevate'
+  AND LOWER(visit_campaign_name) LIKE 'multi-multi-event-london-%'
+GROUP BY 1, 2
+ORDER BY 2, 1;
