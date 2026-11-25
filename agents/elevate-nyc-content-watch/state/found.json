@@ -571,7 +571,23 @@
       "reportedOn": "2026-11-24",
       "dryRun": false,
       "event": "london"
+    },
+    {
+      "url": "https://www.instagram.com/reel/DgK5qxvN4_F/",
+      "creator": "Amichai Sheqel",
+      "platform": "Instagram",
+      "type": "Reel",
+      "date": "2026-11-25",
+      "summary": "Hebrew reel: 'I was at monday's Elevate in London' — recap of the new tools (Vibe, AI Agents, Agent Builder, Sidekick, Harmony, Bring Your Own Agent, Notetaker, Frontier); comment 'אני' for a guide.",
+      "likes": 14,
+      "comments": 18,
+      "views": null,
+      "adLabel": "none in caption; IG paid-partnership flag not returned",
+      "source": "Bright Data IG posts",
+      "reportedOn": "2026-11-25",
+      "dryRun": false,
+      "event": "london"
     }
   ],
-  "lastRun": "2026-11-24T16:59Z (live; NYC window since last successful run 19.11 16:58Z (22.11 run failed: Bright Data spend limit), scraped from 19.11; London first run, from 23.11). IG posts 104 rows across 25 profiles (alexisbarber dead_page, no posts): matches Sajjaad 23.11 reel, Hila Naor 21.11 reel (pre-window teaser). TikTok 47 videos, none match (londonfounder, alexisbarber_, sajjaadkhader: no posts in period). X 9 posts (Charlie Hills), none match; Lauren/Jade no posts in period. YouTube dataset: only Zain 3 videos (5 dead_page); RSS for all 9 channels: Sajjaad 24.11 Short matches; Taki, Naya, Charlie, Moddy, Zain others not monday. Creator Buzz channel since 19.11: London logistics only, no post links. SERP: 85 queries (last week), 0 failures; Beatrice Vladut LinkedIn comment 24.11 found. Not counted: leeleemiah IG Elevate reel (not roster), thenachiketkumar Salesmate post, growth_tank/Charlie GrowthTank workshop, Natasha podcast/VaynerMedia collabs (no monday), weekday 'Monday' hits. CRM: Sajjaad (13275338333) Deliverables appended (IG 23.11 + YT 24.11) + Latest Post replaced. Beatrice/Hila no crmItemId: report only. DM sent: https://monday.slack.com/archives/D038RJ45RQD/p1795539553520049. Total 35 posts (NYC 33 / 14 creators; London 2 / 2 creators), 31 in Nov. NYC not yet posted: Taki Wong, Eilon Gruper, Kayvon Jafarzadeh, Mariana Antaya, Naya, Hilary Gridley, Kierra Mcmillian. London not yet: Charlie Hills, Lara Acosta, Tunde Alao, Moddy Mankus, Agi, Christian Zimmer, Zain, Amichai Sheqel."
+  "lastRun": "2026-11-25T17:02Z (live; window since 24.11 16:59Z, scraped from 23.11 for all). IG posts dataset 27 profiles: 40 posts, 9 dead_page (no posts in period: beavladut, itstundeanthony, thelondonfounder, hila.naor_, etc.); IG Profiles fallback for 14 accounts confirmed Tunde/Beatrice/Agi no posts since 22.11. Match: Amichai 25.11 IG reel (Elevate London recap). Taki 25.11 reel/TikTok/Short = weekday 'Monday' (not counted). TikTok 17 videos, none match. X 5 posts (Charlie), none match. YouTube dataset only Zain (3, none match) + RSS 9 channels: no new matches (Sajjaad 24.11 Short already reported). Creator Buzz channel since last run: no messages. SERP 105 queries (last week), 0 failures. Not counted: Tara Crymble LinkedIn creator-dinner post (not on roster; mentioned in DM as outside list), Nikolas Tsirgelis/Make/neethupradishphilip Elevate posts (not roster). Expected London content (Christian reel, Moddy, Lara, Charlie, Beatrice, Agi, Zain YouTube) not live yet. CRM: Amichai (12993721570) Deliverables appended + Latest Post set. DM sent: https://monday.slack.com/archives/D038RJ45RQD/p1795626098308789. Total 36 (NYC 33 / 14 creators; London 3 / 3 creators), 32 in Nov."
 }
