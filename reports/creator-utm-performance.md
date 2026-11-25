@@ -28,7 +28,18 @@ Primary sort $/visit (cheapest first), $/account alongside; creators with no con
 
 Totals are on all 10 creators (Amichai and Hila at $0 content fee). On the 5 fee-paid creators with visits: 400 visits, 7 accounts. Excluding Moddy's burst (keeping his ~3 other visits), the London total is ~$220/visit (~338 visits). Attribution table (Q2): 534 attributed visitors, 17 signups (Amichai 8, Christian 4, Lara 3), 0 qualified, 0 paying.
 
-Fee notes: Christian $10,000 USD is Narrative's final package (Margo 17.11, Ilan "Confirmed!" the same day; Gmail thread 1a1ea1dec25ff498); the $6,500 of 15.11 was the opening offer. Moddy $11,450 USD: Creator Buzz sheet "Monday Elevate EMEA" > Final (30–60s IG video + 1 IG story + dinner + conference). Amichai and Hila: accommodation + flights only, no content fee (Ilan, 25.11); their travel cost is not counted in the fee column. Creator Buzz/Narrative fees exclude the 18% agency fee.
+**Amichai and Hila incl. travel (added 25.11).** They had no content fee, but we paid their flights + hotel through Signal Tours. Travel in USD; GBP converted at the ECB rate of 24.11.2026 (1 GBP = 1.3098 USD).
+
+| Creator | Flight | Hotel | Travel total | Visits | Accounts | $/visit incl. travel | $/account incl. travel |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Amichai Sheqel | $933 | £460 (2 × £230) = $603 | **$1,536** | 88 | 5 | **$17** | **$307** |
+| Hila Naor | $1,026 | ~£460 = ~$603 (estimate) | **~$1,629** | 2 | 0 | **~$815** | – |
+
+Amichai's travel is cheaper per visit than any fee-paid London creator (Christian $45/visit is the cheapest of those), and his $307/account is lower than Christian's $2,500. With both creators' travel in the total, London is $77,615 for 490 visits = **$158/visit** (was $152) and $6,468/account.
+
+Travel sources: Amichai: Sharon Shulman (Signal Tours) quoted 09.11.2026 a $933 flight and the Dorsett Canary Wharf at £230/night for 23–25.11. Nitzan and Ilan approved the same day and the ticket and hotel voucher were issued (Gmail thread 1a1c0a701fa11019, PO012602925). Hila: Sharon quoted the flight at $1,026 on 15.11 and Ilan approved it the same day (thread 1a1ddf587174194c). Her hotel voucher (1148564, thread 1a1ead0eb445bb11) is for the same hotel, room type and 2 nights as Amichai's but carries no price. Her hotel cost is therefore estimated at Amichai's rate. Her travel falls under Zip #16492. The quoted $50 is a cancellation fee and is not included. No Signal Tours invoices were in Ilan's mail as of 25.11, so all amounts are quotes. Amichai's 22.11 taxi to Ben Gurion is not included (its cost is unknown).
+
+Fee notes: Christian $10,000 USD is Narrative's final package (Margo 17.11, Ilan "Confirmed!" the same day; Gmail thread 1a1ea1dec25ff498); the $6,500 of 15.11 was the opening offer. Moddy $11,450 USD: Creator Buzz sheet "Monday Elevate EMEA" > Final (30–60s IG video + 1 IG story + dinner + conference). Amichai and Hila: accommodation + flights only, no content fee (Ilan, 25.11); their travel cost is not counted in the fee column (see the incl.-travel table above). Creator Buzz/Narrative fees exclude the 18% agency fee.
 
 ## 🗽 NYC ranking (start 27.10; event days 28–29.10)
 
